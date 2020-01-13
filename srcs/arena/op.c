@@ -6,12 +6,24 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2020/01/13 16:24:17 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/01/13 16:40:20 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "op.h"
-
+/*
+typedef struct	s_op
+{
+	char*	name;
+	int		arg_nb;
+	int		arg_types;
+	int		opcode;
+	int		cycle_to_wait;
+	char*	full_name;
+	int		encoding_byte; 	//indicates the presence, or not, of an argument encoding byte after the opcode;
+	int		direct_size;	//indicates the amount of bytes used to encode DIR arguments; 1 => 2, 0 => 4;
+}				t_op;
+*/
 
 t_op    op_tab[17] =
 {

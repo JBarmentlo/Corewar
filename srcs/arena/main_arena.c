@@ -1,7 +1,7 @@
 #include "op.h"
 #include "arena.h"
 
-t_vm	init_vm()
+t_arena	init_vm()
 {
 	//verify input validity
 
@@ -12,9 +12,11 @@ t_vm	init_vm()
 
 int		main(int ac, char **av)
 {
-	t_vm vm;
+	t_arena vm;
 
+	//parsing options
 	vm = init_vm();
+	
 	while(there is a live process)
 	{
 		do_the_cycle(vm);
