@@ -2,6 +2,9 @@
 #include "arena.h"
 #include "stdlib.h"
 
+
+// write bit printer to test these
+
 byte	*endian_switch(byte *val, int size)
 {
 	int		i;
