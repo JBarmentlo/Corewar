@@ -16,10 +16,11 @@ int		main(int ac, char **av)
 
 	//parsing options
 	vm = init_vm();
-	
-	while(there is a live process)
+	/*
+	while(No_winner)
 	{
 		do_the_cycle(vm);
 		display(vm);
 	}
+	*/
 }
