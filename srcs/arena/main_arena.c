@@ -4,10 +4,10 @@
 int		main()
 {
 
-	byte a;
+	uint a;
 
-	a = 1;
-	bit_dump(&a, 1);
+	a = 2;
+	bit_dump(&a, 4);
 
 	return (0);
 }
