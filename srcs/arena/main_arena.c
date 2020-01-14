@@ -1,18 +1,13 @@
 #include "arena.h"
 
 
-int		main(int ac, char **av)
+int		main()
 {
 
-	//parsing options
-	ac++;
-	av++;
-	/*
-	while(No_winner)
-	{
-		do_the_cycle(vm);
-		display(vm);
-	}
-	*/
+	byte a;
+
+	a = 1;
+	bit_dump(&a, 1);
+
 	return (0);
 }

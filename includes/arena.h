@@ -119,3 +119,9 @@ typedef struct 			s_arena
 	
 }						t_arena;
 
+
+void				bit_dump(void *ptr, int size);
+byte				*int_to_big_endian(int val, int size);
+unsigned int		big_endian_to_int(byte *val, int size);
+byte				*endian_switch(byte *val, int size);
+
