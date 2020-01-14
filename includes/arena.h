@@ -1,3 +1,11 @@
+#ifndef ARENA_H
+# define ARENA_H
+
+# include "sdl_include/SDL.h"
+# include "sdl_include/SDL_image.h"
+# include "sdl_include/SDL_ttf.h"
+# include <stdio.h>							//A SUPPRIMER /!\
+
 #define IND_SIZE				2
 #define REG_SIZE				4
 #define DIR_SIZE				REG_SIZE
@@ -129,9 +137,32 @@ typedef struct 			s_arena
 	
 }						t_arena;
 
+
 void				bit_dump(void *ptr, int size);
 byte				*uint_to_big_endian(uint val, int size);
 unsigned int		big_endian_to_uint(void *val, int size);
 byte				*endian_switch(void *val, int size);
 
 // ADD ALWAYS INLINE
+
+typedef struct		s_disp
+{
+	SDL_Window		*win;
+	SDL_Renderer	*rend;
+	SDL_Event		event;
+	SDL_Surface		*img;
+	SDL_Texture		*back;
+	SDL_Rect		screen;
+	SDL_Rect		arena;
+	SDL_Rect		players;
+	SDL_Rect		process;
+}					t_disp;
+
+void				error(char *src, t_disp *d);
+void				init_window(t_disp *d);
+void				bit_dump(void *ptr, int size);
+byte				*int_to_big_endian(int val, int size);
+unsigned int		big_endian_to_int(byte *val, int size);
+byte				*endian_switch(byte *val, int size);
+#endif
+

@@ -35,27 +35,27 @@ else
 	echo "\033[31minstalling sdl2_ttf...\033[00m"
 	brew install sdl2_ttf
 fi
-if [ -d sdl_include ]
+if [ -d includes/sdl_include ]
 then
-	rm -Rf sdl_include/*
+	rm -Rf includes/sdl_include/*
 else
-	mkdir sdl_include
+	mkdir includes/sdl_include
 fi
-echo "\n\033[32mcopy all brew .h in sdl_include\033[00m"
-cp ~/.brew/Cellar/sdl2/*/include/SDL2/*.h sdl_include/
-cp ~/.brew/Cellar/sdl2_image/*/include/SDL2/*.h sdl_include/
-cp ~/.brew/Cellar/sdl2_ttf/*/include/SDL2/*.h sdl_include/
-if [ -d sdl_src ]
+echo "\n\033[32mcopy all brew .h in includes/sdl_include\033[00m"
+cp ~/.brew/Cellar/sdl2/*/include/SDL2/*.h includes/sdl_include/
+cp ~/.brew/Cellar/sdl2_image/*/include/SDL2/*.h includes/sdl_include/
+cp ~/.brew/Cellar/sdl2_ttf/*/include/SDL2/*.h includes/sdl_include/
+if [ -d srcs/sdl_src ]
 then
-	rm -Rf sdl_src/*
+	rm -Rf srcs/sdl_src/*
 else
-	mkdir sdl_src
+	mkdir srcs/sdl_src
 fi
-echo "\033[32mcopy all brew .a and .dylib in sdl_src\033[00m"
-cp ~/.brew/Cellar/sdl2/*/lib/*.a sdl_src/
-cp ~/.brew/Cellar/sdl2/*/lib/*.dylib sdl_src/
-cp ~/.brew/Cellar/sdl2_image/*/lib/*.dylib sdl_src/
-cp ~/.brew/Cellar/sdl2_image/*/lib/*.a sdl_src/
-cp ~/.brew/Cellar/sdl2_ttf/*/lib/*.a sdl_src/
-cp ~/.brew/Cellar/sdl2_ttf/*/lib/*.dylib sdl_src/
+echo "\033[32mcopy all brew .a and .dylib in srcs/sdl_src\033[00m"
+cp ~/.brew/Cellar/sdl2/*/lib/*.a srcs/sdl_src/
+cp ~/.brew/Cellar/sdl2/*/lib/*.dylib srcs/sdl_src/
+cp ~/.brew/Cellar/sdl2_image/*/lib/*.dylib srcs/sdl_src/
+cp ~/.brew/Cellar/sdl2_image/*/lib/*.a srcs/sdl_src/
+cp ~/.brew/Cellar/sdl2_ttf/*/lib/*.a srcs/sdl_src/
+cp ~/.brew/Cellar/sdl2_ttf/*/lib/*.dylib srcs/sdl_src/
 
