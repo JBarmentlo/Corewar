@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2020/01/14 12:47:28 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/01/14 14:50:52 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef struct	s_op
 }				t_op;
 */
 
-t_op    op_tab[17] =
+t_op    g_op_tab[17] =
 {
 	{"live"	, 1, {T_DIR}												, 1	, 10	, "alive"								, 0, 0},
 	{"ld"	, 2, {T_DIR | T_IND, T_REG}									, 2	, 5		, "load"								, 1, 0},

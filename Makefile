@@ -14,11 +14,12 @@ NAME_COREWAR=corewar
 
 COREWAR_SOURCE_FILES=cycle.c \
 	main_arena.c \
-	op.c \
 	args.c \
 	disp.c
 
 UTILS_SOURCE_FILES=endian_converter.c \
+	op.c \
+
 
 ASM_SOURCE_FILES=main.c
 
