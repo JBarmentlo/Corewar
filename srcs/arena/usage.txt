@@ -1,0 +1,5 @@
+Usage: ./corewar [-dump N -s N] <champion1.cor> <...>
+#### TEXT OUTPUT MODE ##########################################################
+    -dump N		: Dumps memory after N cycles then exits
+    -s N		: Runs N cycles, dumps memory, pauses, then repeats
+################################################################################
