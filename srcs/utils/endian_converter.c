@@ -42,7 +42,7 @@ uint		big_endian_to_uint(void *vall, int size)
 	tmp = endian_switch(val, size);
 	if (size == 4)
 	{
-		return ((uint)*((uint32_t*)tmp));
+		return ((uint)*((uint*)tmp));
 	}
 	printf("big_endian_to_int is not meant to be used with size = %d\n", size);
 	return (0);
@@ -71,6 +71,41 @@ void			bit_dump(void *ptrr, int size)
 		printf("%d", (ptr[i] & TWO) != 0);
 		printf("%d", (ptr[i] & ONE) != 0);
 		printf(" ");
+		i++;
+	}
+}
+
+
+void					memcopy(void *src, void *dest, uint16_t size)	// DOES this work for static arrays ?
+{
+	int		i;
+	byte	*srcc;
+	byte	*destt;
+
+	srcc = src;
+	destt = dest;
+
+	i = 0;
+	while (i < size)
+	{
+		destt[i] = srcc[i];
+		i++;
+	}
+}
+
+void					memcopy_endian_flip(void *src, void *dest, uint16_t size)	// DOES this work for static arrays ?
+{
+	int		i;
+	byte	*srcc;
+	byte	*destt;
+
+	srcc = src;
+	destt = dest;
+
+	i = 0;
+	while (i < size)
+	{
+		destt[i] = srcc[size - 1 - i];
 		i++;
 	}
 }

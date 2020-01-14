@@ -23,6 +23,7 @@ int		do_we_have_a_winner(t_arena *arena)
 
 void	execute_process(t_arena *arena, t_process *process)
 {
+	process->current_op = &g_op_tab[arena->memory[process->PC]];
 	/*
 	if (is_encoding_byte_ok(arena, process))
 	{

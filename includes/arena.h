@@ -79,8 +79,10 @@ typedef struct	s_op
 	uint		cycle_to_wait;
 	char*		full_name;
 	byte		encoding_byte; 	//indicates the presence, or not, of an argument encoding byte after the opcode;
-	byte		direct_size;	//indicates the amount of bytes used to encode DIR arguments;
+	byte		direct_size;	//indicates the amount of bytes used to encode DIR arguments; 1 => 2  0 => 4
 }				t_op;
+
+extern	t_op			g_op_tab[17];
 
 
 #define PROCESS_TABLE_SIZE 		1001
@@ -102,7 +104,7 @@ typedef struct			s_process
 	int					bytecode_size;
 	int					carry;
 	uint16_t			PC;
-	t_op				current_op;
+	t_op				*current_op;
 	int					last_live;
 	t_champion			*owner;
 	struct s_process	*next;
@@ -142,6 +144,10 @@ void				bit_dump(void *ptr, int size);
 byte				*uint_to_big_endian(uint val, int size);
 unsigned int		big_endian_to_uint(void *val, int size);
 byte				*endian_switch(void *val, int size);
+void				memcopy_endian_flip(void *src, void *dest, uint16_t size);
+void				memcopy(void *src, void *dest, uint16_t size);
+
+
 
 // ADD ALWAYS INLINE
 
