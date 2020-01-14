@@ -1,4 +1,3 @@
-#include "op.h"
 #include "arena.h"
 
 t_arena	init_vm()
