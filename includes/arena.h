@@ -4,7 +4,7 @@
 # include "sdl_include/SDL.h"
 # include "sdl_include/SDL_image.h"
 # include "sdl_include/SDL_ttf.h"
-# include <stdio.h>							//A SUPPRIMER /!\
+# include <stdio.h>							//A SUPPRIMER /!
 
 #define IND_SIZE				2
 #define REG_SIZE				4
@@ -161,8 +161,5 @@ typedef struct		s_disp
 void				error(char *src, t_disp *d);
 void				init_window(t_disp *d);
 void				bit_dump(void *ptr, int size);
-byte				*int_to_big_endian(int val, int size);
-unsigned int		big_endian_to_int(byte *val, int size);
-byte				*endian_switch(byte *val, int size);
 #endif
 
