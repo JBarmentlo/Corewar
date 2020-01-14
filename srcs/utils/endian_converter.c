@@ -49,21 +49,23 @@ byte				*int_to_big_endian(int val, int size)
 	return (endian_switch((byte*)&val, size));
 }
 
-void			bit_dump(byte *ptr, int size)
+void			bit_dump(void *ptrr, int size)
 {
 	int		i;
+	byte	*ptr;
 
+	ptr = ptrr;
 	i = 0;
 	while (i < size)
 	{
-		printf("%d", (ptr[i] & ONE) != 0);
-		printf("%d", (ptr[i] & TWO) != 0);
-		printf("%d", (ptr[i] & THREE) != 0);
-		printf("%d", (ptr[i] & FOUR) != 0);
-		printf("%d", (ptr[i] & FIVE) != 0);
-		printf("%d", (ptr[i] & SIX) != 0);
-		printf("%d", (ptr[i] & SEVEN) != 0);
 		printf("%d", (ptr[i] & EIGHT) != 0);
+		printf("%d", (ptr[i] & SEVEN) != 0);
+		printf("%d", (ptr[i] & SIX) != 0);
+		printf("%d", (ptr[i] & FIVE) != 0);
+		printf("%d", (ptr[i] & FOUR) != 0);
+		printf("%d", (ptr[i] & THREE) != 0);
+		printf("%d", (ptr[i] & TWO) != 0);
+		printf("%d", (ptr[i] & ONE) != 0);
 		i++;
 	}
 }

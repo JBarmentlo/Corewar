@@ -50,7 +50,7 @@ $(OBJ_FOLDER)/%.o: $(SRCS_ASM_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $@ -c $<
 
 corewar: $(OUT_COREWAR) libCorewar.a Makefile $(RELINK_INCUDE)
-	$(COMPILER) -o $(NAME_COREWAR) $(OUT_COREWAR) $(LIBS)
+	$(COMPILER) -o corewar $(OUT_COREWAR) $(LIBS)
 
 $(OBJ_FOLDER)/%.o: $(SRCS_COREWAR_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $@ -c $<
