@@ -17,11 +17,10 @@ COREWAR_SOURCE_FILES=cycle.c \
 
 UTILS_SOURCE_FILES=endian_converter.c \
 
-ASM_SOURCE_FILES=
+ASM_SOURCE_FILES=main.c
 
 INCLUDES_FILES=arena.h \
 	bitMasks.h \
-	op.h
 
 RELINK_INCUDE=$(addprefix $(INCLUDE_FOLDER)/, $(INCLUDES_FILES))
 SRCS_UTILS=$(addprefix $(SRCS_UTILS_FOLDER)/, $(UTILS_SOURCE_FILES))
@@ -50,7 +49,7 @@ asm: $(OUT_ASM) libCorewar.a Makefile $(RELINK_INCUDE)
 $(OBJ_FOLDER)/%.o: $(SRCS_ASM_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $@ -c $<
 
-corewar: $(OUT_COREWAR) libCorewar Makefile $(RELINK_INCUDE)
+corewar: $(OUT_COREWAR) libCorewar.a Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $(NAME_COREWAR) $(OUT_COREWAR) $(LIBS)
 
 $(OBJ_FOLDER)/%.o: $(SRCS_COREWAR_FOLDER)/%.c Makefile $(RELINK_INCUDE)
@@ -63,3 +62,5 @@ clean:
 fclean: clean
 	rm -f corewar
 	rm -f asm
+
+re: fclean all

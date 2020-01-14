@@ -1,4 +1,3 @@
-#include "op.h"
 #include "arena.h"
 #include "stdlib.h"
 
@@ -24,11 +23,15 @@ int		do_we_have_a_winner(t_arena *arena)
 
 void	execute_process(t_arena *arena, t_process *process)
 {
+	/*
 	if (is_encoding_byte_ok(arena, process))
 	{
 		f[process->current_op](PC);
 	}
 	go_to_next_opcode(arena, process);
+	*/
+	arena++;
+	process++;
 }
 
 
