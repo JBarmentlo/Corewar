@@ -13,7 +13,8 @@ LIBS=libcorewar.a
 
 COREWAR_SOURCE_FILES=cycle.c \
 	main_arena.c \
-	op.c 
+	op.c \
+	args.c \
 
 UTILS_SOURCE_FILES=endian_converter.c \
 
@@ -62,5 +63,8 @@ clean:
 fclean: clean
 	rm -f corewar
 	rm -f asm
+
+brew:
+	sh brew_check.sh
 
 re: fclean all
