@@ -40,13 +40,13 @@ unsigned int		big_endian_to_int(byte *val, int size)
 	{
 		return ((unsigned int)*((uint32_t*)tmp));
 	}
-
 	printf("big_endian_to_int is not meant to be used with size = %d\n", size);
+	return (0);
 }
 
 byte				*int_to_big_endian(int val, int size)
 {
-	return (endian_switch(&val, size));
+	return (endian_switch((byte*)&val, size));
 }
 
 void			bit_dump(byte *ptr, int size)
