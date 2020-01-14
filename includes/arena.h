@@ -1,5 +1,5 @@
-#ifndef DISP_H
-# define DISP_H
+#ifndef ARENA_H
+# define ARENA_H
 
 # include "sdl_include/SDL.h"
 # include "sdl_include/SDL_image.h"
@@ -142,5 +142,8 @@ typedef struct		s_disp
 
 void				error(char *src, t_disp *d);
 void				init_window(t_disp *d);
-
+void				bit_dump(void *ptr, int size);
+byte				*int_to_big_endian(int val, int size);
+unsigned int		big_endian_to_int(byte *val, int size);
+byte				*endian_switch(byte *val, int size);
 #endif

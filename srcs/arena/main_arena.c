@@ -4,16 +4,14 @@ int		main(int ac, char **av)
 {
 	(void)ac;
 	(void)av;
-/*
-	parsing options
-	ac++;
-	av++;
-*/
+  byte a;
 	t_disp		d;
 	int			running;
 
+  a = 1;
 	init_window(&d);
 	running = 1;
+  bit_dump(&a, 1);
 	while (running)
 	{
 		while (SDL_PollEvent(&d.event))
