@@ -63,4 +63,7 @@ fclean: clean
 	rm -f corewar
 	rm -f asm
 
+brew:
+	sh brew_check.sh
+
 re: fclean all
