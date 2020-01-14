@@ -1,3 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   arena.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
+/*   Updated: 2020/01/14 17:05:25 by dberger          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "libft/libft.h"
+#include "ft_printf/ft_printf.h"
+
+#define	FALSE					-1
+
 #define IND_SIZE				2
 #define REG_SIZE				4
 #define DIR_SIZE				REG_SIZE
@@ -109,13 +126,18 @@ typedef	struct 				s_process_list
 typedef struct 			s_arena
 {
 	byte			memory[MEM_SIZE];
-	t_process*	 	process_list;
-	t_process*		process_table[PROCESS_TABLE_SIZE]; // a init vide;
+//	t_process*	 	process_list;
+//	t_process*		process_table[PROCESS_TABLE_SIZE]; // a init vide;
 	t_champion		champion_table[MAX_PLAYERS];
-	int				nb_champions;
+	int				nb_champs;
+	int				option_dump;
+	int				option_s;
 	int				cycle;
 
 	//live_related_info
 	
 }						t_arena;
 
+int						usage();
+int						pars_options(int *ac, char **av, t_arena **vm);
+int						pars_args(int ac, char **av, t_arena *vm);
