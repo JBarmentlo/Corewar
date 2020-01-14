@@ -9,12 +9,14 @@
 //returns a pointer to switched endian value.
 // the macs are little endian I believe ?
 // it's malloc so free it later
-byte	*endian_switch(byte *val, int size)
+byte	*endian_switch(void *vall, int size)
 {
 	int		i;
 	byte	*out;
+	byte	*val;
 
 	i = 0;
+	val = vall;
 	out = malloc(size);
 	while (i < size)
 	{
@@ -26,25 +28,27 @@ byte	*endian_switch(byte *val, int size)
 
 // Only works for size in [2, 4]
 // untested
-unsigned int		big_endian_to_int(byte *val, int size)
+uint		big_endian_to_uint(void *vall, int size)
 {
 	byte	*tmp;
+	byte	*val;
 
+	val = vall;
 	tmp = endian_switch(val, size);
 	if (size == 2)
 	{
-		return ((unsigned int)*((uint16_t*)tmp));
+		return ((uint)*((uint16_t*)tmp));
 	}
 	tmp = endian_switch(val, size);
 	if (size == 4)
 	{
-		return ((unsigned int)*((uint32_t*)tmp));
+		return ((uint)*((uint32_t*)tmp));
 	}
 	printf("big_endian_to_int is not meant to be used with size = %d\n", size);
 	return (0);
 }
 
-byte				*int_to_big_endian(int val, int size)
+byte				*uint_to_big_endian(uint val, int size)
 {
 	return (endian_switch((byte*)&val, size));
 }
@@ -66,6 +70,7 @@ void			bit_dump(void *ptrr, int size)
 		printf("%d", (ptr[i] & THREE) != 0);
 		printf("%d", (ptr[i] & TWO) != 0);
 		printf("%d", (ptr[i] & ONE) != 0);
+		printf(" ");
 		i++;
 	}
 }

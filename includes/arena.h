@@ -46,6 +46,7 @@
 typedef char					t_arg_type;
 typedef unsigned int			uint;
 typedef unsigned char			byte;
+typedef unsigned short			uint16_t;
 
 #define T_REG					1
 #define T_DIR					2
@@ -100,7 +101,7 @@ typedef struct			s_process
 	byte				bytecode[MAX_BYTECODE_SIZE];	//useless ?
 	int					bytecode_size;
 	int					carry;
-	int					PC;
+	uint16_t			PC;
 	t_op				current_op;
 	int					last_live;
 	t_champion			*owner;
@@ -113,6 +114,14 @@ typedef	struct 				s_process_list
 	struct s_process_list 	*next;
 }							t_process_list;
 
+typedef struct			s_args
+{
+	byte				opcode;
+	byte				type[MAX_ARGS_NUMBER];
+	uint16_t			ind[MAX_ARGS_NUMBER];
+	uint16_t			short_dir[MAX_ARGS_NUMBER];
+	uint				dir[MAX_ARGS_NUMBER];
+}						t_args;
 
 typedef struct 			s_arena
 {
@@ -122,10 +131,19 @@ typedef struct 			s_arena
 	t_champion		champion_table[MAX_PLAYERS];
 	int				nb_champions;
 	int				cycle;
+	t_args			*args;
 
 	//live_related_info
 	
 }						t_arena;
+
+
+void				bit_dump(void *ptr, int size);
+byte				*uint_to_big_endian(uint val, int size);
+unsigned int		big_endian_to_uint(void *val, int size);
+byte				*endian_switch(void *val, int size);
+
+// ADD ALWAYS INLINE
 
 typedef struct		s_disp
 {
@@ -147,3 +165,4 @@ byte				*int_to_big_endian(int val, int size);
 unsigned int		big_endian_to_int(byte *val, int size);
 byte				*endian_switch(byte *val, int size);
 #endif
+

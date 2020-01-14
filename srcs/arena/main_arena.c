@@ -1,14 +1,14 @@
 #include "arena.h"
 
+#include "stdio.h"
+
 int		main(int ac, char **av)
 {
 	(void)ac;
 	(void)av;
-  byte a;
 	t_disp		d;
 	int			running;
 
-  a = 1;
 	init_window(&d);
 	running = 1;
   bit_dump(&a, 1);
