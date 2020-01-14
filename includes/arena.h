@@ -1,3 +1,11 @@
+#ifndef DISP_H
+# define DISP_H
+
+# include "sdl_include/SDL.h"
+# include "sdl_include/SDL_image.h"
+# include "sdl_include/SDL_ttf.h"
+# include <stdio.h>							//A SUPPRIMER /!\
+
 #define IND_SIZE				2
 #define REG_SIZE				4
 #define DIR_SIZE				REG_SIZE
@@ -119,3 +127,20 @@ typedef struct 			s_arena
 	
 }						t_arena;
 
+typedef struct		s_disp
+{
+	SDL_Window		*win;
+	SDL_Renderer	*rend;
+	SDL_Event		event;
+	SDL_Surface		*img;
+	SDL_Texture		*back;
+	SDL_Rect		screen;
+	SDL_Rect		arena;
+	SDL_Rect		players;
+	SDL_Rect		process;
+}					t_disp;
+
+void				error(char *src, t_disp *d);
+void				init_window(t_disp *d);
+
+#endif

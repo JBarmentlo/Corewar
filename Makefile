@@ -10,10 +10,12 @@ CFLAGS=-Wall -Wextra -Werror
 INCLUDE_PATH=-I$(INCLUDE_FOLDER)
 COMPILER=$(CC) $(CFLAGS) $(INCLUDE_PATH)
 LIBS=libcorewar.a
+NAME_COREWAR=corewar
 
 COREWAR_SOURCE_FILES=cycle.c \
 	main_arena.c \
-	op.c 
+	op.c \
+	disp.c
 
 UTILS_SOURCE_FILES=endian_converter.c \
 
@@ -50,7 +52,7 @@ $(OBJ_FOLDER)/%.o: $(SRCS_ASM_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $@ -c $<
 
 corewar: $(OUT_COREWAR) libCorewar.a Makefile $(RELINK_INCUDE)
-	$(COMPILER) -o $(NAME_COREWAR) $(OUT_COREWAR) $(LIBS)
+	$(COMPILER) -o $(NAME_COREWAR) $(OUT_COREWAR) $(LIBS) -L srcs/sdl_src -l SDL2-2.0.0 -l SDL2_image -l SDL2_ttf
 
 $(OBJ_FOLDER)/%.o: $(SRCS_COREWAR_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $@ -c $<

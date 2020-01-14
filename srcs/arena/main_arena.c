@@ -1,18 +1,26 @@
 #include "arena.h"
 
-
 int		main(int ac, char **av)
 {
-
-	//parsing options
+	(void)ac;
+	(void)av;
+/*
+	parsing options
 	ac++;
 	av++;
-	/*
-	while(No_winner)
+*/
+	t_disp		d;
+	int			running;
+
+	init_window(&d);
+	running = 1;
+	while (running)
 	{
-		do_the_cycle(vm);
-		display(vm);
+		while (SDL_PollEvent(&d.event))
+			if (d.event.type == SDL_QUIT
+					|| d.event.key.keysym.sym == SDLK_ESCAPE)
+				running = 0;
 	}
-	*/
+	error("End.", &d);
 	return (0);
 }
