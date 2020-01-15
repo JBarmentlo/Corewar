@@ -1,5 +1,7 @@
 #include "arena.h"
 
+#include "stdio.h"
+
 int		main(int ac, char **av)
 {
 	(void)ac;
@@ -7,7 +9,7 @@ int		main(int ac, char **av)
 	t_disp		d;
 	t_arena		a;
 	int			running;
-
+  
 	a.nb_champions = 3;
 	a.champion_table[3].name = "Jjaegle";
 	a.champion_table[2].name = "Jbarment";
