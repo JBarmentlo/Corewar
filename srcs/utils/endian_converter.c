@@ -26,7 +26,7 @@ byte	*endian_switch(void *vall, int size)
 	return (out);
 }
 
-// Only works for size in [2, 4]
+// Only works for size in [1, 2, 4]
 // untested
 uint		big_endian_to_uint(void *vall, int size)
 {
@@ -40,9 +40,13 @@ uint		big_endian_to_uint(void *vall, int size)
 	{
 		out = ((uint)*((uint16_t*)tmp));
 	}
-	if (size == 4)
+	else if (size == 4)
 	{
 		out = ((uint)*((uint*)tmp));
+	}
+	else if (size == 1)
+	{
+		out = ((uint)*((byte*)tmp));
 	}
 	free(tmp);
 	return (out);
@@ -73,6 +77,7 @@ void			bit_dump(void *ptrr, int size)
 		printf(" ");
 		i++;
 	}
+	printf("\n");
 }
 
 
