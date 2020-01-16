@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 15:42:42 by dberger           #+#    #+#             */
-/*   Updated: 2019/11/27 16:14:58 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/16 14:04:09 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ char				*ft_strnstr(const char *str,
 int					ft_strcmp(const char *s1, const char *s2);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
 int					ft_atoi(const char *str);
+int					ft_atou(const char *str);
 long				ft_atol(const char *str);
 int					ft_isalpha(int c);
 int					ft_isdigit(int c);

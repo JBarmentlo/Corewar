@@ -6,7 +6,7 @@
 #    By: dberger <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/08 10:16:12 by dberger           #+#    #+#              #
-#    Updated: 2019/11/27 16:14:43 by dberger          ###   ########.fr        #
+#    Updated: 2020/01/16 14:04:23 by dberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ ft_strnstr.c\
 ft_strcmp.c\
 ft_strncmp.c\
 ft_atoi.c\
+ft_atou.c\
 ft_atol.c\
 ft_isalpha.c\
 ft_isdigit.c\
