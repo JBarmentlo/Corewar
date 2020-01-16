@@ -6,16 +6,21 @@ SRCS_UTILS_FOLDER=./srcs/utils
 SRCS_ASM_FOLDER=./srcs/asm
 
 CC=gcc
-CFLAGS=-Wall -Wextra -Werror
+CFLAGS=
 INCLUDE_PATH=-I$(INCLUDE_FOLDER)
 COMPILER=$(CC) $(CFLAGS) $(INCLUDE_PATH)
-LIBS=libcorewar.a
+LIBS=libCorewar.a
 NAME_COREWAR=corewar
 
 COREWAR_SOURCE_FILES=cycle.c \
 	main_arena.c \
 	args.c \
-	disp.c
+	VM_tester.c \
+	0x01.c \
+	0x02.c \
+	0x03.c \
+	0x04.c \
+
 
 UTILS_SOURCE_FILES=endian_converter.c \
 	op.c \
@@ -54,7 +59,7 @@ $(OBJ_FOLDER)/%.o: $(SRCS_ASM_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $@ -c $<
 
 corewar: $(OUT_COREWAR) libCorewar.a Makefile $(RELINK_INCUDE)
-	$(COMPILER) -o $(NAME_COREWAR) $(OUT_COREWAR) $(LIBS) -L srcs/sdl_src -l SDL2-2.0.0 -l SDL2_image -l SDL2_ttf
+	$(COMPILER) -o $(NAME_COREWAR) $(OUT_COREWAR) $(LIBS)
 
 $(OBJ_FOLDER)/%.o: $(SRCS_COREWAR_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $@ -c $<

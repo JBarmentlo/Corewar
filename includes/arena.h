@@ -110,19 +110,12 @@ typedef struct			s_process
 	struct s_process	*next;
 }						t_process;
 
-typedef	struct 				s_process_list
-{
-	t_process				*process;
-	struct s_process_list 	*next;
-}							t_process_list;
-
 typedef struct			s_args
 {
 	byte				opcode;
 	byte				type[MAX_ARGS_NUMBER];
-	uint16_t			ind[MAX_ARGS_NUMBER];
-	uint16_t			short_dir[MAX_ARGS_NUMBER];
-	uint				dir[MAX_ARGS_NUMBER];
+	byte				size[MAX_ARGS_NUMBER];
+	uint				val[MAX_ARGS_NUMBER];
 }						t_args;
 
 typedef struct 			s_arena
@@ -139,13 +132,6 @@ typedef struct 			s_arena
 	
 }						t_arena;
 
-
-void				bit_dump(void *ptr, int size);
-byte				*uint_to_big_endian(uint val, int size);
-unsigned int		big_endian_to_uint(void *val, int size);
-byte				*endian_switch(void *val, int size);
-void				memcopy_endian_flip(void *src, void *dest, uint16_t size);
-void				memcopy(void *src, void *dest, uint16_t size);
 
 
 
@@ -166,6 +152,50 @@ typedef struct		s_disp
 
 void				error(char *src, t_disp *d);
 void				init_window(t_disp *d);
+
+// ENDIAN
+
+byte				*uint_to_big_endian(uint val, int size);
+unsigned int		big_endian_to_uint(void *val, int size);
+byte				*endian_switch(void *val, int size);
+void				memcopy_endian_flip(void *src, void *dest, uint16_t size);
+void				memcopy(void *src, void *dest, uint16_t size);
+
+// ARGS
+
+void				set_args_to_zero(t_args *args);
+t_args				*new_t_args(void);
+byte				is_opcode_valid(t_arena *arena, uint16_t PC);
+void				read_encoding_byte(t_arena *arena, t_process *process);
+int					is_valid_encoding_byte(t_arena *arena, t_process *process);
+uint16_t			type_to_size(byte type, t_op *op);
+uint16_t			read_args(t_arena *arena, t_process *process);
+uint16_t			fill_args(t_arena *arena, t_process *process);
+
+// OPCODE FUNCTIONS
+
+void    			x01(t_arena *arena, t_process *process);
+void    			x02(t_arena *arena, t_process *process);
+void    			x03(t_arena *arena, t_process *process);
+void    			x04(t_arena *arena, t_process *process);
+void    			x05(t_arena *arena, t_process *process);
+void    			x06(t_arena *arena, t_process *process);
+void    			x07(t_arena *arena, t_process *process);
+void    			x08(t_arena *arena, t_process *process);
+void    			x09(t_arena *arena, t_process *process);
+void    			x10(t_arena *arena, t_process *process);
+void    			x11(t_arena *arena, t_process *process);
+void    			x12(t_arena *arena, t_process *process);
+void    			x13(t_arena *arena, t_process *process);
+void    			x14(t_arena *arena, t_process *process);
+void    			x15(t_arena *arena, t_process *process);
+void    			x16(t_arena *arena, t_process *process);
+
+// 	TESTING FUNCTIONS
+
+byte      			bytecode_gen(int one, int two, int three);
+t_arena 			*make_vm();
 void				bit_dump(void *ptr, int size);
+
 #endif
 

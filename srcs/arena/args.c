@@ -5,8 +5,33 @@
 t_args		*new_t_args(void)
 {
 	t_args	*out;
+	int		i;
+
+	i = 0;
 	out = malloc(sizeof(t_args));
+	while (i < MAX_ARGS_NUMBER)
+	{
+		out->type[i] = 0;
+		out->size[i] = 0;
+		out->val[i] = 0;
+		i++;
+	}
 	return (out);
+}
+
+void		set_args_to_zero(t_args *args)
+{
+	int i;
+	i = 0;
+
+	args->opcode = 0;
+	while (i < MAX_ARGS_NUMBER)
+	{
+		args->type[i] = 0;
+		args->size[i] = 0;
+		args->val[i] = 0;
+		i++;
+	}
 }
 
 byte		is_opcode_valid(t_arena *arena, uint16_t PC)
@@ -71,8 +96,21 @@ uint16_t				type_to_size(byte type, t_op *op)
 uint16_t				read_args(t_arena *arena, t_process *process)
 {
 	uint16_t	PC_tmp;
+	byte		size;
+	byte		i;
 
 	PC_tmp = 0;
+	i = 0;
+
+	while (i < MAX_ARGS_NUMBER && arena->args->type[i] != 0)
+	{
+		size = type_to_size(arena->args->type[i], process->current_op);
+		arena->args->size[i] = size;
+		arena->args->val[i] = big_endian_to_uint(&arena->memory[process->PC + 2 + PC_tmp], size);
+		PC_tmp += size;
+		i++;
+	}
+
 
 }
 

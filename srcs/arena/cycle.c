@@ -3,11 +3,9 @@
 
 int		do_we_have_a_winner(t_arena *arena)
 {
-	int			out;
 	int			first_process_owner;
 	t_process	*it;
 
-	out = 1;
 	it = arena->process_list;
 	first_process_owner = it->owner->number;
 	it = it->next;

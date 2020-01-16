@@ -32,20 +32,20 @@ uint		big_endian_to_uint(void *vall, int size)
 {
 	byte	*tmp;
 	byte	*val;
-
+	uint	out
+	;
 	val = vall;
 	tmp = endian_switch(val, size);
 	if (size == 2)
 	{
-		return ((uint)*((uint16_t*)tmp));
+		out = ((uint)*((uint16_t*)tmp));
 	}
-	tmp = endian_switch(val, size);
 	if (size == 4)
 	{
-		return ((uint)*((uint*)tmp));
+		out = ((uint)*((uint*)tmp));
 	}
-	printf("big_endian_to_int is not meant to be used with size = %d\n", size);
-	return (0);
+	free(tmp);
+	return (out);
 }
 
 byte				*uint_to_big_endian(uint val, int size)
