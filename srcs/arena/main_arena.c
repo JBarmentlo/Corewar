@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/16 12:32:15 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/16 14:37:29 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ int		main(int ac, char **av)
 	vm = init_vm();
 	if (pars_args(ac, av, &vm) == FALSE)
 		return (FALSE);
-	ft_printf("holaa\n");
 	/*
 	while(No_winner)
 	{
