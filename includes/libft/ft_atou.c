@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 14:05:06 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/16 14:12:43 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/16 14:13:33 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /*
 ** The flag '-1' stands for an error (no string, or not only numbers
-** string
+** in the string)
 */
 
 int		ft_atou(const char *str)
