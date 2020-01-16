@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/14 16:24:03 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/16 12:32:15 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,17 @@ t_arena		init_vm()
 
 	vm.nb_champs = 0;
 	vm.option_dump = 0;
-	vm.option_s = 0;
 	vm.cycle = 0;
 	return (vm);
+}
+
+int		error(char *str, char *str2)
+{
+	if (str2 == NULL)
+		ft_printf("%s\n", str);
+	else
+		ft_printf("%s %s\n", str, str2);
+	return (FALSE);
 }
 
 int		main(int ac, char **av)
@@ -28,11 +36,9 @@ int		main(int ac, char **av)
 	t_arena vm;
 
 	vm = init_vm();
-	if (pars_args(ac, av, &vm) == 0)
-		return (0);
-	//parsing options
-//	ac++;
-//	av++;
+	if (pars_args(ac, av, &vm) == FALSE)
+		return (FALSE);
+	ft_printf("holaa\n");
 	/*
 	while(No_winner)
 	{

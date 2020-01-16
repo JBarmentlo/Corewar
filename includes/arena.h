@@ -6,14 +6,17 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/14 17:05:25 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/16 12:32:05 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
 #include "ft_printf/ft_printf.h"
 
-#define	FALSE					-1
+#define	TRUE					1
+#define	FALSE					0
+#define	FALSE2					-1
+#define	INIT_NUM				-1
 
 #define IND_SIZE				2
 #define REG_SIZE				4
@@ -131,7 +134,6 @@ typedef struct 			s_arena
 	t_champion		champion_table[MAX_PLAYERS];
 	int				nb_champs;
 	int				option_dump;
-	int				option_s;
 	int				cycle;
 
 	//live_related_info
@@ -139,5 +141,5 @@ typedef struct 			s_arena
 }						t_arena;
 
 int						usage();
-int						pars_options(int *ac, char **av, t_arena **vm);
+int						error(char *str, char *str2);
 int						pars_args(int ac, char **av, t_arena *vm);
