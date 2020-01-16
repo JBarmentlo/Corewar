@@ -61,6 +61,7 @@ typedef unsigned short			uint16_t;
 # define COMMENT_LENGTH			(2048)
 # define COREWAR_EXEC_MAGIC		0xea83f3
 
+
 typedef struct		header_s
 {
 unsigned int		magic;
@@ -70,31 +71,31 @@ char				comment[COMMENT_LENGTH + 1];
 }					header_t;
 
 
-typedef struct	s_op
+typedef struct			s_op
 {
-	char*		name;
-	byte		arg_nb;
-	byte		arg_types[MAX_ARGS_NUMBER];
-	byte		opcode;
-	uint		cycle_to_wait;
-	char*		full_name;
-	byte		encoding_byte; 	//indicates the presence, or not, of an argument encoding byte after the opcode;
-	byte		direct_size;	//indicates the amount of bytes used to encode DIR arguments; 1 => 20 => 4
-}				t_op;
+	char*				name;
+	byte				arg_nb;
+	byte				arg_types[MAX_ARGS_NUMBER];
+	byte				opcode;
+	uint				cycle_to_wait;
+	char*				full_name;
+	byte				encoding_byte; 	//indicates the presence, or not, of an argument encoding byte after the opcode;
+	byte				direct_size;	//indicates the amount of bytes used to encode DIR arguments; 1 => 20 => 4
+}						t_op;
 
 extern	t_op			g_op_tab[17];
 
 
-#define PROCESS_TABLE_SIZE 		1001
+#define PROCESS_TABLE_SIZE	1001
 #define MAX_BYTECODE_SIZE	18
 
 
 typedef struct			s_champion
 {
-	int		number;
-	char*	comment;
-	char*	name;
-	//live related stuff
+	int					number;
+	char*				comment;
+	char*				name;
+	//live related stuff	
 }						t_champion;
 
 typedef struct			s_process
@@ -121,13 +122,13 @@ typedef struct			s_args
 
 typedef struct 			s_arena
 {
-	byte			memory[MEM_SIZE];
-	t_process*	 	process_list;
-	t_process*		process_table[PROCESS_TABLE_SIZE]; // a init vide;
-	t_champion		champion_table[MAX_PLAYERS];
-	int				nb_champions;
-	long long		cycle;
-	t_args			*args;
+	byte				memory[MEM_SIZE];
+	t_process*	 		process_list;
+	t_process*			process_table[PROCESS_TABLE_SIZE]; // a init vide;
+	t_champion			champion_table[MAX_PLAYERS];
+	int					nb_champions;
+	long long			cycle;
+	t_args				*args;
 
 	//live_related_info
 	
@@ -154,6 +155,9 @@ typedef struct		s_disp
 void				error(char *src, t_disp *d);
 void				init_window(t_disp *d);
 
+
+
+
 // ENDIAN
 
 byte				*uint_to_big_endian(uint val, int size);
@@ -178,35 +182,39 @@ void				no_encoding_byte(t_arena *arena, t_process *process);
 
 // CYCLE & PROCESS
 
-void	execute_process(t_arena *arena, t_process *process);
-
+void				execute_process(t_arena *arena, t_process *process);
+void				process_invalid(t_process *process);
+void				execute_process(t_arena *arena, t_process *process);
+void				execute_processes(t_arena *arena);
 
 
 // OPCODE FUNCTIONS
 
-void			x01(t_arena *arena, t_process *process);
-void			x02(t_arena *arena, t_process *process);
-void			x03(t_arena *arena, t_process *process);
-void			x04(t_arena *arena, t_process *process);
-void			x05(t_arena *arena, t_process *process);
-void			x06(t_arena *arena, t_process *process);
-void			x07(t_arena *arena, t_process *process);
-void			x08(t_arena *arena, t_process *process);
-void			x09(t_arena *arena, t_process *process);
-void			x10(t_arena *arena, t_process *process);
-void			x11(t_arena *arena, t_process *process);
-void			x12(t_arena *arena, t_process *process);
-void			x13(t_arena *arena, t_process *process);
-void			x14(t_arena *arena, t_process *process);
-void			x15(t_arena *arena, t_process *process);
-void			x16(t_arena *arena, t_process *process);
+void				run_function(t_arena *arena, t_process *process);
+
+void				x01(t_arena *arena, t_process *process);
+void				x02(t_arena *arena, t_process *process);
+void				x03(t_arena *arena, t_process *process);
+void				x04(t_arena *arena, t_process *process);
+void				x05(t_arena *arena, t_process *process);
+void				x06(t_arena *arena, t_process *process);
+void				x07(t_arena *arena, t_process *process);
+void				x08(t_arena *arena, t_process *process);
+void				x09(t_arena *arena, t_process *process);
+void				x10(t_arena *arena, t_process *process);
+void				x11(t_arena *arena, t_process *process);
+void				x12(t_arena *arena, t_process *process);
+void				x13(t_arena *arena, t_process *process);
+void				x14(t_arena *arena, t_process *process);
+void				x15(t_arena *arena, t_process *process);
+void				x16(t_arena *arena, t_process *process);
 
 // 	TESTING FUNCTIONS
 
-byte			bytecode_gen(int one, int two, int three);
-t_arena 		*make_vm();
-void			bit_dump(void *ptr, int size);
-void			print_t_args(t_args *args);
+byte				bytecode_gen(int one, int two, int three);
+t_arena 			*make_vm();
+void				bit_dump(void *ptr, int size);
+void				print_t_args(t_args *args);
 
 #endif
 
