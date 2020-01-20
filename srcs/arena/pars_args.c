@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:19:32 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/16 15:18:14 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/20 11:55:32 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,18 @@
 int		is_champ(char *av, t_arena **vm, int n, int *i)
 {
 	int		fd;
+	int		l;
 
+	l = ft_strlen(av);
 	fd = open(av, O_RDONLY);
 	if (fd == -1)
 		return (error("Can't read source file", av));
+	if (l <= 4 || ft_strcmp(av + (l - 4), ".cor"))
+		return (error("The source file should be a '.cor' file", av));
 	if (*i == MAX_PLAYERS)
 		return (error("Too many champions", NULL));
 	(*vm)->champion_table[*i].number = n;
+	(*vm)->champion_table[*i].fd = fd;
 	(*vm)->nb_champs = (*vm)->nb_champs + 1;
 	*i += 1;
 	return (TRUE);
