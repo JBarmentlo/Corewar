@@ -2,6 +2,42 @@
 #include "stdlib.h"
 #include "bitMasks.h"
 
+t_process	*make_process(void)
+{
+	t_process   *process;
+	int			i;
+
+	process = malloc(sizeof(t_process));
+	process->registre[0] = 1;
+	process->bytecode_size = 0;
+	process->carry = 0;
+	process->PC = 0;
+	process->current_op = NULL;
+	process->last_live = 0;
+	process->table_pos = 0;
+	process->alive = 1;
+	process->owner = NULL;
+	process->next_list = NULL;
+	process->next_table = NULL;
+
+
+	i = 0;
+	while (i < REG_NUMBER)
+	{
+		process->registre[i] = 0;
+		i++;
+	}
+	return (process);
+}
+
+t_args		*make_args(void)
+{
+	t_args *args;
+
+	args = malloc(sizeof(t_args));
+	set_args_to_zero(args);
+	return (args);
+}
 
 t_arena *make_vm()
 {
@@ -11,9 +47,8 @@ t_arena *make_vm()
 	int         i;
 
 	arena = malloc(sizeof(t_arena));
-	args = malloc(sizeof(t_args));
-	process = malloc(sizeof(t_process));
-
+	process = make_process();
+	args = make_args();
 	i = 0;
 	while (i < MEM_SIZE)
 	{
@@ -21,24 +56,12 @@ t_arena *make_vm()
 		i++;
 	}
 	arena->cycle = 0;
+	arena->total_live_since_check = 0;
+	arena->cycles_since_check = 0;
+	arena->cycle_to_die = CYCLE_TO_DIE;
 	arena->args = args;
-	args->opcode = 17;
-
-	i = 0;
-	while (i < REG_NUMBER)
-	{
-		process->registre[i] = 0;
-		i++;
-	}
-	process->registre[0] = 1;
-	process->bytecode_size = 0;
-	process->carry = 0;
-	process->PC = 0;
-	process->current_op = NULL;
-	process->last_live = 0;
-	process->next = NULL;
 	arena->process_list = process;
-	set_args_to_zero(args);
+	arena->max_checks = 0;
 	return (arena);
 }
 

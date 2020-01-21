@@ -69,7 +69,7 @@ uint16_t	read_args(t_args *args, t_process *process)
 	while (i < MAX_ARGS_NUMBER && args->type[i] != 0)
 	{
 		size = args->size[i];
-		args->val[i] = big_endian_to_uint(process->args_tmp + PC_tmp, size);
+		args->val[i] = big_endian_to_int(process->args_tmp + PC_tmp, size);
 		PC_tmp += size;
 		i++;
 	}

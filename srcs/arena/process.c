@@ -8,7 +8,6 @@ void	process_invalid(t_process *process)
 }
 void	execute_process(t_arena *arena, t_process *process)
 {
-	//if current op == NULL: read opcode and add;
 	int	PC_jump;
 	set_args_to_zero(arena->args);
 	if (!is_valid_opcode(arena->memory[process->PC])) //to be made redundant by archtecture
@@ -18,7 +17,6 @@ void	execute_process(t_arena *arena, t_process *process)
 		return ;
 	}
 	process->current_op = &g_op_tab[arena->memory[process->PC] - 1];
-	printf("current opcode %d\n", arena->memory[process->PC]);
 	if (process->current_op->encoding_byte)
 	{
 		bit_dump(arena->memory + 1, 1);
@@ -55,23 +53,31 @@ void	execute_processes(t_arena *arena)
 	it = arena->process_table[arena->cycle % PROCESS_TABLE_SIZE];
 	while (it != NULL)
 	{
-		next = it->next;
+		next = it->next_table;
 		if (it->current_op == NULL)
 		{
 			if (is_valid_opcode(arena->memory[it->PC]))
 			{
 				it->current_op = &g_op_tab[arena->memory[it->PC]];
+				add_process_to_table(it, arena, arena->cycle + it->current_op->cycle_to_wait);
 			}
 			else
 			{
 				it->PC = (it->PC + 1) % MEM_SIZE;
+				add_process_to_table(it, arena, arena->cycle + 1);
 			}
-			}
+		}
 		else
 		{
 			execute_process(arena, it);	
 		}
 		it = next;
 	}
-	//reset next pointers and clear table at index, use recusrive call to reset next pointer collapse ? too fancy ?
+	arena->process_table[arena->cycle % PROCESS_TABLE_SIZE] = NULL;
+}
+
+void	add_process_to_table(t_process *process, t_arena *arena, int cycle)
+{
+	process->next_table = arena->process_table[cycle % PROCESS_TABLE_SIZE];
+	arena->process_table[cycle % PROCESS_TABLE_SIZE] = process;
 }

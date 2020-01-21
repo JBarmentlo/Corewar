@@ -52,6 +52,30 @@ uint		big_endian_to_uint(void *vall, int size)
 	return (out);
 }
 
+int		big_endian_to_int(void *vall, int size)
+{
+	byte	*tmp;
+	byte	*val;
+	int	out
+	;
+	val = vall;
+	tmp = endian_switch(val, size);
+	if (size == 2)
+	{
+		out = ((int)*((int16_t*)tmp));
+	}
+	else if (size == 4)
+	{
+		out = ((int)*((int*)tmp));
+	}
+	else if (size == 1)
+	{
+		out = ((int)*((byte*)tmp));
+	}
+	free(tmp);
+	return (out);
+}
+
 byte				*uint_to_big_endian(uint val, int size)
 {
 	return (endian_switch((byte*)&val, size));

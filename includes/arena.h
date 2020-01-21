@@ -80,7 +80,7 @@ typedef struct			s_op
 	uint				cycle_to_wait;
 	char*				full_name;
 	byte				encoding_byte; 	//indicates the presence, or not, of an argument encoding byte after the opcode;
-	byte				direct_size;	//indicates the amount of bytes used to encode DIR arguments; 1 => 20 => 4
+	byte				is_direct_small;	//indicates the amount of bytes used to encode DIR arguments; 1 => 20 => 4
 }						t_op;
 
 extern	t_op			g_op_tab[17];
@@ -95,6 +95,7 @@ typedef struct			s_champion
 	int					number;
 	char*				comment;
 	char*				name;
+	long				last_live;
 	//live related stuff	
 }						t_champion;
 
@@ -106,10 +107,12 @@ typedef struct			s_process
 	int					carry;
 	uint16_t			PC;
 	t_op				*current_op;
-	int					last_live;
+	unsigned long		last_live;
+	int					table_pos;
 	int					alive;
 	t_champion			*owner;
-	struct s_process	*next;
+	struct s_process	*next_list;
+	struct s_process	*next_table;
 }						t_process;
 
 typedef struct			s_args
@@ -117,17 +120,27 @@ typedef struct			s_args
 	byte				opcode;
 	byte				type[MAX_ARGS_NUMBER];
 	byte				size[MAX_ARGS_NUMBER];
-	uint				val[MAX_ARGS_NUMBER];
+	int					val[MAX_ARGS_NUMBER];
 }						t_args;
 
 typedef struct 			s_arena
 {
 	byte				memory[MEM_SIZE];
+
 	t_process*	 		process_list;
 	t_process*			process_table[PROCESS_TABLE_SIZE]; // a init vide;
+
 	t_champion			champion_table[MAX_PLAYERS];
+	int					last_live_champ_number;
 	int					nb_champions;
-	long long			cycle;
+
+	t_op				g_op_tab[17];
+
+	unsigned long		cycle;
+	unsigned long		total_live_since_check;
+	unsigned long		cycles_since_check;
+	uint				cycle_to_die;
+	uint				max_checks;
 	t_args				*args;
 
 	//live_related_info
@@ -162,6 +175,7 @@ void				init_window(t_disp *d);
 
 byte				*uint_to_big_endian(uint val, int size);
 unsigned int		big_endian_to_uint(void *val, int size);
+int					big_endian_to_int(void *vall, int size);
 byte				*endian_switch(void *val, int size);
 void				memcopy_endian_flip(void *src, void *dest, uint16_t size);
 void				memcopy(void *src, void *dest, uint16_t size);
@@ -186,6 +200,7 @@ void				execute_process(t_arena *arena, t_process *process);
 void				process_invalid(t_process *process);
 void				execute_process(t_arena *arena, t_process *process);
 void				execute_processes(t_arena *arena);
+void				add_process_to_table(t_process *process, t_arena *arena, int cycle);
 
 
 // OPCODE FUNCTIONS

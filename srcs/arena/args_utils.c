@@ -59,7 +59,7 @@ uint16_t	type_to_size(byte type, t_op *op)
 
 	if (type == T_DIR)
 	{
-		if (op->direct_size == 1)
+		if (op->is_direct_small == 1)
 			return (2);
 		else
 			return (4);

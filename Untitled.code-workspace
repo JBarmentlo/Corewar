@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "/home/yup/Desktop/code/Corewar_Luigi"
 		}
 	],
 	"settings": {}

@@ -21,7 +21,7 @@ typedef struct	s_op
 	int		cycle_to_wait;
 	char*	full_name;
 	int		encoding_byte; 	//indicates the presence, or not, of an argument encoding byte after the opcode;
-	int		direct_size;	//indicates the amount of bytes used to encode DIR arguments; 1 => 2, 0 => 4;
+	int		is_direct_small;	//indicates the amount of bytes used to encode DIR arguments; 1 => 2, 0 => 4;
 }				t_op;
 */
 
