@@ -1,5 +1,7 @@
 #include "arena.h"
 
+
+// nb or -nb ?
 void    x01(t_arena *arena, t_process *process)
 {
     printf("0x01\n");

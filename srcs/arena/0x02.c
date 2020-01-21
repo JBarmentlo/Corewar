@@ -9,13 +9,13 @@ void    x02(t_arena *arena, t_process *process)
 
 	if (arena->args->type[0] == T_IND)
 	{
-		
-		value = big_endian_to_uint(&arena->memory[(process->PC + (arena->args->val[0] % IDX_MOD)) % MEM_SIZE], DIR_SIZE);
-		memcopy(&value, &process->registre[(arena->args->val[1] - 1) * 4], REG_SIZE);
+		value = mem_ind_to_uint(arena, process, arena->args->val[0]);
+		reg_write_uint(process, value, arena->args->val[1]);
 	}
 	else
 	{
-		memcpy(&process->registre[(arena->args->val[1] - 1) * 4], &arena->args->val[0], T_DIR);
+		value = arena->args->val[0];
+		reg_write_uint(process, value, arena->args->val[1]);
 	}
 	process->carry = (value == 0);
 	printf("0x02\n");
