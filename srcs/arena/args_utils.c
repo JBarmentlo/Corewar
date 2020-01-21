@@ -99,3 +99,27 @@ int			is_valid_args_value(t_args *args)
 	return (1);
 
 }
+
+// Assumes type[] and val[] are defined
+void	get_val(t_arena *arena, t_process *process)
+{
+	int	i;
+
+	i = 0;
+	while (i < process->current_op->arg_nb)
+	{
+		if (arena->args->type[i] == T_DIR)
+		{
+			arena->args->val_read[i] = arena->args->val[i];
+		}
+		else if (arena->args->type[i] == T_IND)
+		{
+			arena->args->val_read[i] = ind_to_uint(arena, process, (int)arena->args->val[i]);
+		}
+		else if (arena->args->type[i] == T_REG)
+		{
+			arena->args->val_read[i] = read_reg(process, arena->args->val[i]);
+		}
+		i++;
+	}
+}

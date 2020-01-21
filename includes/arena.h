@@ -80,7 +80,8 @@ typedef struct			s_op
 	uint				cycle_to_wait;
 	char*				full_name;
 	byte				encoding_byte; 	//indicates the presence, or not, of an argument encoding byte after the opcode;
-	byte				is_direct_small;	//indicates the amount of bytes used to encode DIR arguments; 1 => 20 => 4
+	byte				is_direct_small;	//indicates the amount of bytes used to encode DIR arguments; 1 => 2 0 => 4
+	byte				idx_mod_applies;
 }						t_op;
 
 extern	t_op			g_op_tab[17];
@@ -121,6 +122,7 @@ typedef struct			s_args
 	byte				type[MAX_ARGS_NUMBER];
 	byte				size[MAX_ARGS_NUMBER];
 	int					val[MAX_ARGS_NUMBER];
+	int					val_read[MAX_ARGS_NUMBER];
 }						t_args;
 
 typedef struct 			s_arena
@@ -193,6 +195,7 @@ uint16_t			read_args(t_args *args, t_process *process);
 uint16_t			fill_args(t_arena *arena, t_process *process);
 void				copy_to_args_tmp(t_arena *arena, t_process *process);
 void				no_encoding_byte(t_arena *arena, t_process *process);
+void				get_val(t_arena *arena, t_process *process);
 
 // CYCLE & PROCESS
 
@@ -201,6 +204,25 @@ void				process_invalid(t_process *process);
 void				execute_process(t_arena *arena, t_process *process);
 void				execute_processes(t_arena *arena);
 void				add_process_to_table(t_process *process, t_arena *arena, int cycle);
+
+
+// READ WRITE
+
+void				write_uint_to_reg(t_process *process, uint val, uint reg_number);
+void				mem_memcopy_endian_switch(t_arena *arena, byte *src, int index, uint size);
+void				mem_memcopy(t_arena *arena, byte *src, int index, uint size);
+uint				read_reg(t_process *process, int reg_nb);
+uint				ind_to_uint(t_arena *arena, t_process *process, int ind);
+uint				mem_read_uint(t_arena *arena, int index);
+void				write_uint_to_mem(t_arena *arena, int index, uint val);
+
+//	UTILS
+
+void				*reg_nb_to_ptr(t_process *process, int nb);
+void				*ind_to_ptr_idx(t_arena *arena, int ind, int PC);
+void				*ind_to_ptr_no_idx(t_arena *arena, int ind, int PC);
+
+
 
 
 // OPCODE FUNCTIONS

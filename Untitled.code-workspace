@@ -7,5 +7,9 @@
 			"path": "/home/yup/Desktop/code/Corewar_Luigi"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.associations": {
+			"arena.h": "c"
+		}
+	}
 }

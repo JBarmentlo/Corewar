@@ -22,10 +22,23 @@ COREWAR_SOURCE_FILES=cycle.c \
 	0x02.c \
 	0x03.c \
 	0x04.c \
+	0x05.c \
+	0x06.c \
+	0x07.c \
+	0x08.c \
+	0x09.c \
+	0x10.c \
+	0x11.c \
+	0x12.c \
+	0x13.c \
+	0x14.c \
+	0x15.c \
+	0x16.c \
 
 
 UTILS_SOURCE_FILES=endian_converter.c \
 	op.c \
+	read_write.c \
 
 
 ASM_SOURCE_FILES=main.c

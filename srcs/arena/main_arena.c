@@ -11,7 +11,9 @@ int		main(int ac, char **av)
 	t_process	*process;
 	byte		bytecode;
 	byte		reg;
-	uint16_t	ind;
+	int16_t	ind;
+	int			vint;
+	uint		vuint;
 	uint		dir;
 
 	arena = make_vm();
@@ -24,9 +26,12 @@ int		main(int ac, char **av)
 	memcopy_endian_flip(&reg, &arena->memory[2 + 4], 1);
 	//execute_process(arena, process);
 
-	dir = 4096;
-	dir = dir & MODULO_MASK;
-	printf("%d\n", MODULO_MASK);
+
+	ind = -1;
+	vuint = (uint)ind;
+	vint = (int)vuint;
+	printf("H: %d\n", vint);
+	printf("H: %u\n", vuint);
 
 	return (0);
 }
