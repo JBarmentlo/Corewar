@@ -92,7 +92,7 @@ int			is_valid_args_value(t_args *args)
 	i = 0;
 	while (i < MAX_ARGS_NUMBER && args->type[i] != 0)
 	{
-		if (args->type[i] == T_REG && args->val[i] > REG_NUMBER)
+		if (args->type[i] == T_REG && (args->val[i] > REG_NUMBER || args->val[i] < 1))
 			return (0);
 		i++;
 	}
