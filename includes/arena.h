@@ -203,8 +203,11 @@ void				execute_process(t_arena *arena, t_process *process);
 void				process_invalid(t_process *process);
 void				execute_process(t_arena *arena, t_process *process);
 void				execute_processes(t_arena *arena);
-void				add_process_to_table(t_process *process, t_arena *arena, int cycle);
-
+void				kill_process(t_arena *arena, t_process *it, t_process **prev);
+void				remove_process_from_table(t_arena *arena, t_process *process); //wildly unchecked
+t_process			*process_copy(t_process *src);
+void				add_process_to_table(t_process *process, t_arena *arena, uint table_index);
+void				add_process_to_list(t_process *process, t_arena *arena);
 
 // READ WRITE
 

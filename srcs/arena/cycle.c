@@ -10,28 +10,6 @@ void	run_function(t_arena *arena, t_process *process)
 	print_t_args(arena->args);
 }
 
-void	remove_process_from_table(t_arena *arena, t_process *process) //wildly unchecked
-{
-	t_process	*it;
-	t_process	**prev;
-
-	it = arena->process_table[process->table_pos];
-	prev = &it;
-	while (it != process)
-	{
-		prev = &it->next_table;
-		it = it->next_table;
-	}
-	*prev = it->next_table;
-}
-
-void	kill_process(t_arena *arena, t_process *it, t_process **prev)
-{
-	*prev = it->next_list; //remove it form process_list in arena;
-	remove_process_from_table(arena, it);
-	free(it);
-}
-
 void	check_lives(t_arena *arena)
 {
 	t_process	*it;

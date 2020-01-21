@@ -6,6 +6,7 @@ void	process_invalid(t_process *process)
 	process->PC = process->PC % MEM_SIZE; //manually replace by bitmask
 	process->current_op = NULL;	//will be made obsolete by architecture
 }
+
 void	execute_process(t_arena *arena, t_process *process)
 {
 	int	PC_jump;
@@ -74,10 +75,4 @@ void	execute_processes(t_arena *arena)
 		it = next;
 	}
 	arena->process_table[arena->cycle % PROCESS_TABLE_SIZE] = NULL;
-}
-
-void	add_process_to_table(t_process *process, t_arena *arena, int cycle)
-{
-	process->next_table = arena->process_table[cycle % PROCESS_TABLE_SIZE];
-	arena->process_table[cycle % PROCESS_TABLE_SIZE] = process;
 }

@@ -18,6 +18,7 @@ COREWAR_SOURCE_FILES=cycle.c \
 	VM_tester.c \
 	args_utils.c \
 	process.c \
+	process_utils.c \
 	0x01.c \
 	0x02.c \
 	0x03.c \

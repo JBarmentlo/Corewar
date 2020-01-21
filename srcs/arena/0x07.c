@@ -1,6 +1,6 @@
 #include "arena.h"
 
-void Ox07(t_arena *arena, t_process *process)
+void	x07(t_arena *arena, t_process *process)
 {
 	uint	val;
 
