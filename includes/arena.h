@@ -208,13 +208,13 @@ void				add_process_to_table(t_process *process, t_arena *arena, int cycle);
 
 // READ WRITE
 
-void				write_uint_to_reg(t_process *process, uint val, uint reg_number);
+void				reg_write_uint(t_process *process, uint val, uint reg_number);
 void				mem_memcopy_endian_switch(t_arena *arena, byte *src, int index, uint size);
 void				mem_memcopy(t_arena *arena, byte *src, int index, uint size);
-uint				read_reg(t_process *process, int reg_nb);
-uint				ind_to_uint(t_arena *arena, t_process *process, int ind);
+uint				reg_read_uint(t_process *process, int reg_nb);
+uint				mem_ind_to_uint(t_arena *arena, t_process *process, int ind);
 uint				mem_read_uint(t_arena *arena, int index);
-void				write_uint_to_mem(t_arena *arena, int index, uint val);
+void				mem_write_uint(t_arena *arena, int index, uint val);
 
 //	UTILS
 

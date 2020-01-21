@@ -55,7 +55,7 @@ uint	mem_read_uint(t_arena *arena, int index)
 	return ((uint)*(uint*)out);
 }
 
-void	write_uint_to_mem(t_arena *arena, int index, uint val)
+void	mem_write_uint(t_arena *arena, int index, uint val)
 {
 	byte	*value;
 	int		i;
@@ -69,19 +69,19 @@ void	write_uint_to_mem(t_arena *arena, int index, uint val)
 	}
 }
 
-uint	ind_to_uint(t_arena *arena, t_process *process, int ind)
+uint	mem_ind_to_uint(t_arena *arena, t_process *process, int ind)
 {
 	if (process->current_op->idx_mod_applies)
 		ind = ind % IDX_MOD;
 	return (mem_read_uint(arena, ind));
 }
 
-void	write_uint_to_reg(t_process *process, uint val, uint reg_number)
+void	reg_write_uint(t_process *process, uint val, uint reg_number)
 {
 	memcpy(&process->registre[(reg_number - 1) * 4], &val, REG_SIZE);
 }
 
-uint	read_reg(t_process *process, int reg_nb)
+uint	reg_read_uint(t_process *process, int reg_nb)
 {
 	return ((uint)*((uint*)(&process->registre[(reg_nb - 1) * 4])));
 }

@@ -9,7 +9,7 @@ void    x03(t_arena *arena, t_process *process)
     if (arena->args->type[1] == T_REG)
     {
         dest = reg_nb_to_ptr(process, arena->args->val[1]);
-        write_uint_to_reg(process, process->registre[arena->args->val[0]], arena->args->val[1]);
+        reg_write_uint(process, process->registre[arena->args->val[0]], arena->args->val[1]);
     }
     else
     {

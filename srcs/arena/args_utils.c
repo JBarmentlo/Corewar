@@ -114,11 +114,11 @@ void	get_val(t_arena *arena, t_process *process)
 		}
 		else if (arena->args->type[i] == T_IND)
 		{
-			arena->args->val_read[i] = ind_to_uint(arena, process, (int)arena->args->val[i]);
+			arena->args->val_read[i] = mem_ind_to_uint(arena, process, (int)arena->args->val[i]);
 		}
 		else if (arena->args->type[i] == T_REG)
 		{
-			arena->args->val_read[i] = read_reg(process, arena->args->val[i]);
+			arena->args->val_read[i] = reg_read_uint(process, arena->args->val[i]);
 		}
 		i++;
 	}
