@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:19:32 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/20 11:55:32 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/21 19:24:24 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int		is_champ(char *av, t_arena **vm, int n, int *i)
 ** champion in (vm->champion_table[k].number).
 */
 
-int		champ_num(int *ac, char **av, t_arena *vm, int i)
+int		champ_num(int *ac, char **av, int *nb)
 {
 	int k;
 	int	n;
@@ -53,18 +53,18 @@ int		champ_num(int *ac, char **av, t_arena *vm, int i)
 	k = 0;
 	n = 0;
 	if (ft_strcmp(av[*ac], "-n"))
-		return (i + 1);
+		return (NO_NB);
 	*ac += 1;
 	if (av[*ac])
 		n = ft_atou(av[*ac]);
 	if (av[*ac] == NULL || av[*ac + 1] == NULL || n == -1)
 		return (usage());
-	while (vm->nb_champs > 0 && k < vm->nb_champs)
-	{
-		if (vm->champion_table[k].number == n)
-			return (error("Same number for two champions", NULL));
-		k++;
-	}
+	if (n <= 0 || n > MAX_ARGS_NUMBER)
+		return (error("The number assignated to a champion is not correct", NULL)); 
+	if (nb[n- 1] == NO_NB)
+		return (error("Same number for two champions", NULL));
+	if (n > 0 && n != NO_NB)
+		nb[n - 1] = NO_NB;
 	*ac += 1;
 	return (n);
 }
@@ -109,6 +109,48 @@ int		number_opt(int *opt, char **av, int *ac, t_arena **vm)
 	return (TRUE);
 }
 
+int		check_num_champ(int *nb, t_arena **vm, int mode)
+{
+	int		k;
+	int		i;
+
+	k = 0;
+	while (mode == 1 && k < MAX_ARGS_NUMBER)
+	{
+		nb[k] = k + 1;
+		k++;
+	}
+	k = MAX_ARGS_NUMBER - (*vm)->nb_champs;;
+	i = MAX_ARGS_NUMBER - 1;
+	if (mode == 2 && k > 0)
+	{
+		while (k > 0 && i > 0)
+		{
+			if (nb[i] == NO_NB)
+				return (error("The '-n' option should be corresponding to the amount of champions", NULL));
+			k--;
+			i--;
+		}
+	}
+	else if (mode == 3)
+	{
+	i = 0;
+	k = 0;
+	while (i < (*vm)->nb_champs)
+	{
+		if ((*vm)->champion_table[i].number == NO_NB)
+		{
+			while (nb[k] == NO_NB)
+				k++;
+			(*vm)->champion_table[i].number = nb[k];
+			k++;
+		}
+		i++;
+	}
+	}
+	return (TRUE);
+}
+
 /*
 ** While reading the arguments, we need to know if it is an
 ** option for the vm (-dump N) or the champions (-n N) - stock these
@@ -120,6 +162,7 @@ int		pars_args(int ac, char **av, t_arena *vm)
 	int		n;
 	int		d;
 	int		i;
+	int		nb[MAX_ARGS_NUMBER];
 
 	n = 0;
 	i = 0;
@@ -129,17 +172,27 @@ int		pars_args(int ac, char **av, t_arena *vm)
 	if (ac == 1)
 		return (usage());
 	ac = 1;
+	check_num_champ(nb, &vm, 1); 
 	while (av[ac])
 	{
 		if (!ft_strcmp(av[ac], "-dump"))
 			if (number_opt(&d, av, &ac, &vm) == FALSE)
 				return (FALSE);
-		n = champ_num(&ac, av, vm, i);
+		n = champ_num(&ac, av, nb);
 		if (n == FALSE)
 			return (FALSE);
 		if (is_champ(av[ac], &vm, n, &i) == FALSE)
 			return (FALSE);
 		ac++;
+	}
+	if (check_num_champ(nb, &vm, 2) == FALSE)
+		return (FALSE);
+	check_num_champ(nb, &vm, 3); 
+	i = 0;
+	while (i < vm->nb_champs)
+	{
+		ft_printf("champ n[%d] a pour num: [%d]\n", i, vm->champion_table[i].number);
+		i++;
 	}
 	return (TRUE);
 }
