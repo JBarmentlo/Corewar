@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:19:32 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/22 12:09:49 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/22 13:13:22 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,28 +45,30 @@ int		is_champ(char *av, t_arena **vm, int n, int *i)
 ** champion in (vm->champion_table[k].number).
 */
 
-int		champ_num(int *ac, char **av, int *nb)
+int		champ_num(int *ac, char **av, int *nb, int *n)
 {
 	int k;
-	int	n;
 
 	k = 0;
-	n = 0;
+	*n = 0;
 	if (ft_strcmp(av[*ac], "-n"))
-		return (NO_NB);
+	{
+		*n = NO_NB;
+		return (TRUE);
+	}
 	*ac += 1;
 	if (av[*ac])
-		n = ft_atou(av[*ac]);
-	if (av[*ac] == NULL || av[*ac + 1] == NULL || n == -1)
+		*n = ft_atou(av[*ac]);
+	if (av[*ac] == NULL || av[*ac + 1] == NULL || *n == -1)
 		return (usage());
-	if (n <= 0 || n > MAX_ARGS_NUMBER)
+	if (*n <= 0 || *n > MAX_ARGS_NUMBER)
 		return (error("Wrong number for a champion", NULL));
-	if (nb[n - 1] == NO_NB)
+	if (nb[*n - 1] == NO_NB)
 		return (error("Same number for two champions", NULL));
-	if (n > 0 && n != NO_NB)
-		nb[n - 1] = NO_NB;
+	if (*n > 0 && *n != NO_NB)
+		nb[*n - 1] = NO_NB;
 	*ac += 1;
-	return (n);
+	return (TRUE);
 }
 
 int		usage(void)
@@ -91,11 +93,13 @@ int		usage(void)
 ** string is a negative number or contains letters, ft_atou returns -1.
 */
 
-int		number_opt(int *opt, char **av, int *ac, t_arena **vm)
+int		option_nb(int *opt, char **av, int *ac, t_arena **vm)
 {
 	int		nb;
 
 	nb = 0;
+	if (ft_strcmp(av[*ac], "-dump"))
+		return (TRUE);
 	if (*opt == 1)
 		return (error("Can't have twice the option", av[*ac]));
 	if (av[*ac + 1] == NULL)
@@ -125,23 +129,18 @@ int		pars_args(int ac, char **av, t_arena *vm)
 	n = 0;
 	i = 0;
 	d = 0;
-	if (ac <= 0)
-		return (error("ERROR", NULL));
-	if (ac == 1)
-		return (usage());
+	if (ac <= 1)
+		return (ac == 1 ? usage() : error("can't read the arguments", NULL));
 	ac = 1;
 	pars_num_champ(nb, &vm, 1);
 	while (av[ac])
 	{
-		if (!ft_strcmp(av[ac], "-dump"))
-			if (number_opt(&d, av, &ac, &vm) == FALSE)
-				return (FALSE);
-		n = champ_num(&ac, av, nb);
-		if (n == FALSE)
+		if (option_nb(&d, av, &ac, &vm) != FALSE
+		&& champ_num(&ac, av, nb, &n) != FALSE
+		&& is_champ(av[ac], &vm, n, &i) != FALSE)
+			ac++;
+		else
 			return (FALSE);
-		if (is_champ(av[ac], &vm, n, &i) == FALSE)
-			return (FALSE);
-		ac++;
 	}
 	if (pars_num_champ(nb, &vm, 2) == FALSE)
 		return (FALSE);
