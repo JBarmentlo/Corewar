@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_num_champ.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 11:57:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/22 16:32:12 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/22 17:06:33 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int		check_errors_nb(int *nb, int i, int k)
 		while (k > 0 && i > 0)
 		{
 			if (nb[i] == NO_NB)
-				return (error("NB higher than the amount of champions", NULL));
+				return (ft_error("NB higher than the amount of champions", NULL));
 			k--;
 			i--;
 		}

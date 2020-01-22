@@ -6,13 +6,19 @@ SRCS_COREWAR_FOLDER=./srcs/arena
 SRCS_UTILS_FOLDER=./srcs/utils
 SRCS_ASM_FOLDER=./srcs/asm
 
+LIB_DIR= ./includes/libft
+PRINTF_DIR = ./includes/ft_printf
+
+LIB = $(PRINTF_DIR)/libftprintf.a $(LIB_DIR)/libft.a 
+
+
 CC=gcc
 
 CFLAGS=-Wall -Wextra -Werror
 INCLUDE_PATH=-I $(INCLUDE_FOLDER) -I $(SDL_INCLUDE_FOLDER)
 
 COMPILER=$(CC) $(CFLAGS) $(INCLUDE_PATH)
-LIBS=libCorewar.a
+LIBS=libCorewar.a ./includes/libft/libft.a
 NAME_COREWAR=corewar
 
 COREWAR_SOURCE_FILES=cycle.c \
@@ -24,6 +30,10 @@ COREWAR_SOURCE_FILES=cycle.c \
 	args_utils.c \
 	process.c \
 	process_utils.c \
+	pars_args.c \
+	pars_num_champ.c \
+	pars_header.c \
+	start_arena.c \
 	0x01.c \
 	0x02.c \
 	0x03.c \
@@ -63,6 +73,10 @@ OUT_COREWAR=$(addprefix $(OBJ_FOLDER)/,$(notdir $(SRCS_COREWAR:.c=.o)))
 
 all: $(OBJ_FOLDER) libCorewar.a asm corewar
 
+$(LIB):
+	$(MAKE) -C $(LIB_DIR)
+	$(MAKE) -C $(PRINTF_DIR)
+
 $(OBJ_FOLDER):
 	@mkdir -p $(OBJ_FOLDER)
 
@@ -78,8 +92,8 @@ asm: $(OUT_ASM) libCorewar.a Makefile $(RELINK_INCUDE)
 $(OBJ_FOLDER)/%.o: $(SRCS_ASM_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $@ -c $<
 
-corewar: $(OUT_COREWAR) libCorewar.a Makefile $(RELINK_INCUDE)
-	$(COMPILER) -o $(NAME_COREWAR) $(OUT_COREWAR) $(LIBS)  -L srcs/sdl_src -l SDL2-2.0.0 -l SDL2_image -l SDL2_ttf
+corewar: $(LIB) $(OUT_COREWAR) libCorewar.a Makefile $(RELINK_INCUDE)
+	$(COMPILER) -o $(NAME_COREWAR) $(OUT_COREWAR) $(LIBS)  $(LIB) -L srcs/sdl_src -l SDL2-2.0.0 -l SDL2_image -l SDL2_ttf
 
 $(OBJ_FOLDER)/%.o: $(SRCS_COREWAR_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $@ -c $<

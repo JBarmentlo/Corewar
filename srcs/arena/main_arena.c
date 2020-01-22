@@ -10,8 +10,9 @@
 /*   Updated: 2020/01/22 16:32:19 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "../../includes/arena.h"
+#include "arena.h"
+#include "bitMasks.h"
+#include "stdio.h"
 
 t_arena		init_vm()
 {
@@ -52,11 +53,7 @@ int		main(int ac, char **av)
 	if (start_arena(&vm, &champ) == FALSE)
 		return (FALSE);
 	
-	while(No_winner)
-
-#include "arena.h"
-#include "bitMasks.h"
-#include "stdio.h"
+}
 /*
 int		main(int ac, char **av)
 {
@@ -85,7 +82,7 @@ int		main(int ac, char **av)
 		while (SDL_PollEvent(&d.event))
 			events(&d, &running, a);
 	}
-	error("End.", &d);
+	ft_error("End.", &d);
 
 	t_arena		*arena;
 	t_process	*process;
