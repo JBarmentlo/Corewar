@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/16 12:32:05 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/22 12:06:49 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,11 @@
 
 #define	TRUE					1
 #define	FALSE					0
-#define	FALSE2					-1
 #define	INIT_NUM				-1
+#define	NO_NB					-1
+#define	PADDING					4
+#define	INFO_SIZE_CODE			4
+#define	SIZE_MAX_PROG			2875 // = sizeof(COREWAR_EXEC_MAGIC) + PROG_NAME_LENGTH + PADDING + INFO_SIZE_CODE + COMMENT_LENGTH + PADDING + CHAMP_MAX_SIZE + 1 //
 
 #define IND_SIZE				2
 #define REG_SIZE				4
@@ -27,6 +30,7 @@
 # define DIR_CODE				2
 # define IND_CODE				3
 
+// checker max args number ???? ///
 
 #define MAX_ARGS_NUMBER			4
 #define MAX_PLAYERS				4
@@ -72,15 +76,6 @@ typedef unsigned char			byte;
 # define COMMENT_LENGTH			(2048)
 # define COREWAR_EXEC_MAGIC		0xea83f3
 
-typedef struct		header_s
-{
-  unsigned int		magic;
-  char				prog_name[PROG_NAME_LENGTH + 1];
-  unsigned int		prog_size;
-  char				comment[COMMENT_LENGTH + 1];
-}					header_t;
-
-
 typedef struct	s_op
 {
 	char*		name;
@@ -101,8 +96,11 @@ typedef struct	s_op
 typedef struct			s_champion
 {
 	int		number;
-	char*	comment;
-	char*	name;
+  	char	name[PROG_NAME_LENGTH + 1];
+  	char	comment[COMMENT_LENGTH + 1];
+	int		fd;
+	int		prog_size;
+	char	prog[SIZE_MAX_PROG];
 	//live related stuff
 }						t_champion;
 
@@ -129,8 +127,8 @@ typedef	struct 				s_process_list
 typedef struct 			s_arena
 {
 	byte			memory[MEM_SIZE];
-//	t_process*	 	process_list;
-//	t_process*		process_table[PROCESS_TABLE_SIZE]; // a init vide;
+	t_process*	 	process_list;
+	t_process*		process_table[PROCESS_TABLE_SIZE]; // a init vide;
 	t_champion		champion_table[MAX_PLAYERS];
 	int				nb_champs;
 	int				option_dump;
@@ -142,4 +140,9 @@ typedef struct 			s_arena
 
 int						usage();
 int						error(char *str, char *str2);
+int						pars_num_champ(int *nb, t_arena **vm, int mode);
 int						pars_args(int ac, char **av, t_arena *vm);
+byte					*endian_switch(byte *val, int size);
+unsigned int			big_endian_to_int(byte *val, int size);
+int						pars_header(t_champion *champ);
+int						start_arena(t_arena *vm);
