@@ -19,7 +19,7 @@ void	*ind_to_ptr_no_idx(t_arena *arena, int ind, int PC)
 
 void	mem_memcopy(t_arena *arena, byte *src, int index, uint size)
 {
-	int	i;
+	uint	i;
 
 	i = 0;
 	while (i < size)
@@ -31,7 +31,7 @@ void	mem_memcopy(t_arena *arena, byte *src, int index, uint size)
 
 void	mem_memcopy_endian_switch(t_arena *arena, byte *src, int index, uint size)
 {
-	int	i;
+	uint	i;
 
 	i = 0;
 	while (i < size)

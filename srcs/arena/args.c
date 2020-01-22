@@ -7,7 +7,6 @@ void		read_encoding_byte(t_arena *arena, t_process *process)
 	printf("%s\n",__func__);
 
 	int		i;
-	int		encoding_byte_addr;
 	byte	mask;
 	byte	val;
 

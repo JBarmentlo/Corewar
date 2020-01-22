@@ -2,7 +2,6 @@
 
 void    x03(t_arena *arena, t_process *process)
 {
-    byte    *dest;
     uint    val;
 
     val = reg_read_uint(process, arena->args->val[0]);

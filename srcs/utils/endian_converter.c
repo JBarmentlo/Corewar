@@ -35,6 +35,7 @@ uint		big_endian_to_uint(void *vall, int size)
 	uint	out;
 	val = vall;
 	tmp = endian_switch(val, size);
+	out = 0;
 	if (size == 2)
 	{
 		out = ((uint)*((uint16_t*)tmp));
@@ -58,6 +59,7 @@ int		big_endian_to_int(void *vall, int size)
 	int	out;
 	val = vall;
 	tmp = endian_switch(val, size);
+	out = 0;
 	if (size == 2)
 	{
 		out = ((int)*((int16_t*)tmp));
