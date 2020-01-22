@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/22 11:30:06 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/22 15:36:07 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ int		main(int ac, char **av)
 			return (FALSE);
 		i++;
 	}
-	if (start_arena(&vm) == FALSE)
-		return (FALSE);
+//	if (start_arena(&vm) == FALSE)
+//		return (FALSE);
 	/*
 	while(No_winner)
 	{

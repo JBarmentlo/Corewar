@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 11:57:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/22 13:22:56 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/22 15:33:44 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,20 +57,19 @@ int		check_errors_nb(int *nb, int i, int k)
 ** available in our integer array.
 */
 
-t_arena	**assign_nb(int *nb, t_arena **vm, int i, int k)
+void	assign_nb(int *nb, t_arena *vm, int i, int k)
 {
-	while (i < (*vm)->nb_champs)
+	while (i < vm->nb_champs)
 	{
-		if ((*vm)->champion_table[i].number == NO_NB)
+		if (vm->champion_table[i].number == NO_NB)
 		{
 			while (nb[k] == NO_NB)
 				k++;
-			(*vm)->champion_table[i].number = nb[k];
+			vm->champion_table[i].number = nb[k];
 			k++;
 		}
 		i++;
 	}
-	return (vm);
 }
 
 /*
@@ -78,7 +77,7 @@ t_arena	**assign_nb(int *nb, t_arena **vm, int i, int k)
 ** is correct and then assign it to a champion.
 */
 
-int		pars_num_champ(int *nb, t_arena **vm, int mode)
+int		pars_num_champ(int *nb, t_arena *vm, int mode)
 {
 	int		k;
 	int		i;
@@ -87,12 +86,12 @@ int		pars_num_champ(int *nb, t_arena **vm, int mode)
 	i = 0;
 	if (mode == 1)
 		init_tab(nb, k);
-	k = MAX_ARGS_NUMBER - (*vm)->nb_champs;
+	k = MAX_ARGS_NUMBER - vm->nb_champs;
 	if (mode == 2)
 		if (check_errors_nb(nb, i, k) == FALSE)
 			return (FALSE);
 	k = 0;
 	if (mode == 3)
-		vm = assign_nb(nb, vm, i, k);
+		assign_nb(nb, vm, i, k);
 	return (TRUE);
 }

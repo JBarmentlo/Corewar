@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:19:32 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/22 13:13:22 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/22 15:28:05 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 ** not overlapping the maximum number of champions.
 */
 
-int		is_champ(char *av, t_arena **vm, int n, int *i)
+int		is_champ(char *av, t_arena *vm, int n, int *i)
 {
 	int		fd;
 	int		l;
@@ -31,9 +31,9 @@ int		is_champ(char *av, t_arena **vm, int n, int *i)
 		return (error("The source file should be a '.cor' file", av));
 	if (*i == MAX_PLAYERS)
 		return (error("Too many champions", NULL));
-	(*vm)->champion_table[*i].number = n;
-	(*vm)->champion_table[*i].fd = fd;
-	(*vm)->nb_champs = (*vm)->nb_champs + 1;
+	vm->champion_table[*i].number = n;
+	vm->champion_table[*i].fd = fd;
+	vm->nb_champs = vm->nb_champs + 1;
 	*i += 1;
 	return (TRUE);
 }
@@ -61,7 +61,7 @@ int		champ_num(int *ac, char **av, int *nb, int *n)
 		*n = ft_atou(av[*ac]);
 	if (av[*ac] == NULL || av[*ac + 1] == NULL || *n == -1)
 		return (usage());
-	if (*n <= 0 || *n > MAX_ARGS_NUMBER)
+	if (*n <= 0 || *n > MAX_PLAYERS)
 		return (error("Wrong number for a champion", NULL));
 	if (nb[*n - 1] == NO_NB)
 		return (error("Same number for two champions", NULL));
@@ -93,7 +93,7 @@ int		usage(void)
 ** string is a negative number or contains letters, ft_atou returns -1.
 */
 
-int		option_nb(int *opt, char **av, int *ac, t_arena **vm)
+int		option_nb(int *opt, char **av, int *ac, t_arena *vm)
 {
 	int		nb;
 
@@ -108,7 +108,7 @@ int		option_nb(int *opt, char **av, int *ac, t_arena **vm)
 	if (nb == -1 || av[*ac + 2] == NULL)
 		return (usage());
 	*opt = 1;
-	(*vm)->option_dump = nb;
+	vm->option_dump = nb;
 	*ac = *ac + 2;
 	return (TRUE);
 }
@@ -124,7 +124,7 @@ int		pars_args(int ac, char **av, t_arena *vm)
 	int		n;
 	int		d;
 	int		i;
-	int		nb[MAX_ARGS_NUMBER];
+	int		nb[MAX_PLAYERS];
 
 	n = 0;
 	i = 0;
@@ -132,18 +132,18 @@ int		pars_args(int ac, char **av, t_arena *vm)
 	if (ac <= 1)
 		return (ac == 1 ? usage() : error("can't read the arguments", NULL));
 	ac = 1;
-	pars_num_champ(nb, &vm, 1);
+	pars_num_champ(nb, vm, 1);
 	while (av[ac])
 	{
-		if (option_nb(&d, av, &ac, &vm) != FALSE
+		if (option_nb(&d, av, &ac, vm) != FALSE
 		&& champ_num(&ac, av, nb, &n) != FALSE
-		&& is_champ(av[ac], &vm, n, &i) != FALSE)
+		&& is_champ(av[ac], vm, n, &i) != FALSE)
 			ac++;
 		else
 			return (FALSE);
 	}
-	if (pars_num_champ(nb, &vm, 2) == FALSE)
+	if (pars_num_champ(nb, vm, 2) == FALSE)
 		return (FALSE);
-	pars_num_champ(nb, &vm, 3);
+	pars_num_champ(nb, vm, 3);
 	return (TRUE);
 }
