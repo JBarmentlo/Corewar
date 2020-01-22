@@ -1,10 +1,35 @@
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   arena.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
+/*   Updated: 2020/01/22 16:14:45 by dberger          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #ifndef ARENA_H
 # define ARENA_H
+
+#include "libft/libft.h"
+#include "ft_printf/ft_printf.h"
+
+#define	TRUE					1
+#define	FALSE					0
+#define	INIT_NUM				-1
+#define	NO_NB					-1
+#define	PADDING					4
+#define	INFO_SIZE_CODE			4
+#define	SIZE_HEADER				2192
+#define	SIZE_MAX_PROG			2875 // = sizeof(COREWAR_EXEC_MAGIC) + PROG_NAME_LENGTH + PADDING + INFO_SIZE_CODE + COMMENT_LENGTH + PADDING + CHAMP_MAX_SIZE + 1 //
 
 # include "sdl_include/SDL.h"
 # include "sdl_include/SDL_image.h"
 # include "sdl_include/SDL_ttf.h"
 # include <stdio.h>							//A SUPPRIMER
+
 
 #define IND_SIZE				2
 #define REG_SIZE				4
@@ -15,6 +40,7 @@
 # define DIR_CODE				2
 # define IND_CODE				3
 
+// checker max args number ???? ///
 
 #define MAX_ARGS_NUMBER			4
 #define MAX_PLAYERS				4
@@ -62,15 +88,6 @@ typedef unsigned short			uint16_t;
 # define COREWAR_EXEC_MAGIC		0xea83f3
 
 
-typedef struct		header_s
-{
-unsigned int		magic;
-char				prog_name[PROG_NAME_LENGTH + 1];
-unsigned int		prog_size;
-char				comment[COMMENT_LENGTH + 1];
-}					header_t;
-
-
 typedef struct			s_op
 {
 	char*				name;
@@ -94,8 +111,11 @@ extern	t_op			g_op_tab[17];
 typedef struct			s_champion
 {
 	int		number;
-	char*	comment;
-	char*	name;
+	char	name[PROG_NAME_LENGTH + 1];
+	char	comment[COMMENT_LENGTH + 1];
+	int		fd;
+	int		prog_size;
+	char	prog[SIZE_MAX_PROG];
 	int		alive;
 	int		lives_since_last_check;
 	int		total_memory_owned;
@@ -103,7 +123,7 @@ typedef struct			s_champion
 
 typedef struct			s_process
 {
-	byte				registre[REG_NUMBER * REG_SIZE];
+	byte				registre[REG_NUMBER * REG_SIZE]; // (-) ? le num du champion ds r1 registre[0]
 	byte				args_tmp[MAX_ARGS_SIZE];
 	int					bytecode_size;
 	int					carry;
@@ -128,27 +148,33 @@ typedef struct			s_args
 
 typedef struct 			s_arena
 {
-	byte				memory[MEM_SIZE];
-	byte				memory_color[MEM_SIZE];
 	t_process*	 		process_list;
 	t_process*			process_table[PROCESS_TABLE_SIZE]; // a init vide;
-
 	t_champion			champion_table[MAX_PLAYERS];
+	t_champion			*last;
+	int					nb_champs;
+	int				    option_dump;
+	byte				memory[MEM_SIZE];
+	byte				memory_color[MEM_SIZE];
 	int					last_live_champ_number;
 	int					nb_champions;
 
 	t_op				g_op_tab[17];
 
-	unsigned long		cycle;
+  unsigned long		cycle;
 	unsigned long		total_live_since_check;
 	unsigned long		cycles_since_check;
-	uint				cycle_to_die;
-	uint				max_checks;
-	t_args				*args;
-
-	//live_related_info
-	
+	uint				    cycle_to_die;
+	uint				    max_checks;
+	t_args				  *args;	
 }						t_arena;
+
+int						usage();
+int						ft_error(char *str, char *str2);
+int						pars_num_champ(int *nb, t_arena *vm, int mode);
+int						pars_args(int ac, char **av, t_arena *vm);
+int						pars_header(t_champion *champ);
+int						start_arena(t_arena *vm, t_champion *champ);
 
 typedef struct			s_texte
 {
@@ -276,4 +302,3 @@ void				bit_dump(void *ptr, int size);
 void				print_t_args(t_args *args);
 
 #endif
-
