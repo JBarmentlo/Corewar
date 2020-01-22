@@ -4,7 +4,7 @@
 # include "sdl_include/SDL.h"
 # include "sdl_include/SDL_image.h"
 # include "sdl_include/SDL_ttf.h"
-# include <stdio.h>							//A SUPPRIMER /!
+# include <stdio.h>							//A SUPPRIMER
 
 #define IND_SIZE				2
 #define REG_SIZE				4
@@ -93,11 +93,11 @@ extern	t_op			g_op_tab[17];
 
 typedef struct			s_champion
 {
-	int					number;
-	char*				comment;
-	char*				name;
-	long				last_live;
-	//live related stuff	
+	int		number;
+	char*	comment;
+	char*	name;
+	int		alive;
+	int		lives_since_last_check;
 }						t_champion;
 
 typedef struct			s_process
@@ -156,20 +156,33 @@ typedef struct 			s_arena
 
 typedef struct		s_disp
 {
+	unsigned int	color_champ[MAX_PLAYERS];
 	SDL_Window		*win;
 	SDL_Renderer	*rend;
 	SDL_Event		event;
 	SDL_Surface		*img;
+	SDL_Surface		*txt;
 	SDL_Texture		*back;
+	SDL_Texture		*title;
+	SDL_Texture		*font;
+	SDL_Texture		*tmp;
 	SDL_Rect		screen;
 	SDL_Rect		arena;
 	SDL_Rect		players;
 	SDL_Rect		process;
+	SDL_Rect		mod;
+	TTF_Font		*font1;
 }					t_disp;
 
 void				error(char *src, t_disp *d);
-void				init_window(t_disp *d);
+void				init_window(t_disp *d, t_arena a);
+void				events(t_disp *d, int *running, t_arena a);
+void				disp_ttf(char *ttf, SDL_Color color, t_disp *d);
 
+void				bit_dump(void *ptr, int size);
+byte				*int_to_big_endian(int val, int size);
+unsigned int		big_endian_to_int(byte *val, int size);
+byte				*endian_switch(void *val, int size);
 
 
 

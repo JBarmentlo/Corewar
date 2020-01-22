@@ -65,15 +65,6 @@ uint16_t	read_args(t_args *args, t_process *process)
 	byte		i;
 
 	PC_tmp = 0;
-	i = 0;
-	while (i < MAX_ARGS_NUMBER && args->type[i] != 0)
-	{
-		size = args->size[i];
-		args->val[i] = big_endian_to_int(process->args_tmp + PC_tmp, size);
-		PC_tmp += size;
-		i++;
-	}
-	return (PC_tmp);
 }
 
 void		print_t_args(t_args *args)

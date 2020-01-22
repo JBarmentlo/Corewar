@@ -6,8 +6,10 @@ SRCS_UTILS_FOLDER=./srcs/utils
 SRCS_ASM_FOLDER=./srcs/asm
 
 CC=gcc
-CFLAGS=
-INCLUDE_PATH=-I$(INCLUDE_FOLDER)
+
+CFLAGS=-Wall -Wextra -Werror
+INCLUDE_PATH=-I $(INCLUDE_FOLDER)
+
 COMPILER=$(CC) $(CFLAGS) $(INCLUDE_PATH)
 LIBS=libCorewar.a
 NAME_COREWAR=corewar
@@ -15,6 +17,8 @@ NAME_COREWAR=corewar
 COREWAR_SOURCE_FILES=cycle.c \
 	main_arena.c \
 	args.c \
+	disp_corewar.c \
+	disp.c \
 	VM_tester.c \
 	args_utils.c \
 	process.c \
@@ -35,7 +39,6 @@ COREWAR_SOURCE_FILES=cycle.c \
 	0x14.c \
 	0x15.c \
 	0x16.c \
-
 
 UTILS_SOURCE_FILES=endian_converter.c \
 	op.c \
