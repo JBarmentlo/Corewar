@@ -4,8 +4,12 @@
 			"path": "."
 		},
 		{
-			"path": "/Users/jbarment/Documents/Corewar_Luigi"
+			"path": "/home/yup/Desktop/code/Corewar_Luigi"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.associations": {
+			"arena.h": "c"
+		}
+	}
 }
