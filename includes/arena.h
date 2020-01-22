@@ -98,6 +98,7 @@ typedef struct			s_champion
 	char*	name;
 	int		alive;
 	int		lives_since_last_check;
+	int		total_memory_owned;
 }						t_champion;
 
 typedef struct			s_process
@@ -128,7 +129,7 @@ typedef struct			s_args
 typedef struct 			s_arena
 {
 	byte				memory[MEM_SIZE];
-
+	byte				memory_color[MEM_SIZE];
 	t_process*	 		process_list;
 	t_process*			process_table[PROCESS_TABLE_SIZE]; // a init vide;
 
@@ -149,7 +150,13 @@ typedef struct 			s_arena
 	
 }						t_arena;
 
+typedef struct			s_texte
+{
+	int					player;
+	char*				txt;
+	struct s_texte*		next;
 
+}						t_texte;
 
 
 // ADD ALWAYS INLINE
@@ -181,7 +188,6 @@ void				disp_ttf(char *ttf, SDL_Color color, t_disp *d);
 
 void				bit_dump(void *ptr, int size);
 byte				*int_to_big_endian(int val, int size);
-unsigned int		big_endian_to_int(byte *val, int size);
 byte				*endian_switch(void *val, int size);
 
 
