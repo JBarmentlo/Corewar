@@ -16,7 +16,10 @@ opcode interpreter :
 
 
 Questions :
-	after the opcode is read are the encoding bytes/args read after of before the wait
+	after the opcode is read are the encoding bytes/args read after of before the wait ?
 	when do processes live/die ?
+	if args or encoding byte are invalid how does the PC move ?
+
+[embed]https://cdn.intra.42.fr/pdf/pdf/6250/corewar.fr.pdf[/embed]
 
 

@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "/home/yup/Desktop/code/Corewar_Luigi"
+		},
+		{
+			"path": "/Users/jbarment/Documents/Corewar_Copy"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"arena.h": "c"
+		}
+	}
+}

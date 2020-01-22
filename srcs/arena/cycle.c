@@ -1,57 +1,46 @@
 #include "arena.h"
 #include "stdlib.h"
+#include "stdio.h"
 
-int		do_we_have_a_winner(t_arena *arena)
+
+
+void	run_function(t_arena *arena, t_process *process)
 {
-	int			out;
-	int			first_process_owner;
+	printf("running %s\n", process->current_op->name);
+	print_t_args(arena->args);
+}
+
+void	check_lives(t_arena *arena)
+{
 	t_process	*it;
+	t_process	*next;
+	t_process	**prev;
 
-	out = 1;
 	it = arena->process_list;
-	first_process_owner = it->owner->number;
-	it = it->next;
-
-	while (it != NULL)
+	prev = &arena->process_list;
+	while (it)
 	{
-		if (it->owner->number != first_process_owner)
-			return (0);
-		it = it->next;
+		next = it->next_list;
+		if (arena->cycle - it->last_live > arena->cycle_to_die) // gt or gteq ?
+			kill_process(arena, it, prev);
+		it = next;
 	}
-	return (1);
-}
-
-void	execute_process(t_arena *arena, t_process *process)
-{
-	/*
-	if (is_encoding_byte_ok(arena, process))
+	if (arena->total_live_since_check >= NBR_LIVE || arena->max_checks >= MAX_CHECKS)		//what happens when it reaches 0 or negative values?
 	{
-		f[process->current_op](PC);
+		arena->cycle_to_die -= CYCLE_DELTA;
+		arena->max_checks = 0;
 	}
-	go_to_next_opcode(arena, process);
-	*/
-	arena++;
-	process++;
-}
-
-
-void	execute_processes(t_arena *arena)
-{
-	t_process *it;
-
-	it = arena->process_table[arena->cycle % PROCESS_TABLE_SIZE];
-	while (it != NULL)
+	else
 	{
-		execute_process(arena, it);
-		it = it->next;
+		arena->max_checks += 1;		
 	}
-	//reset next pointers and clear table at index, use recusrive call to reset next pointer collapse ? too fancy ?
+	arena->cycles_since_check = 0;
 }
 
 int		do_the_cycle(t_arena *arena)
 {	
-	if (do_we_have_a_winner(arena))
-		return (0);
+	if (arena->cycles_since_check == arena->cycle_to_die)
+		check_lives(arena);
 	execute_processes(arena);	//skip empty turns for performance
 	arena->cycle += 1;
 	return (1);
