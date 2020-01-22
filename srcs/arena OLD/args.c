@@ -55,26 +55,6 @@ void		copy_to_args_tmp(t_arena *arena, t_process *process)
 	}
 }
 
-uint16_t	read_args(t_args *args, t_process *process)
-{
-	printf("%s\n",__func__);
-
-	uint16_t	PC_tmp;
-	byte		size;
-	byte		i;
-
-	PC_tmp = 0;
-	i = 0;
-	while (i < MAX_ARGS_NUMBER && args->type[i] != 0)
-	{
-		size = args->size[i];
-		args->val[i] = big_endian_to_int(process->args_tmp + PC_tmp, size);
-		PC_tmp += size;
-		i++;
-	}
-	return (PC_tmp);
-}
-
 void		print_t_args(t_args *args)
 {
 	printf("%s\n",__func__);
