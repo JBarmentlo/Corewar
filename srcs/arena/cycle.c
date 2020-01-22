@@ -46,7 +46,8 @@ void	check_lives(t_arena *arena)
 	}
 	if (arena->total_live_since_check >= NBR_LIVE || arena->max_checks >= MAX_CHECKS)		//what happens when it reaches 0 or negative values?
 	{
-		arena->cycle_to_die -= CYCLE_DELTA;
+		if (arena->cycle_to_die > CYCLE_DELTA)
+			arena->cycle_to_die -= CYCLE_DELTA;
 		arena->max_checks = 0;
 	}
 	else
@@ -59,7 +60,10 @@ void	check_lives(t_arena *arena)
 int		do_the_cycle(t_arena *arena)
 {	
 	if (arena->cycles_since_check == arena->cycle_to_die)
+	{
 		check_lives(arena);
+		update_champion_alive(arena);
+	}
 	execute_processes(arena);	//skip empty turns for performance
 	arena->cycle += 1;
 	return (1);
