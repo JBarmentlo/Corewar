@@ -10,6 +10,25 @@ void	run_function(t_arena *arena, t_process *process)
 	print_t_args(arena->args);
 }
 
+void	update_champion_alive(t_arena *arena)
+{
+	int			i;
+	t_process	*it;
+
+	i = 0;
+	while (i < arena->nb_champs)	// DUPLICATE VARIABLE !!
+	{
+		arena->champion_table[i].alive = 0;
+		i++;
+	}
+	it = arena->process_list;
+	while (it)
+	{
+		arena->champion_table[it->owner->number].alive = 1;
+		it = it->next_list;
+	}
+}
+
 void	check_lives(t_arena *arena)
 {
 	t_process	*it;

@@ -116,9 +116,9 @@ typedef struct			s_champion
 	int		fd;
 	int		prog_size;
 	char	prog[SIZE_MAX_PROG];
-	int		alive;
-	int		lives_since_last_check;
-	int		total_memory_owned;
+	int		alive; 						//
+	int		lives_since_last_check;		//
+	int		total_memory_owned;			//
 }						t_champion;
 
 typedef struct			s_process
@@ -157,7 +157,7 @@ typedef struct 			s_arena
 	byte				memory[MEM_SIZE];
 	byte				memory_color[MEM_SIZE];
 	int					last_live_champ_number;
-	int					nb_champions;
+	int					nb_champions;			//
 
 	t_op				g_op_tab[17];
 
@@ -270,6 +270,10 @@ void				*reg_nb_to_ptr(t_process *process, int nb);
 void				*ind_to_ptr_idx(t_arena *arena, int ind, int PC);
 void				*ind_to_ptr_no_idx(t_arena *arena, int ind, int PC);
 
+//	Display
+
+void				mem_write_color(t_arena *arena, uint index, uint size, int champ_nb);
+void				update_champion_alive(t_arena *arena);
 
 
 

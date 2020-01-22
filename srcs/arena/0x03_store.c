@@ -12,6 +12,7 @@ void    x03(t_arena *arena, t_process *process)
     else
     {
         mem_write_uint(arena, process->PC + (arena->args->val[1] % IDX_MOD), val);
+		mem_write_color(arena, process->PC + (arena->args->val[1] % IDX_MOD), 4 , process->owner->number);
     }
     printf("0x03\n");
 }
