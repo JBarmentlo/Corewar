@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 11:57:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/22 15:33:44 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/22 16:32:12 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ void	assign_nb(int *nb, t_arena *vm, int i, int k)
 			vm->champion_table[i].number = nb[k];
 			k++;
 		}
+//		if (vm->champion_table[i].number == vm->nb_champs)
+//			vm->last = &(vm->champion_table[i]);
 		i++;
 	}
 }

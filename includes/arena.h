@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/22 12:06:49 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/22 16:14:45 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #define	NO_NB					-1
 #define	PADDING					4
 #define	INFO_SIZE_CODE			4
+#define	SIZE_HEADER				2192
 #define	SIZE_MAX_PROG			2875 // = sizeof(COREWAR_EXEC_MAGIC) + PROG_NAME_LENGTH + PADDING + INFO_SIZE_CODE + COMMENT_LENGTH + PADDING + CHAMP_MAX_SIZE + 1 //
 
 #define IND_SIZE				2
@@ -130,6 +131,7 @@ typedef struct 			s_arena
 	t_process*	 	process_list;
 	t_process*		process_table[PROCESS_TABLE_SIZE]; // a init vide;
 	t_champion		champion_table[MAX_PLAYERS];
+	t_champion		*last;
 	int				nb_champs;
 	int				option_dump;
 	int				cycle;
@@ -140,9 +142,9 @@ typedef struct 			s_arena
 
 int						usage();
 int						error(char *str, char *str2);
-int						pars_num_champ(int *nb, t_arena **vm, int mode);
+int						pars_num_champ(int *nb, t_arena *vm, int mode);
 int						pars_args(int ac, char **av, t_arena *vm);
 byte					*endian_switch(byte *val, int size);
 unsigned int			big_endian_to_int(byte *val, int size);
 int						pars_header(t_champion *champ);
-int						start_arena(t_arena *vm);
+int						start_arena(t_arena *vm, t_champion *champ);

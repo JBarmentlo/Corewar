@@ -1,33 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memmove.c                                       :+:      :+:    :+:   */
+/*   start_arena.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/08 11:23:31 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/20 15:20:04 by dberger          ###   ########.fr       */
+/*   Created: 2020/01/22 11:30:14 by dberger           #+#    #+#             */
+/*   Updated: 2020/01/22 16:32:54 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../includes/arena.h"
 
-void	*ft_memmove(void *dst, const void *src, size_t len)
+int		start_arena(t_arena *vm, t_champion *champ)
 {
-	const char	*source;
-	char		*dest;
-
-	source = (const char *)src;
-	dest = (char *)dst;
-	if (source < dest)
-	{
-		while (len--)
-			dest[len] = source[len];
-	}
-	else
-	{
-		while (len--)
-			*(dest++) = *(source++);
-	}
-	return (dst);
+	(void)vm;
+	(void)champ;
+	return (TRUE);
 }

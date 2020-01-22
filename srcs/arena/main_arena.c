@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/22 15:36:07 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/22 16:32:19 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ int		error(char *str, char *str2)
 
 int		main(int ac, char **av)
 {
-	t_arena vm;
-	t_champion champ;
-	int		i;
+	t_arena		vm;
+	t_champion	champ;
+	int			i;
 
 	i = 0;
 	vm = init_vm();
@@ -48,8 +48,8 @@ int		main(int ac, char **av)
 			return (FALSE);
 		i++;
 	}
-//	if (start_arena(&vm) == FALSE)
-//		return (FALSE);
+	if (start_arena(&vm, &champ) == FALSE)
+		return (FALSE);
 	/*
 	while(No_winner)
 	{
