@@ -68,13 +68,13 @@ uint16_t				type_to_size(byte type, t_op *op)
 
 
 
-uint16_t				read_args(t_arena *arena, t_process *process)
+/*uint16_t				read_args(t_arena *arena, t_process *process)
 {
 	uint16_t	PC_tmp;
 
 	PC_tmp = 0;
 
-}
+}*/
 
 uint16_t		fill_args(t_arena *arena, t_process *process)
 {

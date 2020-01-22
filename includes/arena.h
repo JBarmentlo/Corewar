@@ -94,7 +94,8 @@ typedef struct			s_champion
 	int		number;
 	char*	comment;
 	char*	name;
-	//live related stuff
+	int		alive;
+	int		lives_since_last_check;
 }						t_champion;
 
 typedef struct			s_process
@@ -153,6 +154,7 @@ void				memcopy(void *src, void *dest, uint16_t size);
 
 typedef struct		s_disp
 {
+	unsigned int	color_champ[MAX_PLAYERS];
 	SDL_Window		*win;
 	SDL_Renderer	*rend;
 	SDL_Event		event;
@@ -161,6 +163,7 @@ typedef struct		s_disp
 	SDL_Texture		*back;
 	SDL_Texture		*title;
 	SDL_Texture		*font;
+	SDL_Texture		*tmp;
 	SDL_Rect		screen;
 	SDL_Rect		arena;
 	SDL_Rect		players;
@@ -171,9 +174,12 @@ typedef struct		s_disp
 
 void				error(char *src, t_disp *d);
 void				init_window(t_disp *d, t_arena a);
+void				events(t_disp *d, int *running, t_arena a);
+void				disp_ttf(char *ttf, SDL_Color color, t_disp *d);
+
 void				bit_dump(void *ptr, int size);
 byte				*int_to_big_endian(int val, int size);
 unsigned int		big_endian_to_int(byte *val, int size);
-byte				*endian_switch(byte *val, int size);
+byte				*endian_switch(void *val, int size);
 #endif
 
