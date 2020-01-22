@@ -26,26 +26,52 @@ byte	*endian_switch(void *vall, int size)
 	return (out);
 }
 
-// Only works for size in [2, 4]
+// Only works for size in [1, 2, 4]
 // untested
 uint		big_endian_to_uint(void *vall, int size)
 {
 	byte	*tmp;
 	byte	*val;
-
+	uint	out;
 	val = vall;
 	tmp = endian_switch(val, size);
 	if (size == 2)
 	{
-		return ((uint)*((uint16_t*)tmp));
+		out = ((uint)*((uint16_t*)tmp));
 	}
-	tmp = endian_switch(val, size);
-	if (size == 4)
+	else if (size == 4)
 	{
-		return ((uint)*((uint*)tmp));
+		out = ((uint)*((uint*)tmp));
 	}
-	printf("big_endian_to_int is not meant to be used with size = %d\n", size);
-	return (0);
+	else if (size == 1)
+	{
+		out = ((uint)*((byte*)tmp));
+	}
+	free(tmp);
+	return (out);
+}
+
+int		big_endian_to_int(void *vall, int size)
+{
+	byte	*tmp;
+	byte	*val;
+	int	out;
+	val = vall;
+	tmp = endian_switch(val, size);
+	if (size == 2)
+	{
+		out = ((int)*((int16_t*)tmp));
+	}
+	else if (size == 4)
+	{
+		out = ((int)*((int*)tmp));
+	}
+	else if (size == 1)
+	{
+		out = ((int)*((byte*)tmp));
+	}
+	free(tmp);
+	return (out);
 }
 
 byte				*uint_to_big_endian(uint val, int size)
@@ -73,9 +99,10 @@ void			bit_dump(void *ptrr, int size)
 		printf(" ");
 		i++;
 	}
+	printf("\n");
 }
 
-
+// not safe for use on MEM
 void					memcopy(void *src, void *dest, uint16_t size)	// DOES this work for static arrays ?
 {
 	int		i;
@@ -93,7 +120,8 @@ void					memcopy(void *src, void *dest, uint16_t size)	// DOES this work for sta
 	}
 }
 
-void					memcopy_endian_flip(void *src, void *dest, uint16_t size)	// DOES this work for static arrays ?
+// not safe for use on MEM
+void					memcopy_endian_flip(void *src, void *dest, uint16_t size)
 {
 	int		i;
 	byte	*srcc;
