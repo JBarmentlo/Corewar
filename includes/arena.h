@@ -111,20 +111,19 @@ extern	t_op			g_op_tab[17];
 typedef struct			s_champion
 {
 	int		number;
-  char	name[PROG_NAME_LENGTH + 1];
-  char	comment[COMMENT_LENGTH + 1];
+	char	name[PROG_NAME_LENGTH + 1];
+	char	comment[COMMENT_LENGTH + 1];
 	int		fd;
 	int		prog_size;
 	char	prog[SIZE_MAX_PROG];
 	int		alive;
 	int		lives_since_last_check;
 	int		total_memory_owned;
-
 }						t_champion;
 
 typedef struct			s_process
 {
-	byte				registre[REG_NUMBER * REG_SIZE];
+	byte				registre[REG_NUMBER * REG_SIZE]; // (-) ? le num du champion ds r1 registre[0]
 	byte				args_tmp[MAX_ARGS_SIZE];
 	int					bytecode_size;
 	int					carry;
@@ -149,18 +148,18 @@ typedef struct			s_args
 
 typedef struct 			s_arena
 {
-	t_process*	 	process_list;
-	t_process*		process_table[PROCESS_TABLE_SIZE]; // a init vide;
-	t_champion		champion_table[MAX_PLAYERS];
-	t_champion		*last;
-	int				    nb_champs;
+	t_process*	 		process_list;
+	t_process*			process_table[PROCESS_TABLE_SIZE]; // a init vide;
+	t_champion			champion_table[MAX_PLAYERS];
+	t_champion			*last;
+	int					nb_champs;
 	int				    option_dump;
-	byte				  memory[MEM_SIZE];
-	byte				  memory_color[MEM_SIZE];
-	int					  last_live_champ_number;
-	int					  nb_champions;
+	byte				memory[MEM_SIZE];
+	byte				memory_color[MEM_SIZE];
+	int					last_live_champ_number;
+	int					nb_champions;
 
-	t_op				    g_op_tab[17];
+	t_op				g_op_tab[17];
 
   unsigned long		cycle;
 	unsigned long		total_live_since_check;
