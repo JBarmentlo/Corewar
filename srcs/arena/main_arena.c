@@ -1,4 +1,3 @@
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -7,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/22 16:32:19 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/23 15:47:14 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "arena.h"
@@ -36,7 +35,7 @@ int		ft_error(char *str, char *str2)
 int		main(int ac, char **av)
 {
 	t_arena		vm;
-	t_champion	champ;
+	t_champion	*champ;
 	int			i;
 
 	i = 0;
@@ -45,14 +44,14 @@ int		main(int ac, char **av)
 		return (FALSE);
 	while (i < vm.nb_champs)
 	{
-		champ = vm.champion_table[i];
-		if (pars_header(&champ) == FALSE)
+		champ = &vm.champion_table[i];
+		if (pars_header(champ) == FALSE)
 			return (FALSE);
 		i++;
 	}
-	if (start_arena(&vm, &champ) == FALSE)
+	if (start_arena(&vm, champ) == FALSE)
 		return (FALSE);
-	
+	return (TRUE);
 }
 
 /*

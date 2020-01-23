@@ -6,11 +6,11 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:19:32 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/22 17:06:33 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/01/23 15:48:07 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/arena.h"
+#include "arena.h"
 
 /*
 ** Once we have a champion's number, before stocking its datas, we want to make

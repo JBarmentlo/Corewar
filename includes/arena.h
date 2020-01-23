@@ -1,4 +1,3 @@
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -7,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/22 16:14:45 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/23 15:49:15 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef ARENA_H
@@ -15,6 +14,10 @@
 
 #include "libft/libft.h"
 #include "ft_printf/ft_printf.h"
+# include "sdl_include/SDL.h"
+# include "sdl_include/SDL_image.h"
+# include "sdl_include/SDL_ttf.h"
+# include <stdio.h>							//A SUPPRIMER
 
 #define	TRUE					1
 #define	FALSE					0
@@ -24,12 +27,6 @@
 #define	INFO_SIZE_CODE			4
 #define	SIZE_HEADER				2192
 #define	SIZE_MAX_PROG			2875 // = sizeof(COREWAR_EXEC_MAGIC) + PROG_NAME_LENGTH + PADDING + INFO_SIZE_CODE + COMMENT_LENGTH + PADDING + CHAMP_MAX_SIZE + 1 //
-
-# include "sdl_include/SDL.h"
-# include "sdl_include/SDL_image.h"
-# include "sdl_include/SDL_ttf.h"
-# include <stdio.h>							//A SUPPRIMER
-
 
 #define IND_SIZE				2
 #define REG_SIZE				4
@@ -115,7 +112,7 @@ typedef struct			s_champion
 	char	comment[COMMENT_LENGTH + 1];
 	int		fd;
 	int		prog_size;
-	char	prog[SIZE_MAX_PROG];
+	byte	prog[SIZE_MAX_PROG];
 	int		alive;
 	int		lives_since_last_check;
 	int		total_memory_owned;
@@ -151,7 +148,6 @@ typedef struct 			s_arena
 	t_process*	 		process_list;
 	t_process*			process_table[PROCESS_TABLE_SIZE]; // a init vide;
 	t_champion			champion_table[MAX_PLAYERS];
-	t_champion			*last;
 	int					nb_champs;
 	int				    option_dump;
 	byte				memory[MEM_SIZE];
@@ -161,12 +157,12 @@ typedef struct 			s_arena
 
 	t_op				g_op_tab[17];
 
-  unsigned long		cycle;
+  	unsigned long		cycle;
 	unsigned long		total_live_since_check;
 	unsigned long		cycles_since_check;
-	uint				    cycle_to_die;
-	uint				    max_checks;
-	t_args				  *args;	
+	uint			    cycle_to_die;
+	uint			    max_checks;
+	t_args				*args;	
 }						t_arena;
 
 int						usage();

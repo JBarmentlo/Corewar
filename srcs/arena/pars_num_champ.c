@@ -6,11 +6,11 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 11:57:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/22 17:06:33 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/01/23 15:48:25 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/arena.h"
+#include "arena.h"
 
 /*
 ** First we have created an integer tab, of the size of MAX_ARGS_NUMBER
@@ -68,8 +68,8 @@ void	assign_nb(int *nb, t_arena *vm, int i, int k)
 			vm->champion_table[i].number = nb[k];
 			k++;
 		}
-//		if (vm->champion_table[i].number == vm->nb_champs)
-//			vm->last = &(vm->champion_table[i]);
+	//	if (vm->champion_table[i].number == vm->nb_champs)
+	//		vm->last = &vm->champion_table[i];
 		i++;
 	}
 }
