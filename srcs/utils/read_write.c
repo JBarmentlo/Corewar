@@ -1,5 +1,7 @@
 #include "arena.h"
 
+
+// CHAMP NUMBER TO champion_table INDEX RELATIONSHIP unknown
 void	mem_write_color(t_arena *arena, uint index, uint size, int champ_nb)
 {
 	uint	i;
@@ -7,7 +9,14 @@ void	mem_write_color(t_arena *arena, uint index, uint size, int champ_nb)
 	i = 0;
 	while (i < size)
 	{
+		if (arena->memory_color[(index + i) % MEM_SIZE] != 0)
+		{
+			arena->champion_table[arena->memory_color[(index + i) % MEM_SIZE]].total_memory_owned -= 1;
+		}
+		if (arena->memory_color[(index + i) % MEM_SIZE] != champ_nb)
+			arena->champion_table[champ_nb].total_memory_owned += 1;
 		arena->memory_color[(index + i) % MEM_SIZE] = champ_nb;
+
 		i++;
 	}
 }
@@ -65,7 +74,35 @@ uint	mem_read_uint(t_arena *arena, int index)
 	return ((uint)*(uint*)out);
 }
 
+int		mem_read_int(t_arena *arena, int index)
+{
+	byte	out[REG_SIZE];
+	int		i;
+
+	i = 0;
+	while (i < REG_SIZE)
+	{
+		out[REG_SIZE - 1 - i] = arena->memory[(index + i) % MEM_SIZE];
+		i++;
+	}
+	return (*(int*)out);
+}
+
 void	mem_write_uint(t_arena *arena, int index, uint val)
+{
+	byte	*value;
+	int		i;
+
+	value =  (byte*)&val;
+	i = 0;
+	while (i < REG_SIZE)
+	{
+		arena->memory[(index + i) % MEM_SIZE] = value[REG_SIZE - 1 - i];
+		i++;
+	}
+}
+
+void	mem_write_int(t_arena *arena, int index, uint val)
 {
 	byte	*value;
 	int		i;

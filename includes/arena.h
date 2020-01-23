@@ -116,9 +116,9 @@ typedef struct			s_champion
 	int		fd;
 	int		prog_size;
 	char	prog[SIZE_MAX_PROG];
-	int		alive; 						//
-	int		lives_since_last_check;		//
-	int		total_memory_owned;			//
+	int		alive;
+	int		lives_since_last_check;
+	int		total_memory_owned;
 }						t_champion;
 
 typedef struct			s_process
@@ -157,16 +157,17 @@ typedef struct 			s_arena
 	byte				memory[MEM_SIZE];
 	byte				memory_color[MEM_SIZE];
 	int					last_live_champ_number;
-	int					nb_champions;			//
+	int					nb_champions;
+	int					nb_live_champions;
 
 	t_op				g_op_tab[17];
 
-  unsigned long		cycle;
+	unsigned long			cycle;
 	unsigned long		total_live_since_check;
 	unsigned long		cycles_since_check;
-	uint				    cycle_to_die;
-	uint				    max_checks;
-	t_args				  *args;	
+	uint				cycle_to_die;
+	uint				max_checks;
+	t_args				*args;	
 }						t_arena;
 
 int						usage();
@@ -263,6 +264,8 @@ uint				reg_read_uint(t_process *process, int reg_nb);
 uint				mem_ind_to_uint(t_arena *arena, t_process *process, int ind);
 uint				mem_read_uint(t_arena *arena, int index);
 void				mem_write_uint(t_arena *arena, int index, uint val);
+
+int					mem_read_int(t_arena *arena, int index);
 
 //	UTILS
 

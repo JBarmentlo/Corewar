@@ -5,11 +5,11 @@
 //we write to process->registre[arg - 1]
 void    x02(t_arena *arena, t_process *process)
 {
-	uint	value;
+	int	value;
 
 	if (arena->args->type[0] == T_IND)
 	{
-		value = mem_ind_to_uint(arena, process, arena->args->val[0]);
+		value = (int)mem_ind_to_uint(arena, process, arena->args->val[0]);
 		reg_write_uint(process, value, arena->args->val[1]);
 	}
 	else
