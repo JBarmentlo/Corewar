@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 11:30:14 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/24 13:35:20 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 12:11:40 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ t_process	*make_process_list(t_arena *vm)
 		process->owner = &vm->champion_table[i];
 		new = make_process();
 		process->next_table = new;
-		ft_printf("process[%d] : owner = [%s], r1 = [%d]\n", i, process->owner->name, process->registre[0]); 
 		process = process->next_table;
 		i++;
 	}

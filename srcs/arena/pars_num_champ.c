@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 11:57:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/23 15:48:25 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/24 13:14:44 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,31 @@ int		check_errors_nb(int *nb, int i, int k)
 	return (TRUE);
 }
 
+void	swipe_champs(t_arena *vm)
+{
+	t_champion		save;
+	t_champion		swipe;
+	int			i;
+	int			k;
+
+	i = 0;
+	k = 1;
+	while (i < vm->nb_champs)
+	{
+		if (vm->champion_table[i].number == k)
+		{
+			save = vm->champion_table[k - 1];
+			swipe = vm->champion_table[i];
+			vm->champion_table[k - 1] = swipe;
+			vm->champion_table[i] = save;
+			k++;
+			i = 0;
+		}
+		i++;
+	}
+	
+}
+
 /*
 ** In pars_args, we have writen 'NO_NB' in our integer array when
 ** its number is no longer avaible [taken by a champion with the '-n' option.
@@ -68,10 +93,9 @@ void	assign_nb(int *nb, t_arena *vm, int i, int k)
 			vm->champion_table[i].number = nb[k];
 			k++;
 		}
-	//	if (vm->champion_table[i].number == vm->nb_champs)
-	//		vm->last = &vm->champion_table[i];
 		i++;
 	}
+	swipe_champs(vm);
 }
 
 /*
