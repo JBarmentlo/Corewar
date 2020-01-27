@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/27 12:12:51 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 12:40:57 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef ARENA_H
@@ -153,7 +153,6 @@ typedef struct 			s_arena
 	byte				memory[MEM_SIZE];
 	byte				memory_color[MEM_SIZE];
 	int					last_live_champ_number;
-	int					nb_champions;
 
 	t_op				g_op_tab[17];
 
