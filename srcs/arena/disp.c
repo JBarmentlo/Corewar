@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:36:59 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/01/27 10:40:59 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/01/27 12:42:26 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void		disp_init(t_disp *d, t_arena a)
 
 	nb_p[2] = '\0';
 	nb_p[0] = 'P';
-	ph = (((d->players.y + d->players.h) - d->players.y) / a.nb_champions);
+	ph = (((d->players.y + d->players.h) - d->players.y) / a.nb_champs);
 	d->tmp = SDL_CreateTexture(d->rend, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, d->screen.w, d->screen.h);
 	d->a_tmp = SDL_CreateTexture(d->rend, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, d->screen.w, d->screen.h);
 	d->b_tmp = SDL_CreateTexture(d->rend, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, d->arena.w, d->arena.h);
@@ -76,7 +76,7 @@ void		disp_init(t_disp *d, t_arena a)
 		error("(disp.c) SDL_RenderDrawRect : ", d);
 	if (SDL_RenderDrawRect(d->rend, &d->process) < 0)
 		error("(disp.c) SDL_RenderDrawRect : ", d);
-	while (i <= a.nb_champions)
+	while (i <= a.nb_champs)
 	{
 		if (!((d->font1 = TTF_OpenFont("img/font1.ttf", 65))))
 			error("(menu.c) TTF_OpenFont : ", d);

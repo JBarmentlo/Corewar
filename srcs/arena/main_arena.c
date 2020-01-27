@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/27 13:33:59 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 13:39:50 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,12 @@ int		ft_error(char *str, char *str2)
 int		main(int ac, char **av)
 {
 	t_arena		vm;
-//	t_disp		d;
+	t_disp		d;
 	t_champion	*champ;
 	int			i;
-//	int			timeout;
-//	int			running;
-  
+	int			timeout;
+	int			running;
+ 
 
 	i = 0;
 	vm = init_vm();
@@ -57,13 +57,6 @@ int		main(int ac, char **av)
 	}
 	if (start_arena(&vm, champ) == FALSE)
 		return (FALSE);
-/*	int		k;
-	k = 0;
-	while (k < 100)
-	{
-		ft_printf("[%x]", vm.memory[k]);
-		k++;
-	}
 	init_window(&d, vm);
 	running = 1;
 	while (running)
@@ -83,6 +76,6 @@ int		main(int ac, char **av)
 			i++;
 		}
 	}
-	error("End.", &d);*/
+	error("End.", &d);
 	return (TRUE);
 }
