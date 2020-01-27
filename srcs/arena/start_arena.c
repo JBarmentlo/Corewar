@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 11:30:14 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/27 13:33:46 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 14:13:22 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,15 @@ void	fill_arena(t_arena *vm, t_champion *champ, int indx)
 	while (i < MEM_SIZE / vm->nb_champs)
 	{
 		if (i <= size)
+		{
 			vm->memory[indx + i] = champ->prog[SIZE_HEADER + i];
-		vm->memory_color[indx + i] = champ->number + '0';
+			vm->memory_color[indx + i] = champ->number + '0';
+		}
+		else
+		{
+			vm->memory[indx + i] = '\0';
+			vm->memory_color[indx + i] = '0';
+		}
 		i++;
 	}
 }
