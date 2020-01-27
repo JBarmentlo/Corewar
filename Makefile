@@ -1,3 +1,21 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: dberger <marvin@42.fr>                     +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/01/22 19:37:40 by dberger           #+#    #+#              #
+#    Updated: 2020/01/22 19:40:07 by dberger          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+NO_COLOR = \033[0m
+YELLOW = \033[33m
+GREEN = \033[32m
+BLUE = \033[36m
+PINK = \033[35m
+
 INCLUDE_FOLDER=./includes
 SDL_INCLUDE_FOLDER=./includes/sdl_include
 OBJ_FOLDER=out
@@ -94,6 +112,7 @@ $(OBJ_FOLDER)/%.o: $(SRCS_ASM_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 
 corewar: $(LIB) $(OUT_COREWAR) libCorewar.a Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $(NAME_COREWAR) $(OUT_COREWAR) $(LIBS)  $(LIB) -L srcs/sdl_src -l SDL2-2.0.0 -l SDL2_image -l SDL2_ttf
+	echo "$(YELLOW)	--- $(GREEN)Corewar$(YELLOW) Compiled ! ---	$(NO_COLOR)"
 
 $(OBJ_FOLDER)/%.o: $(SRCS_COREWAR_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $@ -c $<
@@ -101,12 +120,16 @@ $(OBJ_FOLDER)/%.o: $(SRCS_COREWAR_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 clean:
 	rm -rf $(OBJ_FOLDER)
 	rm -f libCorewar.a
+	echo "$(BLUE)	--- Binary deleted ! ---	$(NO_COLOR)"
 
 fclean: clean
 	rm -f corewar
 	rm -f asm
+	echo "$(PINK)	--- Programm deleted ! ---	$(NO_COLOR)"
 
 brew:
 	sh brew_check.sh
 
 re: fclean all
+
+.SILENT:
