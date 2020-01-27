@@ -6,11 +6,11 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 12:14:08 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/22 17:06:33 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/01/23 15:48:16 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/arena.h"
+#include "arena.h"
 
 /*
 **	This function is a type of 'get_next_line' adapted: we read the necessary
