@@ -186,6 +186,9 @@ typedef struct			s_texte
 typedef struct		s_disp
 {
 	unsigned int	color_champ[MAX_PLAYERS];
+	unsigned int	delay;
+	unsigned int	pause;
+	unsigned int	step;
 	SDL_Window		*win;
 	SDL_Renderer	*rend;
 	SDL_Event		event;
@@ -193,8 +196,19 @@ typedef struct		s_disp
 	SDL_Surface		*txt;
 	SDL_Texture		*back;
 	SDL_Texture		*title;
+	SDL_Texture		*bar;
+	SDL_Texture		*bar_plus;
+	SDL_Texture		*bar_minus;
+	SDL_Texture		*bar_pause;
+	SDL_Texture		*bar_stop;
+	SDL_Texture		*bar_step;
+	SDL_Texture		*bar_play;
 	SDL_Texture		*font;
 	SDL_Texture		*tmp;
+	SDL_Texture		*a_tmp;
+	SDL_Texture		*b_tmp;
+	SDL_Texture		*p_tmp;
+	SDL_Texture		*f_tmp;
 	SDL_Rect		screen;
 	SDL_Rect		arena;
 	SDL_Rect		players;
@@ -203,10 +217,15 @@ typedef struct		s_disp
 	TTF_Font		*font1;
 }					t_disp;
 
+// VISU
+
 void				error(char *src, t_disp *d);
 void				init_window(t_disp *d, t_arena a);
-void				events(t_disp *d, int *running, t_arena a);
+void				events(t_disp *d, int *running, int *timeout, t_arena a);
 void				disp_ttf(char *ttf, SDL_Color color, t_disp *d);
+void				update_visu(t_disp *d, t_arena a);
+
+//
 
 void				bit_dump(void *ptr, int size);
 byte				*int_to_big_endian(int val, int size);
