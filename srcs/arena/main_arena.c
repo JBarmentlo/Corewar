@@ -6,13 +6,23 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/27 12:10:52 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 13:39:50 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "arena.h"
 #include "bitMasks.h"
 #include "stdio.h"
+
+t_arena		init_vm()
+{
+	t_arena vm;
+
+	vm.nb_champs = 0;
+	vm.option_dump = 0;
+	vm.cycle = 0;
+	return (vm);
+}
 
 int		ft_error(char *str, char *str2)
 {
@@ -27,8 +37,12 @@ int		ft_error(char *str, char *str2)
 int		main(int ac, char **av)
 {
 	t_arena		vm;
+	t_disp		d;
 	t_champion	*champ;
 	int			i;
+	int			timeout;
+	int			running;
+ 
 
 	i = 0;
 	vm = init_vm();
@@ -43,32 +57,7 @@ int		main(int ac, char **av)
 	}
 	if (start_arena(&vm, champ) == FALSE)
 		return (FALSE);
-	return (TRUE);
-}
-
-/*
-int		main(int ac, char **av)
-{
-	t_disp		d;
-	t_arena		a;
-	int			running;
-	int			timeout;
-  
-	/////////////////////////////////////
-	a.nb_champions = 4;
-	int		i = 0;
-	int 	j = 0;
-	while (i < MEM_SIZE)
-	{
-		a.memory[i] = 'B';
-		a.memory_color[i] = j;
-		j++;
-		if (j > 3)
-			j = 0;
-		i++;
-	}
-	//////////////////////////////////////
-	init_window(&d, a);
+	init_window(&d, vm);
 	running = 1;
 	while (running)
 	{
@@ -76,17 +65,17 @@ int		main(int ac, char **av)
 		while (SDL_PollEvent(&d.event) || (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout) && running != 0) || (d.pause != 0 && d.step != 1))
 		{
 			d.step = 0;
-			events(&d, &running, &timeout, a);
+			events(&d, &running, &timeout, vm);
 		}
-		update_visu(&d, a);
+		update_visu(&d, vm);
 		i = 0;
 		while (i < MEM_SIZE)
 		{
-			a.memory[i] += 1;
-			a.memory_color[i] = (a.memory_color[i] + 1) % 4;
+			vm.memory[i] += 1;
+			vm.memory_color[i] = (vm.memory_color[i] + 1) % 4;
 			i++;
 		}
 	}
 	error("End.", &d);
-	return (0);
+	return (TRUE);
 }
