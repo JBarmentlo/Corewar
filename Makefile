@@ -26,6 +26,7 @@ COREWAR_SOURCE_FILES=cycle.c \
 	args.c \
 	disp_corewar.c \
 	disp.c \
+	update_visu.c \
 	VM_tester.c \
 	args_utils.c \
 	process.c \

@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:36:59 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/01/22 14:28:23 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/01/27 10:40:59 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,6 @@ void		error(char *src, t_disp *d)
 	TTF_Quit();
 	SDL_Quit();
 	exit(1);
-}
-
-size_t	ft_strlen(const char *str)
-{
-	size_t i;
-
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
 }
 
 void		disp_ttf(char *ttf, SDL_Color color, t_disp *d)
@@ -53,7 +43,14 @@ void		disp_init(t_disp *d, t_arena a)
 	nb_p[0] = 'P';
 	ph = (((d->players.y + d->players.h) - d->players.y) / a.nb_champions);
 	d->tmp = SDL_CreateTexture(d->rend, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, d->screen.w, d->screen.h);
+	d->a_tmp = SDL_CreateTexture(d->rend, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, d->screen.w, d->screen.h);
+	d->b_tmp = SDL_CreateTexture(d->rend, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, d->arena.w, d->arena.h);
+	d->p_tmp = SDL_CreateTexture(d->rend, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 300, 30);
+	d->f_tmp = SDL_CreateTexture(d->rend, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 540, (d->process.h / 3) - 20);
 	color.a = 0;
+	d->pause = 0;
+	d->step = 0;
+	d->delay = 1000;
 	i = 1;
 	if (SDL_SetRenderTarget(d->rend, d->tmp) < 0)
 		error("(menu.c) SDL_SetRenderTarget : ", d);
@@ -79,28 +76,6 @@ void		disp_init(t_disp *d, t_arena a)
 		error("(disp.c) SDL_RenderDrawRect : ", d);
 	if (SDL_RenderDrawRect(d->rend, &d->process) < 0)
 		error("(disp.c) SDL_RenderDrawRect : ", d);
-	/*
-	d->arena.x += 1;
-	d->arena.y += 1;
-	d->arena.w -= 2;
-	d->arena.h -= 2;
-	if (SDL_SetRenderTarget(d->rend, d->tmp) < 0)
-		error("(menu.c) SDL_SetRenderTarget : ", d);
-	if (SDL_SetRenderDrawBlendMode(d->rend, SDL_BLENDMODE_BLEND) < 0)
-		error("(menu.c) SDL_SetRenderDrawBlendMode error : ", d);
-	if (SDL_SetRenderDrawColor(d->rend, 186, 186, 186, 100) < 0)
-		error("(disp.c) SDL_SetRenderDrawColor : ", d);
-	if (SDL_RenderCopy(d->rend, d->back, &d->arena, NULL) < 0)
-		error("(menu.c) SDL_RenderCopy : ", d);
-	if (SDL_RenderFillRect(d->rend, NULL) < 0)
-		error("(disp.c) SDL_RenderDrawRect : ", d);
-	if (SDL_SetRenderDrawBlendMode(d->rend, SDL_BLENDMODE_NONE) < 0)
-		error("(menu.c) SDL_SetRenderDrawBlendMode error : ", d);
-	if (SDL_SetRenderTarget(d->rend, NULL) < 0)
-		error("(menu.c) SDL_SetRenderTarget : ", d);
-	if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 250) < 0)
-		error("(disp.c) SDL_SetRenderDrawColor : ", d);
-	*/
 	while (i <= a.nb_champions)
 	{
 		if (!((d->font1 = TTF_OpenFont("img/font1.ttf", 65))))
@@ -131,6 +106,7 @@ void		disp_init(t_disp *d, t_arena a)
 		disp_ttf(nb_p, color, d);
 		i++;
 	}
+	TTF_CloseFont(d->font1);
 	if (!((d->font1 = TTF_OpenFont("img/font2.ttf", 65))))
 		error("(menu.c) TTF_OpenFont : ", d);
 	d->mod.y = 20;
@@ -143,10 +119,16 @@ void		disp_init(t_disp *d, t_arena a)
 	d->mod.y = d->process.h + 20 - (d->process.h / 3);
 	d->mod.w = 540;
 	d->mod.h = (d->process.h / 3) - 20;
+	if (SDL_SetRenderTarget(d->rend, d->f_tmp) < 0)
+		error("(menu.c) SDL_SetRenderTarget : ", d);
 	if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 0) < 0)
 		error("(disp.c) SDL_SetRenderDrawColor : ", d);
 	if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
 		error("(disp.c) SDL_RenderDrawRect : ", d);
+	if (SDL_SetRenderTarget(d->rend, d->tmp) < 0)
+		error("(menu.c) SDL_SetRenderTarget : ", d);
+	if (SDL_RenderCopy(d->rend, d->f_tmp, NULL, &d->mod) < 0)
+		error("(menu.c) SDL_RenderCopy : ", d);
 	if (SDL_SetRenderDrawColor(d->rend, 255, 255, 255, 0) < 0)
 		error("(disp.c) SDL_SetRenderDrawColor : ", d);
 	if (SDL_RenderDrawRect(d->rend, &d->mod) < 0)
@@ -164,6 +146,8 @@ void		disp_init(t_disp *d, t_arena a)
 	i = 0;
 	while (i < 4)
 	{
+		if (SDL_SetRenderTarget(d->rend, d->p_tmp) < 0)
+			error("(menu.c) SDL_SetRenderTarget : ", d);
 		d->mod.y = d->process.y + 15 + (60 * i);
 		if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 0) < 0)
 			error("(disp.c) SDL_SetRenderDrawColor : ", d);
@@ -171,6 +155,10 @@ void		disp_init(t_disp *d, t_arena a)
 			error("(disp.c) SDL_RenderDrawRect : ", d);
 		if (SDL_SetRenderDrawColor(d->rend, 255, 255, 255, 0) < 0)
 			error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		if (SDL_SetRenderTarget(d->rend, d->tmp) < 0)
+			error("(menu.c) SDL_SetRenderTarget : ", d);
+		if (SDL_RenderCopy(d->rend, d->p_tmp, NULL, &d->mod) < 0)
+			error("(menu.c) SDL_RenderCopy : ", d);
 		if (SDL_RenderDrawRect(d->rend, &d->mod) < 0)
 			error("(disp.c) SDL_RenderDrawRect : ", d);
 		i++;
@@ -189,47 +177,42 @@ void		disp_init(t_disp *d, t_arena a)
 	disp_ttf("Nbr_Live      :", color, d);
 	d->mod.y = d->process.y + 200;
 	disp_ttf("Process       :", color, d);
-
-	/////////////////////////////////////////
-	unsigned char		test[64][129];
-	int		j = 0;
-	int		k = 0;
-	i = 0;
-	while (i < MEM_SIZE)
-	{
-		test[k][j] = (a.memory[i] >> 4) + '0';
-		if (test[k][j] > 57)
-			test[k][j] += 7;
-		j++;
-		test[k][j] = (a.memory[i] & 0x0F) + '0';
-		if (test[k][j] > 57)
-			test[k][j] += 7;
-		j++;
-		i++;
-		if (j == 128)
-		{
-			test[k][j] = '\0';
-			k++;
-			j = 0;
-		}
-	}
-	i = 0;
-	while (i < 64)
-	{
-		d->mod.x = d->arena.x + 10;
-		d->mod.y = d->arena.y + (21.6 * i) + 10;
-		d->mod.h = 20;
-		d->mod.w = d->arena.w - 20;
-		disp_ttf((char*)test[i], color, d);
-		i++;
-	}
-	///////////////////////////////////////// 
-//	if (SDL_RenderCopy(d->rend, d->tmp, NULL, &d->arena) < 0)
-//		error("(menu.c) SDL_RenderCopy : ", d);
+	d->mod.x = 1980;
+	d->mod.y = d->process.h - (d->process.h / 3) + 30;
+	d->mod.w = 540;
+	d->mod.h = 90;
+	if (SDL_RenderCopy(d->rend, d->bar, NULL, &d->mod) < 0)
+		error("(menu.c) SDL_RenderCopy : ", d);
+	if (SDL_SetRenderTarget(d->rend, NULL) < 0)
+		error("(menu.c) SDL_SetRenderTarget : ", d);
+	if (SDL_SetRenderTarget(d->rend, d->a_tmp) < 0)
+		error("(menu.c) SDL_SetRenderTarget : ", d);
+	if (SDL_RenderCopy(d->rend, d->tmp, NULL, NULL) < 0)
+		error("(menu.c) SDL_RenderCopy : ", d);
 	if (SDL_SetRenderTarget(d->rend, NULL) < 0)
 		error("(menu.c) SDL_SetRenderTarget : ", d);
 	if (SDL_RenderCopy(d->rend, d->tmp, NULL, NULL) < 0)
 		error("(menu.c) SDL_RenderCopy : ", d);
+	////////////////////////////////////////////////////////////////////////
+	d->arena.x += 1;
+	d->arena.y += 1;
+	d->arena.w -= 2;
+	d->arena.h -= 2;
+	if (SDL_SetRenderTarget(d->rend, d->b_tmp) < 0)
+		error("(menu.c) SDL_SetRenderTarget : ", d);
+	if (SDL_SetRenderDrawBlendMode(d->rend, SDL_BLENDMODE_BLEND) < 0)
+		error("(menu.c) SDL_SetRenderDrawBlendMode error : ", d);
+	if (SDL_SetRenderDrawColor(d->rend, 186, 186, 186, 100) < 0)
+		error("(disp.c) SDL_SetRenderDrawColor : ", d);
+	if (SDL_RenderCopy(d->rend, d->back, &d->arena, NULL) < 0)
+		error("(menu.c) SDL_RenderCopy : ", d);
+	if (SDL_RenderFillRect(d->rend, NULL) < 0)
+		error("(disp.c) SDL_RenderDrawRect : ", d);
+	if (SDL_SetRenderDrawBlendMode(d->rend, SDL_BLENDMODE_NONE) < 0)
+		error("(menu.c) SDL_SetRenderDrawBlendMode error : ", d);
+	if (SDL_SetRenderTarget(d->rend, NULL) < 0)
+		error("(menu.c) SDL_SetRenderTarget : ", d);
+	//////////////////////////////////////////////////////////////////////////
 	SDL_RenderPresent(d->rend);
 }
 
@@ -246,6 +229,13 @@ void			init_img(t_disp *d)
 {
 	init_img_load(d, &d->back, "img/back2.jpg");
 	init_img_load(d, &d->title, "img/core_title.xcf");
+	init_img_load(d, &d->bar, "img/bar_button_press.xcf");
+	init_img_load(d, &d->bar_plus, "img/button_plus_press.xcf");
+	init_img_load(d, &d->bar_minus, "img/button_minus_press.xcf");
+	init_img_load(d, &d->bar_play, "img/button_play_press.xcf");
+	init_img_load(d, &d->bar_pause, "img/button_pause_press.xcf");
+	init_img_load(d, &d->bar_stop, "img/button_stop_press.xcf");
+	init_img_load(d, &d->bar_step, "img/button_step_press.xcf");
 }
 
 void		init_window(t_disp *d, t_arena a)
