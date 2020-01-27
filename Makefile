@@ -6,7 +6,7 @@
 #    By: dberger <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/22 19:37:40 by dberger           #+#    #+#              #
-#    Updated: 2020/01/22 19:40:07 by dberger          ###   ########.fr        #
+#    Updated: 2020/01/27 12:28:03 by dberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,6 @@ PRINTF_DIR = ./includes/ft_printf
 
 LIB = $(PRINTF_DIR)/libftprintf.a $(LIB_DIR)/libft.a 
 
-
 CC=gcc
 
 CFLAGS=-Wall -Wextra -Werror
@@ -45,7 +44,6 @@ COREWAR_SOURCE_FILES=cycle.c \
 	disp_corewar.c \
 	disp.c \
 	update_visu.c \
-	VM_tester.c \
 	args_utils.c \
 	process.c \
 	process_utils.c \

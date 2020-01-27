@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/20 17:32:17 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/01/27 10:14:52 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/01/27 12:42:03 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ void		events(t_disp *d, int *running, int *timeout, t_arena a)
 
 	if (d->event.type == SDL_QUIT || d->event.key.keysym.sym == SDLK_ESCAPE)
 		*running = 0;
-	ph = (((d->players.y + d->players.h) - d->players.y) / a.nb_champions);
+	ph = (((d->players.y + d->players.h) - d->players.y) / a.nb_champs);
 	i = 0;
 	if (d->event.type == SDL_MOUSEMOTION)
 	{
-		while (i < a.nb_champions)
+		while (i < a.nb_champs)
 		{
 			if (d->event.motion.x >= d->players.x
 					&& d->event.motion.x <= d->players.x + d->players.w
@@ -152,7 +152,7 @@ void		events(t_disp *d, int *running, int *timeout, t_arena a)
 	if (d->event.type == SDL_MOUSEBUTTONDOWN)
 	{
 		i = 0;
-		while (i < a.nb_champions)
+		while (i < a.nb_champs)
 		{
 			j = 0;
 			while (j < 6)
