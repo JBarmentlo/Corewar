@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/27 14:14:36 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 15:43:38 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,6 @@ int		main(int ac, char **av)
 	}
 	if (start_arena(&vm, champ) == FALSE)
 		return (FALSE);
-	int	k;
-	k = 0;
-	while (k < 100)
-	{
-		ft_printf("[%c] ", vm.memory_color[k]);
-		k++;
-	}
 	init_window(&d, vm);
 	running = 1;
 	while (running)
