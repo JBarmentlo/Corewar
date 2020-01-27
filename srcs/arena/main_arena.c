@@ -9,19 +9,10 @@
 /*   Updated: 2020/01/27 12:10:52 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "arena.h"
 #include "bitMasks.h"
 #include "stdio.h"
-
-t_arena		init_vm()
-{
-	t_arena vm;
-
-	vm.nb_champs = 0;
-	vm.option_dump = 0;
-	vm.cycle = 0;
-	return (vm);
-}
 
 int		ft_error(char *str, char *str2)
 {
@@ -31,6 +22,7 @@ int		ft_error(char *str, char *str2)
 		ft_printf("Error: %s %s\n", str, str2);
 	return (FALSE);
 }
+
 
 int		main(int ac, char **av)
 {
@@ -57,59 +49,44 @@ int		main(int ac, char **av)
 /*
 int		main(int ac, char **av)
 {
-	(void)ac;
-	(void)av;
 	t_disp		d;
 	t_arena		a;
 	int			running;
+	int			timeout;
   
-	a.nb_champions = 3;
-	a.champion_table[3].name = "Tpillot";
-	a.champion_table[2].name = "Jbarment";
-	a.champion_table[1].name = "Ncoursol";
-	a.champion_table[0].name = "Dberger";
+	/////////////////////////////////////
+	a.nb_champions = 4;
 	int		i = 0;
+	int 	j = 0;
 	while (i < MEM_SIZE)
 	{
-		a.memory[i] = '0';
+		a.memory[i] = 'B';
+		a.memory_color[i] = j;
+		j++;
+		if (j > 3)
+			j = 0;
 		i++;
 	}
+	//////////////////////////////////////
 	init_window(&d, a);
 	running = 1;
 	while (running)
-
 	{
-		while (SDL_PollEvent(&d.event))
-			events(&d, &running, a);
+		timeout = SDL_GetTicks() + d.delay;
+		while (SDL_PollEvent(&d.event) || (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout) && running != 0) || (d.pause != 0 && d.step != 1))
+		{
+			d.step = 0;
+			events(&d, &running, &timeout, a);
+		}
+		update_visu(&d, a);
+		i = 0;
+		while (i < MEM_SIZE)
+		{
+			a.memory[i] += 1;
+			a.memory_color[i] = (a.memory_color[i] + 1) % 4;
+			i++;
+		}
 	}
-	ft_error("End.", &d);
-
-	t_arena		*arena;
-	t_process	*process;
-	byte		bytecode;
-	byte		reg;
-	int16_t	ind;
-	int			vint;
-	uint		vuint;
-	uint		dir;
-
-	arena = make_vm();
-	process = arena->process_list;
-	arena->memory[0] = 2;
-	arena->memory[1] = bytecode_gen(2,1,0);
-	dir = 12345678;
-	reg = 3;
-	memcopy_endian_flip(&dir, &arena->memory[2], 4);
-	memcopy_endian_flip(&reg, &arena->memory[2 + 4], 1);
-	//execute_process(arena, process);
-
-
-	ind = -1;
-	vuint = (uint)ind;
-	vint = (int)vuint;
-	printf("H: %d\n", vint);
-	printf("H: %u\n", vuint);
-
+	error("End.", &d);
 	return (0);
 }
-*/
