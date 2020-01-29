@@ -6,11 +6,11 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:19:32 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/22 17:06:33 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/01/27 15:46:43 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/arena.h"
+#include "arena.h"
 
 /*
 ** Once we have a champion's number, before stocking its datas, we want to make
@@ -75,11 +75,14 @@ int		usage(void)
 
 	fd = 0;
 	line = NULL;
-	fd = open("./usage.txt", O_RDONLY);
-	while (get_next_line(fd, &line))
+	fd = open("./srcs/arena/usage.txt", O_RDONLY);
+	if (fd >= 0)
 	{
-		ft_printf("%s\n", line);
-		ft_memdel((void **)&(line));
+		while (get_next_line(fd, &line))
+		{
+			ft_printf("%s\n", line);
+			ft_memdel((void **)&(line));
+		}
 	}
 	return (FALSE);
 }

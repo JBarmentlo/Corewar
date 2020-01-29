@@ -1,4 +1,3 @@
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -7,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/22 16:14:45 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 12:40:57 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef ARENA_H
@@ -15,6 +14,10 @@
 
 #include "libft/libft.h"
 #include "ft_printf/ft_printf.h"
+# include "sdl_include/SDL.h"
+# include "sdl_include/SDL_image.h"
+# include "sdl_include/SDL_ttf.h"
+# include <stdio.h>							//A SUPPRIMER
 
 #define	TRUE					1
 #define	FALSE					0
@@ -24,12 +27,6 @@
 #define	INFO_SIZE_CODE			4
 #define	SIZE_HEADER				2192
 #define	SIZE_MAX_PROG			2875 // = sizeof(COREWAR_EXEC_MAGIC) + PROG_NAME_LENGTH + PADDING + INFO_SIZE_CODE + COMMENT_LENGTH + PADDING + CHAMP_MAX_SIZE + 1 //
-
-# include "sdl_include/SDL.h"
-# include "sdl_include/SDL_image.h"
-# include "sdl_include/SDL_ttf.h"
-# include <stdio.h>							//A SUPPRIMER
-
 
 #define IND_SIZE				2
 #define REG_SIZE				4
@@ -114,7 +111,7 @@ typedef struct			s_champion
 	char	comment[COMMENT_LENGTH + 1];
 	int		fd;
 	int		prog_size;
-	char	prog[SIZE_MAX_PROG];
+	byte	prog[SIZE_MAX_PROG];
 	int		alive;
 	int		lives_since_last_check;
 	int		total_memory_owned;
@@ -150,7 +147,6 @@ typedef struct 			s_arena
 	t_process*	 		process_list;
 	t_process*			process_table[PROCESS_TABLE_SIZE]; // a init vide;
 	t_champion			champion_table[MAX_PLAYERS];
-	t_champion			*last;
 	int					nb_champs;
 	int				    option_dump;
 	byte				memory[MEM_SIZE];
@@ -194,6 +190,9 @@ typedef struct			s_texte
 typedef struct		s_disp
 {
 	unsigned int	color_champ[MAX_PLAYERS];
+	unsigned int	delay;
+	unsigned int	pause;
+	unsigned int	step;
 	SDL_Window		*win;
 	SDL_Renderer	*rend;
 	SDL_Event		event;
@@ -201,8 +200,19 @@ typedef struct		s_disp
 	SDL_Surface		*txt;
 	SDL_Texture		*back;
 	SDL_Texture		*title;
+	SDL_Texture		*bar;
+	SDL_Texture		*bar_plus;
+	SDL_Texture		*bar_minus;
+	SDL_Texture		*bar_pause;
+	SDL_Texture		*bar_stop;
+	SDL_Texture		*bar_step;
+	SDL_Texture		*bar_play;
 	SDL_Texture		*font;
 	SDL_Texture		*tmp;
+	SDL_Texture		*a_tmp;
+	SDL_Texture		*b_tmp;
+	SDL_Texture		*p_tmp;
+	SDL_Texture		*f_tmp;
 	SDL_Rect		screen;
 	SDL_Rect		arena;
 	SDL_Rect		players;
@@ -211,10 +221,15 @@ typedef struct		s_disp
 	TTF_Font		*font1;
 }					t_disp;
 
+// VISU
+
 void				error(char *src, t_disp *d);
 void				init_window(t_disp *d, t_arena a);
-void				events(t_disp *d, int *running, t_arena a);
+void				events(t_disp *d, int *running, int *timeout, t_arena a);
 void				disp_ttf(char *ttf, SDL_Color color, t_disp *d);
+void				update_visu(t_disp *d, t_arena a);
+
+//
 
 void				bit_dump(void *ptr, int size);
 byte				*int_to_big_endian(int val, int size);
