@@ -95,6 +95,9 @@ $(OBJ_FOLDER)/%.o: $(SRCS_ASM_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 corewar: $(LIB) $(OUT_COREWAR) libCorewar.a Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $(NAME_COREWAR) $(OUT_COREWAR) $(LIBS)  $(LIB) -L srcs/sdl_src -l SDL2-2.0.0 -l SDL2_image -l SDL2_ttf
 
+corewar2: $(LIB) $(OUT_COREWAR) libCorewar.a Makefile $(RELINK_INCUDE)
+	$(COMPILER) -o $(NAME_COREWAR) $(OUT_COREWAR) $(LIBS)  $(LIB)
+
 $(OBJ_FOLDER)/%.o: $(SRCS_COREWAR_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $@ -c $<
 

@@ -103,7 +103,6 @@ typedef struct			s_op
 
 extern	t_op			g_op_tab[17];
 
-
 #define PROCESS_TABLE_SIZE	1001
 #define MAX_BYTECODE_SIZE	18
 
@@ -159,7 +158,7 @@ typedef struct 			s_arena
 	int					last_live_champ_number;
 	int					nb_champions;
 	int					nb_live_champions;
-
+	void 				(**op_fun_tab)(struct s_arena*, t_process*);
 	t_op				g_op_tab[17];
 
 	unsigned long			cycle;
@@ -169,6 +168,10 @@ typedef struct 			s_arena
 	uint				max_checks;
 	t_args				*args;	
 }						t_arena;
+
+typedef void 			(*t_fun_ptr)(struct s_arena*, t_process*);
+
+
 
 int						usage();
 int						ft_error(char *str, char *str2);
