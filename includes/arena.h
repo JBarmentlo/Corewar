@@ -100,7 +100,6 @@ typedef struct			s_op
 
 extern	t_op			g_op_tab[17];
 
-
 #define PROCESS_TABLE_SIZE	1001
 #define MAX_BYTECODE_SIZE	18
 
@@ -153,16 +152,22 @@ typedef struct 			s_arena
 	byte				memory[MEM_SIZE];
 	byte				memory_color[MEM_SIZE];
 	int					last_live_champ_number;
-
+	int					nb_champions;
+	int					nb_live_champions;
+	void 				(**op_fun_tab)(struct s_arena*, t_process*);
 	t_op				g_op_tab[17];
 
-  	unsigned long		cycle;
+	unsigned long			cycle;
 	unsigned long		total_live_since_check;
 	unsigned long		cycles_since_check;
-	uint			    cycle_to_die;
-	uint			    max_checks;
+	uint				cycle_to_die;
+	uint				max_checks;
 	t_args				*args;	
 }						t_arena;
+
+typedef void 			(*t_fun_ptr)(struct s_arena*, t_process*);
+
+
 
 int						usage();
 int						ft_error(char *str, char *str2);
@@ -278,12 +283,18 @@ uint				mem_ind_to_uint(t_arena *arena, t_process *process, int ind);
 uint				mem_read_uint(t_arena *arena, int index);
 void				mem_write_uint(t_arena *arena, int index, uint val);
 
+int					mem_read_int(t_arena *arena, int index);
+
 //	UTILS
 
 void				*reg_nb_to_ptr(t_process *process, int nb);
 void				*ind_to_ptr_idx(t_arena *arena, int ind, int PC);
 void				*ind_to_ptr_no_idx(t_arena *arena, int ind, int PC);
 
+//	Display
+
+void				mem_write_color(t_arena *arena, uint index, uint size, int champ_nb);
+void				update_champion_alive(t_arena *arena);
 
 
 
