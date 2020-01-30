@@ -7,6 +7,7 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 11:30:14 by dberger           #+#    #+#             */
 /*   Updated: 2020/01/30 17:30:51 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/01/30 15:07:22 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +29,6 @@ t_process	*make_process(void)
 
 	if (!(process = malloc(sizeof(t_process))))
 		return (NULL);
-//	process->registre[0] = -1;
 	process->bytecode_size = 0;
 	process->carry = 0;
 	process->PC = 0;
