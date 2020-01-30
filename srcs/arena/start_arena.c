@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 11:30:14 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/30 13:09:31 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/30 15:07:22 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ t_process	*make_process(void)
 
 	if (!(process = malloc(sizeof(t_process))))
 		return (NULL);
-//	process->registre[0] = -1;
 	process->bytecode_size = 0;
 	process->carry = 0;
 	process->PC = 0;
@@ -54,8 +53,10 @@ t_process	*make_process_list(t_arena *vm)
 	t_process	*save;
 	t_process	*new;
 	int			i;
+	int			pc;
 
 	i = 0;
+	pc = 0;
 	process = make_process();
 	save = process;
 	while (i < vm->nb_champs)
@@ -63,10 +64,12 @@ t_process	*make_process_list(t_arena *vm)
 		process->registre[0] = i + 1;
 		// what about (-) ? //
 		process->owner = &vm->champion_table[i];
+		process->PC = pc;
 		new = make_process();
 		process->next_table = new;
 		process = process->next_table;
 		i++;
+		pc += (MEM_SIZE / vm->nb_champs);
 	}
 	process = save;
 	return (process);
