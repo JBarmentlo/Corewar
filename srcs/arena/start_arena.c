@@ -3,10 +3,11 @@
 /*                                                        :::      ::::::::   */
 /*   start_arena.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 11:30:14 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/27 14:13:22 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/30 17:30:51 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/01/30 15:07:22 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +29,6 @@ t_process	*make_process(void)
 
 	if (!(process = malloc(sizeof(t_process))))
 		return (NULL);
-//	process->registre[0] = -1;
 	process->bytecode_size = 0;
 	process->carry = 0;
 	process->PC = 0;
@@ -51,24 +51,25 @@ t_process	*make_process(void)
 t_process	*make_process_list(t_arena *vm)
 {
 	t_process	*process;
-	t_process	*save;
-	t_process	*new;
 	int			i;
+	int			pc;
 
 	i = 0;
-	process = make_process();
-	save = process;
+	pc = 0;
 	while (i < vm->nb_champs)
 	{
-		process->registre[0] = i + 1;
+		process = make_process();
+		process->registre[0] = ((-1) * (i + 1));
+		printf("r1: %d\n", process->registre[0]);
 		// what about (-) ? //
 		process->owner = &vm->champion_table[i];
-		new = make_process();
-		process->next_table = new;
-		process = process->next_table;
+		process->PC = pc;
+		add_process_to_list(process, vm);
+		add_process_to_table(process, vm, 0);
+		printf("pointer table: %p, list :%p\n", vm->process_table[0], vm->process_list);
 		i++;
+		pc += (MEM_SIZE / vm->nb_champs);
 	}
-	process = save;
 	return (process);
 }
 
@@ -99,15 +100,16 @@ int			init_var(t_arena *vm)
 	vm->args = args;
 	vm->process_list = process;
 	vm->max_checks = 0;
+	fill_fun_ptr_tab(vm);
 	return (TRUE);
 }
 
-void	fill_arena(t_arena *vm, t_champion *champ, int indx)
+void		fill_arena(t_arena *vm, t_champion *champ, int indx)
 {
 	int		size;
 	int		i;
 
-	size = champ->prog_size - SIZE_HEADER;
+	size = champ->header.prog_size - SIZE_HEADER;
 	i = 0;
 	while (i < MEM_SIZE / vm->nb_champs)
 	{
@@ -125,6 +127,30 @@ void	fill_arena(t_arena *vm, t_champion *champ, int indx)
 	}
 }
 
+
+void	fill_fun_ptr_tab(t_arena *arena)
+{
+	arena->op_fun_tab = malloc(17 * sizeof(t_fun_ptr));
+
+	arena->op_fun_tab[0] = &x01;
+	arena->op_fun_tab[1] = &x02;
+	arena->op_fun_tab[2] = &x03;
+	arena->op_fun_tab[3] = &x04;
+	arena->op_fun_tab[4] = &x05;
+	arena->op_fun_tab[5] = &x06;
+	arena->op_fun_tab[6] = &x07;
+	arena->op_fun_tab[7] = &x08;
+	arena->op_fun_tab[8] = &x09;
+	arena->op_fun_tab[9] = &x10;
+	arena->op_fun_tab[10] = &x11;
+	arena->op_fun_tab[11] = &x12;
+	arena->op_fun_tab[12] = &x13;
+	arena->op_fun_tab[13] = &x14;
+	arena->op_fun_tab[14] = &x15;
+	arena->op_fun_tab[15] = &x16;
+//	arena->op_fun_tab[16] = &x17;
+}
+
 int			start_arena(t_arena *vm, t_champion *champ)
 {
 	int			i;
@@ -140,7 +166,7 @@ int			start_arena(t_arena *vm, t_champion *champ)
 		champ = &vm->champion_table[i];
 		if (champ->number == s)
 		{
-			fill_arena(vm , champ, indx);
+			fill_arena(vm, champ, indx);
 			indx += (MEM_SIZE / vm->nb_champs);
 			s++;
 			i = 0;

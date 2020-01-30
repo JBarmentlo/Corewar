@@ -39,6 +39,9 @@ t_args		*make_args(void)
 	return (args);
 }
 
+//check the SIZEOF
+
+
 t_arena *make_vm()
 {
 	t_arena     *arena;

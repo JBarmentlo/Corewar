@@ -47,9 +47,6 @@ int		is_champ(char *av, t_arena *vm, int n, int *i)
 
 int		champ_num(int *ac, char **av, int *nb, int *n)
 {
-	int k;
-
-	k = 0;
 	*n = 0;
 	if (ft_strcmp(av[*ac], "-n"))
 	{

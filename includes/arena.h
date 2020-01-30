@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   arena.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
 /*   Updated: 2020/01/30 16:26:39 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #ifndef ARENA_H
 # define ARENA_H
 
 #include "libft/libft.h"
+#include "op.h"
 #include "ft_printf/ft_printf.h"
 # include "sdl_include/SDL.h"
 # include "sdl_include/SDL_image.h"
@@ -28,62 +30,11 @@
 #define	SIZE_HEADER				2192
 #define	SIZE_MAX_PROG			2875 // = sizeof(COREWAR_EXEC_MAGIC) + PROG_NAME_LENGTH + PADDING + INFO_SIZE_CODE + COMMENT_LENGTH + PADDING + CHAMP_MAX_SIZE + 1 //
 
-#define IND_SIZE				2
-#define REG_SIZE				4
-#define DIR_SIZE				REG_SIZE
 #define	MAX_ARGS_SIZE			16
 
-# define REG_CODE				1
-# define DIR_CODE				2
-# define IND_CODE				3
-
-// checker max args number ???? ///
-
-#define MAX_ARGS_NUMBER			4
-#define MAX_PLAYERS				4
-#define MEM_SIZE				(4*1024)
-#define IDX_MOD					(MEM_SIZE / 8)
-#define CHAMP_MAX_SIZE			(MEM_SIZE / 6)
-
-#define COMMENT_CHAR			'#'
-#define LABEL_CHAR				':'
-#define DIRECT_CHAR				'%'
-#define SEPARATOR_CHAR			','
-
-#define LABEL_CHARS				"abcdefghijklmnopqrstuvwxyz_0123456789"
-
-#define NAME_CMD_STRING			".name"
-#define COMMENT_CMD_STRING		".comment"
-
-#define REG_NUMBER				16
-
-#define CYCLE_TO_DIE			1536
-#define CYCLE_DELTA				50
-#define NBR_LIVE				21
-#define MAX_CHECKS				10
-
-/*
-**
-*/
-
-typedef char					t_arg_type;
 typedef unsigned int			uint;
 typedef unsigned char			byte;
 typedef unsigned short			uint16_t;
-
-#define T_REG					1
-#define T_DIR					2
-#define T_IND					4
-#define T_LAB					8
-
-/*
-**
-*/
-
-# define PROG_NAME_LENGTH		(128)
-# define COMMENT_LENGTH			(2048)
-# define COREWAR_EXEC_MAGIC		0xea83f3
-
 
 typedef struct			s_op
 {
@@ -100,27 +51,24 @@ typedef struct			s_op
 
 extern	t_op			g_op_tab[17];
 
-
 #define PROCESS_TABLE_SIZE	1001
 #define MAX_BYTECODE_SIZE	18
 
 
 typedef struct			s_champion
 {
-	int		number;
-	char	name[PROG_NAME_LENGTH + 1];
-	char	comment[COMMENT_LENGTH + 1];
-	int		fd;
-	int		prog_size;
-	byte	prog[SIZE_MAX_PROG];
-	int		alive;
-	int		lives_since_last_check;
-	int		total_memory_owned;
+	header_t	header;
+	int			number;
+	int			fd;
+	byte		prog[SIZE_MAX_PROG];
+	int			alive;
+	int			lives_since_last_check;
+	int			total_memory_owned;
 }						t_champion;
 
 typedef struct			s_process
 {
-	byte				registre[REG_NUMBER * REG_SIZE]; // (-) ? le num du champion ds r1 registre[0]
+	int					registre[REG_NUMBER];
 	byte				args_tmp[MAX_ARGS_SIZE];
 	int					bytecode_size;
 	int					carry;
@@ -153,16 +101,22 @@ typedef struct 			s_arena
 	byte				memory[MEM_SIZE];
 	byte				memory_color[MEM_SIZE];
 	int					last_live_champ_number;
-
+	int					nb_champions;
+	int					nb_live_champions;
+	void 				(**op_fun_tab)(struct s_arena*, t_process*);
 	t_op				g_op_tab[17];
 
-  	unsigned long		cycle;
+	unsigned long			cycle;
 	unsigned long		total_live_since_check;
 	unsigned long		cycles_since_check;
-	uint			    cycle_to_die;
-	uint			    max_checks;
+	uint				cycle_to_die;
+	uint				max_checks;
 	t_args				*args;	
 }						t_arena;
+
+typedef void 			(*t_fun_ptr)(t_arena*, t_process*);
+
+
 
 int						usage();
 int						ft_error(char *str, char *str2);
@@ -259,6 +213,10 @@ void				get_val(t_arena *arena, t_process *process);
 
 // CYCLE & PROCESS
 
+int					do_the_cycle(t_arena *arena);
+int					is_game_over(t_arena *arena);
+
+
 void				execute_process(t_arena *arena, t_process *process);
 void				process_invalid(t_process *process);
 void				execute_process(t_arena *arena, t_process *process);
@@ -271,20 +229,28 @@ void				add_process_to_list(t_process *process, t_arena *arena);
 
 // READ WRITE
 
-void				reg_write_uint(t_process *process, uint val, uint reg_number);
 void				mem_memcopy_endian_switch(t_arena *arena, byte *src, int index, uint size);
 void				mem_memcopy(t_arena *arena, byte *src, int index, uint size);
-uint				reg_read_uint(t_process *process, int reg_nb);
-uint				mem_ind_to_uint(t_arena *arena, t_process *process, int ind);
-uint				mem_read_uint(t_arena *arena, int index);
-void				mem_write_uint(t_arena *arena, int index, uint val);
+
+int					reg_read_int(t_process *process, int reg_nb);
+void				reg_write_int(t_process *process, int val, int reg_number);
+
+int					mem_ind_to_int(t_arena *arena, t_process *process, int ind);
+
+int					mem_read_int(t_arena *arena, int index);
+void				mem_write_int(t_arena *arena, int index, int val);
+
 
 //	UTILS
 
 void				*reg_nb_to_ptr(t_process *process, int nb);
 void				*ind_to_ptr_idx(t_arena *arena, int ind, int PC);
 void				*ind_to_ptr_no_idx(t_arena *arena, int ind, int PC);
+void				fill_fun_ptr_tab(t_arena *arena);
+//	Display
 
+void				mem_write_color(t_arena *arena, uint index, uint size, int champ_nb);
+void				update_champion_alive(t_arena *arena);
 
 
 

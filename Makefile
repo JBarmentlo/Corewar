@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dberger <marvin@42.fr>                     +#+  +:+       +#+         #
+#    By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/22 19:37:40 by dberger           #+#    #+#              #
-#    Updated: 2020/01/27 12:28:03 by dberger          ###   ########.fr        #
+#    Updated: 2020/01/30 16:55:06 by jbarment         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,22 +51,22 @@ COREWAR_SOURCE_FILES=cycle.c \
 	pars_num_champ.c \
 	pars_header.c \
 	start_arena.c \
-	0x01.c \
-	0x02.c \
-	0x03.c \
-	0x04.c \
-	0x05.c \
-	0x06.c \
-	0x07.c \
-	0x08.c \
-	0x09.c \
-	0x10.c \
-	0x11.c \
-	0x12.c \
-	0x13.c \
-	0x14.c \
-	0x15.c \
-	0x16.c \
+	0x01_live.c \
+	0x02_load.c \
+	0x03_store.c \
+	0x04_add.c \
+	0x05_sub.c \
+	0x06_and.c \
+	0x07_or.c \
+	0x08_xor.c \
+	0x09_zjump.c \
+	0x10_ldi.c \
+	0x11_sti.c \
+	0x12_fork.c \
+	0x13_lld.c \
+	0x14_lldi.c \
+	0x15_lfork.c \
+	0x16_aff.c \
 
 UTILS_SOURCE_FILES=endian_converter.c \
 	op.c \
@@ -112,6 +112,9 @@ $(OBJ_FOLDER)/%.o: $(SRCS_ASM_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 corewar: $(LIB) $(OUT_COREWAR) libCorewar.a Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $(NAME_COREWAR) $(OUT_COREWAR) $(LIBS)  $(LIB) -L srcs/sdl_src -l SDL2-2.0.0 -l SDL2_image -l SDL2_ttf
 	echo "$(YELLOW)	--- $(GREEN)Corewar$(YELLOW) Compiled ! ---	$(NO_COLOR)"
+
+corewar2: $(LIB) $(OUT_COREWAR) libCorewar.a Makefile $(RELINK_INCUDE)
+	$(COMPILER) -o $(NAME_COREWAR) $(OUT_COREWAR) $(LIBS)  $(LIB)
 
 $(OBJ_FOLDER)/%.o: $(SRCS_COREWAR_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $@ -c $<

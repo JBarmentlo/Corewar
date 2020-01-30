@@ -12,7 +12,9 @@
 	],
 	"settings": {
 		"files.associations": {
-			"arena.h": "c"
+			"arena.h": "c",
+			"stdio.h": "c",
+			"libft.h": "c"
 		}
 	}
 }
