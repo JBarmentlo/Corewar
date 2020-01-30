@@ -11,20 +11,12 @@ void	execute_process(t_arena *arena, t_process *process)
 {
 	int	PC_jump;
 	set_args_to_zero(arena->args);
-	if (!is_valid_opcode(arena->memory[process->PC])) //to be made redundant by archtecture
-	{
-		process_invalid(process);
-		printf("invalid opcode\n");
-		return ;
-	}
-	process->current_op = &g_op_tab[arena->memory[process->PC] - 1];
 	if (process->current_op->encoding_byte)
 	{
-		bit_dump(arena->memory + 1, 1);
 		read_encoding_byte(arena, process);
 		if (!is_valid_encoding_byte(arena, process))
 		{
-			process_invalid(process);
+			process_invalid(process);		//check reinsertion inta table
 			printf("invalid encoding_byte\n");
 			return ;
 		}
