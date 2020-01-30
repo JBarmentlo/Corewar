@@ -38,9 +38,14 @@ void		set_args_to_zero(t_args *args)
 
 byte		is_valid_opcode(byte opcode)
 {
-	printf("%s\n",__func__);
 
-	return (opcode <= 16);
+	if (opcode <= 16 && opcode > 0)
+	{
+		printf("%s\n",__func__);
+		printf("opcode: %d\n", opcode);
+		return (1);
+	}
+	return (0);
 }
 
 uint16_t	type_to_size(byte type, t_op *op)
@@ -114,11 +119,11 @@ void	get_val(t_arena *arena, t_process *process)
 		}
 		else if (arena->args->type[i] == T_IND)
 		{
-			arena->args->val_read[i] = mem_ind_to_uint(arena, process, (int)arena->args->val[i]);
+			arena->args->val_read[i] = mem_ind_to_int(arena, process, (int)arena->args->val[i]);
 		}
 		else if (arena->args->type[i] == T_REG)
 		{
-			arena->args->val_read[i] = reg_read_uint(process, arena->args->val[i]);
+			arena->args->val_read[i] = reg_read_int(process, arena->args->val[i]);
 		}
 		i++;
 	}
