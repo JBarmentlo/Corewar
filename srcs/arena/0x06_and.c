@@ -1,5 +1,6 @@
 #include "arena.h"
 
+// CHECK IDX MOD APPLIES ?
 void	x06(t_arena *arena, t_process *process)
 {
 	uint	val;
