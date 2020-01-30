@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 11:57:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/24 13:14:44 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/30 13:07:55 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,12 @@ void	init_tab(int *nb, int k)
 int		check_errors_nb(int *nb, int i, int k)
 {
 	i = MAX_ARGS_NUMBER - 1;
-	if (k > 0)
+	while (k > 0 && i > 0)
 	{
-		while (k > 0 && i > 0)
-		{
-			if (nb[i] == NO_NB)
-				return (ft_error("NB higher than the amount of champions", NULL));
-			k--;
-			i--;
-		}
+		if (nb[i] == NO_NB)
+			return (ft_error("NB higher than the amount of champions", NULL));
+		k--;
+		i--;
 	}
 	return (TRUE);
 }
@@ -53,8 +50,8 @@ void	swipe_champs(t_arena *vm)
 {
 	t_champion		save;
 	t_champion		swipe;
-	int			i;
-	int			k;
+	int				i;
+	int				k;
 
 	i = 0;
 	k = 1;
@@ -71,7 +68,6 @@ void	swipe_champs(t_arena *vm)
 		}
 		i++;
 	}
-	
 }
 
 /*

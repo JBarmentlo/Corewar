@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 11:30:14 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/27 14:13:22 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/30 13:09:31 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,12 +102,12 @@ int			init_var(t_arena *vm)
 	return (TRUE);
 }
 
-void	fill_arena(t_arena *vm, t_champion *champ, int indx)
+void		fill_arena(t_arena *vm, t_champion *champ, int indx)
 {
 	int		size;
 	int		i;
 
-	size = champ->prog_size - SIZE_HEADER;
+	size = champ->header.prog_size - SIZE_HEADER;
 	i = 0;
 	while (i < MEM_SIZE / vm->nb_champs)
 	{
@@ -140,7 +140,7 @@ int			start_arena(t_arena *vm, t_champion *champ)
 		champ = &vm->champion_table[i];
 		if (champ->number == s)
 		{
-			fill_arena(vm , champ, indx);
+			fill_arena(vm, champ, indx);
 			indx += (MEM_SIZE / vm->nb_champs);
 			s++;
 			i = 0;
