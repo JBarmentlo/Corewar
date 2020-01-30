@@ -4,9 +4,16 @@
 
 
 
+// keep going ?
+int		is_game_over(t_arena *arena)
+{
+	return (arena->process_list == NULL || (((uint)arena->option_dump == arena->cycle) && arena->cycle != 0));
+}
+
 void	run_function(t_arena *arena, t_process *process)
 {
 	printf("running %s\n", process->current_op->name);
+
 	arena->op_fun_tab[process->current_op->opcode - 1](arena, process);
 	print_t_args(arena->args);
 }
@@ -58,7 +65,7 @@ void	check_lives(t_arena *arena)
 	}
 	else
 	{
-		arena->max_checks += 1;		
+		arena->max_checks += 1;
 	}
 	arena->cycles_since_check = 0;
 }

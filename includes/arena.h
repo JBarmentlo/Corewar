@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   arena.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/30 13:04:19 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/30 16:53:34 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #ifndef ARENA_H
 # define ARENA_H
 
@@ -67,7 +68,7 @@ typedef struct			s_champion
 
 typedef struct			s_process
 {
-	byte				registre[REG_NUMBER * REG_SIZE]; // (-) ? le num du champion ds r1 registre[0]
+	int					registre[REG_NUMBER];
 	byte				args_tmp[MAX_ARGS_SIZE];
 	int					bytecode_size;
 	int					carry;
@@ -113,7 +114,7 @@ typedef struct 			s_arena
 	t_args				*args;	
 }						t_arena;
 
-typedef void 			(*t_fun_ptr)(struct s_arena*, t_process*);
+typedef void 			(*t_fun_ptr)(t_arena*, t_process*);
 
 
 
@@ -211,6 +212,10 @@ void				get_val(t_arena *arena, t_process *process);
 
 // CYCLE & PROCESS
 
+int					do_the_cycle(t_arena *arena);
+int					is_game_over(t_arena *arena);
+
+
 void				execute_process(t_arena *arena, t_process *process);
 void				process_invalid(t_process *process);
 void				execute_process(t_arena *arena, t_process *process);
@@ -223,22 +228,24 @@ void				add_process_to_list(t_process *process, t_arena *arena);
 
 // READ WRITE
 
-void				reg_write_uint(t_process *process, uint val, uint reg_number);
 void				mem_memcopy_endian_switch(t_arena *arena, byte *src, int index, uint size);
 void				mem_memcopy(t_arena *arena, byte *src, int index, uint size);
-uint				reg_read_uint(t_process *process, int reg_nb);
-uint				mem_ind_to_uint(t_arena *arena, t_process *process, int ind);
-uint				mem_read_uint(t_arena *arena, int index);
-void				mem_write_uint(t_arena *arena, int index, uint val);
+
+int					reg_read_int(t_process *process, int reg_nb);
+void				reg_write_int(t_process *process, int val, int reg_number);
+
+int					mem_ind_to_int(t_arena *arena, t_process *process, int ind);
 
 int					mem_read_int(t_arena *arena, int index);
+void				mem_write_int(t_arena *arena, int index, int val);
+
 
 //	UTILS
 
 void				*reg_nb_to_ptr(t_process *process, int nb);
 void				*ind_to_ptr_idx(t_arena *arena, int ind, int PC);
 void				*ind_to_ptr_no_idx(t_arena *arena, int ind, int PC);
-
+void				fill_fun_ptr_tab(t_arena *arena);
 //	Display
 
 void				mem_write_color(t_arena *arena, uint index, uint size, int champ_nb);
