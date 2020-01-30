@@ -39,6 +39,30 @@ t_args		*make_args(void)
 	return (args);
 }
 
+//check the SIZEOF
+void	fill_fun_ptr_tab(t_arena *arena)
+{
+	arena->op_fun_tab = malloc(17 * sizeof(t_fun_ptr));
+
+	arena->op_fun_tab[0] = &x01;
+	arena->op_fun_tab[1] = &x02;
+	arena->op_fun_tab[2] = &x03;
+	arena->op_fun_tab[3] = &x04;
+	arena->op_fun_tab[4] = &x05;
+	arena->op_fun_tab[5] = &x06;
+	arena->op_fun_tab[6] = &x07;
+	arena->op_fun_tab[7] = &x08;
+	arena->op_fun_tab[8] = &x09;
+	arena->op_fun_tab[9] = &x10;
+	arena->op_fun_tab[10] = &x11;
+	arena->op_fun_tab[11] = &x12;
+	arena->op_fun_tab[12] = &x13;
+	arena->op_fun_tab[13] = &x14;
+	arena->op_fun_tab[14] = &x15;
+	arena->op_fun_tab[15] = &x16;
+//	arena->op_fun_tab[16] = &x17;
+}
+
 t_arena *make_vm()
 {
 	t_arena     *arena;
