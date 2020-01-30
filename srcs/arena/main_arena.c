@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/27 15:43:38 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/30 17:25:56 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,17 +62,23 @@ int		main(int ac, char **av)
 	while (running)
 	{
 		timeout = SDL_GetTicks() + d.delay;
+		i = SDL_GetTicks() + 250;
 		while (SDL_PollEvent(&d.event) || (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout) && running != 0) || (d.pause != 0 && d.step != 1))
 		{
 			d.step = 0;
 			events(&d, &running, &timeout, vm);
+			if (SDL_TICKS_PASSED(SDL_GetTicks(), i))
+			{
+				d.button_status = 0;
+				i = SDL_GetTicks() + 200;
+			}
 		}
 		update_visu(&d, vm);
 		i = 0;
 		while (i < MEM_SIZE)
 		{
 			vm.memory[i] += 1;
-			vm.memory_color[i] = (vm.memory_color[i] + 1) % 4;
+			vm.memory_color[i] = (((vm.memory_color[i] - '0') + 1) % 4) + '0';
 			i++;
 		}
 	}

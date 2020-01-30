@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/27 12:40:57 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/30 16:26:39 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef ARENA_H
@@ -184,10 +184,11 @@ typedef struct			s_texte
 
 typedef struct		s_disp
 {
-	unsigned int	color_champ[MAX_PLAYERS];
+	unsigned int	color_champ[MAX_PLAYERS + 1];
 	unsigned int	delay;
 	unsigned int	pause;
 	unsigned int	step;
+	int				button_status;
 	SDL_Window		*win;
 	SDL_Renderer	*rend;
 	SDL_Event		event;
