@@ -1,4 +1,5 @@
 #include "arena.h"
+#include "bitMasks.h";
 
 void	mem_write_color(t_arena *arena, uint index, uint size, int champ_nb)
 {

@@ -64,7 +64,7 @@ void	execute_processes(t_arena *arena)
 			}
 			else
 			{
-				it->PC = (it->PC + 1) % MEM_SIZE;
+				it->PC = (it->PC + 1)  & MODULO_MASK;
 				add_process_to_table(it, arena, arena->cycle + 1);
 			}
 		}

@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/31 17:58:13 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/01/31 19:11:54 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int		main(int ac, char **av)
 	int			timeout;
 	int			running;
 	int			visu = 0;
+
 
 
 
