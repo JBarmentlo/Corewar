@@ -2,6 +2,7 @@
 
 
 // NEED TO ADD DEAD CHAMPS TO FILL TAB
+// NEGATIVE NUMBERS ARE USED
 void    x01(t_arena *arena, t_process *process)
 {
 	int	arg;
