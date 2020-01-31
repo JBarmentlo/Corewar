@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/30 16:53:34 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/01/31 17:52:53 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@
 #define	SIZE_MAX_PROG			2875 // = sizeof(COREWAR_EXEC_MAGIC) + PROG_NAME_LENGTH + PADDING + INFO_SIZE_CODE + COMMENT_LENGTH + PADDING + CHAMP_MAX_SIZE + 1 //
 
 #define	MAX_ARGS_SIZE			16
-
 typedef unsigned int			uint;
 typedef unsigned char			byte;
 typedef unsigned short			uint16_t;
@@ -246,6 +245,8 @@ void				*reg_nb_to_ptr(t_process *process, int nb);
 void				*ind_to_ptr_idx(t_arena *arena, int ind, int PC);
 void				*ind_to_ptr_no_idx(t_arena *arena, int ind, int PC);
 void				fill_fun_ptr_tab(t_arena *arena);
+int					positive_modulo_memsize(int a);
+
 //	Display
 
 void				mem_write_color(t_arena *arena, uint index, uint size, int champ_nb);

@@ -1,9 +1,10 @@
 #include "arena.h"
+#include "bitMasks.h"
 
 void	process_invalid(t_process *process)
 {
 	process->PC++;
-	process->PC = process->PC % MEM_SIZE; //manually replace by bitmask
+	process->PC = process->PC  & MODULO_MASK;
 	process->current_op = NULL;	//will be made obsolete by architecture
 }
 

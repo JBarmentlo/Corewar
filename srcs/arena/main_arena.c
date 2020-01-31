@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/30 18:20:19 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/01/31 17:58:13 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,12 @@ int		main(int ac, char **av)
 	t_champion	*champ;
 	int			i;
  
+	t_disp		d;
+	int			timeout;
+	int			running;
+	int			visu = 0;
+
+
 
 	i = 0;
 	vm = init_vm();
@@ -58,18 +64,26 @@ int		main(int ac, char **av)
 		return (FALSE);
 	printf("owner number = [%d]\n", vm.process_list->owner->number);
 	printf("process address: %p \n", vm.process_list);
-	while (!is_game_over(&vm) && vm.cycle < 200)
+	if (visu)
+		init_window(&d, vm);
+	running = 1;
+	while (!is_game_over(&vm) && vm.cycle < 0 && running == 1)
 	{
 		do_the_cycle(&vm);
-		//printf("%lu\n", vm.cycle);
-		//update_visu
+		if (visu)
+		{
+			timeout = SDL_GetTicks() + d.delay;
+			while (SDL_PollEvent(&d.event) || (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout) && running != 0) || (d.pause != 0 && d.step != 1))
+			{
+				d.step = 0;
+				events(&d, &running, &timeout, vm);
+			}
+			update_visu(&d, vm);
+		}
 	}
-	/*
 
-	t_disp		d;
-	int			timeout;
-	int			running;
 
+/*
 	init_window(&d, vm);
 	running = 1;
 	while (running)
@@ -89,7 +103,8 @@ int		main(int ac, char **av)
 			i++;
 		}
 	}
+	*/
 	error("End.", &d);
-*/
+
 	return (TRUE);
 }
