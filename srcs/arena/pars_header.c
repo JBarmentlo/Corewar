@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 12:14:08 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/30 13:05:15 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/04 17:46:24 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,11 @@ int			stock_file(t_champion *champ)
 	ret = 0;
 	ret = read(champ->fd, buf, SIZE_MAX_PROG);
 	buf[ret] = '\0';
-	champ->header.prog_size = ret;
 	min_header = sizeof(COREWAR_EXEC_MAGIC) + PROG_NAME_LENGTH + PADDING;
 	min_header += INFO_SIZE_CODE + COMMENT_LENGTH + PADDING + 1;
-	if (champ->header.prog_size < min_header)
+	champ->header.prog_size = ret - min_header + 1;
+// dois je mettre le +1??
+	if ((uint)ret < min_header)
 		return (ft_error("The source file too small", NULL));
 	ft_memcpy(champ->prog, buf, ret);
 	if ((ret = read(champ->fd, buf, 2)))
@@ -97,7 +98,7 @@ int			name_size_comment(t_champion *champ)
 	ft_bzero(champ->header.comment, COMMENT_LENGTH + 1);
 	ft_memcpy(champ->header.prog_name, champ->prog + i, total_name);
 	nb = string_to_int(champ, INFO_SIZE_CODE, i + total_name);
-	if (nb != (champ->header.prog_size - size_header))
+	if (nb != champ->header.prog_size)
 		return (ft_error("Wrong instruction section size in header", NULL));
 	i += total_name + INFO_SIZE_CODE;
 	ft_memcpy(champ->header.comment, champ->prog + i, total_comment);
