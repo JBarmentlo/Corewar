@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/30 16:26:39 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/04 16:32:23 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include "sdl_include/SDL_ttf.h"
 # include <stdio.h>							//A SUPPRIMER
 
+#define COREWAR					1
 #define	TRUE					1
 #define	FALSE					0
 #define	INIT_NUM				-1
@@ -118,7 +119,7 @@ typedef void 			(*t_fun_ptr)(t_arena*, t_process*);
 
 
 
-int						usage();
+int						usage(int prog);
 int						ft_error(char *str, char *str2);
 int						pars_num_champ(int *nb, t_arena *vm, int mode);
 int						pars_args(int ac, char **av, t_arena *vm);
