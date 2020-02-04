@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:19:32 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/27 15:46:43 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/04 15:31:37 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int		is_champ(char *av, t_arena *vm, int n, int *i)
 	if (fd == -1)
 		return (ft_error("Can't read source file", av));
 	if (l <= 4 || ft_strcmp(av + (l - 4), ".cor"))
-		return (ft_error("The source file should be a '.cor' file", av));
+		return (ft_error("The source file should be a '.cor' file", NULL));
 	if (*i == MAX_PLAYERS)
 		return (ft_error("Too many champions", NULL));
 	vm->champion_table[*i].number = n;
@@ -57,7 +57,7 @@ int		champ_num(int *ac, char **av, int *nb, int *n)
 	if (av[*ac])
 		*n = ft_atou(av[*ac]);
 	if (av[*ac] == NULL || av[*ac + 1] == NULL || *n == -1)
-		return (usage());
+		return (usage(COREWAR));
 	if (*n <= 0 || *n > MAX_PLAYERS)
 		return (ft_error("Wrong number for a champion", NULL));
 	if (nb[*n - 1] == NO_NB)
@@ -66,25 +66,6 @@ int		champ_num(int *ac, char **av, int *nb, int *n)
 		nb[*n - 1] = NO_NB;
 	*ac += 1;
 	return (TRUE);
-}
-
-int		usage(void)
-{
-	int		fd;
-	char	*line;
-
-	fd = 0;
-	line = NULL;
-	fd = open("./srcs/arena/usage.txt", O_RDONLY);
-	if (fd >= 0)
-	{
-		while (get_next_line(fd, &line))
-		{
-			ft_printf("%s\n", line);
-			ft_memdel((void **)&(line));
-		}
-	}
-	return (FALSE);
 }
 
 /*
@@ -103,10 +84,10 @@ int		option_nb(int *opt, char **av, int *ac, t_arena *vm)
 	if (*opt == 1)
 		return (ft_error("Can't have twice the option", av[*ac]));
 	if (av[*ac + 1] == NULL)
-		return (usage());
+		return (usage(COREWAR));
 	nb = ft_atou(av[*ac + 1]);
 	if (nb == -1 || av[*ac + 2] == NULL)
-		return (usage());
+		return (usage(COREWAR));
 	*opt = 1;
 	vm->option_dump = nb;
 	*ac = *ac + 2;
@@ -130,7 +111,7 @@ int		pars_args(int ac, char **av, t_arena *vm)
 	i = 0;
 	d = 0;
 	if (ac <= 1)
-		return (ac == 1 ? usage() : ft_error("can't read the arguments", NULL));
+		return (ac == 1 ? usage(COREWAR) : ft_error("can't read the arguments", NULL));
 	ac = 1;
 	pars_num_champ(nb, vm, 1);
 	while (av[ac])

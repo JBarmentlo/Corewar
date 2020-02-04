@@ -6,6 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
+/*   Updated: 2020/02/04 15:31:07 by dberger          ###   ########.fr       */
 /*   Updated: 2020/01/30 17:25:56 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -23,16 +24,6 @@ t_arena		init_vm()
 	vm.cycle = 0;
 	return (vm);
 }
-
-int		ft_error(char *str, char *str2)
-{
-	if (str2 == NULL)
-		ft_printf("Error: %s\n", str);
-	else
-		ft_printf("Error: %s %s\n", str, str2);
-	return (FALSE);
-}
-
 
 int		main(int ac, char **av)
 {
