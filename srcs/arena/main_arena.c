@@ -7,6 +7,7 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
 /*   Updated: 2020/02/04 15:31:07 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/30 17:25:56 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +27,12 @@ t_arena		init_vm()
 
 int		main(int ac, char **av)
 {
-
+ 	t_disp		d;
+	int		timeout;
+	int		running;
 	t_arena		vm;
 	t_champion	*champ;
-	int			i;
+	int		i;
  
 
 	i = 0;
@@ -48,38 +51,25 @@ int		main(int ac, char **av)
 		return (FALSE);
 	printf("owner number = [%d]\n", vm.process_list->owner->number);
 	printf("process address: %p \n", vm.process_list);
-	while (!is_game_over(&vm) && vm.cycle < 200)
+  	init_window(&d, vm);
+	running = 1;
+	while (!is_game_over(&vm) && vm.cycle < 200 && running)
 	{
 		do_the_cycle(&vm);
-		//printf("%lu\n", vm.cycle);
-		//update_visu
-	}
-	/*
-
-	t_disp		d;
-	int			timeout;
-	int			running;
-
-	init_window(&d, vm);
-	running = 1;
-	while (running)
-	{
-		timeout = SDL_GetTicks() + d.delay;
+    		timeout = SDL_GetTicks() + d.delay;
+		i = SDL_GetTicks() + 250;
 		while (SDL_PollEvent(&d.event) || (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout) && running != 0) || (d.pause != 0 && d.step != 1))
 		{
 			d.step = 0;
 			events(&d, &running, &timeout, vm);
+			if (SDL_TICKS_PASSED(SDL_GetTicks(), i))
+			{
+				d.button_status = 0;
+				i = SDL_GetTicks() + 200;
+			}
 		}
 		update_visu(&d, vm);
-		i = 0;
-		while (i < MEM_SIZE)
-		{
-			vm.memory[i] += 1;
-			vm.memory_color[i] = (vm.memory_color[i] + 1) % 4;
-			i++;
-		}
 	}
 	error("End.", &d);
-*/
 	return (TRUE);
 }

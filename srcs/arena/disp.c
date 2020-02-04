@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:36:59 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/01/27 12:42:26 by dberger          ###   ########.fr       */
+/*   Updated: 2020/01/30 18:04:47 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void		error(char *src, t_disp *d)
 
 void		disp_ttf(char *ttf, SDL_Color color, t_disp *d)
 {
-	d->txt = TTF_RenderText_Blended(d->font1, ttf, color);
+	d->txt = TTF_RenderText_Solid(d->font1, ttf, color);
 	d->font = SDL_CreateTextureFromSurface(d->rend, d->txt);
 	if (SDL_RenderCopy(d->rend, d->font, NULL, &d->mod) < 0)
 		error("(menu.c) SDL_RenderCopy : ", d);
@@ -41,6 +41,7 @@ void		disp_init(t_disp *d, t_arena a)
 
 	nb_p[2] = '\0';
 	nb_p[0] = 'P';
+	d->color_champ[0] = 0xFFFFFF00;
 	ph = (((d->players.y + d->players.h) - d->players.y) / a.nb_champs);
 	d->tmp = SDL_CreateTexture(d->rend, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, d->screen.w, d->screen.h);
 	d->a_tmp = SDL_CreateTexture(d->rend, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, d->screen.w, d->screen.h);
@@ -88,26 +89,38 @@ void		disp_init(t_disp *d, t_arena a)
 		if (SDL_RenderDrawLine(d->rend, d->players.x + 70, d->players.y + (ph * (i - 1)), d->players.x + 70, d->players.y + 70 + (ph * (i - 1))) < 0)
 			error("(disp.c) SDL_RenderDrawLine : ", d);
 		if (i == 1)
-			d->color_champ[i - 1] = 0xFF000000;
+			d->color_champ[i] = 0xFF000000;
 		else if (i == 2)
-			d->color_champ[i - 1] = 0xFFFF0000;
+			d->color_champ[i] = 0xFFFF0000;
 		else if (i == 3)
-			d->color_champ[i - 1] = 0x00FF0000;
+			d->color_champ[i] = 0x00FF0000;
 		else if (i == 4)
-			d->color_champ[i - 1] = 0x0000FF00;
-		color.r = (d->color_champ[i - 1] & 0xFF000000) >> 24;
-		color.g = (d->color_champ[i - 1] & 0xFF0000) >> 16;
-		color.b = (d->color_champ[i - 1] & 0xFF00) >> 8;
+			d->color_champ[i] = 0x0000FF00;
+		color.r = (d->color_champ[i] & 0xFF000000) >> 24;
+		color.g = (d->color_champ[i] & 0xFF0000) >> 16;
+		color.b = (d->color_champ[i] & 0xFF00) >> 8;
 		nb_p[1] = i + '0';
 		d->mod.x = d->players.x + 5;
 		d->mod.y = (ph * (i - 1)) + d->players.y + 5;
 		d->mod.h = 70;
 		d->mod.w = 60;
 		disp_ttf(nb_p, color, d);
+		d->mod.x = d->players.x + 5;
+		d->mod.y = (ph * (i - 1)) + d->players.y + (ph - 35);
+		d->mod.h = 30;
+		d->mod.w = d->players.w - 10;
+		if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
+			error("(disp.c) SDL_RenderDrawRect : ", d);
+	if (SDL_SetRenderDrawColor(d->rend, 255, 255, 255, 250) < 0)
+		error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		if (SDL_RenderDrawRect(d->rend, &d->mod) < 0)
+			error("(disp.c) SDL_RenderDrawRect : ", d);
+	if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 250) < 0)
+		error("(disp.c) SDL_SetRenderDrawColor : ", d);
 		i++;
 	}
 	TTF_CloseFont(d->font1);
-	if (!((d->font1 = TTF_OpenFont("img/font2.ttf", 65))))
+	if (!((d->font1 = TTF_OpenFont("img/font2.ttf", 25))))
 		error("(menu.c) TTF_OpenFont : ", d);
 	d->mod.y = 20;
 	d->mod.x = 1960;
@@ -119,20 +132,20 @@ void		disp_init(t_disp *d, t_arena a)
 	d->mod.y = d->process.h + 20 - (d->process.h / 3);
 	d->mod.w = 540;
 	d->mod.h = (d->process.h / 3) - 20;
-	if (SDL_SetRenderTarget(d->rend, d->f_tmp) < 0)
-		error("(menu.c) SDL_SetRenderTarget : ", d);
 	if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 0) < 0)
 		error("(disp.c) SDL_SetRenderDrawColor : ", d);
-	if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
+	if (SDL_SetRenderTarget(d->rend, d->f_tmp) < 0)
+		error("(menu.c) SDL_SetRenderTarget : ", d);
+	if (SDL_RenderFillRect(d->rend, NULL) < 0)
+		error("(disp.c) SDL_RenderDrawRect : ", d);
+	if (SDL_SetRenderDrawColor(d->rend, 255, 255, 255, 0) < 0)
+		error("(disp.c) SDL_SetRenderDrawColor : ", d);
+	if (SDL_RenderDrawRect(d->rend, NULL) < 0)
 		error("(disp.c) SDL_RenderDrawRect : ", d);
 	if (SDL_SetRenderTarget(d->rend, d->tmp) < 0)
 		error("(menu.c) SDL_SetRenderTarget : ", d);
 	if (SDL_RenderCopy(d->rend, d->f_tmp, NULL, &d->mod) < 0)
 		error("(menu.c) SDL_RenderCopy : ", d);
-	if (SDL_SetRenderDrawColor(d->rend, 255, 255, 255, 0) < 0)
-		error("(disp.c) SDL_SetRenderDrawColor : ", d);
-	if (SDL_RenderDrawRect(d->rend, &d->mod) < 0)
-		error("(disp.c) SDL_RenderDrawRect : ", d);
 	d->process.x = 1960;
 	d->process.y = 188;
 	d->process.w = 580;
@@ -151,16 +164,16 @@ void		disp_init(t_disp *d, t_arena a)
 		d->mod.y = d->process.y + 15 + (60 * i);
 		if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 0) < 0)
 			error("(disp.c) SDL_SetRenderDrawColor : ", d);
-		if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
+		if (SDL_RenderFillRect(d->rend, NULL) < 0)
 			error("(disp.c) SDL_RenderDrawRect : ", d);
 		if (SDL_SetRenderDrawColor(d->rend, 255, 255, 255, 0) < 0)
 			error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		if (SDL_RenderDrawRect(d->rend, NULL) < 0)
+			error("(disp.c) SDL_RenderDrawRect : ", d);
 		if (SDL_SetRenderTarget(d->rend, d->tmp) < 0)
 			error("(menu.c) SDL_SetRenderTarget : ", d);
 		if (SDL_RenderCopy(d->rend, d->p_tmp, NULL, &d->mod) < 0)
 			error("(menu.c) SDL_RenderCopy : ", d);
-		if (SDL_RenderDrawRect(d->rend, &d->mod) < 0)
-			error("(disp.c) SDL_RenderDrawRect : ", d);
 		i++;
 	}
 	d->mod.x = d->process.x + 20;
