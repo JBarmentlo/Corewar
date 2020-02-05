@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/03 13:53:09 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/05 16:49:42 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,18 +170,22 @@ typedef struct		s_disp
 	SDL_Rect		process;
 	SDL_Rect		mod;
 	TTF_Font		*font1;
+	SDL_Color		color;
 }					t_disp;
 
 // VISU
 
+
 void				error(char *src, t_disp *d);
 void				init_window(t_disp *d, t_arena a);
+void				disp_init_var(t_disp *d);
+void				disp_init_players(t_disp *d, t_arena a);
+void				disp_init_info(t_disp *d);
 void				events(t_disp *d, int *running, int *timeout, t_arena a);
 void				disp_ttf(char *ttf, SDL_Color color, t_disp *d);
 void				update_visu(t_disp *d, t_arena a);
 char				*ft_itoa2(int n);
 size_t				ft_nbrlen(int nbr);
-
 //
 
 void				bit_dump(void *ptr, int size);
