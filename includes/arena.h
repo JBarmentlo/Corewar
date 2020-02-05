@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/30 16:26:39 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/03 13:53:09 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ typedef struct			s_champion
 	int			alive;
 	int			lives_since_last_check;
 	int			total_memory_owned;
+	int			total_process;
 }						t_champion;
 
 typedef struct			s_process
@@ -178,6 +179,8 @@ void				init_window(t_disp *d, t_arena a);
 void				events(t_disp *d, int *running, int *timeout, t_arena a);
 void				disp_ttf(char *ttf, SDL_Color color, t_disp *d);
 void				update_visu(t_disp *d, t_arena a);
+char				*ft_itoa2(int n);
+size_t				ft_nbrlen(int nbr);
 
 //
 

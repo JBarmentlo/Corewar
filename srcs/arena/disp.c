@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:36:59 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/01/30 18:04:47 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/04 17:14:32 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,17 +106,67 @@ void		disp_init(t_disp *d, t_arena a)
 		d->mod.w = 60;
 		disp_ttf(nb_p, color, d);
 		d->mod.x = d->players.x + 5;
-		d->mod.y = (ph * (i - 1)) + d->players.y + (ph - 35);
-		d->mod.h = 30;
+		d->mod.y = (ph * (i - 1)) + d->players.y + (ph - (ph / 10) - 15);
+		d->mod.h = 10 + (ph / 10);
 		d->mod.w = d->players.w - 10;
 		if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
 			error("(disp.c) SDL_RenderDrawRect : ", d);
-	if (SDL_SetRenderDrawColor(d->rend, 255, 255, 255, 250) < 0)
-		error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		if (SDL_SetRenderDrawColor(d->rend, 255, 255, 255, 250) < 0)
+			error("(disp.c) SDL_SetRenderDrawColor : ", d);
 		if (SDL_RenderDrawRect(d->rend, &d->mod) < 0)
 			error("(disp.c) SDL_RenderDrawRect : ", d);
-	if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 250) < 0)
-		error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 250) < 0)
+			error("(disp.c) SDL_SetRenderDrawColor : ", d);
+///////////////PLAYERS DISP//////////
+		if (!((d->font1 = TTF_OpenFont("img/font2.ttf", 35))))
+			error("(menu.c) TTF_OpenFont : ", d);
+		d->mod.x = d->players.x + 85;
+		d->mod.y = (ph * (i - 1)) + d->players.y + (ph / 10);
+		d->mod.h = ph / 5;
+		d->mod.w = 200;
+		disp_ttf("name   :", color, d);
+		d->mod.y = (ph * (i - 1)) + d->players.y + (ph / 10) * 3;
+		disp_ttf("area   :", color, d);
+		d->mod.y = (ph * (i - 1)) + d->players.y + (ph / 10) * 5;
+		disp_ttf("lives  :", color, d);
+		d->mod.x = d->players.x + (d->players.w / 2) + 10;
+		d->mod.y = (ph * (i - 1)) + d->players.y + (ph / 9);
+		d->mod.h = 10 + (ph / 10);
+		d->mod.w = (d->players.w / 2) - 15;
+		if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
+			error("(disp.c) SDL_RenderDrawRect : ", d);
+		if (SDL_SetRenderDrawColor(d->rend, 255, 255, 255, 250) < 0)
+			error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		if (SDL_RenderDrawRect(d->rend, &d->mod) < 0)
+			error("(disp.c) SDL_RenderDrawRect : ", d);
+		if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 250) < 0)
+			error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		d->mod.y = (ph * (i - 1)) + d->players.y + (ph / 9) * 3;
+		if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
+			error("(disp.c) SDL_RenderDrawRect : ", d);
+		if (SDL_SetRenderDrawColor(d->rend, 255, 255, 255, 250) < 0)
+			error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		if (SDL_RenderDrawRect(d->rend, &d->mod) < 0)
+			error("(disp.c) SDL_RenderDrawRect : ", d);
+		if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 250) < 0)
+			error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		d->mod.y = (ph * (i - 1)) + d->players.y + (ph / 9) * 5;
+		if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
+			error("(disp.c) SDL_RenderDrawRect : ", d);
+		if (SDL_SetRenderDrawColor(d->rend, 255, 255, 255, 250) < 0)
+			error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		if (SDL_RenderDrawRect(d->rend, &d->mod) < 0)
+			error("(disp.c) SDL_RenderDrawRect : ", d);
+		if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 250) < 0)
+			error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		d->mod.x += 5;
+		d->mod.w = ft_strlen(a.champion_table[i - 1].header.prog_name) * 15;
+		d->mod.y = (ph * (i - 1)) + d->players.y + (ph / 9);
+		color.r = 255;
+		color.g = 255;
+		color.b = 255;
+		disp_ttf(a.champion_table[i - 1].header.prog_name, color, d);
+////////////////////////
 		i++;
 	}
 	TTF_CloseFont(d->font1);
@@ -132,13 +182,13 @@ void		disp_init(t_disp *d, t_arena a)
 	d->mod.y = d->process.h + 20 - (d->process.h / 3);
 	d->mod.w = 540;
 	d->mod.h = (d->process.h / 3) - 20;
-	if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 0) < 0)
+	if (SDL_SetRenderDrawColor(d->rend, 100, 100, 100, 0) < 0)
 		error("(disp.c) SDL_SetRenderDrawColor : ", d);
 	if (SDL_SetRenderTarget(d->rend, d->f_tmp) < 0)
 		error("(menu.c) SDL_SetRenderTarget : ", d);
 	if (SDL_RenderFillRect(d->rend, NULL) < 0)
 		error("(disp.c) SDL_RenderDrawRect : ", d);
-	if (SDL_SetRenderDrawColor(d->rend, 255, 255, 255, 0) < 0)
+	if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 0) < 0)
 		error("(disp.c) SDL_SetRenderDrawColor : ", d);
 	if (SDL_RenderDrawRect(d->rend, NULL) < 0)
 		error("(disp.c) SDL_RenderDrawRect : ", d);
@@ -152,12 +202,12 @@ void		disp_init(t_disp *d, t_arena a)
 	d->process.h = 712;
 	if (SDL_RenderDrawLine(d->rend, d->process.x + 1, d->process.y,
 				d->process.x + d->process.w - 2, d->process.y) < 0)
-			error("(disp.c) SDL_RenderDrawLine : ", d);
+		error("(disp.c) SDL_RenderDrawLine : ", d);
 	d->mod.x = d->process.x + 55 + (13 * 15);
 	d->mod.h = 30;
 	d->mod.w = 300;
 	i = 0;
-	while (i < 4)
+	while (i < 5)
 	{
 		if (SDL_SetRenderTarget(d->rend, d->p_tmp) < 0)
 			error("(menu.c) SDL_SetRenderTarget : ", d);
@@ -190,6 +240,8 @@ void		disp_init(t_disp *d, t_arena a)
 	disp_ttf("Nbr_Live      :", color, d);
 	d->mod.y = d->process.y + 200;
 	disp_ttf("Process       :", color, d);
+	d->mod.y = d->process.y + 260;
+	disp_ttf("Empty         :", color, d);
 	d->mod.x = 1980;
 	d->mod.y = d->process.h - (d->process.h / 3) + 30;
 	d->mod.w = 540;
@@ -285,4 +337,4 @@ void		init_window(t_disp *d, t_arena a)
 	d->process.w = 580;
 	d->process.h = 880;
 	disp_init(d, a);
-}
+} 

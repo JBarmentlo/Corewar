@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/30 17:25:56 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/04 14:18:36 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,13 @@ int		ft_error(char *str, char *str2)
 
 int		main(int ac, char **av)
 {
-  t_disp		d;
+	t_disp		d;
 	int			timeout;
 	int			running;
 	t_arena		vm;
 	t_champion	*champ;
 	int			i;
- 
+
 
 	i = 0;
 	vm = init_vm();
@@ -60,13 +60,25 @@ int		main(int ac, char **av)
 		return (FALSE);
 	printf("owner number = [%d]\n", vm.process_list->owner->number);
 	printf("process address: %p \n", vm.process_list);
-  init_window(&d, vm);
+	init_window(&d, vm);
 	running = 1;
-	while (!is_game_over(&vm) && vm.cycle < 200)
+
+////////////////////////////////TOTAL_PROCESS///////////////////////////////////
+/*	while (vm.process_list != NULL)
 	{
-    timeout = SDL_GetTicks() + d.delay;
+		vm.process_list->owner->total_process += 1;
+		vm.process_list = vm.process_list->next_list;
+	}*/
+////////////////////////////////////////////////////////////////////////////////
+
+	while (!is_game_over(&vm) /*&& vm.cycle < 200*/ && running)
+	{
+		do_the_cycle(&vm);
+		timeout = SDL_GetTicks() + d.delay;
 		i = SDL_GetTicks() + 250;
-		while (SDL_PollEvent(&d.event) || (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout) && running != 0) || (d.pause != 0 && d.step != 1))
+		while (SDL_PollEvent(&d.event)
+		|| (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout) && running != 0)
+		|| (d.pause != 0 && d.step != 1))
 		{
 			d.step = 0;
 			events(&d, &running, &timeout, vm);
@@ -77,10 +89,7 @@ int		main(int ac, char **av)
 			}
 		}
 		update_visu(&d, vm);
-		do_the_cycle(&vm);
-		//printf("%lu\n", vm.cycle);
-		//update_visu
 	}
-  error("End.", &d);
+	error("End.", &d);
 	return (TRUE);
 }
