@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/04 15:31:07 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/04 17:46:37 by dberger          ###   ########.fr       */
 /*   Updated: 2020/01/30 17:25:56 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -27,9 +27,9 @@ t_arena		init_vm()
 
 int		main(int ac, char **av)
 {
- 	t_disp		d;
-	int		timeout;
-	int		running;
+// 	t_disp		d;
+//	int		timeout;
+//	int		running;
 	t_arena		vm;
 	t_champion	*champ;
 	int		i;
@@ -49,9 +49,7 @@ int		main(int ac, char **av)
 	}
 	if (start_arena(&vm, champ) == FALSE)
 		return (FALSE);
-	printf("owner number = [%d]\n", vm.process_list->owner->number);
-	printf("process address: %p \n", vm.process_list);
-  	init_window(&d, vm);
+  /*	init_window(&d, vm);
 	running = 1;
 	while (!is_game_over(&vm) && vm.cycle < 200 && running)
 	{
@@ -71,5 +69,5 @@ int		main(int ac, char **av)
 		update_visu(&d, vm);
 	}
 	error("End.", &d);
-	return (TRUE);
+	return (TRUE);*/
 }
