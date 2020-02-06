@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 15:35:36 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/05 18:30:23 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 15:46:03 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,9 @@ int main(int ac, char **av)
 	fd = open(av[1], O_RDONLY);
 	if (fd < 0)
 		return (ft_error("a problem occured while opening the source file", NULL));
-	if (create_file(av[1], &out_file, fd) == FALSE)
+	if (cor_file(av[1], &out_file, fd) == FALSE)
 		return (FALSE);
-	if (start_content(&out_file, fd) == FALSE)
-		return (FALSE);
+	write(out_file.fd, out_file.content, out_file.total_size);
 	ft_printf("Writing output program to %s\n", out_file.name);
 	return (TRUE);	
 }

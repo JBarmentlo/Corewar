@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 15:31:05 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/06 15:48:22 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 17:13:45 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,9 @@
 **** translation
 */
 
-#define PROG_ASM		0
-#define MAX_SIZE_FILE	2875
+# define PROG_ASM		0
+# define MAX_SIZE_FILE	2875
+# define BITS_IN_OCTET	8
 
 enum				e_state
 {
@@ -141,5 +142,9 @@ typedef struct 		s_file
 int						usage(int prog);
 int						ft_error(char *str, char *str2);
 int						cor_file(char *source_file, t_file *out_file, int fd);
+/////////////////////// asm utils   //////////////////////////
+void					nb_to_binary(t_file *out_file, int octets, int indx, int nb);
+int						count_bits(int nb);
+void					write_in_file(t_file *out_file, int indx, int n);
 
 #endif

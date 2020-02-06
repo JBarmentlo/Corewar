@@ -6,7 +6,7 @@
 #    By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/22 19:37:40 by dberger           #+#    #+#              #
-#    Updated: 2020/02/06 15:48:36 by dberger          ###   ########.fr        #
+#    Updated: 2020/02/06 17:14:10 by dberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,7 +76,8 @@ UTILS_SOURCE_FILES=endian_converter.c \
 	usage.c
 
 ASM_SOURCE_FILES=main_asm.c \
-	cor_file.c 
+	cor_file.c \
+	asm_utils.c
 
 INCLUDES_FILES=arena.h \
 	op.h \

@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:29:48 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/06 15:56:14 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 17:22:00 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,23 +29,8 @@ int		init_file(t_file *out_file, char *source_file, int i)
 int		fill_header(t_file *out_file, int fd)
 {
 	(void)fd;
-	out_file->content[0] = (unsigned char)0;
-	out_file->total_size += 1;
-	out_file->content[1] = (unsigned char)234;
-	out_file->total_size += 1;
-	out_file->content[2] = (unsigned char)131;
-	out_file->total_size += 1;
-	out_file->content[3] = (unsigned char)243;
-	out_file->total_size += 1;
-	ft_printf("total_size = %d\n", out_file->total_size);
-	unsigned long i;
-	i = 0;
-	while (i < sizeof(COREWAR_EXEC_MAGIC))
-	{
-		ft_printf("[%x]\n", out_file->content[i] & 0xff);
-		i++;
-	}
-	ft_printf("magic = [%x]\n", COREWAR_EXEC_MAGIC);
+// write magic number//
+	nb_to_binary(out_file, sizeof(COREWAR_EXEC_MAGIC), out_file->total_size, COREWAR_EXEC_MAGIC);
 	return (TRUE);
 }
 
