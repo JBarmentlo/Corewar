@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 15:31:05 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/05 18:29:15 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 15:48:22 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,11 +134,12 @@ typedef struct 		s_file
 	int				fd;
 	char			*name;
 	char			*content;
+	int				total_size;
+	int				prog_size;
 }					t_file;
 
 int						usage(int prog);
 int						ft_error(char *str, char *str2);
-int						create_file(char *source_file, t_file *out_file, int fd);
-int						start_content(t_file *out_file, int fd);
+int						cor_file(char *source_file, t_file *out_file, int fd);
 
 #endif
