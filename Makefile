@@ -6,7 +6,7 @@
 #    By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/22 19:37:40 by dberger           #+#    #+#              #
-#    Updated: 2020/01/30 16:55:06 by jbarment         ###   ########.fr        #
+#    Updated: 2020/02/06 17:14:10 by dberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,12 +37,16 @@ INCLUDE_PATH=-I $(INCLUDE_FOLDER) -I $(SDL_INCLUDE_FOLDER)
 COMPILER=$(CC) $(CFLAGS) $(INCLUDE_PATH)
 LIBS=libCorewar.a ./includes/libft/libft.a
 NAME_COREWAR=corewar
+NAME_ASM=asm
 
 COREWAR_SOURCE_FILES=cycle.c \
 	main_arena.c \
 	args.c \
 	disp_corewar.c \
 	disp.c \
+	disp_init_var.c \
+	disp_init_players.c \
+	disp_init_info.c \
 	update_visu.c \
 	args_utils.c \
 	process.c \
@@ -71,11 +75,15 @@ COREWAR_SOURCE_FILES=cycle.c \
 UTILS_SOURCE_FILES=endian_converter.c \
 	op.c \
 	read_write.c \
+	ft_error.c \
+	usage.c
 
-
-ASM_SOURCE_FILES=main.c
+ASM_SOURCE_FILES=main_asm.c \
+	cor_file.c \
+	asm_utils.c
 
 INCLUDES_FILES=arena.h \
+	op.h \
 	bitMasks.h \
 
 RELINK_INCUDE=$(addprefix $(INCLUDE_FOLDER)/, $(INCLUDES_FILES))
@@ -103,8 +111,9 @@ libCorewar.a: $(OUT_UTILS) Makefile $(RELINK_INCUDE)
 $(OBJ_FOLDER)/%.o: $(SRCS_UTILS_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $@ -c $<
 
-asm: $(OUT_ASM) libCorewar.a Makefile $(RELINK_INCUDE)
-	$(COMPILER) -o asm $(OUT_ASM) $(LIBS)
+asm: $(LIB) $(OUT_ASM) libCorewar.a Makefile $(RELINK_INCUDE)
+	$(COMPILER) -o $(NAME_ASM) $(OUT_ASM) $(LIBS) $(LIB)
+	echo "$(YELLOW)	--- $(GREEN)ASM$(YELLOW) Compiled ! ---	$(NO_COLOR)"
 
 $(OBJ_FOLDER)/%.o: $(SRCS_ASM_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $@ -c $<
@@ -112,9 +121,6 @@ $(OBJ_FOLDER)/%.o: $(SRCS_ASM_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 corewar: $(LIB) $(OUT_COREWAR) libCorewar.a Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $(NAME_COREWAR) $(OUT_COREWAR) $(LIBS)  $(LIB) -L srcs/sdl_src -l SDL2-2.0.0 -l SDL2_image -l SDL2_ttf
 	echo "$(YELLOW)	--- $(GREEN)Corewar$(YELLOW) Compiled ! ---	$(NO_COLOR)"
-
-corewar2: $(LIB) $(OUT_COREWAR) libCorewar.a Makefile $(RELINK_INCUDE)
-	$(COMPILER) -o $(NAME_COREWAR) $(OUT_COREWAR) $(LIBS)  $(LIB)
 
 $(OBJ_FOLDER)/%.o: $(SRCS_COREWAR_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $@ -c $<

@@ -3,7 +3,6 @@
 #include "stdio.h"
 
 
-
 // keep going ?
 int		is_game_over(t_arena *arena)
 {

@@ -50,7 +50,6 @@ void	execute_processes(t_arena *arena)
 	t_process	*next;
 
 	it = arena->process_table[arena->cycle % PROCESS_TABLE_SIZE];
-	
 	while (it != NULL)
 	{
 

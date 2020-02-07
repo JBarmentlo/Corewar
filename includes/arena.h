@@ -6,7 +6,11 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2020/01/31 17:52:53 by jbarment         ###   ########.fr       */
+=======
+/*   Updated: 2020/02/04 16:32:23 by dberger          ###   ########.fr       */
+>>>>>>> c6c407fc4559259fe3147f047487c75a7989aad2
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +25,7 @@
 # include "sdl_include/SDL_ttf.h"
 # include <stdio.h>							//A SUPPRIMER
 
+#define COREWAR					1
 #define	TRUE					1
 #define	FALSE					0
 #define	INIT_NUM				-1
@@ -63,6 +68,7 @@ typedef struct			s_champion
 	int			alive;
 	int			lives_since_last_check;
 	int			total_memory_owned;
+	int			total_process;
 }						t_champion;
 
 typedef struct			s_process
@@ -117,7 +123,7 @@ typedef void 			(*t_fun_ptr)(t_arena*, t_process*);
 
 
 
-int						usage();
+int						usage(int prog);
 int						ft_error(char *str, char *str2);
 int						pars_num_champ(int *nb, t_arena *vm, int mode);
 int						pars_args(int ac, char **av, t_arena *vm);
@@ -137,10 +143,11 @@ typedef struct			s_texte
 
 typedef struct		s_disp
 {
-	unsigned int	color_champ[MAX_PLAYERS];
+	unsigned int	color_champ[MAX_PLAYERS + 1];
 	unsigned int	delay;
 	unsigned int	pause;
 	unsigned int	step;
+	int				button_status;
 	SDL_Window		*win;
 	SDL_Renderer	*rend;
 	SDL_Event		event;
@@ -167,16 +174,22 @@ typedef struct		s_disp
 	SDL_Rect		process;
 	SDL_Rect		mod;
 	TTF_Font		*font1;
+	SDL_Color		color;
 }					t_disp;
 
 // VISU
 
+
 void				error(char *src, t_disp *d);
 void				init_window(t_disp *d, t_arena a);
+void				disp_init_var(t_disp *d);
+void				disp_init_players(t_disp *d, t_arena a);
+void				disp_init_info(t_disp *d);
 void				events(t_disp *d, int *running, int *timeout, t_arena a);
 void				disp_ttf(char *ttf, SDL_Color color, t_disp *d);
 void				update_visu(t_disp *d, t_arena a);
-
+char				*ft_itoa2(int n);
+size_t				ft_nbrlen(int nbr);
 //
 
 void				bit_dump(void *ptr, int size);

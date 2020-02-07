@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/31 19:11:54 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/02/07 16:09:58 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,11 @@ t_arena		init_vm()
 	return (vm);
 }
 
-int		ft_error(char *str, char *str2)
-{
-	if (str2 == NULL)
-		ft_printf("Error: %s\n", str);
-	else
-		ft_printf("Error: %s %s\n", str, str2);
-	return (FALSE);
-}
-
-
 int		main(int ac, char **av)
 {
-
+// 	t_disp		d;
+//	int		timeout;
+//	int		running;
 	t_arena		vm;
 	t_champion	*champ;
 	int			i;
@@ -65,46 +57,29 @@ int		main(int ac, char **av)
 		return (FALSE);
 	printf("owner number = [%d]\n", vm.process_list->owner->number);
 	printf("process address: %p \n", vm.process_list);
-	if (visu)
-		init_window(&d, vm);
+	init_window(&d, vm);
+
 	running = 1;
-	while (!is_game_over(&vm) && vm.cycle < 0 && running == 1)
+	while (!is_game_over(&vm) && vm.cycle < 200 && running)
 	{
 		do_the_cycle(&vm);
-		if (visu)
-		{
-			timeout = SDL_GetTicks() + d.delay;
-			while (SDL_PollEvent(&d.event) || (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout) && running != 0) || (d.pause != 0 && d.step != 1))
-			{
-				d.step = 0;
-				events(&d, &running, &timeout, vm);
-			}
-			update_visu(&d, vm);
-		}
-	}
-
-
-/*
-	init_window(&d, vm);
-	running = 1;
-	while (running)
-	{
-		timeout = SDL_GetTicks() + d.delay;
-		while (SDL_PollEvent(&d.event) || (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout) && running != 0) || (d.pause != 0 && d.step != 1))
+    		timeout = SDL_GetTicks() + d.delay;
+		i = SDL_GetTicks() + 250;
+		while (SDL_PollEvent(&d.event)
+		|| (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout) && running != 0)
+		|| (d.pause != 0 && d.step != 1))
 		{
 			d.step = 0;
 			events(&d, &running, &timeout, vm);
+			if (SDL_TICKS_PASSED(SDL_GetTicks(), i))
+			{
+				d.button_status = 0;
+				i = SDL_GetTicks() + 200;
+			}
 		}
 		update_visu(&d, vm);
-		i = 0;
-		while (i < MEM_SIZE)
-		{
-			vm.memory[i] += 1;
-			vm.memory_color[i] = (vm.memory_color[i] + 1) % 4;
-			i++;
-		}
 	}
-	*/
+
 	error("End.", &d);
 
 	return (TRUE);
