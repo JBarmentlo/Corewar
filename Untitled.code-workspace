@@ -17,7 +17,8 @@
 		"files.associations": {
 			"arena.h": "c",
 			"stdio.h": "c",
-			"libft.h": "c"
+			"libft.h": "c",
+			"bitmasks.h": "c"
 		}
 	}
 }

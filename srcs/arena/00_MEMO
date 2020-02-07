@@ -3,3 +3,7 @@ WILL CRASH:
 
 NEED TO ADD DEAD CHAMPS TO FILL TAB or live will segfault
 
+
+process_champ
+proces_total
+total_lives_since not working ?

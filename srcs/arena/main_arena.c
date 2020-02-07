@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/07 16:13:22 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/02/07 17:02:57 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,15 @@ int		main(int ac, char **av)
 		return (FALSE);
 	printf("owner number = [%d]\n", vm.process_list->owner->number);
 	printf("process address: %p \n", vm.process_list);
-	init_window(&d, vm);
+	//init_window(&d, vm);
 
 	running = 1;
 	while (!is_game_over(&vm) && vm.cycle < 200 && running)
 	{
 		do_the_cycle(&vm);
-    		timeout = SDL_GetTicks() + d.delay;
+		if (0)
+		{
+    	timeout = SDL_GetTicks() + d.delay;
 		i = SDL_GetTicks() + 250;
 		while (SDL_PollEvent(&d.event)
 		|| (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout) && running != 0)
@@ -77,6 +79,7 @@ int		main(int ac, char **av)
 			}
 		}
 		update_visu(&d, vm);
+		}
 	}
 
 	error("End.", &d);

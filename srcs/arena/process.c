@@ -11,7 +11,7 @@ void	process_invalid(t_process *process)
 void	execute_process(t_arena *arena, t_process *process)
 {
 	int	PC_jump;
-	printf("opcode: %u\n", process->current_op->opcode);
+//	printf("opcode: %u\n", process->current_op->opcode);
 	set_args_to_zero(arena->args);
 	if (process->current_op->encoding_byte)
 	{
