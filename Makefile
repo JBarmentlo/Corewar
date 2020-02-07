@@ -44,6 +44,9 @@ COREWAR_SOURCE_FILES=cycle.c \
 	args.c \
 	disp_corewar.c \
 	disp.c \
+	disp_init_var.c \
+	disp_init_players.c \
+	disp_init_info.c \
 	update_visu.c \
 	args_utils.c \
 	process.c \

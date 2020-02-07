@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/20 17:32:17 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/01/30 19:33:04 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/03 15:23:18 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,19 @@ void		events(t_disp *d, int *running, int *timeout, t_arena a)
 					d->mod.h = 70;
 					d->mod.w = 60;
 					disp_ttf(p, color, d);
+					///////////////////////////////
+					if (!((d->font1 = TTF_OpenFont("img/font2.ttf", 35))))
+						error("(menu.c) TTF_OpenFont : ", d);
+					d->mod.x = d->players.x + 85;
+					d->mod.y = (ph * i) + d->players.y + (ph / 10);
+					d->mod.h = ph / 5;
+					d->mod.w = 200;
+					disp_ttf("name   :", color, d);
+					d->mod.y = (ph * i) + d->players.y + (ph / 10) * 3;
+					disp_ttf("area   :", color, d);
+					d->mod.y = (ph * i) + d->players.y + (ph / 10) * 5;
+					disp_ttf("lives  :", color, d);
+					///////////////////////////////
 					if (SDL_SetRenderTarget(d->rend, NULL) < 0)
 						error("(menu.c) SDL_SetRenderTarget : ", d);
 				}

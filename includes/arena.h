@@ -65,6 +65,7 @@ typedef struct			s_champion
 	int			alive;
 	int			lives_since_last_check;
 	int			total_memory_owned;
+	int			total_process;
 }						t_champion;
 
 typedef struct			s_process
@@ -170,16 +171,22 @@ typedef struct		s_disp
 	SDL_Rect		process;
 	SDL_Rect		mod;
 	TTF_Font		*font1;
+	SDL_Color		color;
 }					t_disp;
 
 // VISU
 
+
 void				error(char *src, t_disp *d);
 void				init_window(t_disp *d, t_arena a);
+void				disp_init_var(t_disp *d);
+void				disp_init_players(t_disp *d, t_arena a);
+void				disp_init_info(t_disp *d);
 void				events(t_disp *d, int *running, int *timeout, t_arena a);
 void				disp_ttf(char *ttf, SDL_Color color, t_disp *d);
 void				update_visu(t_disp *d, t_arena a);
-
+char				*ft_itoa2(int n);
+size_t				ft_nbrlen(int nbr);
 //
 
 void				bit_dump(void *ptr, int size);
