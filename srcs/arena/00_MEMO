@@ -1,6 +1,5 @@
-Args int uint wtf ?
-arena->cycle_to_die can be negative or rolover to what ?
+WILL CRASH:
+	champ_number to champion_table[champ_number] ?? needed for color_read_write total_owned_memory
 
-DIR args always poisitive ? IND certainly not *(almost).
+NEED TO ADD DEAD CHAMPS TO FILL TAB or live will segfault
 
-Everything that is not in arena->memory is written in little endian;

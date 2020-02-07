@@ -1,21 +1,35 @@
 #include "arena.h"
+#include "bitMasks.h"
 
-
-
-void	*reg_nb_to_ptr(t_process *process, int nb)
+// will return a positive modulo
+int		positive_modulo_memsize(int a)
 {
-	return (&process->registre[((nb - 1) * 4)]);
+	return (a & (MEM_SIZE - 1));
 }
 
-void	*ind_to_ptr_idx(t_arena *arena, int ind, int PC)
+// CHAMP NUMBER TO champion_table INDEX RELATIONSHIP unknown
+void	mem_write_color(t_arena *arena, uint index, uint size, int champ_nb)
 {
-	return (&arena->memory[(PC + (ind % IDX_MOD)) % MEM_SIZE]);
+	uint	i;
+
+	i = 0;
+	while (i < size)
+	{
+		if (arena->memory_color[(index + i) & MODULO_MASK] != 0)
+		{
+			arena->champion_table[arena->memory_color[(index + i) & MODULO_MASK]].total_memory_owned -= 1;
+		}
+		if (arena->memory_color[(index + i) & MODULO_MASK] != champ_nb)
+			arena->champion_table[champ_nb].total_memory_owned += 1;
+		arena->memory_color[(index + i) & MODULO_MASK] = champ_nb;
+
+		i++;
+	}
 }
 
-void	*ind_to_ptr_no_idx(t_arena *arena, int ind, int PC)
-{
-	return (&arena->memory[(PC + ind) % MEM_SIZE]);
-}
+
+
+
 
 void	mem_memcopy(t_arena *arena, byte *src, int index, uint size)
 {
@@ -24,7 +38,7 @@ void	mem_memcopy(t_arena *arena, byte *src, int index, uint size)
 	i = 0;
 	while (i < size)
 	{
-		arena->memory[(index + i) % MEM_SIZE] = src[i];
+		arena->memory[(index + i) & MODULO_MASK] = src[i];
 		i++;
 	}
 }
@@ -36,12 +50,12 @@ void	mem_memcopy_endian_switch(t_arena *arena, byte *src, int index, uint size)
 	i = 0;
 	while (i < size)
 	{
-		arena->memory[(index + i) % MEM_SIZE] = src[size - i - 1];
+		arena->memory[(index + i) & MODULO_MASK] = src[size - i - 1];
 		i++;
 	}
 }
 
-uint	mem_read_uint(t_arena *arena, int index)
+int		mem_read_int(t_arena *arena, int index)
 {
 	byte	out[REG_SIZE];
 	int		i;
@@ -49,13 +63,13 @@ uint	mem_read_uint(t_arena *arena, int index)
 	i = 0;
 	while (i < REG_SIZE)
 	{
-		out[REG_SIZE - 1 - i] = arena->memory[(index + i) % MEM_SIZE];
+		out[REG_SIZE - 1 - i] = arena->memory[(index + i) & MODULO_MASK];
 		i++;
 	}
-	return ((uint)*(uint*)out);
+	return (*(int*)out);
 }
 
-void	mem_write_uint(t_arena *arena, int index, uint val)
+void	mem_write_int(t_arena *arena, int index, int val)
 {
 	byte	*value;
 	int		i;
@@ -64,24 +78,24 @@ void	mem_write_uint(t_arena *arena, int index, uint val)
 	i = 0;
 	while (i < REG_SIZE)
 	{
-		arena->memory[(index + i) % MEM_SIZE] = value[REG_SIZE - 1 - i];
+		arena->memory[(index + i) & MODULO_MASK] = value[REG_SIZE - 1 - i];
 		i++;
 	}
 }
 
-uint	mem_ind_to_uint(t_arena *arena, t_process *process, int ind)
+int		mem_ind_to_int(t_arena *arena, t_process *process, int ind)
 {
 	if (process->current_op->idx_mod_applies)
 		ind = ind % IDX_MOD;
-	return (mem_read_uint(arena, ind));
+	return (mem_read_int(arena, ind));
 }
 
-void	reg_write_uint(t_process *process, uint val, uint reg_number)
+void	reg_write_int(t_process *process, int val, int reg_number)
 {
-	memcpy(&process->registre[(reg_number - 1) * 4], &val, REG_SIZE);
+	memcpy(&process->registre[(reg_number - 1)], &val, REG_SIZE);
 }
 
-uint	reg_read_uint(t_process *process, int reg_nb)
+int		reg_read_int(t_process *process, int reg_nb)
 {
-	return ((uint)*((uint*)(&process->registre[(reg_nb - 1) * 4])));
+	return (process->registre[(reg_nb - 1)]);
 }

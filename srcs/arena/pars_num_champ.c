@@ -6,11 +6,11 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 11:57:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/22 17:06:33 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/01/30 13:07:55 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/arena.h"
+#include "arena.h"
 
 /*
 ** First we have created an integer tab, of the size of MAX_ARGS_NUMBER
@@ -36,17 +36,38 @@ void	init_tab(int *nb, int k)
 int		check_errors_nb(int *nb, int i, int k)
 {
 	i = MAX_ARGS_NUMBER - 1;
-	if (k > 0)
+	while (k > 0 && i > 0)
 	{
-		while (k > 0 && i > 0)
-		{
-			if (nb[i] == NO_NB)
-				return (ft_error("NB higher than the amount of champions", NULL));
-			k--;
-			i--;
-		}
+		if (nb[i] == NO_NB)
+			return (ft_error("NB higher than the amount of champions", NULL));
+		k--;
+		i--;
 	}
 	return (TRUE);
+}
+
+void	swipe_champs(t_arena *vm)
+{
+	t_champion		save;
+	t_champion		swipe;
+	int				i;
+	int				k;
+
+	i = 0;
+	k = 1;
+	while (i < vm->nb_champs)
+	{
+		if (vm->champion_table[i].number == k)
+		{
+			save = vm->champion_table[k - 1];
+			swipe = vm->champion_table[i];
+			vm->champion_table[k - 1] = swipe;
+			vm->champion_table[i] = save;
+			k++;
+			i = 0;
+		}
+		i++;
+	}
 }
 
 /*
@@ -68,10 +89,9 @@ void	assign_nb(int *nb, t_arena *vm, int i, int k)
 			vm->champion_table[i].number = nb[k];
 			k++;
 		}
-//		if (vm->champion_table[i].number == vm->nb_champs)
-//			vm->last = &(vm->champion_table[i]);
 		i++;
 	}
+	swipe_champs(vm);
 }
 
 /*
