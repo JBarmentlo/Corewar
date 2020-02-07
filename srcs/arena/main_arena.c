@@ -24,25 +24,14 @@ t_arena		init_vm()
 	return (vm);
 }
 
-int		ft_error(char *str, char *str2)
-{
-	if (str2 == NULL)
-		ft_printf("Error: %s\n", str);
-	else
-		ft_printf("Error: %s %s\n", str, str2);
-	return (FALSE);
-}
-
-
 int		main(int ac, char **av)
 {
-	t_disp		d;
-	int			timeout;
-	int			running;
+// 	t_disp		d;
+//	int		timeout;
+//	int		running;
 	t_arena		vm;
 	t_champion	*champ;
-	int			i;
-
+	int		i;
 
 	i = 0;
 	vm = init_vm();
@@ -58,23 +47,12 @@ int		main(int ac, char **av)
 	}
 	if (start_arena(&vm, champ) == FALSE)
 		return (FALSE);
-	printf("owner number = [%d]\n", vm.process_list->owner->number);
-	printf("process address: %p \n", vm.process_list);
-	init_window(&d, vm);
+  /*	init_window(&d, vm);
 	running = 1;
-
-////////////////////////////////TOTAL_PROCESS///////////////////////////////////
-/*	while (vm.process_list != NULL)
-	{
-		vm.process_list->owner->total_process += 1;
-		vm.process_list = vm.process_list->next_list;
-	}*/
-////////////////////////////////////////////////////////////////////////////////
-
-	while (!is_game_over(&vm) /*&& vm.cycle < 200*/ && running)
+	while (!is_game_over(&vm) && vm.cycle < 200 && running)
 	{
 		do_the_cycle(&vm);
-		timeout = SDL_GetTicks() + d.delay;
+    		timeout = SDL_GetTicks() + d.delay;
 		i = SDL_GetTicks() + 250;
 		while (SDL_PollEvent(&d.event)
 		|| (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout) && running != 0)
@@ -91,5 +69,5 @@ int		main(int ac, char **av)
 		update_visu(&d, vm);
 	}
 	error("End.", &d);
-	return (TRUE);
+	return (TRUE);*/
 }

@@ -1,0 +1,1 @@
+Usage: ./asm <sourcefile.s>

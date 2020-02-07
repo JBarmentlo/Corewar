@@ -6,7 +6,7 @@
 #    By: dberger <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/08 10:16:12 by dberger           #+#    #+#              #
-#    Updated: 2020/01/16 14:04:23 by dberger          ###   ########.fr        #
+#    Updated: 2020/02/05 14:55:47 by dberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ ft_strcpy.c\
 ft_strncpy.c\
 ft_strcat.c\
 ft_strncat.c\
+ft_stricat.c\
 ft_strlcat.c\
 ft_strchr.c\
 ft_strrchr.c\

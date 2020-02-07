@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 11:30:14 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/30 17:30:51 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/02/04 17:45:23 by dberger          ###   ########.fr       */
 /*   Updated: 2020/01/30 15:07:22 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -60,13 +60,11 @@ t_process	*make_process_list(t_arena *vm)
 	{
 		process = make_process();
 		process->registre[0] = ((-1) * (i + 1));
-		printf("r1: %d\n", process->registre[0]);
 		// what about (-) ? //
 		process->owner = &vm->champion_table[i];
 		process->PC = pc;
 		add_process_to_list(process, vm);
 		add_process_to_table(process, vm, 0);
-		printf("pointer table: %p, list :%p\n", vm->process_table[0], vm->process_list);
 		i++;
 		pc += (MEM_SIZE / vm->nb_champs);
 	}
@@ -109,7 +107,7 @@ void		fill_arena(t_arena *vm, t_champion *champ, int indx)
 	int		size;
 	int		i;
 
-	size = champ->header.prog_size - SIZE_HEADER;
+	size = champ->header.prog_size;
 	i = 0;
 	while (i < MEM_SIZE / vm->nb_champs)
 	{
