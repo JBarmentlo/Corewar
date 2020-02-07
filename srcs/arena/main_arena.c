@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/07 17:02:57 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/02/07 17:10:35 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int		main(int ac, char **av)
 	//init_window(&d, vm);
 
 	running = 1;
+	vm.total_process_nb = vm.nb_champs;
 	while (!is_game_over(&vm) && vm.cycle < 200 && running)
 	{
 		do_the_cycle(&vm);

@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 12:14:08 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/07 17:03:30 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/02/07 17:07:18 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,5 +126,6 @@ int			pars_header(t_champion *champ)
 	if (name_size_comment(champ) == FALSE)
 		return (FALSE);
 	champ->alive = 1;
+	champ->total_process = 1;
 	return (TRUE);
 }

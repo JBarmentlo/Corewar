@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/07 16:10:56 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/02/07 17:08:55 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ typedef struct			s_args
 typedef struct 			s_arena
 {
 	t_process*	 		process_list;
+	int					total_process_nb;
 	t_process*			process_table[PROCESS_TABLE_SIZE]; // a init vide;
 	t_champion			champion_table[MAX_PLAYERS];
 	int					nb_champs;
