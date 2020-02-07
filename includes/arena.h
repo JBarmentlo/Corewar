@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/07 17:08:55 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/02/07 17:23:09 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,8 +237,6 @@ void				add_process_to_list(t_process *process, t_arena *arena);
 
 // READ WRITE
 
-void				mem_memcopy_endian_switch(t_arena *arena, byte *src, int index, uint size);
-void				mem_memcopy(t_arena *arena, byte *src, int index, uint size);
 
 int					reg_read_int(t_process *process, int reg_nb);
 void				reg_write_int(t_process *process, int val, int reg_number);

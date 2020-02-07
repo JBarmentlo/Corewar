@@ -2,6 +2,3 @@ WILL CRASH:
 	champ_number to champion_table[champ_number] ?? needed for color_read_write total_owned_memory
 
 NEED TO ADD DEAD CHAMPS TO FILL TAB or live will segfault
-
-
-proces_total

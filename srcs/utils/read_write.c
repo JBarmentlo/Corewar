@@ -11,46 +11,15 @@ int		positive_modulo_memsize(int a)
 void	mem_write_color(t_arena *arena, uint index, uint size, int champ_nb)
 {
 	uint	i;
+	int		current_owner;
 
 	i = 0;
 	while (i < size)
 	{
-		if (arena->memory_color[(index + i) & MODULO_MASK] != 0)
-		{
-			arena->champion_table[arena->memory_color[(index + i) & MODULO_MASK]].total_memory_owned -= 1;
-		}
-		if (arena->memory_color[(index + i) & MODULO_MASK] != champ_nb)
-			arena->champion_table[champ_nb].total_memory_owned += 1;
+		current_owner = arena->memory_color[(index + i) & MODULO_MASK];
+		arena->champion_table[current_owner - 1].total_memory_owned -= 1;
+		arena->champion_table[champ_nb - 1].total_memory_owned += 1;
 		arena->memory_color[(index + i) & MODULO_MASK] = champ_nb;
-
-		i++;
-	}
-}
-
-
-
-
-
-void	mem_memcopy(t_arena *arena, byte *src, int index, uint size)
-{
-	uint	i;
-
-	i = 0;
-	while (i < size)
-	{
-		arena->memory[(index + i) & MODULO_MASK] = src[i];
-		i++;
-	}
-}
-
-void	mem_memcopy_endian_switch(t_arena *arena, byte *src, int index, uint size)
-{
-	uint	i;
-
-	i = 0;
-	while (i < size)
-	{
-		arena->memory[(index + i) & MODULO_MASK] = src[size - i - 1];
 		i++;
 	}
 }
