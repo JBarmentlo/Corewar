@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:29:48 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/07 16:13:14 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/02/11 10:03:36 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int		init_file(t_file *out_file, char *source_file, int i)
 int		fill_header(t_file *out_file, int fd)
 {
 	(void)fd;
-// write magic number//
+	// write magic number//
 	nb_to_binary(out_file, sizeof(COREWAR_EXEC_MAGIC), out_file->total_size, COREWAR_EXEC_MAGIC);
 	return (TRUE);
 }
@@ -63,5 +63,105 @@ int		cor_file(char *source_file, t_file *out_file, int fd)
 		return (FALSE);
 	if (fill_header(out_file, fd) == FALSE)
 		return (FALSE);
+	//////////////////////////NICO MODIFICATIONS///////////////////////////
+/*	t_stack		a;
+	t_label		*save;
+
+	save = a.label_list;
+	a.champion_name = "zork";
+	a.comment = "Bonjour le monde";
+	a.label_list->name = "l2";
+	a.label_list->opt = (char**)malloc(sizeof(char*) * 2);
+	a.label_list->opt[0] = (char*)malloc(sizeof(char) * 19);
+	a.label_list->opt[0] = "sti r1, %:live, %1\0";
+	a.label_list->opt[1] = (char*)malloc(sizeof(char) * 15);
+	a.label_list->opt[1] = "and r1, %0, r1\0";
+	a.label_list = a.label_list->next;
+	a.label_list->name = "live";
+	a.label_list->opt = (char**)malloc(sizeof(char*) * 2);
+	a.label_list->opt[0] = (char*)malloc(sizeof(char) * 8);
+	a.label_list->opt[0] = "live %1\0";
+	a.label_list->opt[1] = (char*)malloc(sizeof(char) * 12);
+	a.label_list->opt[1] = "zjmp %:live\0";
+	a.label_list = save;
+*/
+	/*
+	** CHAMPION_NAME SUR 128 OCTETS
+	*/
+/*
+	i = 0;
+	while (i < 128)
+	{
+		if (i < (int)ft_strlen(a.champion_name))
+			out_file->content[out_file->total_size] = a.champion_name[i];
+		else
+			out_file->content[out_file->total_size] = 0;
+		out_file->total_size += 1;
+		i++;
+	}
+*/
+	/*
+	** 4 OCTETS A NULL
+	*/
+/*
+	i = 0;
+	while (i < 4)
+	{
+		out_file->content[out_file->total_size] = 0;
+		out_file->total_size += 1;
+		i++;
+	}
+*/
+	/*
+	** TAILLE DE L'EXE EN OCTETS ?
+	** je met a 0 pour l'instant vu que je sais pas
+	*/
+/*
+	i = 0;
+	while (i < 4)
+	{
+		out_file->content[out_file->total_size] = 0;
+		out_file->total_size += 1;
+		i++;
+	}
+*/
+	/*
+	** COMMENT SUR 2048 OCTETS
+	** COMMENT_LENGHT ?
+	*/
+/*
+	i = 0;
+	while (i < 2048)
+	{
+		if (i < (int)ft_strlen(a.comment))
+			out_file->content[out_file->total_size] = a.comment[i];
+		else
+			out_file->content[out_file->total_size] = 0;
+		out_file->total_size += 1;
+		i++;
+	}
+*/
+	/*
+	** NULL AGAIN
+	*/
+/*
+	i = 0;
+	while (i < 4)
+	{
+		out_file->content[out_file->total_size] = 0;
+		out_file->total_size += 1;
+		i++;
+	}
+*/
+	/*
+	** CODE
+	*/
+/*
+	while (a.label_list)
+	{
+	
+		a.label_list
+	}
+*/	///////////////////////////////////////////////////////////////////////
 	return (TRUE);
 }

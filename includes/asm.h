@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 15:31:05 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/06 17:13:45 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/07 15:56:00 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,12 +108,21 @@ enum				e_state
 	GET_COMMENT,
 	GET_PROCESS,
 };
-
+/*
 typedef struct 		s_label
 {
 	char			*name;
 	size_t			oct;
 	t_list			*instruct_list;
+}					t_label;
+*/
+
+typedef struct 		s_label
+{
+	char			*name;
+	size_t			oct;
+	char			**opt;
+	struct s_label			*next;
 }					t_label;
 
 typedef struct 		s_instruct
@@ -127,7 +136,7 @@ typedef struct		s_stack
 	int				cur_label;
 	enum e_state	state;
 	char			*comment;
-	t_list			*label_list;
+	t_label			*label_list;
 }					t_stack;
 
 typedef struct 		s_file
