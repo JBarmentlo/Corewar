@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 15:25:33 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/02/05 16:32:54 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/07 16:54:59 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,12 @@
 
 void        error(char *src, t_disp *d)
 {
-    printf("%s%s\n", src, SDL_GetError());
+	if (ft_strcmp(src, "TTF"))
+		printf("%s%s\n", src, TTF_GetError());
+	else if (ft_strcmp(src, "SDL"))
+		printf("%s%s\n", src, SDL_GetError());
+	else
+		printf("%s\n", src);
     SDL_DestroyTexture(d->back);
     SDL_DestroyRenderer(d->rend);
     SDL_DestroyWindow(d->win);
@@ -34,6 +39,8 @@ void        disp_ttf(char *ttf, SDL_Color color, t_disp *d)
     d->font = SDL_CreateTextureFromSurface(d->rend, d->txt);
     if (SDL_RenderCopy(d->rend, d->font, NULL, &d->mod) < 0)
         error("(menuc) SDL_RenderCopy : ", d);
+	SDL_DestroyTexture(d->font);
+	SDL_FreeSurface(d->txt);
 }
 
 /*
@@ -60,7 +67,7 @@ void		disp_init_var2(t_disp *d)
 	d->pause = 0;
     d->step = 0;
 	d->color.a = 0;
-    d->delay = 1000;
+    d->delay = 300;
 }
 
 void		disp_init_var(t_disp *d)
@@ -69,7 +76,7 @@ void		disp_init_var(t_disp *d)
         error("(main.c) SDL_Init error : ", d);
     if (TTF_Init() == -1)
         error("(main.c) TTF_Init error : ", d);
-    if (!(d->win = SDL_CreateWindow("COREWAR", 1000, 1000,
+    if (!(d->win = SDL_CreateWindow("Visu Corewar", 1000, 1000,
                     0, 0, SDL_WINDOW_OPENGL)))
         error("(main.c) SDL_CreateWindow error : ", d);
     if (!(d->rend = SDL_CreateRenderer(d->win, -1,

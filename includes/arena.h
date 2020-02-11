@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/07 17:23:09 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/02/11 10:04:00 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,7 @@ typedef struct		s_disp
 {
 	unsigned int	color_champ[MAX_PLAYERS + 1];
 	unsigned int	delay;
+	unsigned int	d_cycle;
 	unsigned int	pause;
 	unsigned int	step;
 	int				button_status;
@@ -183,6 +184,8 @@ void				disp_init_var(t_disp *d);
 void				disp_init_players(t_disp *d, t_arena a);
 void				disp_init_info(t_disp *d);
 void				events(t_disp *d, int *running, int *timeout, t_arena a);
+void				event_mousemotion(t_disp *d, int *timeout, t_arena a);
+void				event_mousebutton(t_disp *d, int *running, int *timeout, t_arena a);
 void				disp_ttf(char *ttf, SDL_Color color, t_disp *d);
 void				update_visu(t_disp *d, t_arena a);
 char				*ft_itoa2(int n);

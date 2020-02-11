@@ -6,7 +6,7 @@
 #    By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/22 19:37:40 by dberger           #+#    #+#              #
-#    Updated: 2020/02/07 16:20:26 by jbarment         ###   ########.fr        #
+#    Updated: 2020/02/11 10:00:57 by ncoursol         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,11 +42,13 @@ NAME_ASM=asm
 COREWAR_SOURCE_FILES=cycle.c \
 	main_arena.c \
 	args.c \
-	disp_corewar.c \
 	disp.c \
 	disp_init_var.c \
 	disp_init_players.c \
 	disp_init_info.c \
+	event.c \
+	event_mousebutton.c \
+	event_mousemotion.c \
 	update_visu.c \
 	args_utils.c \
 	process.c \
