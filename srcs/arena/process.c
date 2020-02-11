@@ -1,16 +1,17 @@
 #include "arena.h"
+#include "bitMasks.h"
 
 void	process_invalid(t_process *process)
 {
 	process->PC++;
-	process->PC = process->PC % MEM_SIZE; //manually replace by bitmask
+	process->PC = process->PC  & MODULO_MASK;
 	process->current_op = NULL;	//will be made obsolete by architecture
 }
 
 void	execute_process(t_arena *arena, t_process *process)
 {
 	int	PC_jump;
-	printf("opcode: %u\n", process->current_op->opcode);
+//	printf("opcode: %u\n", process->current_op->opcode);
 	set_args_to_zero(arena->args);
 	if (process->current_op->encoding_byte)
 	{
@@ -49,7 +50,6 @@ void	execute_processes(t_arena *arena)
 	t_process	*next;
 
 	it = arena->process_table[arena->cycle % PROCESS_TABLE_SIZE];
-	
 	while (it != NULL)
 	{
 
@@ -63,7 +63,7 @@ void	execute_processes(t_arena *arena)
 			}
 			else
 			{
-				it->PC = (it->PC + 1) % MEM_SIZE;
+				it->PC = (it->PC + 1)  & MODULO_MASK;
 				add_process_to_table(it, arena, arena->cycle + 1);
 			}
 		}

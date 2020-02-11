@@ -6,7 +6,7 @@
 #    By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/22 19:37:40 by dberger           #+#    #+#              #
-#    Updated: 2020/02/06 17:14:10 by dberger          ###   ########.fr        #
+#    Updated: 2020/02/07 16:20:26 by jbarment         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,6 +44,9 @@ COREWAR_SOURCE_FILES=cycle.c \
 	args.c \
 	disp_corewar.c \
 	disp.c \
+	disp_init_var.c \
+	disp_init_players.c \
+	disp_init_info.c \
 	update_visu.c \
 	args_utils.c \
 	process.c \

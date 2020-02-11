@@ -1,61 +1,25 @@
 #include "arena.h"
+#include "bitMasks.h"
 
+// will return a positive modulo
+int		positive_modulo_memsize(int a)
+{
+	return (a & (MEM_SIZE - 1));
+}
 
 // CHAMP NUMBER TO champion_table INDEX RELATIONSHIP unknown
 void	mem_write_color(t_arena *arena, uint index, uint size, int champ_nb)
 {
 	uint	i;
+	int		current_owner;
 
 	i = 0;
 	while (i < size)
 	{
-		if (arena->memory_color[(index + i) % MEM_SIZE] != 0)
-		{
-			arena->champion_table[arena->memory_color[(index + i) % MEM_SIZE]].total_memory_owned -= 1;
-		}
-		if (arena->memory_color[(index + i) % MEM_SIZE] != champ_nb)
-			arena->champion_table[champ_nb].total_memory_owned += 1;
-		arena->memory_color[(index + i) % MEM_SIZE] = champ_nb;
-
-		i++;
-	}
-}
-
-void	*reg_nb_to_ptr(t_process *process, int nb)
-{
-	return (&process->registre[((nb - 1))]);
-}
-
-void	*ind_to_ptr_idx(t_arena *arena, int ind, int PC)
-{
-	return (&arena->memory[(PC + (ind % IDX_MOD)) % MEM_SIZE]);
-}
-
-void	*ind_to_ptr_no_idx(t_arena *arena, int ind, int PC)
-{
-	return (&arena->memory[(PC + ind) % MEM_SIZE]);
-}
-
-void	mem_memcopy(t_arena *arena, byte *src, int index, uint size)
-{
-	uint	i;
-
-	i = 0;
-	while (i < size)
-	{
-		arena->memory[(index + i) % MEM_SIZE] = src[i];
-		i++;
-	}
-}
-
-void	mem_memcopy_endian_switch(t_arena *arena, byte *src, int index, uint size)
-{
-	uint	i;
-
-	i = 0;
-	while (i < size)
-	{
-		arena->memory[(index + i) % MEM_SIZE] = src[size - i - 1];
+		current_owner = arena->memory_color[(index + i) & MODULO_MASK];
+		arena->champion_table[current_owner - 1].total_memory_owned -= 1;
+		arena->champion_table[champ_nb - 1].total_memory_owned += 1;
+		arena->memory_color[(index + i) & MODULO_MASK] = champ_nb;
 		i++;
 	}
 }
@@ -68,7 +32,7 @@ int		mem_read_int(t_arena *arena, int index)
 	i = 0;
 	while (i < REG_SIZE)
 	{
-		out[REG_SIZE - 1 - i] = arena->memory[(index + i) % MEM_SIZE];
+		out[REG_SIZE - 1 - i] = arena->memory[(index + i) & MODULO_MASK];
 		i++;
 	}
 	return (*(int*)out);
@@ -83,7 +47,7 @@ void	mem_write_int(t_arena *arena, int index, int val)
 	i = 0;
 	while (i < REG_SIZE)
 	{
-		arena->memory[(index + i) % MEM_SIZE] = value[REG_SIZE - 1 - i];
+		arena->memory[(index + i) & MODULO_MASK] = value[REG_SIZE - 1 - i];
 		i++;
 	}
 }

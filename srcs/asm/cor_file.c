@@ -3,14 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   cor_file.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:29:48 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/06 17:22:00 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/07 16:13:14 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
+
+char    *ft_stricat(char *dest, const char *src, int indx_src)
+{
+    int i;
+    int j;
+    i = indx_src;
+    j = 0;
+    while (src[j])
+    {
+        dest[i + j] = src[j];
+        j++;
+    }
+    dest[i + j] = '\0';
+    return (dest);
+}
 
 int		init_file(t_file *out_file, char *source_file, int i)
 {
