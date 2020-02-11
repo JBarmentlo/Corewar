@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:29:48 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/11 14:38:25 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/11 15:08:54 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ int		fill_header(t_file *out_file, int fd, t_stack *stack)
 	copy_string(out_file->content, stack->champion_name,  PROG_NAME_LENGTH, &(out_file->total_size));
 	// padding //
 	copy_string(out_file->content, EMPTY,  PADDING, &(out_file->total_size));
-	// Prog size  = 0 pour l'instant + indice de prog size stocke en negatif pour s'assurer que c'est pas la taille
- 	// du programme mais bien son indice//
+	// Prog size  = 0 pour l'instant + indice de prog size stocke en negatif
+	// pour s'assurer que c'est pas la taille du programme mais bien son indice//
 	out_file->prog_size = out_file->total_size * (-1);
 	copy_string(out_file->content, EMPTY,  INFO_PROG, &(out_file->total_size));
 	//// write comment ///// 
@@ -82,6 +82,7 @@ int		cor_file(char *source_file, t_file *out_file, int fd)
 		return (FALSE);
 	if (fill_header(out_file, fd, &stack) == FALSE)
 		return (FALSE);
+	ft_printf("zjump = [%d]\n", find_opcode("zjmp"));
 
 	/*
 	** CODE
