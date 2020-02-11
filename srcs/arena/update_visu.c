@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/23 12:34:21 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/02/11 10:10:48 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/11 10:48:13 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,29 +151,40 @@ void		update_visu(t_disp *d, t_arena a)
 		}
 		else if (i == 3)
 		{
-			d->mod.w = ft_nbrlen(4) * 20;
-			info = ft_itoa2(4);
+			d->mod.w = ft_nbrlen(a.total_process_nb) * 20;
+			info = ft_itoa2(a.total_process_nb);
 			disp_ttf(info, d->color, d);
 			free(info);
 		}
 		i++;
 	}
 	////////////////////INFO PLAYERS//////////////////////
-	i = 1;
-	d->mod.x = d->players.x + (d->players.w / 2) + 15;
-	d->mod.h = 10 + (ph / 10);
-	while (i <= a.nb_champs)
+	i = 0;
+	while (i < a.nb_champs)
 	{
-		d->mod.y = (ph * (i - 1)) + d->players.y + (ph / 9) * 3;
-		info = ft_itoa(a.champion_table[i - 1].total_memory_owned);
-		d->mod.w = ft_nbrlen(a.champion_table[i - 1].total_memory_owned) * 15;
+		d->mod.x = d->players.x + (d->players.w / 2) + 15;
+		d->mod.h = 10 + (ph / 10);
+		d->mod.y = (ph * i) + d->players.y + (ph / 9) * 3;
+		info = ft_itoa(a.champion_table[i].total_memory_owned);
+		d->mod.w = ft_nbrlen(a.champion_table[i].total_memory_owned) * 15;
 		disp_ttf(info, d->color, d);
 		free(info);
-		d->mod.y = (ph * (i - 1)) + d->players.y + (ph / 9) * 5;
-		info = ft_itoa(a.champion_table[i - 1].lives_since_last_check);
-		d->mod.w = ft_nbrlen(a.champion_table[i - 1].lives_since_last_check) * 15;
+		d->mod.y = (ph * i) + d->players.y + (ph / 9) * 5;
+		info = ft_itoa(a.champion_table[i].lives_since_last_check);
+		d->mod.w = ft_nbrlen(a.champion_table[i].lives_since_last_check) * 15;
 		disp_ttf(info, d->color, d);
 		free(info);
+
+		d->mod.y = (ph * i) + d->players.y + (ph - (ph / 10) - 15) + 1;
+		d->mod.h = 8 + (ph / 10);
+		d->mod.w = (d->players.w - 12) / (a.total_process_nb / a.champion_table[i].total_process);
+		d->mod.x = d->players.x + 6;
+		
+		if (SDL_SetRenderDrawColor(d->rend, (d->color_champ[a.champion_table[i].number] & 0xFF000000) >> 24, (d->color_champ[a.champion_table[i].number] & 0xFF0000) >> 16, (d->color_champ[a.champion_table[i].number] & 0xFF00) >> 8, 150) < 0)
+        error("(disp.c) SDL_SetRenderDrawColor : ", d);
+    if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
+        error("(disp.c) SDL_RenderDrawRect : ", d);
+
 		i++;
 	}
 	/////////////////FCT LIST////////////////////////
