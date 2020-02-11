@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/04 16:32:23 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/07 17:23:09 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@
 #define	SIZE_MAX_PROG			2875 // = sizeof(COREWAR_EXEC_MAGIC) + PROG_NAME_LENGTH + PADDING + INFO_SIZE_CODE + COMMENT_LENGTH + PADDING + CHAMP_MAX_SIZE + 1 //
 
 #define	MAX_ARGS_SIZE			16
-
 typedef unsigned int			uint;
 typedef unsigned char			byte;
 typedef unsigned short			uint16_t;
@@ -96,6 +95,7 @@ typedef struct			s_args
 typedef struct 			s_arena
 {
 	t_process*	 		process_list;
+	int					total_process_nb;
 	t_process*			process_table[PROCESS_TABLE_SIZE]; // a init vide;
 	t_champion			champion_table[MAX_PLAYERS];
 	int					nb_champs;
@@ -237,8 +237,6 @@ void				add_process_to_list(t_process *process, t_arena *arena);
 
 // READ WRITE
 
-void				mem_memcopy_endian_switch(t_arena *arena, byte *src, int index, uint size);
-void				mem_memcopy(t_arena *arena, byte *src, int index, uint size);
 
 int					reg_read_int(t_process *process, int reg_nb);
 void				reg_write_int(t_process *process, int val, int reg_number);
@@ -255,6 +253,8 @@ void				*reg_nb_to_ptr(t_process *process, int nb);
 void				*ind_to_ptr_idx(t_arena *arena, int ind, int PC);
 void				*ind_to_ptr_no_idx(t_arena *arena, int ind, int PC);
 void				fill_fun_ptr_tab(t_arena *arena);
+int					positive_modulo_memsize(int a);
+
 //	Display
 
 void				mem_write_color(t_arena *arena, uint index, uint size, int champ_nb);

@@ -11,7 +11,7 @@ int		is_game_over(t_arena *arena)
 
 void	run_function(t_arena *arena, t_process *process)
 {
-	printf("running %s\n", process->current_op->name);
+	printf("\nRUNNING : %s\n", process->current_op->name);
 
 	arena->op_fun_tab[process->current_op->opcode - 1](arena, process);
 	print_t_args(arena->args);
