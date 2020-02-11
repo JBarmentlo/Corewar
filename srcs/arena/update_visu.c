@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/23 12:34:21 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/02/04 16:55:47 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/07 17:02:05 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,27 +62,24 @@ void		update_visu(t_disp *d, t_arena a)
 	int			i;
 	char		hex[3];
 	char		*info;
-	SDL_Color	color;
 	int			ph;
 	t_process	*first;
 
 	ph = (((d->players.y + d->players.h) - d->players.y) / a.nb_champs);
 	i = 0;
-	color.a = 0;
 	if (SDL_SetRenderTarget(d->rend, d->tmp) < 0)
 		error("(menu.c) SDL_SetRenderTarget : ", d);
 	if (SDL_RenderCopy(d->rend, d->b_tmp, NULL, &d->arena) < 0)
 		error("(menu.c) SDL_RenderCopy : ", d);
-	TTF_CloseFont(d->font1);
 	if (!((d->font1 = TTF_OpenFont("img/font2.ttf", 32))))
 		error("(menu.c) TTF_OpenFont : ", d);
 	hex[2] = '\0';
 	///////////////////ARENA/////////////////////////
 	while (i < MEM_SIZE)
 	{
-		color.r = (d->color_champ[a.memory_color[i] - '0'] & 0xFF000000) >> 24;
-		color.g = (d->color_champ[a.memory_color[i] - '0'] & 0xFF0000) >> 16;
-		color.b = (d->color_champ[a.memory_color[i] - '0'] & 0xFF00) >> 8;
+		d->color.r = (d->color_champ[a.memory_color[i] - '0'] & 0xFF000000) >> 24;
+		d->color.g = (d->color_champ[a.memory_color[i] - '0'] & 0xFF0000) >> 16;
+		d->color.b = (d->color_champ[a.memory_color[i] - '0'] & 0xFF00) >> 8;
 		hex[0] = (a.memory[i] >> 4) + '0';
 		hex[0] = (hex[0] > '9' ? hex[0] + 7 : hex[0]);
 		d->mod.x = d->arena.x + 10 + 29.7 * (i % 64);
@@ -91,7 +88,7 @@ void		update_visu(t_disp *d, t_arena a)
 		d->mod.w = 24;
 		hex[1] = (a.memory[i] & 0x0F) + '0';
 		hex[1] = (hex[1] > '9' ? hex[1] + 7 : hex[1]);
-		d->txt = TTF_RenderText_Solid(d->font1, hex, color);
+		d->txt = TTF_RenderText_Solid(d->font1, hex, d->color);
 		d->font = SDL_CreateTextureFromSurface(d->rend, d->txt);
 		if (SDL_RenderCopy(d->rend, d->font, NULL, &d->mod) < 0)
 			error("(menu.c) SDL_RenderCopy : ", d);
@@ -120,9 +117,9 @@ void		update_visu(t_disp *d, t_arena a)
 	//////////////////INFO GLOBAL///////////////////////
 	d->mod.h = 30;
 	i = 0;
-	color.r = 255;
-	color.g = 255;
-	color.b = 255;
+	d->color.r = 255;
+	d->color.g = 255;
+	d->color.b = 255;
 	while (i < 4)
 	{
 		d->mod.w = 300;
@@ -133,30 +130,30 @@ void		update_visu(t_disp *d, t_arena a)
 		d->mod.x += 5;
 		if (i == 0)
 		{
-			d->mod.w = ft_nbrlen(CYCLE_TO_DIE) * 20;
-			info = ft_itoa2(CYCLE_TO_DIE);
-			disp_ttf(info, color, d);
+			d->mod.w = ft_nbrlen(a.cycle_to_die) * 20;
+			info = ft_itoa2(a.cycle_to_die);
+			disp_ttf(info, d->color, d);
 			free(info);
 		}
 		else if (i == 1)
 		{
 			d->mod.w = ft_nbrlen(CYCLE_DELTA) * 20;
 			info = ft_itoa2(CYCLE_DELTA);
-			disp_ttf(info, color, d);
+			disp_ttf(info, d->color, d);
 			free(info);
 		}
 		else if (i == 2)
 		{
-			d->mod.w = ft_nbrlen(NBR_LIVE) * 20;
-			info = ft_itoa2(NBR_LIVE);
-			disp_ttf(info, color, d);
+			d->mod.w = ft_nbrlen(a.total_live_since_check) * 20;
+			info = ft_itoa2(a.total_live_since_check);
+			disp_ttf(info, d->color, d);
 			free(info);
 		}
 		else if (i == 3)
 		{
 			d->mod.w = ft_nbrlen(4) * 20;
 			info = ft_itoa2(4);
-			disp_ttf(info, color, d);
+			disp_ttf(info, d->color, d);
 			free(info);
 		}
 		i++;
@@ -170,12 +167,12 @@ void		update_visu(t_disp *d, t_arena a)
 		d->mod.y = (ph * (i - 1)) + d->players.y + (ph / 9) * 3;
 		info = ft_itoa(a.champion_table[i - 1].total_memory_owned);
 		d->mod.w = ft_nbrlen(a.champion_table[i - 1].total_memory_owned) * 15;
-		disp_ttf(info, color, d);
+		disp_ttf(info, d->color, d);
 		free(info);
 		d->mod.y = (ph * (i - 1)) + d->players.y + (ph / 9) * 5;
 		info = ft_itoa(a.champion_table[i - 1].lives_since_last_check);
 		d->mod.w = ft_nbrlen(a.champion_table[i - 1].lives_since_last_check) * 15;
-		disp_ttf(info, color, d);
+		disp_ttf(info, d->color, d);
 		free(info);
 		i++;
 	}
@@ -189,23 +186,21 @@ void		update_visu(t_disp *d, t_arena a)
 	d->mod.y = 880 + 27 - (880 / 3);
 	while (a.process_list)
 	{
-	//	printf("op : [%s][%s] cycle : [%u]\n", a.process_list->owner->header.prog_name, a.process_list->current_op->name, a.process_list->current_op->cycle_to_wait);
 		if (a.process_list->current_op)
 		{
-			color.r = (d->color_champ[a.process_list->owner->number] & 0xFF000000) >> 24;
-			color.g = (d->color_champ[a.process_list->owner->number] & 0xFF0000) >> 16;
-			color.b = (d->color_champ[a.process_list->owner->number] & 0xFF00) >> 8;
-	//		printf("r : [%d] g : [%d] b : [%d]\n", color.r, color.g, color.b);
+			d->color.r = (d->color_champ[a.process_list->owner->number] & 0xFF000000) >> 24;
+			d->color.g = (d->color_champ[a.process_list->owner->number] & 0xFF0000) >> 16;
+			d->color.b = (d->color_champ[a.process_list->owner->number] & 0xFF00) >> 8;
 			d->mod.h = 20;
 			d->mod.x = 1995;
 			d->mod.w = ft_strlen(a.process_list->owner->header.prog_name) * 15;
-			disp_ttf(a.process_list->owner->header.prog_name, color, d);
+			disp_ttf(a.process_list->owner->header.prog_name, d->color, d);
 			d->mod.x += 15 + d->mod.w;
 			d->mod.w = ft_strlen(a.process_list->current_op->name) * 15;
-			disp_ttf(a.process_list->current_op->name, color, d);
+			disp_ttf(a.process_list->current_op->name, d->color, d);
 			d->mod.x += 15 + d->mod.w;	
 			d->mod.w = ft_nbrlen(a.process_list->current_op->cycle_to_wait) * 15;
-			disp_ttf(ft_itoa2(a.process_list->current_op->cycle_to_wait), color, d);
+			disp_ttf(ft_itoa2(a.process_list->current_op->cycle_to_wait), d->color, d);
 			d->mod.y += 20;	
 		}
 		a.process_list = a.process_list->next_list;

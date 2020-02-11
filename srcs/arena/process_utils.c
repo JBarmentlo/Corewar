@@ -41,6 +41,8 @@ void	remove_process_from_table(t_arena *arena, t_process *process) //wildly unch
 
 void	kill_process(t_arena *arena, t_process *it, t_process **prev)
 {
+	it->owner->total_process -= 1;
+	arena->total_process_nb -= 1;
 	*prev = it->next_list; //remove it form process_list in arena;
 	remove_process_from_table(arena, it);
 	free(it);

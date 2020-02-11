@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 16:07:12 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/02/05 16:49:41 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/06 14:31:40 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,11 @@ void			disp_init_players3(t_disp *d, int i, int ph, char *nb_p)
 	d->mod.h = 70;
 	d->mod.w = 60;
 	disp_ttf(nb_p, d->color, d);
-	d->mod.x = d->players.x + 5;
 	d->mod.y = (ph * (i - 1)) + d->players.y + (ph - (ph / 10) - 15);
 	d->mod.h = 10 + (ph / 10);
 	d->mod.w = d->players.w - 10;
+	if (SDL_SetRenderDrawColor(d->rend, 50, 50, 50, 250) < 0)
+		error("(disp.c) SDL_SetRenderDrawColor : ", d);
 	if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
 		error("(disp.c) SDL_RenderDrawRect : ", d);
 	if (SDL_SetRenderDrawColor(d->rend, 255, 255, 255, 250) < 0)
@@ -136,4 +137,5 @@ void			disp_init_players(t_disp *d, t_arena a)
 		disp_init_players5(d, a, i, ph);
 		i++;
 	}
+	TTF_CloseFont(d->font1);
 }
