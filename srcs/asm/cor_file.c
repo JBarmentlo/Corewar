@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:29:48 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/11 15:08:54 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/12 15:44:47 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ int		cor_file(char *source_file, t_file *out_file, int fd)
 		return (FALSE);
 	if (fill_header(out_file, fd, &stack) == FALSE)
 		return (FALSE);
-	ft_printf("zjump = [%d]\n", find_opcode("zjmp"));
 
 	/*
 	** CODE

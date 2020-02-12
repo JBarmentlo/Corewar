@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/11 10:04:00 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/12 15:45:33 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,7 @@ typedef struct		s_disp
 	SDL_Event		event;
 	SDL_Surface		*img;
 	SDL_Surface		*txt;
+	SDL_Surface		*s_arena;
 	SDL_Texture		*back;
 	SDL_Texture		*title;
 	SDL_Texture		*bar;

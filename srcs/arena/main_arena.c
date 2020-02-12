@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/12 13:26:29 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/02/12 15:54:57 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int		main(int ac, char **av)
 	running = 1;
 	vm.total_process_nb = vm.nb_champs;
 	print_vm_state(&vm);
-	while (!is_game_over(&vm) && vm.cycle < 400 && running)
+	while (!is_game_over(&vm) && running)
 	{
 		do_the_cycle(&vm);
     	timeout = SDL_GetTicks() + d.delay;
