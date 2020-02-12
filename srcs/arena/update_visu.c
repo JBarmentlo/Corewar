@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/23 12:34:21 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/02/11 10:48:13 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/12 16:09:56 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void		update_visu(t_disp *d, t_arena a)
 		error("(menu.c) SDL_SetRenderTarget : ", d);
 	if (SDL_RenderCopy(d->rend, d->b_tmp, NULL, &d->arena) < 0)
 		error("(menu.c) SDL_RenderCopy : ", d);
-	if (!((d->font1 = TTF_OpenFont("img/font2.ttf", 32))))
+	if (!((d->font1 = TTF_OpenFont("img/font2.ttf", 22))))
 		error("(menu.c) TTF_OpenFont : ", d);
 	hex[2] = '\0';
 	///////////////////ARENA/////////////////////////
@@ -82,20 +82,19 @@ void		update_visu(t_disp *d, t_arena a)
 		d->color.b = (d->color_champ[a.memory_color[i] - '0'] & 0xFF00) >> 8;
 		hex[0] = (a.memory[i] >> 4) + '0';
 		hex[0] = (hex[0] > '9' ? hex[0] + 7 : hex[0]);
-		d->mod.x = d->arena.x + 10 + 29.7 * (i % 64);
-		d->mod.y = d->arena.y + 14 + 21.4 * (i / 64);
-		d->mod.h = 24;
-		d->mod.w = 24;
 		hex[1] = (a.memory[i] & 0x0F) + '0';
 		hex[1] = (hex[1] > '9' ? hex[1] + 7 : hex[1]);
+		d->mod.x = d->arena.x + 10 + 29.7 * (i % 64);
+		d->mod.y = d->arena.y + 14 + 21.4 * (i / 64);
 		d->txt = TTF_RenderText_Solid(d->font1, hex, d->color);
-		d->font = SDL_CreateTextureFromSurface(d->rend, d->txt);
-		if (SDL_RenderCopy(d->rend, d->font, NULL, &d->mod) < 0)
-			error("(menu.c) SDL_RenderCopy : ", d);
-		SDL_DestroyTexture(d->font);
+		SDL_BlitSurface(d->txt, NULL, d->s_arena, &d->mod);
 		SDL_FreeSurface(d->txt);
 		i++;
 	}
+	d->font = SDL_CreateTextureFromSurface(d->rend, d->s_arena);
+	if (SDL_RenderCopy(d->rend, d->font, NULL, NULL) < 0)
+		error("(menu.c) SDL_RenderCopy : ", d);
+	SDL_DestroyTexture(d->font);
 	d->mod.h = 21;
 	d->mod.w = 26;
 	if (SDL_SetRenderDrawBlendMode(d->rend, SDL_BLENDMODE_BLEND) < 0)
@@ -162,14 +161,22 @@ void		update_visu(t_disp *d, t_arena a)
 	i = 0;
 	while (i < a.nb_champs)
 	{
-		d->mod.x = d->players.x + (d->players.w / 2) + 15;
-		d->mod.h = 10 + (ph / 10);
-		d->mod.y = (ph * i) + d->players.y + (ph / 9) * 3;
+		if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 250) < 0)
+			error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		d->mod.x = d->players.x + (d->players.w / 2) + 11;
+		d->mod.h = 8 + (ph / 10);
+		d->mod.y = (ph * i) + d->players.y + (ph / 9) * 3 + 1;
+		d->mod.w = (d->players.w / 2) - 17;
+		if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
+			error("(disp.c) SDL_RenderDrawRect : ", d);
 		info = ft_itoa(a.champion_table[i].total_memory_owned);
 		d->mod.w = ft_nbrlen(a.champion_table[i].total_memory_owned) * 15;
 		disp_ttf(info, d->color, d);
 		free(info);
-		d->mod.y = (ph * i) + d->players.y + (ph / 9) * 5;
+		d->mod.y = (ph * i) + 1 + d->players.y + (ph / 9) * 5;
+		d->mod.w = (d->players.w / 2) - 17;
+		if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
+			error("(disp.c) SDL_RenderDrawRect : ", d);
 		info = ft_itoa(a.champion_table[i].lives_since_last_check);
 		d->mod.w = ft_nbrlen(a.champion_table[i].lives_since_last_check) * 15;
 		disp_ttf(info, d->color, d);
@@ -179,11 +186,14 @@ void		update_visu(t_disp *d, t_arena a)
 		d->mod.h = 8 + (ph / 10);
 		d->mod.w = (d->players.w - 12) / (a.total_process_nb / a.champion_table[i].total_process);
 		d->mod.x = d->players.x + 6;
-		
+		if (SDL_SetRenderDrawColor(d->rend, 50, 50, 50, 250) < 0)
+			error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
+			error("(disp.c) SDL_RenderDrawRect : ", d);
 		if (SDL_SetRenderDrawColor(d->rend, (d->color_champ[a.champion_table[i].number] & 0xFF000000) >> 24, (d->color_champ[a.champion_table[i].number] & 0xFF0000) >> 16, (d->color_champ[a.champion_table[i].number] & 0xFF00) >> 8, 150) < 0)
-        error("(disp.c) SDL_SetRenderDrawColor : ", d);
-    if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
-        error("(disp.c) SDL_RenderDrawRect : ", d);
+			error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
+			error("(disp.c) SDL_RenderDrawRect : ", d);
 
 		i++;
 	}

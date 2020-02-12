@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/12 12:55:31 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/02/12 15:45:33 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,7 @@ typedef struct		s_disp
 	SDL_Event		event;
 	SDL_Surface		*img;
 	SDL_Surface		*txt;
+	SDL_Surface		*s_arena;
 	SDL_Texture		*back;
 	SDL_Texture		*title;
 	SDL_Texture		*bar;
@@ -257,8 +258,6 @@ void				*ind_to_ptr_idx(t_arena *arena, int ind, int PC);
 void				*ind_to_ptr_no_idx(t_arena *arena, int ind, int PC);
 void				fill_fun_ptr_tab(t_arena *arena);
 int					positive_modulo_memsize(int a);
-int					opcode_to_mask(int opcode);
-
 
 //	Display
 
