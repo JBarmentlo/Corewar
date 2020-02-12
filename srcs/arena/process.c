@@ -69,10 +69,14 @@ void	execute_processes(t_arena *arena)
 		}
 		else
 		{
-			printf("cycle : %lu\n", arena->cycle);
-			printf("PC:%d\n", it->PC);
+			if (opcode_to_mask(it->current_op->opcode) & TEST_PRINT)
+			{
+				printf("cycle : %lu\n", arena->cycle);
+				printf("PC:%d\n", it->PC);
+				printf("\n\n");
+			}
+
 			execute_process(arena, it);	
-			printf("\n\n");
 		}
 		it = next;
 	}

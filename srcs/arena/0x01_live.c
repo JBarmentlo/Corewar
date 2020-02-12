@@ -2,13 +2,10 @@
 
 
 // NEED TO ADD DEAD CHAMPS TO FILL TAB
-// 
 void    x01(t_arena *arena, t_process *process)
 {
 	int	arg;
 
-    printf("0x01\n");
-	print_t_args(arena->args);
     process->last_live = arena->cycle;
     arena->total_live_since_check++;
 	arg = arena->args->val[0];

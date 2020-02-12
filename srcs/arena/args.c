@@ -4,7 +4,7 @@
 
 void		read_encoding_byte(t_arena *arena, t_process *process)
 {
-	printf("%s\n",__func__);
+//	print_t_args(arena->args);
 
 	int		i;
 	byte	mask;
@@ -28,7 +28,7 @@ void		read_encoding_byte(t_arena *arena, t_process *process)
 
 void		no_encoding_byte(t_arena *arena, t_process *process)
 {
-	printf("%s\n",__func__);
+//	print_t_args(arena->args);
 
 	int	i;
 
@@ -43,7 +43,7 @@ void		no_encoding_byte(t_arena *arena, t_process *process)
 
 void		copy_to_args_tmp(t_arena *arena, t_process *process)
 {
-	printf("%s\n",__func__);
+//	print_t_args(arena->args);
 
 	int	i;
 
@@ -57,7 +57,7 @@ void		copy_to_args_tmp(t_arena *arena, t_process *process)
 
 uint16_t	read_args(t_args *args, t_process *process)
 {
-	printf("%s\n",__func__);
+//	print_t_args(arena->args);
 
 	uint16_t	PC_tmp;
 	byte		size;
@@ -77,8 +77,6 @@ uint16_t	read_args(t_args *args, t_process *process)
 
 void		print_t_args(t_args *args)
 {
-	printf("%s\n",__func__);
-
 	int	i;
 
 	i = 0;

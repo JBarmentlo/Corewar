@@ -11,5 +11,4 @@ void    x04(t_arena *arena, t_process *process)
     val2 = reg_read_int(process, arena->args->val[1]);
     reg_write_int(process, (val1 + val2), arena->args->val[2]);
     process->carry = (val1 + val2 == 0);
-    printf("0x04\n");
 }
