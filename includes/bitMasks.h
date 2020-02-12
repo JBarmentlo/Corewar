@@ -37,4 +37,7 @@
 
 #define	MODULO_MASK	(MEM_SIZE - 1) //as long as MEM_SIZE is a power of 2
 
-#define TEST_PRINT	(0 + LIVE + STI)
+
+#define	ALL			(LIVE + LOAD + STORE + ADD + SUB + AND + OR + XOR + ZJUMP + LDI + STI + FORK + LLD + LLDI + LFORK + AFF)
+#define TEST_PRINT	ALL
+#define	MAX_TURNS	24
