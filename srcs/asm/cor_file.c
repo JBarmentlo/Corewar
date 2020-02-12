@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:29:48 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/11 15:08:54 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/12 16:00:17 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,33 +46,95 @@ int		fill_header(t_file *out_file, int fd, t_stack *stack)
 	return (TRUE);
 }
 
-int		cor_file(char *source_file, t_file *out_file, int fd)
-{	
-	int		i;
+t_instruct		*is_instruct(char *line, int i)
+{
+	t_instruct	*op;
+	char	*op_code;
+	int		k;
+	int		save;
+
+	k = 0;
+	save = i;
+	ft_printf("line[%d] = [%c]\n", i, line[i]);
+	op = malloc(sizeof(t_instruct));
+	while (ft_isalnum(line[i]) == 1)
+	{
+		i++;
+		k++;
+	}
+	op_code = malloc(sizeof(char) * k);
+	op_code = ft_memcpy(op_code, line + save, k);
+	ft_printf("op_code = [%s]\n", op_code);
+	op->type = find_opcode(op_code);
+	ft_printf("op->type = [%d]\n", op->type);
+	return (op);
+}
+
+int		is_label(int fd, char *line, t_stack *stack)
+{
+	t_label		*label;
+	t_instruct *op;	
+	int			ln;
+	int			i;
 
 	(void) fd;
-	//////////////////////////NICO MODIFICATIONS///////////////////////////
-	t_stack		stack;
-	t_label		*save;
+	i = 0;
+	ln = 0;
+	label = malloc(sizeof(t_label));
+	label->oct = stack->cur_octet;
+	label->nb_instructs= 0;
+	label->op = NULL;
+	label->first_op = NULL;
+	if (stack->first_label == NULL && stack->label_list == NULL)
+	{
+		stack->first_label = label;
+		stack->label_list = label;
+	}
+	while (line[i] != '\0')
+	{
+		if (ln == 0 && line[i] == ':')
+		{
+			label->name = (char*)malloc(sizeof(char) * i);
+			label->name = ft_memcpy(label->name, line, i);
+			ft_printf("label name = [%s]\n", label->name);
+			ln = 1;
+			i++;
+		}
+		if (ln == 1 && ft_isalpha(line[i]) == 1)
+		{
+			label->nb_instructs += 1;
+			op = is_instruct(line, i);
+			if (label->op == NULL && label->first_op == NULL)
+			{
+				label->op = op;
+				label->first_op = op;
+			}
+			break;
+		}
+		i++;
+	}
+	
+	return (TRUE);
+}
 
-	save = stack.label_list;
+int		cor_file(char *source_file, t_file *out_file, int fd)
+{	
+	t_stack		stack;
+	char		*line;
+	int		i;
+
+	i = 0;
+	stack.first_label = NULL;
+	stack.label_list = NULL;
+	while (get_next_line(fd, &line))
+	{
+		if (i == 3)
+			break;
+		i++;
+	}
+	ft_printf("line n%d = [%s]\n", i, line);
 	stack.champion_name = "zork";
 	stack.comment = "I'M ALIIIIVE";
-	stack.label_list->name = "l2";
-	stack.label_list->opt = (char**)malloc(sizeof(char*) * 2);
-	stack.label_list->opt[0] = (char*)malloc(sizeof(char) * 19);
-	stack.label_list->opt[0] = "sti r1, %:live, %1\0";
-	stack.label_list->opt[1] = (char*)malloc(sizeof(char) * 15);
-	stack.label_list->opt[1] = "and r1, %0, r1\0";
-	stack.label_list = stack.label_list->next;
-	stack.label_list->name = "live";
-	stack.label_list->opt = (char**)malloc(sizeof(char*) * 2);
-	stack.label_list->opt[0] = (char*)malloc(sizeof(char) * 8);
-	stack.label_list->opt[0] = "live %1\0";
-	stack.label_list->opt[1] = (char*)malloc(sizeof(char) * 12);
-	stack.label_list->opt[1] = "zjmp %:live\0";
-	stack.label_list = save;
-	//////////////////////////////////////////////////////////////////////
 	i = 0;
 	while (source_file[i] && source_file[i] != '.')
 		i++;
@@ -82,17 +144,10 @@ int		cor_file(char *source_file, t_file *out_file, int fd)
 		return (FALSE);
 	if (fill_header(out_file, fd, &stack) == FALSE)
 		return (FALSE);
+	stack.cur_octet = out_file->total_size;
+	ft_printf("stack->cur_octet = %d\n", stack.cur_octet);
+	if (is_label(fd, line, &stack) == FALSE)
+		return (FALSE);
 	ft_printf("zjump = [%d]\n", find_opcode("zjmp"));
-
-	/*
-	** CODE
-	*/
-/*
-	while (a.label_list)
-	{
-	
-		a.label_list
-	}
-*/	///////////////////////////////////////////////////////////////////////
 	return (TRUE);
 }

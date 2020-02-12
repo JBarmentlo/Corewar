@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 15:31:05 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/11 14:56:05 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/12 15:51:57 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,35 +111,42 @@ enum				e_state
 	GET_COMMENT,
 	GET_PROCESS,
 };
-/*
-typedef struct 		s_label
+
+typedef struct			s_argz
 {
-	char			*name;
-	size_t			oct;
-	t_list			*instruct_list;
-}					t_label;
-*/
+	size_t				type; // 1 pour REGISTRE, 2 pour DIRECT, 3 pour INDIRECT
+	char				*lab; // NULL sauf si appel a label (:live)
+	int					value; // si lab != NULL on ne prend pas en compte value
+	struct s_argz		*next;
+}						t_argz;
+
+typedef struct 			s_instruct
+{
+	size_t				type; // 0x01 si "live" par exemple
+	size_t 				oct; // numero de l'octet ou est ecrit 0x01
+	size_t				nb_args; // si "sti" on sait tout de suite que c'est 3
+	t_args				*args; // liste chainee ou tableau de structure 
+	struct s_instruct	*next;
+}						t_instruct;
 
 typedef struct 		s_label
 {
-	char			*name;
-	size_t			oct;
-	char			**opt;
-	struct s_label			*next;
+	char			*name; // par exemple "l2" ou "noname1"
+	size_t			oct; // place du label dans 
+	size_t			nb_instructs; // a remplir avant de passer au prochain label
+	t_instruct		*op; // liste chainee d'instructions
+	t_instruct		*first_op; // liste chainee d'instructions
+	struct s_label	*next; // liste chainee de label
 }					t_label;
-
-typedef struct 		s_instruct
-{
-	int				code;
-}					t_instruct;
 
 typedef struct		s_stack
 {
 	char			*champion_name;
-	int				cur_label;
+	int				cur_octet; // permet de savoir ou on se trouve
 	enum e_state	state;
 	char			*comment;
-	t_label			*label_list;
+	t_label			*label_list; // liste chainee de label
+	t_label			*first_label; // liste chainee de label
 }					t_stack;
 
 typedef struct 		s_file
@@ -159,6 +166,7 @@ void					nb_to_binary(t_file *out_file, int octets, int indx, int nb);
 int						count_bits(int nb);
 void					write_in_file(t_file *out_file, int indx, int n);
 void					copy_string(char *dest, char *src, int size, int *indx);
+/////////////////////// op_code utils   //////////////////////////
 int						find_opcode(char *string);
 
 #endif
