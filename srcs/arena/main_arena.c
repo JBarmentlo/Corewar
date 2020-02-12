@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/12 16:44:34 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/02/12 17:16:05 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int		main(int ac, char **av)
 	t_arena		vm;
 	t_champion	*champ;
 	int			i;
-	int			visu = 0;
+	int			visu = 1;
  
 	i = 0;
 	d.d_cycle = 1000;
@@ -129,7 +129,7 @@ int		main(int ac, char **av)
 	vm.total_process_nb = vm.nb_champs;
 	print_vm_state(&vm);
 	hex_dump(&vm);
-	while (!is_game_over(&vm) && vm.cycle < 40 && running)
+	while (!is_game_over(&vm) && vm.cycle < 500 && running)
 	{
 		do_the_cycle(&vm);
 
