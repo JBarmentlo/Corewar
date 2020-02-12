@@ -39,5 +39,5 @@
 
 
 #define	ALL			(LIVE + LOAD + STORE + ADD + SUB + AND + OR + XOR + ZJUMP + LDI + STI + FORK + LLD + LLDI + LFORK + AFF)
-#define TEST_PRINT	ALL
+#define TEST_PRINT	(STORE + STI)
 #define	MAX_TURNS	24
