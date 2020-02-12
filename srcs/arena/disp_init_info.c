@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 16:08:57 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/02/05 16:45:09 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/06 14:20:14 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void			disp_init_info2(t_disp *d)
 {
-	TTF_CloseFont(d->font1);
 	if (!((d->font1 = TTF_OpenFont("img/font2.ttf", 25))))
 		error("(menu.c) TTF_OpenFont : ", d);
 	d->mod.y = 20;
@@ -27,7 +26,7 @@ void			disp_init_info2(t_disp *d)
 	d->mod.y = d->process.h + 20 - (d->process.h / 3);
 	d->mod.w = 540;
 	d->mod.h = (d->process.h / 3) - 20;
-	if (SDL_SetRenderDrawColor(d->rend, 100, 100, 100, 0) < 0)
+	if (SDL_SetRenderDrawColor(d->rend, 50, 50, 50, 0) < 0)
 		error("(disp.c) SDL_SetRenderDrawColor : ", d);
 	if (SDL_SetRenderTarget(d->rend, d->f_tmp) < 0)
 		error("(menu.c) SDL_SetRenderTarget : ", d);
@@ -37,7 +36,7 @@ void			disp_init_info2(t_disp *d)
 
 void			disp_init_info3(t_disp *d)
 {
-	if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 0) < 0)
+	if (SDL_SetRenderDrawColor(d->rend, 255, 255, 255, 0) < 0)
 		error("(disp.c) SDL_SetRenderDrawColor : ", d);
 	if (SDL_RenderDrawRect(d->rend, NULL) < 0)
 		error("(disp.c) SDL_RenderDrawRect : ", d);
@@ -81,9 +80,6 @@ void			disp_init_info5(t_disp *d)
 	d->mod.x = d->process.x + 20;
 	d->mod.h = 20;
 	d->mod.w = 13 * 15;
-	d->color.r = 255;
-	d->color.g = 255;
-	d->color.b = 255;
 	d->mod.y = d->process.y + 20;
 	disp_ttf("Cycle_To_Die  :", d->color, d);
 	d->mod.y = d->process.y + 80;
@@ -125,4 +121,5 @@ void			disp_init_info(t_disp *d)
 		error("(menu.c) SDL_SetRenderTarget : ", d);
 	if (SDL_RenderCopy(d->rend, d->tmp, NULL, NULL) < 0)
 		error("(menu.c) SDL_RenderCopy : ", d);
+	TTF_CloseFont(d->font1);
 }

@@ -77,8 +77,6 @@ uint16_t	read_args(t_args *args, t_process *process)
 
 void		print_t_args(t_args *args)
 {
-//	print_t_args(arena->args);
-
 	int	i;
 
 	i = 0;

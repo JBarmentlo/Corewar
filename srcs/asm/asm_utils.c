@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 17:10:28 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/06 17:10:37 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/11 14:28:18 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,24 @@ void	write_in_file(t_file *out_file, int indx, int n)
 {
 	out_file->content[indx] = n;
 	out_file->total_size += 1;
+}
+
+void	copy_string(char *dest, char *src, int size, int *indx)
+{
+	int		l;
+	int		i;
+
+	i = 0;
+	l = (int)ft_strlen(src);
+	while (i < size)
+	{
+		if (i < l)
+			dest[*indx] = src[i];
+		else
+			dest[*indx] = 0;
+		*indx = *indx + 1;
+		i++;
+	}
 }
 
 int		count_bits(int nb)

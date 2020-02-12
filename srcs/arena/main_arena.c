@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/11 14:53:48 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/02/12 13:26:29 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,26 +34,19 @@ void	print_vm_state(t_arena *arena)
 		printf("Owner: %s, owner.nb: %d, R1:%d\n", it->owner->header.prog_name, it->owner->number, it->registre[0]);
 		it = it->next_list;
 	}
-
 }
 
 int		main(int ac, char **av)
 {
-// 	t_disp		d;
-//	int		timeout;
-//	int		running;
+ 	t_disp		d;
+	int		timeout;
+	int		running;
 	t_arena		vm;
 	t_champion	*champ;
 	int			i;
  
-	t_disp		d;
-	int			timeout;
-	int			running;
-
-
-
-
 	i = 0;
+	d.d_cycle = 1000;
 	vm = init_vm();
 	if (pars_args(ac, av, &vm) == FALSE)
 		return (FALSE);
@@ -67,24 +60,21 @@ int		main(int ac, char **av)
 	}
 	if (start_arena(&vm, champ) == FALSE)
 		return (FALSE);
-	printf("owner number = [%d]\n", vm.process_list->owner->number);
-	printf("process address: %p \n", vm.process_list);
-	//init_window(&d, vm);
-
+	init_window(&d, vm);
 	running = 1;
 	vm.total_process_nb = vm.nb_champs;
 	print_vm_state(&vm);
 	while (!is_game_over(&vm) && vm.cycle < 400 && running)
 	{
 		do_the_cycle(&vm);
-		if (0)
-		{
     	timeout = SDL_GetTicks() + d.delay;
 		i = SDL_GetTicks() + 250;
 		while (SDL_PollEvent(&d.event)
 		|| (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout) && running != 0)
 		|| (d.pause != 0 && d.step != 1))
 		{
+			if (!(SDL_GetTicks() % d.d_cycle))
+				do_the_cycle(&vm);
 			d.step = 0;
 			events(&d, &running, &timeout, vm);
 			if (SDL_TICKS_PASSED(SDL_GetTicks(), i))
@@ -94,10 +84,7 @@ int		main(int ac, char **av)
 			}
 		}
 		update_visu(&d, vm);
-		}
 	}
-
 	error("End.", &d);
-
 	return (TRUE);
 }

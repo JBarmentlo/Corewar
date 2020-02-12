@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 15:31:05 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/06 17:13:45 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/11 14:56:05 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,9 @@
 # define PROG_ASM		0
 # define MAX_SIZE_FILE	2875
 # define BITS_IN_OCTET	8
+# define PADDING		4
+# define INFO_PROG		4
+# define EMPTY			"\0"
 
 enum				e_state
 {
@@ -108,12 +111,21 @@ enum				e_state
 	GET_COMMENT,
 	GET_PROCESS,
 };
-
+/*
 typedef struct 		s_label
 {
 	char			*name;
 	size_t			oct;
 	t_list			*instruct_list;
+}					t_label;
+*/
+
+typedef struct 		s_label
+{
+	char			*name;
+	size_t			oct;
+	char			**opt;
+	struct s_label			*next;
 }					t_label;
 
 typedef struct 		s_instruct
@@ -127,7 +139,7 @@ typedef struct		s_stack
 	int				cur_label;
 	enum e_state	state;
 	char			*comment;
-	t_list			*label_list;
+	t_label			*label_list;
 }					t_stack;
 
 typedef struct 		s_file
@@ -146,5 +158,7 @@ int						cor_file(char *source_file, t_file *out_file, int fd);
 void					nb_to_binary(t_file *out_file, int octets, int indx, int nb);
 int						count_bits(int nb);
 void					write_in_file(t_file *out_file, int indx, int n);
+void					copy_string(char *dest, char *src, int size, int *indx);
+int						find_opcode(char *string);
 
 #endif
