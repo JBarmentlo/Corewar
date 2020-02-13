@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:29:48 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/13 19:09:31 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/13 19:22:09 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int		fill_header(t_file *out_file, int fd, t_stack *stack)
 	return (TRUE);
 }
 
-void	fill_opcode(t_file *out_file, t_stack stack)
+int		fill_opcode(t_file *out_file, t_stack stack)
 {
 	t_label 	*label;
 	t_instruct	*op;
@@ -66,11 +66,13 @@ void	fill_opcode(t_file *out_file, t_stack stack)
 				write_in_file(out_file, i, encoding_byte(op));
 			}
 			i++;
-	//		write_op_values(out_file, &i, stack, op);
+			if (write_op_values(out_file, &i, op) == FALSE)
+				return (FALSE);
 			op = op->next;
 		}
 		label = label->next;
 	}
+	return (TRUE);
 }
 
 int		cor_file(char *source_file, t_file *out_file, int fd)
@@ -94,6 +96,7 @@ int		cor_file(char *source_file, t_file *out_file, int fd)
 	parsing_tester(&stack, fd);
 //	print_tester(&stack);
 ///////////////////////// 
-	fill_opcode(out_file, stack);
+	if (fill_opcode(out_file, stack) == FALSE)
+		return (FALSE);
 	return (TRUE);
 }

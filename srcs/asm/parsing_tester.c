@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 16:14:13 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/13 19:33:45 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/13 19:44:15 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,23 @@ t_argz		is_argument(char *line, int *i, size_t inst_type, t_argz argz)
 	if (line[*i] == 'r')
 	{
 		argz.type = REG_CODE;
-		argz.oct = 1;
+		argz.oct = T_REG;
+		/// pk reg size a 4 ??? ///
 	}
 	else if (line[*i] == '%')
 	{
 		argz.type = DIR_CODE;
 		if (g_op_tab[inst_type - 1].is_direct_small == 1)
-			argz.oct = 2;
+			argz.oct = DIR_SIZE / 2; // car DIR SIZE = 4 au lieu de 2
 		else
-			argz.oct = 4;
+			argz.oct = DIR_SIZE; // = a 4 pourtant reg sur 1 ?? //
+		///// pour cerains arg, direct code sur 4 octets ////
 	}
 	else
 	{
 		argz.type = IND_CODE;
-		argz.oct = 2;
+		argz.oct = IND_SIZE;
+		/////// indirect devrait etre code sur 2 octets ///
 	}
 	*i += 1;
 	if (line[*i] != ':')
