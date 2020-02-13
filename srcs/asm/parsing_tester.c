@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 16:14:13 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/13 18:10:04 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/13 18:18:36 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ t_argz		is_argument(char *line, int *i, size_t inst_type, t_argz argz)
 	return (argz);
 }
 
-t_instruct		*is_instruct(char *line, int *i)
+t_instruct		*is_instruct(char *line, int *i, int *cur_octet)
 {
 	t_instruct	*op;
 	char		*op_code;
@@ -98,6 +98,13 @@ t_instruct		*is_instruct(char *line, int *i)
 			k++;
 		}
 		*i += 1;
+	}
+	*cur_octet = *cur_octet + 1 + g_op_tab[op->type - 1].encoding_byte;
+	k = 0;
+	while (k < (int)op->nb_args)
+	{
+		*cur_octet = *cur_octet + op->argz[k].oct;
+		k++;
 	}
 	return (op);
 }
@@ -148,6 +155,7 @@ void	parsing_tester(t_stack *stack, int fd)
 			if (i == 0 && ft_isalpha(line[i]))
 			{
 				label = is_label(line, stack, &i);
+				label->oct = stack->cur_octet;
 				if (stack->first_label == NULL && stack->label_list == NULL)
 				{
 					stack->first_label = label;
@@ -162,7 +170,7 @@ void	parsing_tester(t_stack *stack, int fd)
 			if (i != 0 && line[i] != '\0' && ft_isalpha(line[i]))
 			{
 				label->nb_instructs += 1;
-				op = is_instruct(line, &i);
+				op = is_instruct(line, &i, &stack->cur_octet);
 				if (label->op == NULL && label->first_op == NULL)
 				{
 					label->op = op;
@@ -186,7 +194,7 @@ void	parsing_tester(t_stack *stack, int fd)
 	label = stack->first_label;
 	while (label != NULL)
 	{
-		ft_printf("label name = [%s], nb instructs = [%d]\n", label->name, label->nb_instructs);
+		ft_printf("label name = [%s], nb instructs = [%d], octet = [%d]\n", label->name, label->nb_instructs, label->oct);
 		op = label->first_op;
 		while (op != NULL)
 		{
