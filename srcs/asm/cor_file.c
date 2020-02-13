@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:29:48 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/13 18:31:17 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/13 19:09:31 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,33 @@ int		fill_header(t_file *out_file, int fd, t_stack *stack)
 	return (TRUE);
 }
 
+void	fill_opcode(t_file *out_file, t_stack stack)
+{
+	t_label 	*label;
+	t_instruct	*op;
+	int			i;
+
+	i = out_file->total_size;
+	label = stack.first_label;
+	while (label != NULL)
+	{
+		op = label->first_op;
+		while (op != NULL)
+		{
+			write_in_file(out_file, i, op->type);
+			if (g_op_tab[op->type - 1].encoding_byte != 0)
+			{
+				i++;
+				write_in_file(out_file, i, encoding_byte(op));
+			}
+			i++;
+	//		write_op_values(out_file, &i, stack, op);
+			op = op->next;
+		}
+		label = label->next;
+	}
+}
+
 int		cor_file(char *source_file, t_file *out_file, int fd)
 {	
 	t_stack		stack;
@@ -65,7 +92,8 @@ int		cor_file(char *source_file, t_file *out_file, int fd)
 	stack.cur_octet = out_file->total_size;
 ////// to delete: /////// 
 	parsing_tester(&stack, fd);
-	print_tester(&stack);
+//	print_tester(&stack);
 ///////////////////////// 
+	fill_opcode(out_file, stack);
 	return (TRUE);
 }
