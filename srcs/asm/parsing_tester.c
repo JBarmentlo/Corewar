@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 16:14:13 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/13 18:30:30 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/13 19:33:45 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ t_argz		is_argument(char *line, int *i, size_t inst_type, t_argz argz)
 	k = 0;
 	if (line[*i] == 'r')
 	{
-		argz.type = T_REG;
+		argz.type = REG_CODE;
 		argz.oct = 1;
 	}
 	else if (line[*i] == '%')
 	{
-		argz.type = T_DIR;
+		argz.type = DIR_CODE;
 		if (g_op_tab[inst_type - 1].is_direct_small == 1)
 			argz.oct = 2;
 		else
@@ -33,7 +33,7 @@ t_argz		is_argument(char *line, int *i, size_t inst_type, t_argz argz)
 	}
 	else
 	{
-		argz.type = T_IND;
+		argz.type = IND_CODE;
 		argz.oct = 2;
 	}
 	*i += 1;
