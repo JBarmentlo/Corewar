@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 17:52:35 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/02/06 15:13:14 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/13 12:13:48 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,15 @@ void			event_motion_players2(t_disp *d, int *timeout, int i, int ph)
 	{
 		if (j == 0 && SDL_SetRenderDrawColor(d->rend, 255, 0, 0, 155) < 0)
 			error("(disp.c) SDL_SetRenderDrawColor : ", d);
-		if (j == 1 && SDL_SetRenderDrawColor(d->rend, 255, 255, 0, 155) < 0)
+		else if (j == 1 && SDL_SetRenderDrawColor(d->rend, 255, 255, 0, 155) < 0)
 			error("(disp.c) SDL_SetRenderDrawColor : ", d);
-		if (j == 2 &&SDL_SetRenderDrawColor(d->rend, 0, 255, 0, 155) < 0)
+		else if (j == 2 && SDL_SetRenderDrawColor(d->rend, 0, 255, 0, 155) < 0)
 			error("(disp.c) SDL_SetRenderDrawColor : ", d);
-		if (j == 3 && SDL_SetRenderDrawColor(d->rend, 0, 0, 255, 155) < 0)
+		else if (j == 3 && SDL_SetRenderDrawColor(d->rend, 0, 0, 255, 155) < 0)
 			error("(disp.c) SDL_SetRenderDrawColor : ", d);
-		if (j == 4 && SDL_SetRenderDrawColor(d->rend, 255, 0, 255, 155) < 0)
+		else if (j == 4 && SDL_SetRenderDrawColor(d->rend, 255, 0, 255, 155) < 0)
 			error("(disp.c) SDL_SetRenderDrawColor : ", d);
-		if (j == 5 && SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 155) < 0)
+		else if (j == 5 && SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 155) < 0)
 			error("(disp.c) SDL_SetRenderDrawColor : ", d);
 		d->mod.x = (d->players.x + d->players.w) - ((d->players.w / 6) * (j + 1)) + 20;
 		d->mod.y = (d->players.y + (ph * i)) + (ph / 2) - 25;
@@ -99,7 +99,7 @@ void			event_motion_players2(t_disp *d, int *timeout, int i, int ph)
 
 void			event_motion_players(t_disp *d, int *timeout, int i, int ph)
 {
-	if (d->event.motion.x >= d->players.x
+	if (d->pause == 1 && d->event.motion.x >= d->players.x
 			&& d->event.motion.x <= d->players.x + d->players.w
 			&& d->event.motion.y >= d->players.y + (ph * i)
 			&& d->event.motion.y <= d->players.y + (ph * i) + ph)

@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 15:25:33 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/02/12 15:42:53 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/13 12:43:35 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,30 @@ void        error(char *src, t_disp *d)
 		printf("%s\n", src);
     SDL_DestroyTexture(d->back);
     SDL_DestroyRenderer(d->rend);
+
+///////////////////////////////////////////////////////
+
+    SDL_DestroyTexture(d->title);
+    SDL_DestroyTexture(d->bar);
+    SDL_DestroyTexture(d->bar_plus);
+    SDL_DestroyTexture(d->bar_minus);
+    SDL_DestroyTexture(d->bar_pause);
+    SDL_DestroyTexture(d->bar_stop);
+    SDL_DestroyTexture(d->bar_step);
+    SDL_DestroyTexture(d->bar_play);
+    SDL_DestroyTexture(d->font);
+    SDL_DestroyTexture(d->tmp);
+    SDL_DestroyTexture(d->a_tmp);
+    SDL_DestroyTexture(d->b_tmp);
+    SDL_DestroyTexture(d->p_tmp);
+    SDL_DestroyTexture(d->f_tmp);
+
+
+
+
+
+///////////////////////////////////////////////////////
+
     SDL_DestroyWindow(d->win);
     TTF_CloseFont(d->font1);
     TTF_Quit();
@@ -68,7 +92,7 @@ void		disp_init_var2(t_disp *d)
 	d->pause = 0;
     d->step = 0;
 	d->color.a = 0;
-    d->delay = 300;
+    d->delay = 1;
 }
 
 void		disp_init_var(t_disp *d)

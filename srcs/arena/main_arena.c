@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/12 15:54:57 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/13 12:55:40 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ int		main(int ac, char **av)
 	t_arena		vm;
 	t_champion	*champ;
 	int			i;
+	unsigned int j;
  
 	i = 0;
-	d.d_cycle = 1000;
 	vm = init_vm();
 	if (pars_args(ac, av, &vm) == FALSE)
 		return (FALSE);
@@ -67,14 +67,18 @@ int		main(int ac, char **av)
 	while (!is_game_over(&vm) && running)
 	{
 		do_the_cycle(&vm);
-    	timeout = SDL_GetTicks() + d.delay;
+    	timeout = SDL_GetTicks() + 250;
 		i = SDL_GetTicks() + 250;
+		j = 0;
+		while (j < d.delay)
+		{
+			do_the_cycle(&vm);
+			j++;
+		}
 		while (SDL_PollEvent(&d.event)
 		|| (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout) && running != 0)
 		|| (d.pause != 0 && d.step != 1))
 		{
-			if (!(SDL_GetTicks() % d.d_cycle))
-				do_the_cycle(&vm);
 			d.step = 0;
 			events(&d, &running, &timeout, vm);
 			if (SDL_TICKS_PASSED(SDL_GetTicks(), i))
