@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:29:48 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/12 16:20:14 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/13 18:31:17 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,9 @@ int		cor_file(char *source_file, t_file *out_file, int fd)
 	if (fill_header(out_file, fd, &stack) == FALSE)
 		return (FALSE);
 	stack.cur_octet = out_file->total_size;
-	ft_printf("stack->cur_octet = %d\n", stack.cur_octet);
+////// to delete: /////// 
 	parsing_tester(&stack, fd);
-	ft_printf("zjump = [%d]\n", find_opcode("zjmp"));
+	print_tester(&stack);
+///////////////////////// 
 	return (TRUE);
 }

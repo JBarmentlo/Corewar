@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 16:14:13 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/13 18:18:36 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/13 18:30:30 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ t_argz		is_argument(char *line, int *i, size_t inst_type, t_argz argz)
 		}
 		argz.lab = (char*)malloc(sizeof(char) * k);
 		argz.lab = ft_memcpy(argz.lab, line + save, k);
+		argz.value = 0;
 	}
 	return (argz);
 }
@@ -126,13 +127,41 @@ t_label		*is_label(char *line, t_stack *stack, int *i)
 	return (label);
 }
 
+void	print_tester(t_stack *stack)
+{
+	t_argz argz;
+	t_label		*label;
+	t_instruct	*op;
+	int			i;
+
+	i = 0;
+	label = stack->first_label;
+	while (label != NULL)
+	{
+		ft_printf("label name = [%s], nb instructs = [%d], octet = [%d]\n", label->name, label->nb_instructs, label->oct);
+		op = label->first_op;
+		while (op != NULL)
+		{
+			ft_printf("\top type = [%d], nb_args = [%d]\n", op->type, op->nb_args);
+			i = 0;
+			while (i < (int)op->nb_args)
+			{
+				argz = op->argz[i];
+				ft_printf("\t\targ n-%d: type = [%d], value = [%d], lab = [%s],  oct = [%d]\n", i, argz.type, argz.value, argz.lab, argz.oct);
+				i++;
+			}
+			op = op->next;
+		}
+		label = label->next;
+	}
+}
+
 void	parsing_tester(t_stack *stack, int fd)
 {
 	char		*line;
 	t_label		*label;
 	t_instruct	*op;
 	int			i;
-	t_argz argz;
 
 	i = 0;
 	label = NULL;
@@ -188,26 +217,5 @@ void	parsing_tester(t_stack *stack, int fd)
 		}
 			else
 		ft_memdel((void**)&line);
-			
-	}
-
-	label = stack->first_label;
-	while (label != NULL)
-	{
-		ft_printf("label name = [%s], nb instructs = [%d], octet = [%d]\n", label->name, label->nb_instructs, label->oct);
-		op = label->first_op;
-		while (op != NULL)
-		{
-			ft_printf("\top type = [%d], nb_args = [%d]\n", op->type, op->nb_args);
-			i = 0;
-			while (i < (int)op->nb_args)
-			{
-				argz = op->argz[i];
-				ft_printf("\t\targ n-%d: type = [%d], value = [%d], oct = [%d]\n", i, argz.type, argz.value, argz.oct);
-				i++;
-			}
-			op = op->next;
-		}
-		label = label->next;
 	}
 }

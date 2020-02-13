@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 15:31:05 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/12 18:36:58 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/13 18:30:04 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ typedef struct 			s_instruct
 	size_t				type; // 0x01 si "live" par exemple
 	size_t 				oct; // numero de l'octet ou est ecrit 0x01
 	size_t				nb_args; // si "sti" on sait tout de suite que c'est 3
-	t_argz				*argz; // liste chainee ou tableau de structure 
+	t_argz				argz[3]; // liste chainee ou tableau de structure 
 	struct s_instruct	*next;
 }						t_instruct;
 
@@ -170,5 +170,6 @@ void					copy_string(char *dest, char *src, int size, int *indx);
 int						find_opcode(char *string);
 /////////////////////// To delete   //////////////////////////
 void					parsing_tester(t_stack *stack, int fd);
+void					print_tester(t_stack *stack);
 
 #endif
