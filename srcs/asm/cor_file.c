@@ -3,11 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cor_file.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/06 15:29:48 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/13 19:22:09 by dberger          ###   ########.fr       */
-/*   Updated: 2020/02/12 15:44:47 by ncoursol         ###   ########.fr       */
+/*   Created: 2020/02/14 19:11:09 by dberger           #+#    #+#             */
+/*   Updated: 2020/02/14 19:11:12 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +66,7 @@ int		fill_opcode(t_file *out_file, t_stack stack)
 				write_in_file(out_file, i, encoding_byte(op));
 			}
 			i++;
-			if (write_op_values(out_file, &i, op) == FALSE)
+			if (write_op_values(out_file, &i, op, stack) == FALSE)
 				return (FALSE);
 			op = op->next;
 		}

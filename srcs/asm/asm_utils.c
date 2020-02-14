@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 17:10:28 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/11 14:28:18 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/14 18:59:39 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,12 @@ int		count_bits(int nb)
 	int	bits;
 
 	bits = 0;
+	if (nb < 0)
+	{
+		ft_printf("nb AVANT= %d\n", nb);
+		nb = (unsigned char) nb;
+		ft_printf("nb APRES= %d\n", nb);
+	}
 	while (nb != 0)
 	{
 		nb  = nb >> 1;
@@ -55,8 +61,8 @@ void	nb_to_binary(t_file *out_file, int octets, int indx, int nb)
 	int	bits;
 	int	zeros;
 
-	bits = count_bits(nb);
-	zeros = ((octets * BITS_IN_OCTET) - bits) / BITS_IN_OCTET;
+	bits = nb != 0 ? count_bits(nb) : 0;
+	zeros = nb != 0 ? ((octets * BITS_IN_OCTET) - bits) / BITS_IN_OCTET : 0;
 	n = nb;
 	while (zeros > 0)
 	{
@@ -66,7 +72,7 @@ void	nb_to_binary(t_file *out_file, int octets, int indx, int nb)
 		octets--;
 	}
 	indx = indx + octets - 1;
-	while (indx > 0)
+	while (octets > 0)
 	{
 		n = nb & 0xff;
 		write_in_file(out_file, indx, n);

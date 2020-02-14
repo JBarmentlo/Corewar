@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/11 14:48:14 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/13 19:44:22 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/14 19:06:59 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,30 +43,62 @@ int		encoding_byte(t_instruct *op)
 	return (i);
 }
 
-int		write_op_values(t_file *out_file, int *i, t_instruct *op)
+int		find_label(char *to_find, t_label *label)
+{
+	t_label *save;
+	int		oct_lab;
+
+	save = label;
+	oct_lab = 0;
+	while (label != NULL)
+	{
+		if (!ft_strcmp(label->name, to_find))
+		{
+			oct_lab = label->oct;
+			label = save;
+			return (oct_lab);
+		}
+		else
+			label = label->next;
+	}
+	label = save;
+	return (FALSE);
+}
+
+int		write_op_values(t_file *out_file, int *i, t_instruct *op, t_stack stack)
 {
 	size_t k;
 	int	to_label;
 	int	oct;
+	t_label	*label;
 
 	k = 0;
 	to_label = 0;
 	oct = 0;
-	(void) out_file,
-	(void) i;
-	(void) op;
+	label = stack.first_label;
 	while (k < op->nb_args)
 	{
 		if (op->argz[k].type == REG_CODE)
 		{
-			if (op->argz[k].value > 16)
+			if (op->argz[k].value > REG_NUMBER)
 				return (FALSE);
 			write_in_file(out_file, *i, op->argz[k].value);
 			*i += 1;
-		}/*
-		else if (op->argz[k].type = DIR_CODE)
+		}
+		else if (op->argz[k].lab == NULL)
 		{
-		}*/
+			nb_to_binary(out_file, op->argz[k].oct, *i, op->argz[k].value);
+			*i += op->argz[k].oct;
+		}
+		else if (op->argz[k].lab != NULL)
+		{
+			to_label = find_label(op->argz[k].lab, label);
+			if (to_label == FALSE)
+				return (FALSE);
+			ft_printf("op type = [%d], to label = [%d], label->oct = [%d], label->name =[%s]\n", op->type, to_label, op->owner->oct, op->owner->name);
+			nb_to_binary(out_file, op->argz[k].oct, *i, (to_label - op->owner->oct) % MEM_SIZE);
+			*i += op->argz[k].oct;
+		}
 		k++;
 	}
 	return (TRUE);
