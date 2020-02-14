@@ -6,6 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 15:29:48 by dberger           #+#    #+#             */
+/*   Updated: 2020/02/13 19:22:09 by dberger          ###   ########.fr       */
 /*   Updated: 2020/02/12 15:44:47 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -46,33 +47,42 @@ int		fill_header(t_file *out_file, int fd, t_stack *stack)
 	return (TRUE);
 }
 
+int		fill_opcode(t_file *out_file, t_stack stack)
+{
+	t_label 	*label;
+	t_instruct	*op;
+	int			i;
+
+	i = out_file->total_size;
+	label = stack.first_label;
+	while (label != NULL)
+	{
+		op = label->first_op;
+		while (op != NULL)
+		{
+			write_in_file(out_file, i, op->type);
+			if (g_op_tab[op->type - 1].encoding_byte != 0)
+			{
+				i++;
+				write_in_file(out_file, i, encoding_byte(op));
+			}
+			i++;
+			if (write_op_values(out_file, &i, op) == FALSE)
+				return (FALSE);
+			op = op->next;
+		}
+		label = label->next;
+	}
+	return (TRUE);
+}
+
 int		cor_file(char *source_file, t_file *out_file, int fd)
 {	
+	t_stack		stack;
 	int		i;
 
-	(void) fd;
-	//////////////////////////NICO MODIFICATIONS///////////////////////////
-	t_stack		stack;
-	t_label		*save;
-
-	save = stack.label_list;
 	stack.champion_name = "zork";
 	stack.comment = "I'M ALIIIIVE";
-	stack.label_list->name = "l2";
-	stack.label_list->opt = (char**)malloc(sizeof(char*) * 2);
-	stack.label_list->opt[0] = (char*)malloc(sizeof(char) * 19);
-	stack.label_list->opt[0] = "sti r1, %:live, %1\0";
-	stack.label_list->opt[1] = (char*)malloc(sizeof(char) * 15);
-	stack.label_list->opt[1] = "and r1, %0, r1\0";
-	stack.label_list = stack.label_list->next;
-	stack.label_list->name = "live";
-	stack.label_list->opt = (char**)malloc(sizeof(char*) * 2);
-	stack.label_list->opt[0] = (char*)malloc(sizeof(char) * 8);
-	stack.label_list->opt[0] = "live %1\0";
-	stack.label_list->opt[1] = (char*)malloc(sizeof(char) * 12);
-	stack.label_list->opt[1] = "zjmp %:live\0";
-	stack.label_list = save;
-	//////////////////////////////////////////////////////////////////////
 	i = 0;
 	while (source_file[i] && source_file[i] != '.')
 		i++;
@@ -82,16 +92,12 @@ int		cor_file(char *source_file, t_file *out_file, int fd)
 		return (FALSE);
 	if (fill_header(out_file, fd, &stack) == FALSE)
 		return (FALSE);
-
-	/*
-	** CODE
-	*/
-/*
-	while (a.label_list)
-	{
-	
-		a.label_list
-	}
-*/	///////////////////////////////////////////////////////////////////////
+	stack.cur_octet = out_file->total_size;
+////// to delete: /////// 
+	parsing_tester(&stack, fd);
+//	print_tester(&stack);
+///////////////////////// 
+	if (fill_opcode(out_file, stack) == FALSE)
+		return (FALSE);
 	return (TRUE);
 }
