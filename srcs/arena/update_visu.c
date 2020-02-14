@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/23 12:34:21 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/02/12 16:09:56 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/13 13:27:48 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void		update_visu(t_disp *d, t_arena a)
 		hex[1] = (hex[1] > '9' ? hex[1] + 7 : hex[1]);
 		d->mod.x = d->arena.x + 10 + 29.7 * (i % 64);
 		d->mod.y = d->arena.y + 14 + 21.4 * (i / 64);
-		d->txt = TTF_RenderText_Solid(d->font1, hex, d->color);
+	d->txt = TTF_RenderText_Solid(d->font1, hex, d->color);
 		SDL_BlitSurface(d->txt, NULL, d->s_arena, &d->mod);
 		SDL_FreeSurface(d->txt);
 		i++;
@@ -119,7 +119,7 @@ void		update_visu(t_disp *d, t_arena a)
 	d->color.r = 255;
 	d->color.g = 255;
 	d->color.b = 255;
-	while (i < 4)
+	while (i < 5)
 	{
 		d->mod.w = 300;
 		d->mod.y = d->process.y + 15 + (60 * i);
@@ -155,6 +155,24 @@ void		update_visu(t_disp *d, t_arena a)
 			disp_ttf(info, d->color, d);
 			free(info);
 		}
+		else if (i == 4)
+		{
+			d->mod.w = ft_nbrlen(a.cycle) * 20;
+			info = ft_itoa2(a.cycle);
+			disp_ttf(info, d->color, d);
+			free(info);
+			d->mod.x += d->mod.w;
+			d->mod.w = 40;
+			disp_ttf(" (", d->color, d);
+			d->mod.x += 40;
+			d->mod.w = ft_nbrlen(d->delay * 4) * 20;
+			info = ft_itoa2(d->delay * 4);
+			disp_ttf(info, d->color, d);
+			free(info);
+			d->mod.x += d->mod.w;
+			d->mod.w = 100;
+			disp_ttf(".cps)", d->color, d);
+		}
 		i++;
 	}
 	////////////////////INFO PLAYERS//////////////////////
@@ -173,6 +191,19 @@ void		update_visu(t_disp *d, t_arena a)
 		d->mod.w = ft_nbrlen(a.champion_table[i].total_memory_owned) * 15;
 		disp_ttf(info, d->color, d);
 		free(info);
+		d->mod.x += d->mod.w;
+		d->mod.w = 30;
+		disp_ttf(" (", d->color, d);
+		info = ft_itoa(100 * (a.champion_table[i].total_memory_owned / 4096));
+		d->mod.x += 30;
+		d->mod.w = ft_nbrlen(100 * (a.champion_table[i].total_memory_owned / 4096)) * 15;
+		disp_ttf(info, d->color, d);
+		free(info);
+		d->mod.x += d->mod.w;
+		d->mod.w = 45;
+		disp_ttf(" %)", d->color, d);
+
+		d->mod.x = d->players.x + (d->players.w / 2) + 11;
 		d->mod.y = (ph * i) + 1 + d->players.y + (ph / 9) * 5;
 		d->mod.w = (d->players.w / 2) - 17;
 		if (SDL_RenderFillRect(d->rend, &d->mod) < 0)

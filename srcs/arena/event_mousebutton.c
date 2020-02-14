@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 17:59:26 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/02/12 16:22:57 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/13 12:54:07 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void			event_button_players2(t_disp *d, int i, int ph, t_arena a)
 	d->mod.h = 8 + (ph / 10);
 	d->mod.w = (d->players.w - 12) / (a.total_process_nb / a.champion_table[i].total_process);
 	d->mod.x = d->players.x + 6;
-	if (SDL_SetRenderDrawColor(d->rend, (d->color.r & 0xFF000000) >> 24, (d->color.g & 0xFF0000) >> 16, (d->color.b & 0xFF00) >> 8, 150) < 0)
+	if (SDL_SetRenderDrawColor(d->rend, (d->color_champ[i + 1] & 0xFF000000) >> 24, (d->color_champ[i + 1] & 0xFF0000) >> 16, (d->color_champ[i + 1] & 0xFF00) >> 8, 150) < 0)
 		error("(disp.c) SDL_SetRenderDrawColor : ", d);
 	if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
 		error("(disp.c) SDL_RenderDrawRect : ", d);
@@ -75,9 +75,9 @@ void			event_button_players2(t_disp *d, int i, int ph, t_arena a)
 void			event_button_bar2(t_disp *d, int i, int *timeout, int *running)
 {
 	if (i == 0)
-		d->delay -= 150;
+		d->delay = (d->delay == 100 ? 100 : d->delay + 4);
 	else if (i == 1)
-		d->delay += 150;
+		d->delay = (d->delay == 1 ? 1 : d->delay - 4);
 	else if (i == 2)
 		d->pause = 0;
 	else if (i == 3)
