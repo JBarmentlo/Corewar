@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 16:14:13 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/13 19:44:15 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/14 19:07:04 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ t_argz		is_argument(char *line, int *i, size_t inst_type, t_argz argz)
 	}
 	else
 	{
+		*i += 1;
 		save = *i;
 		while (line[*i] && line[*i] != ',')
 		{
@@ -203,6 +204,7 @@ void	parsing_tester(t_stack *stack, int fd)
 			{
 				label->nb_instructs += 1;
 				op = is_instruct(line, &i, &stack->cur_octet);
+				op->owner = label;
 				if (label->op == NULL && label->first_op == NULL)
 				{
 					label->op = op;
