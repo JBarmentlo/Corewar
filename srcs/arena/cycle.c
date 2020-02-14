@@ -1,7 +1,7 @@
 #include "arena.h"
 #include "stdlib.h"
 #include "stdio.h"
-
+#include "bitMasks.h"
 
 // keep going ?
 int		is_game_over(t_arena *arena)
@@ -9,12 +9,87 @@ int		is_game_over(t_arena *arena)
 	return (arena->process_list == NULL || (((uint)arena->option_dump == arena->cycle) && arena->cycle != 0));
 }
 
+int		opcode_to_mask(int opcode)
+{
+	int	o;
+
+	o = opcode;
+	if (o == 1)
+	{
+		return (ONE);
+	}
+	else if (o == 2)
+	{
+		return (TWO);
+	}
+	else if (o == 3)
+	{
+		return (THREE);
+	}
+	else if (o == 4)
+	{
+		return (FOUR);
+	}
+	else if (o == 5)
+	{
+		return (FIVE);
+	}
+	else if (o == 6)
+	{
+		return (SIX);
+	}
+	else if (o == 7)
+	{
+		return (SEVEN);
+	}
+	else if (o == 8)
+	{
+		return (EIGHT);
+	}
+	else if (o == 9)
+	{
+		return (NINE);
+	}
+	else if (o == 10)
+	{
+		return (TEN);
+	}
+	else if (o == 11)
+	{
+		return (ELEVEN);
+	}
+	else if (o == 12)
+	{
+		return (TWELVE);
+	}
+	else if (o == 13)
+	{
+		return (THIRTEEN);
+	}
+	else if (o == 14)
+	{
+		return (FOURTEEN);
+	}
+	else if (o == 15)
+	{
+		return (FIFTEEN);
+	}
+	else if (o == 16)
+	{
+		return (SIXTEEN);
+	}
+	return (0);
+}
+
 void	run_function(t_arena *arena, t_process *process)
 {
-	printf("\nRUNNING : %s\n", process->current_op->name);
-
+	if (TEST_PRINT & opcode_to_mask(process->current_op->opcode))
+	{
+		printf("RUNNING : %s\n", process->current_op->name);
+		printf("Owner: %d\n", process->owner->number);
+		print_t_args(arena->args);
+	}
 	arena->op_fun_tab[process->current_op->opcode - 1](arena, process);
-	print_t_args(arena->args);
 }
 
 void	update_champion_alive(t_arena *arena)

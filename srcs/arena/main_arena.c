@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/11 10:24:53 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/12 17:16:05 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,80 @@ t_arena		init_vm()
 	return (vm);
 }
 
+void	print_vm_state(t_arena *arena)
+{
+	t_process	*it;
+
+	it = arena->process_list;
+	printf("process list : \n");
+	while (it)
+	{
+		printf("Owner: %s, owner.nb: %d, R1:%d, R2:%d\n", it->owner->header.prog_name, it->owner->number, it->registre[0], it->registre[1]);
+		it = it->next_list;
+	}
+	it = arena->process_table[0];
+	printf("process table : \n");
+	while (it)
+	{
+		printf("Owner: %s, owner.nb: %d, R1:%d\n", it->owner->header.prog_name, it->owner->number, it->registre[0]);
+		it = it->next_table;
+	}
+}
+
+void	hex_dump(t_arena *arena)
+{
+	size_t		i;
+	int			zeroes;
+	int			offset;
+
+	zeroes = 0;
+	offset = 0;
+	i = 0;
+	while (i < MEM_SIZE)
+	{	
+		if (i && offset % 50 == 0)
+			printf ("\n");
+		if (arena->memory[i])
+		{
+			printf("%02x ", arena->memory[i]);
+			zeroes = 0;
+
+		}
+		if (!arena->memory[i])
+		{
+			zeroes += 1;
+			if (i % 10 == 0)
+			{
+				printf(" ! ");
+			}
+			else
+				printf(" . ");
+		}
+		if (zeroes > 100)
+		{
+			printf("skip");
+			while (i < MEM_SIZE && arena->memory[i] == 0)
+			{
+				i++;
+			}
+			i--;
+			zeroes = 0;
+		}
+
+		if ((i + 1) % (MEM_SIZE / arena->nb_champs) == 0)
+		{
+			offset = 0;
+			printf ("\n\n%zu",i);
+		}
+		else
+		{
+			offset++;
+		}
+		i++;
+	}
+
+}
+
 int		main(int ac, char **av)
 {
  	t_disp		d;
@@ -32,6 +106,7 @@ int		main(int ac, char **av)
 	t_arena		vm;
 	t_champion	*champ;
 	int			i;
+	int			visu = 1;
  
 	i = 0;
 	d.d_cycle = 1000;
@@ -48,30 +123,39 @@ int		main(int ac, char **av)
 	}
 	if (start_arena(&vm, champ) == FALSE)
 		return (FALSE);
-	init_window(&d, vm);
+	if (visu)
+		init_window(&d, vm);
 	running = 1;
 	vm.total_process_nb = vm.nb_champs;
-	while (!is_game_over(&vm) && running)
+	print_vm_state(&vm);
+	hex_dump(&vm);
+	while (!is_game_over(&vm) && vm.cycle < 500 && running)
 	{
 		do_the_cycle(&vm);
-    	timeout = SDL_GetTicks() + d.delay;
-		i = SDL_GetTicks() + 250;
-		while (SDL_PollEvent(&d.event)
-		|| (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout) && running != 0)
-		|| (d.pause != 0 && d.step != 1))
+
+		if (visu)
 		{
-			if (!(SDL_GetTicks() % d.d_cycle))
-				do_the_cycle(&vm);
-			d.step = 0;
-			events(&d, &running, &timeout, vm);
-			if (SDL_TICKS_PASSED(SDL_GetTicks(), i))
+			timeout = SDL_GetTicks() + d.delay;
+			i = SDL_GetTicks() + 250;
+			while (SDL_PollEvent(&d.event)
+			|| (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout) && running != 0)
+			|| (d.pause != 0 && d.step != 1))
 			{
-				d.button_status = 0;
-				i = SDL_GetTicks() + 200;
+				if (!(SDL_GetTicks() % d.d_cycle))
+					do_the_cycle(&vm);
+				d.step = 0;
+				events(&d, &running, &timeout, vm);
+				if (SDL_TICKS_PASSED(SDL_GetTicks(), i))
+				{
+					d.button_status = 0;
+					i = SDL_GetTicks() + 200;
+				}
 			}
+			update_visu(&d, vm);
 		}
-		update_visu(&d, vm);
 	}
-	error("End.", &d);
+	hex_dump(&vm);
+	if (visu)
+		error("End.", &d);
 	return (TRUE);
 }
