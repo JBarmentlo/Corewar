@@ -33,6 +33,7 @@ void	execute_process(t_arena *arena, t_process *process)
 	{
 		process_invalid(process);
 		printf("invalid argument value (register > 16)\n");
+		printf("PC: %d, owner: %d\n", process->PC, process->owner->number);
 		return ;
 	}
 	run_function(arena, process);
@@ -69,10 +70,14 @@ void	execute_processes(t_arena *arena)
 		}
 		else
 		{
-			printf("cycle : %lu\n", arena->cycle);
-			printf("PC:%d\n", it->PC);
+			if (opcode_to_mask(it->current_op->opcode) & TEST_PRINT)
+			{
+				printf("\n\n");
+				printf("cycle : %lu\n", arena->cycle);
+				printf("PC:%d\n", it->PC);
+			}
+
 			execute_process(arena, it);	
-			printf("\n\n");
 		}
 		it = next;
 	}
