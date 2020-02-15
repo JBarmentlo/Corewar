@@ -92,6 +92,7 @@ t_instruct		*is_instruct(char *line, int *i, int *cur_octet)
 	op_code[w] = '\0';
 	op->type = find_opcode(op_code);
 	op->nb_args = g_op_tab[op->type - 1].arg_nb;
+	op->oct = *cur_octet;
 	k = 0;
 	while (line[*i] != '\0')
 	{
