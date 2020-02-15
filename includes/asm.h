@@ -159,20 +159,20 @@ typedef struct 		s_file
 	int				prog_size;
 }					t_file;
 
-int						usage(int prog);
-int						ft_error(char *str, char *str2);
-int						cor_file(char *source_file, t_file *out_file, int fd);
+int		usage(int prog);
+int		ft_error(char *str, char *str2);
+int		cor_file(char *source_file, t_file *out_file, int fd);
 /////////////////////// asm utils   //////////////////////////
-void					nb_to_binary(t_file *out_file, int octets, int indx, int nb);
-int						count_bits(int nb);
-void					write_in_file(t_file *out_file, int indx, int n);
-void					copy_string(char *dest, char *src, int size, int *indx);
+void		nb_to_binary(t_file *out_file, int octets, int indx, int nb);
+int		count_bits(int nb);
+void		write_in_file(t_file *out_file, int indx, int n);
+void		copy_string(char *dest, char *src, int size, int *indx);
 /////////////////////// op_code utils   //////////////////////////
-int						find_opcode(char *string);
-int						encoding_byte(t_instruct *op);
-int						write_op_values(t_file *out_file, int *i, t_instruct *op, t_stack stack);
+int		find_opcode(char *string);
+int		encoding_byte(t_instruct *op);
+int		write_op_values(t_file *out_file, int *i, t_instruct *op, t_stack stack);
 /////////////////////// To delete   //////////////////////////
-void					parsing_tester(t_stack *stack, int fd);
-void					print_tester(t_stack *stack);
+void		parsing_tester(t_stack *stack, int fd);
+void		print_tester(t_stack *stack);
 
 #endif
