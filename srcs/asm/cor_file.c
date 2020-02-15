@@ -102,6 +102,6 @@ int		cor_file(char *source_file, t_file *out_file, int fd)
 		return (FALSE);
 	real_prog_size = out_file->total_size - SIZE_HEADER;
 	nb_to_binary(out_file, INFO_PROG, out_file->prog_size, real_prog_size);
-	out_file->prog_size = real_prog_size;
+	out_file->total_size -= INFO_PROG;
 	return (TRUE);
 }
