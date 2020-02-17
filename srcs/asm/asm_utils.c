@@ -43,9 +43,12 @@ int		count_bits(int nb)
 	bits = 0;
 	if (nb < 0)
 	{
-		ft_printf("nb AVANT= %d\n", nb);
-		nb = (unsigned char) nb;
-		ft_printf("nb APRES= %d\n", nb);
+		while (nb != 0)
+		{
+			nb  = nb << 1;
+			bits += 1;
+		}
+		return (bits);
 	}
 	while (nb != 0)
 	{

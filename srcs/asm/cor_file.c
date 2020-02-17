@@ -35,9 +35,9 @@ int		fill_header(t_file *out_file, int fd, t_stack *stack)
 	copy_string(out_file->content, stack->champion_name,  PROG_NAME_LENGTH, &(out_file->total_size));
 	// padding //
 	copy_string(out_file->content, EMPTY,  PADDING, &(out_file->total_size));
-	// Prog size  = 0 pour l'instant + indice de prog size stocke en negatif
+	// Prog size  = 0 pour l'instant + indice de prog size stocke
 	// pour s'assurer que c'est pas la taille du programme mais bien son indice//
-	out_file->prog_size = out_file->total_size * (-1);
+	out_file->prog_size = out_file->total_size;
 	copy_string(out_file->content, EMPTY,  INFO_PROG, &(out_file->total_size));
 	//// write comment ///// 
 	copy_string(out_file->content, stack->comment,  COMMENT_LENGTH, &(out_file->total_size));
@@ -78,8 +78,10 @@ int		fill_opcode(t_file *out_file, t_stack stack)
 int		cor_file(char *source_file, t_file *out_file, int fd)
 {	
 	t_stack		stack;
+	int		real_prog_size;
 	int		i;
 
+	real_prog_size = 0;
 	stack.champion_name = "zork";
 	stack.comment = "I'M ALIIIIVE";
 	i = 0;
@@ -98,5 +100,8 @@ int		cor_file(char *source_file, t_file *out_file, int fd)
 ///////////////////////// 
 	if (fill_opcode(out_file, stack) == FALSE)
 		return (FALSE);
+	real_prog_size = out_file->total_size - SIZE_HEADER;
+	nb_to_binary(out_file, INFO_PROG, out_file->prog_size, real_prog_size);
+	out_file->total_size -= INFO_PROG;
 	return (TRUE);
 }

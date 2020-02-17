@@ -95,8 +95,7 @@ int		write_op_values(t_file *out_file, int *i, t_instruct *op, t_stack stack)
 			to_label = find_label(op->argz[k].lab, label);
 			if (to_label == FALSE)
 				return (FALSE);
-			ft_printf("op type = [%d], to label = [%d], label->oct = [%d], label->name =[%s]\n", op->type, to_label, op->owner->oct, op->owner->name);
-			nb_to_binary(out_file, op->argz[k].oct, *i, (to_label - op->owner->oct) % MEM_SIZE);
+			nb_to_binary(out_file, op->argz[k].oct, *i, (to_label - op->oct));
 			*i += op->argz[k].oct;
 		}
 		k++;
