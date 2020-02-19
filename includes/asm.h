@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 15:31:05 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/14 19:07:00 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/17 15:15:05 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,7 @@ typedef struct 		s_file
 int		usage(int prog);
 int		ft_error(char *str, char *str2);
 int		cor_file(char *source_file, t_file *out_file, int fd);
+int		get_header_file(t_stack *stack, int fd);
 /////////////////////// asm utils   //////////////////////////
 void		nb_to_binary(t_file *out_file, int octets, int indx, int nb);
 int		count_bits(int nb);
