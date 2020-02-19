@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:11:09 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/19 14:28:59 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/19 18:29:16 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int		cor_file(char *source_file, t_file *out_file, int fd)
 	stack.cur_octet = out_file->total_size;
 ////// to delete: /////// 
 	parsing_tester(&stack, fd);
-//	print_tester(&stack);
+	print_tester(&stack);
 ///////////////////////// 
 	if (fill_opcode(out_file, stack) == FALSE)
 		return (FALSE);
