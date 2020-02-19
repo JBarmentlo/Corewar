@@ -6,6 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:11:09 by dberger           #+#    #+#             */
+/*   Updated: 2020/02/19 14:50:40 by dberger          ###   ########.fr       */
 /*   Updated: 2020/02/19 18:29:16 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -48,30 +49,25 @@ int		fill_header(t_file *out_file, int fd, t_stack *stack)
 
 int		fill_opcode(t_file *out_file, t_stack stack)
 {
-	t_label 	*label;
 	t_instruct	*op;
 	int			i;
 
 	i = out_file->total_size;
-	label = stack.first_label;
-	while (label != NULL)
+	op = stack.first_op;
+	while (op != NULL)
 	{
-		op = label->first_op;
-		while (op != NULL)
+		write_in_file(out_file, i, op->type);
+		if (g_op_tab[op->type - 1].encoding_byte != 0)
 		{
-			write_in_file(out_file, i, op->type);
-			if (g_op_tab[op->type - 1].encoding_byte != 0)
-			{
-				i++;
-				write_in_file(out_file, i, encoding_byte(op));
-			}
 			i++;
-			if (write_op_values(out_file, &i, op, stack) == FALSE)
-				return (FALSE);
-			op = op->next;
+			write_in_file(out_file, i, encoding_byte(op));
 		}
-		label = label->next;
+		i++;
+		if (write_op_values(out_file, &i, op, stack) == FALSE)
+			return (FALSE);
+		op = op->next;
 	}
+	op = stack.first_op;
 	return (TRUE);
 }
 

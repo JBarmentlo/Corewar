@@ -6,7 +6,7 @@
 #    By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/22 19:37:40 by dberger           #+#    #+#              #
-#    Updated: 2020/02/17 15:29:38 by ncoursol         ###   ########.fr        #
+#    Updated: 2020/02/19 15:00:00 by dberger          ###   ########.fr        #
 #    Updated: 2020/02/11 10:00:57 by ncoursol         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -86,6 +86,7 @@ ASM_SOURCE_FILES=main_asm.c \
 	asm_utils.c \
 	op_code_utils.c \
 	parsing_tester.c \
+	print_tester.c \
 	parse_header.c
 
 
