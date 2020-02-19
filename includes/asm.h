@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 15:31:05 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/17 15:15:05 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/19 14:35:12 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,6 @@ typedef struct 			s_instruct
 	size_t 				oct; // numero de l'octet ou est ecrit 0x01
 	size_t				nb_args; // si "sti" on sait tout de suite que c'est 3
 	t_argz				argz[3]; // liste chainee ou tableau de structure 
-	struct s_label		*owner;
 	struct s_instruct	*next;
 }						t_instruct;
 
@@ -134,18 +133,17 @@ typedef struct 		s_label
 {
 	char			*name; // par exemple "l2" ou "noname1"
 	size_t			oct; // place du label dans 
-	size_t			nb_instructs; // a remplir avant de passer au prochain label
-	t_instruct		*op; // liste chainee d'instructions
-	t_instruct		*first_op; // liste chainee d'instructions
 	struct s_label	*next; // liste chainee de label
 }					t_label;
 
 typedef struct		s_stack
 {
 	char			*champion_name;
+	char			*comment;
 	int				cur_octet; // permet de savoir ou on se trouve
 	enum e_state	state;
-	char			*comment;
+	t_instruct		*first_op;
+	t_instruct		*op_list;
 	t_label			*label_list; // liste chainee de label
 	t_label			*first_label; // liste chainee de label
 }					t_stack;
@@ -173,7 +171,7 @@ int		find_opcode(char *string);
 int		encoding_byte(t_instruct *op);
 int		write_op_values(t_file *out_file, int *i, t_instruct *op, t_stack stack);
 /////////////////////// To delete   //////////////////////////
-void		parsing_tester(t_stack *stack, int fd);
+int			parsing_tester(t_stack *stack, int fd);
 void		print_tester(t_stack *stack);
 
 #endif

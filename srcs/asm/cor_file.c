@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:11:09 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/19 14:28:59 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/19 14:50:40 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,30 +48,25 @@ int		fill_header(t_file *out_file, int fd, t_stack *stack)
 
 int		fill_opcode(t_file *out_file, t_stack stack)
 {
-	t_label 	*label;
 	t_instruct	*op;
 	int			i;
 
 	i = out_file->total_size;
-	label = stack.first_label;
-	while (label != NULL)
+	op = stack.first_op;
+	while (op != NULL)
 	{
-		op = label->first_op;
-		while (op != NULL)
+		write_in_file(out_file, i, op->type);
+		if (g_op_tab[op->type - 1].encoding_byte != 0)
 		{
-			write_in_file(out_file, i, op->type);
-			if (g_op_tab[op->type - 1].encoding_byte != 0)
-			{
-				i++;
-				write_in_file(out_file, i, encoding_byte(op));
-			}
 			i++;
-			if (write_op_values(out_file, &i, op, stack) == FALSE)
-				return (FALSE);
-			op = op->next;
+			write_in_file(out_file, i, encoding_byte(op));
 		}
-		label = label->next;
+		i++;
+		if (write_op_values(out_file, &i, op, stack) == FALSE)
+			return (FALSE);
+		op = op->next;
 	}
+	op = stack.first_op;
 	return (TRUE);
 }
 
@@ -108,7 +103,7 @@ int		cor_file(char *source_file, t_file *out_file, int fd)
 	stack.cur_octet = out_file->total_size;
 ////// to delete: /////// 
 	parsing_tester(&stack, fd);
-//	print_tester(&stack);
+	print_tester(&stack);
 ///////////////////////// 
 	if (fill_opcode(out_file, stack) == FALSE)
 		return (FALSE);
