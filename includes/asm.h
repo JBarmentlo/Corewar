@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 15:31:05 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/19 14:35:12 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/19 15:30:28 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@
 # define PADDING		4
 # define INFO_PROG		4
 # define EMPTY			"\0"
+# define MAX_ARGS		3
 
 enum				e_state
 {
@@ -125,7 +126,7 @@ typedef struct 			s_instruct
 	size_t				type; // 0x01 si "live" par exemple
 	size_t 				oct; // numero de l'octet ou est ecrit 0x01
 	size_t				nb_args; // si "sti" on sait tout de suite que c'est 3
-	t_argz				argz[3]; // liste chainee ou tableau de structure 
+	t_argz				argz[MAX_ARGS]; // liste chainee ou tableau de structure 
 	struct s_instruct	*next;
 }						t_instruct;
 

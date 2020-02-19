@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 16:14:13 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/19 14:54:13 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/19 17:04:41 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_argz		is_argument(char *line, int *i, size_t inst_type, t_argz argz)
 		argz.oct = T_REG;
 		/// pk reg size a 4 ??? ///
 	}
-	else if (line[*i] == '%')
+	else if (line[*i] == DIRECT_CHAR)
 	{
 		argz.type = DIR_CODE;
 		if (g_op_tab[inst_type - 1].is_direct_small == 1)
@@ -39,9 +39,9 @@ t_argz		is_argument(char *line, int *i, size_t inst_type, t_argz argz)
 		argz.oct = IND_SIZE;
 		/////// indirect devrait etre code sur 2 octets ///
 	}
-	if (line[*i] != '\0')
+	if (line[*i] != LABEL_CHAR)
 		*i += 1;
-	if (line[*i] != '\0' && line[*i] != ':')
+	if (line[*i] != '\0' && line[*i] != LABEL_CHAR)
 	{
 		argz.value = ft_atoi(line + *i);
 		argz.lab = NULL;
@@ -52,7 +52,7 @@ t_argz		is_argument(char *line, int *i, size_t inst_type, t_argz argz)
 	{
 		*i += 1;
 		save = *i;
-		while (line[*i] != '\0' && line[*i] != ',')
+		while (line[*i] != '\0' && line[*i] != SEPARATOR_CHAR)
 		{
 			*i += 1;
 			k++;
@@ -76,7 +76,7 @@ t_instruct		*is_instruct(char *line, int *i, int start, int *cur_octet)
 	k = 0;
 	w = 0;
 	save = *i;
-	op = malloc(sizeof(t_instruct));
+	op = ft_memalloc(sizeof(t_instruct));
 	op_code = ft_memalloc(sizeof(char) * (*i - start)); 
 	op_code = ft_stricpy(op_code, line, start, *i);
 	op->type = find_opcode(op_code);
@@ -120,7 +120,7 @@ t_label		*is_label(char *line, t_stack *stack, int s, int i)
 	{
 		if (ft_strchr(LABEL_CHARS, (int)line[s]) == NULL)
 		{
-			ft_error("Lexial error for a label", NULL);
+			ft_error("Lexical error for a label", NULL);
 			return (NULL);
 		}
 		s++;
@@ -128,38 +128,6 @@ t_label		*is_label(char *line, t_stack *stack, int s, int i)
 	label->name = ft_memalloc(sizeof(char) * s);
 	label->name = ft_stricpy(label->name, line, save, i);
 	return (label);
-}
-
-void	print_tester(t_stack *stack)
-{
-	t_argz argz;
-	t_label		*label;
-	t_instruct	*op;
-	int			i;
-
-	i = 0;
-	label = stack->first_label;
-	while (label != NULL)
-	{
-		ft_printf("label name = [%s], octet = [%d]\n", label->name, label->oct);
-		label = label->next;
-	}
-	ft_printf("\n");
-	label = stack->first_label;
-	op = stack->first_op;
-	while (op != NULL)
-	{
-		ft_printf("op type = [%d], nb_args = [%d]\n", op->type, op->nb_args);
-		i = 0;
-		while (i < (int)op->nb_args)
-		{
-			argz = op->argz[i];
-			ft_printf("\targ n-%d: type = [%d], value = [%d], lab = [%s],  oct = [%d]\n", i, argz.type, argz.value, argz.lab, argz.oct);
-			i++;
-		}
-		op = op->next;
-	}
-	op = stack->first_op;
 }
 
 int		is_label_or_op(char *line, t_stack *stack, int *i)
