@@ -17,5 +17,8 @@ void    x01(t_arena *arena, t_process *process)
 		arena->champion_table[arg].lives_since_last_check += 1;
    		arena->last_live_champ_number = arg;
 	}
-
+	if (VERBOSE)
+	{
+		printf("live %d\n", arg);
+	}
 }

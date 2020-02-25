@@ -90,6 +90,10 @@ void	run_function(t_arena *arena, t_process *process)
 		print_t_args(arena->args);
 	}
 	arena->op_fun_tab[process->current_op->opcode - 1](arena, process);
+	if (TEST_PRINT & opcode_to_mask(process->current_op->opcode))
+	{
+		hex_dump(arena);
+	}
 }
 
 void	update_champion_alive(t_arena *arena)

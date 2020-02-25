@@ -18,4 +18,8 @@ void    x02(t_arena *arena, t_process *process)
 		reg_write_int(process, value, arena->args->val[1]);
 	}
 	process->carry = (value == 0);
+	if (VERBOSE)
+	{
+		printf("loaded %d to registre %d\n", value, arena->args->val[1]);
+	}
 }
