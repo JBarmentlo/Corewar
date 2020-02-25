@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 16:08:57 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/02/06 14:20:14 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/13 13:15:34 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void			disp_init_info5(t_disp *d)
 	d->mod.y = d->process.y + 200;
 	disp_ttf("Process       :", d->color, d);
 	d->mod.y = d->process.y + 260;
-	disp_ttf("Empty         :", d->color, d);
+	disp_ttf("Cycles        :", d->color, d);
 	d->mod.x = 1980;
 	d->mod.y = d->process.h - (d->process.h / 3) + 30;
 	d->mod.w = 540;

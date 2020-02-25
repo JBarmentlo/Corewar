@@ -6,7 +6,7 @@
 #    By: dberger <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/08 10:16:12 by dberger           #+#    #+#              #
-#    Updated: 2020/02/05 14:55:47 by dberger          ###   ########.fr        #
+#    Updated: 2020/02/19 14:05:46 by dberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -84,6 +84,7 @@ ft_sqrt.c\
 ft_sizenb_l.c\
 ft_sizenb_u.c\
 ft_strlen_l.c\
+ft_stricpy.c\
 get_next_line.c
 
 HEADERS = libft.h

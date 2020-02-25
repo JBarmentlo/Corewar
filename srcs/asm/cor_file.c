@@ -3,10 +3,11 @@
 /*                                                        :::      ::::::::   */
 /*   cor_file.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/06 15:29:48 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/12 15:44:47 by ncoursol         ###   ########.fr       */
+/*   Created: 2020/02/14 19:11:09 by dberger           #+#    #+#             */
+/*   Updated: 2020/02/19 14:50:40 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/19 18:29:16 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +36,9 @@ int		fill_header(t_file *out_file, int fd, t_stack *stack)
 	copy_string(out_file->content, stack->champion_name,  PROG_NAME_LENGTH, &(out_file->total_size));
 	// padding //
 	copy_string(out_file->content, EMPTY,  PADDING, &(out_file->total_size));
-	// Prog size  = 0 pour l'instant + indice de prog size stocke en negatif
+	// Prog size  = 0 pour l'instant + indice de prog size stocke
 	// pour s'assurer que c'est pas la taille du programme mais bien son indice//
-	out_file->prog_size = out_file->total_size * (-1);
+	out_file->prog_size = out_file->total_size;
 	copy_string(out_file->content, EMPTY,  INFO_PROG, &(out_file->total_size));
 	//// write comment ///// 
 	copy_string(out_file->content, stack->comment,  COMMENT_LENGTH, &(out_file->total_size));
@@ -46,33 +47,51 @@ int		fill_header(t_file *out_file, int fd, t_stack *stack)
 	return (TRUE);
 }
 
+int		fill_opcode(t_file *out_file, t_stack stack)
+{
+	t_instruct	*op;
+	int			i;
+
+	i = out_file->total_size;
+	op = stack.first_op;
+	while (op != NULL)
+	{
+		write_in_file(out_file, i, op->type);
+		if (g_op_tab[op->type - 1].encoding_byte != 0)
+		{
+			i++;
+			write_in_file(out_file, i, encoding_byte(op));
+		}
+		i++;
+		if (write_op_values(out_file, &i, op, stack) == FALSE)
+			return (FALSE);
+		op = op->next;
+	}
+	op = stack.first_op;
+	return (TRUE);
+}
+
 int		cor_file(char *source_file, t_file *out_file, int fd)
 {	
+	t_stack		stack;
+	int		real_prog_size;
 	int		i;
 
-	(void) fd;
-	//////////////////////////NICO MODIFICATIONS///////////////////////////
-	t_stack		stack;
-	t_label		*save;
-
-	save = stack.label_list;
-	stack.champion_name = "zork";
-	stack.comment = "I'M ALIIIIVE";
-	stack.label_list->name = "l2";
-	stack.label_list->opt = (char**)malloc(sizeof(char*) * 2);
-	stack.label_list->opt[0] = (char*)malloc(sizeof(char) * 19);
-	stack.label_list->opt[0] = "sti r1, %:live, %1\0";
-	stack.label_list->opt[1] = (char*)malloc(sizeof(char) * 15);
-	stack.label_list->opt[1] = "and r1, %0, r1\0";
-	stack.label_list = stack.label_list->next;
-	stack.label_list->name = "live";
-	stack.label_list->opt = (char**)malloc(sizeof(char*) * 2);
-	stack.label_list->opt[0] = (char*)malloc(sizeof(char) * 8);
-	stack.label_list->opt[0] = "live %1\0";
-	stack.label_list->opt[1] = (char*)malloc(sizeof(char) * 12);
-	stack.label_list->opt[1] = "zjmp %:live\0";
-	stack.label_list = save;
-	//////////////////////////////////////////////////////////////////////
+	real_prog_size = 0;
+	///////////////////////////////////////////////////////////////////////////
+	if (!(stack.champion_name = (char*)malloc(sizeof(char) * PROG_NAME_LENGTH)))
+		return (ft_error("\"stack.champion_name\" allocation fail.", NULL));
+	if (!(stack.comment = (char*)malloc(sizeof(char) * COMMENT_LENGTH)))
+		return (ft_error("\"stack.comment\" allocation fail.", NULL));
+	stack.champion_name[PROG_NAME_LENGTH] = '\0';
+	stack.comment[COMMENT_LENGTH] = '\0';
+	if (!get_header_file(&stack, fd))
+		return (ft_error("Bad Header in .s file", NULL));
+	if (!get_header_file(&stack, fd))
+		return (ft_error("Bad Header in .s file", NULL));
+	printf("name : [%s]\n", stack.champion_name);
+	printf("comment : [%s]\n", stack.comment);
+	///////////////////////////////////////////////////////////////////////////
 	i = 0;
 	while (source_file[i] && source_file[i] != '.')
 		i++;
@@ -82,16 +101,15 @@ int		cor_file(char *source_file, t_file *out_file, int fd)
 		return (FALSE);
 	if (fill_header(out_file, fd, &stack) == FALSE)
 		return (FALSE);
-
-	/*
-	** CODE
-	*/
-/*
-	while (a.label_list)
-	{
-	
-		a.label_list
-	}
-*/	///////////////////////////////////////////////////////////////////////
+	stack.cur_octet = out_file->total_size;
+////// to delete: /////// 
+	parsing_tester(&stack, fd);
+	print_tester(&stack);
+///////////////////////// 
+	if (fill_opcode(out_file, stack) == FALSE)
+		return (FALSE);
+	real_prog_size = out_file->total_size - SIZE_HEADER;
+	nb_to_binary(out_file, INFO_PROG, out_file->prog_size, real_prog_size);
+	out_file->total_size -= INFO_PROG;
 	return (TRUE);
 }
