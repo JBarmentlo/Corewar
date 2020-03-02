@@ -37,7 +37,7 @@ void	execute_process(t_arena *arena, t_process *process)
 		return ;
 	}
 	run_function(arena, process);
-	if (process->current_op->opcode != 9)
+	if (process->current_op->opcode != 9 || process->carry == 0)
 		process->PC += PC_jump + process->current_op->encoding_byte + 1;
 	process->current_op = NULL;
 	add_process_to_table(process, arena, arena->cycle + 1);
