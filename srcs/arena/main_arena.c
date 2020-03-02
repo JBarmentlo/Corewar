@@ -100,7 +100,7 @@ void	hex_dump(t_arena *arena)
 
 int		main(int ac, char **av)
 {
- 	t_disp		d;
+	t_disp		d;
 	int		timeout;
 	int		running;
 	t_arena		vm;
@@ -108,7 +108,7 @@ int		main(int ac, char **av)
 	int			i;
 	int			visu = 0;
 	unsigned int j;
- 
+
 	i = 0;
 	vm = init_vm();
 	if (pars_args(ac, av, &vm) == FALSE)
@@ -134,38 +134,38 @@ int		main(int ac, char **av)
 		do_the_cycle(&vm);
 		if (visu)
 		{
-    	timeout = SDL_GetTicks() + 250;
-		  i = SDL_GetTicks() + 250;
-		  j = 0;
-		  while (j < d.delay)
-		  {
-		   	do_the_cycle(&vm);
-		  	j++;
-	  	}
-	  	while (SDL_PollEvent(&d.event)
-	  	|| (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout) && running != 0)
-	  	|| (d.pause != 0 && d.step != 1))
-	  	{
-	  		d.step = 0;
-		  	events(&d, &running, &timeout, vm);
-		  	if (SDL_TICKS_PASSED(SDL_GetTicks(), i))
-		  	{
-			  	if (!(SDL_GetTicks() % d.d_cycle))
-			  		do_the_cycle(&vm);
-			  	d.step = 0;
-			  	events(&d, &running, &timeout, vm);
-			  	if (SDL_TICKS_PASSED(SDL_GetTicks(), i))
-			  	{
-				  	d.button_status = 0;
-			  		i = SDL_GetTicks() + 200;
-			  	}
-		  	}
-			  update_visu(&d, vm);
-	  	}
-    }   
+			timeout = SDL_GetTicks() + 250;
+			i = SDL_GetTicks() + 250;
+			j = 0;
+			while (j < d.delay)
+			{
+				do_the_cycle(&vm);
+				j++;
+			}
+			while (SDL_PollEvent(&d.event)
+					|| (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout) && running != 0)
+					|| (d.pause != 0 && d.step != 1))
+			{
+				d.step = 0;
+				events(&d, &running, &timeout, vm);
+				if (SDL_TICKS_PASSED(SDL_GetTicks(), i))
+				{
+					if (!(SDL_GetTicks() % d.d_cycle))
+						do_the_cycle(&vm);
+					d.step = 0;
+					events(&d, &running, &timeout, vm);
+					if (SDL_TICKS_PASSED(SDL_GetTicks(), i))
+					{
+						d.button_status = 0;
+						i = SDL_GetTicks() + 200;
+					}
+				}
+			}
+			update_visu(&d, vm);
+		}   
 	}
-	 hex_dump(&vm);
-	 if (visu)
-	 	error("End.", &d);
+	hex_dump(&vm);
+	if (visu)
+		error("End.", &d);
 	return (TRUE);
 }
