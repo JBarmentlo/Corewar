@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/23 12:34:21 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/02/19 16:51:00 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/03/02 15:31:09 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,9 @@ void		update_visu(t_disp *d, t_arena a)
 	if (!((d->font1 = TTF_OpenFont("img/font2.ttf", 22))))
 		error("(menu.c) TTF_OpenFont : ", d);
 	hex[2] = '\0';
+	printf("BONJOUR1\n");
 	///////////////////ARENA/////////////////////////
+	d->s_arena = SDL_CreateRGBSurface(0, d->screen.w, d->screen.h, 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
 	while (i < MEM_SIZE)
 	{
 		d->color.r = (d->color_champ[a.memory_color[i] - '0'] & 0xFF000000) >> 24;
@@ -91,25 +93,35 @@ void		update_visu(t_disp *d, t_arena a)
 		SDL_FreeSurface(d->txt);
 		i++;
 	}
+	printf("BONJOUR2\n");
 	d->font = SDL_CreateTextureFromSurface(d->rend, d->s_arena);
 	if (SDL_RenderCopy(d->rend, d->font, NULL, NULL) < 0)
 		error("(menu.c) SDL_RenderCopy : ", d);
 	SDL_DestroyTexture(d->font);
+	SDL_FreeSurface(d->s_arena);
 	d->mod.h = 21;
 	d->mod.w = 26;
 	if (SDL_SetRenderDrawBlendMode(d->rend, SDL_BLENDMODE_BLEND) < 0)
 		error("(menu.c) SDL_SetRenderDrawBlendMode error : ", d);
+	printf("BONJOUR3\n");
 	first = a.process_list;
-	while (a.process_list)
+	printf("TEST1\n");
+	while (a.process_list != NULL)
 	{
+		printf("TEST2\n");
 		if (SDL_SetRenderDrawColor(d->rend, (d->color_champ[a.process_list->owner->number] & 0xFF000000) >> 24, (d->color_champ[a.process_list->owner->number] & 0xFF0000) >> 16, (d->color_champ[a.process_list->owner->number] & 0xFF00) >> 8, 110) < 0)
 			error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		printf("TEST3\n");
 		d->mod.x = d->arena.x + 10 + 29.7 * (a.process_list->PC % 64);
 		d->mod.y = d->arena.y + 14 + 21.4 * (a.process_list->PC / 64);
+		printf("TEST4\n");
 		if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
 			error("(disp.c) SDL_RenderFillRect : ", d);
+		printf("TEST5 : [%hu]\n", a.process_list->PC);
 		a.process_list = a.process_list->next_list;
+		printf("TEST6\n");
 	}
+	printf("BONJOUR4\n");
 	a.process_list = first;
 	if (SDL_SetRenderDrawBlendMode(d->rend, SDL_BLENDMODE_NONE) < 0)
 		error("(menu.c) SDL_SetRenderDrawBlendMode error : ", d);
@@ -119,6 +131,7 @@ void		update_visu(t_disp *d, t_arena a)
 	d->color.r = 255;
 	d->color.g = 255;
 	d->color.b = 255;
+	printf("BONJOUR5\n");
 	while (i < 5)
 	{
 		d->mod.w = 300;
@@ -165,8 +178,8 @@ void		update_visu(t_disp *d, t_arena a)
 			d->mod.w = 40;
 			disp_ttf(" (", d->color, d);
 			d->mod.x += 40;
-			d->mod.w = ft_nbrlen(d->delay * 4) * 20;
-			info = ft_itoa2(d->delay * 4);
+			d->mod.w = ft_nbrlen(d->delay * 10) * 20;
+			info = ft_itoa2(d->delay * 10);
 			disp_ttf(info, d->color, d);
 			free(info);
 			d->mod.x += d->mod.w;
@@ -176,12 +189,13 @@ void		update_visu(t_disp *d, t_arena a)
 		i++;
 	}
 	////////////////////INFO PLAYERS//////////////////////
+	printf("BONJOUR6\n");
 	i = 0;
 	while (i < a.nb_champs)
 	{
 		if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 250) < 0)
 			error("(disp.c) SDL_SetRenderDrawColor : ", d);
-		d->mod.x = d->players.x + (d->players.w / 2) + 11;
+		d->mod.x = d->players.x + (d->players.w / 2) + 14;
 		d->mod.h = 8 + (ph / 10);
 		d->mod.y = (ph * i) + d->players.y + (ph / 9) * 3 + 1;
 		d->mod.w = (d->players.w / 2) - 17;
@@ -203,7 +217,7 @@ void		update_visu(t_disp *d, t_arena a)
 		d->mod.w = 45;
 		disp_ttf(" %)", d->color, d);
 
-		d->mod.x = d->players.x + (d->players.w / 2) + 11;
+		d->mod.x = d->players.x + (d->players.w / 2) + 14;
 		d->mod.y = (ph * i) + 1 + d->players.y + (ph / 9) * 5;
 		d->mod.w = (d->players.w / 2) - 17;
 		if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
@@ -228,6 +242,7 @@ void		update_visu(t_disp *d, t_arena a)
 
 		i++;
 	}
+	printf("BONJOUR7\n");
 	/////////////////FCT LIST////////////////////////
 	d->mod.x = 1980;
 	d->mod.y = 880 + 20 - (880 / 3);
@@ -236,6 +251,7 @@ void		update_visu(t_disp *d, t_arena a)
 	if (SDL_RenderCopy(d->rend, d->f_tmp, NULL, &d->mod) < 0)
 		error("(menu.c) SDL_RenderCopy : ", d);
 	d->mod.y = 880 + 27 - (880 / 3);
+	printf("BONJOUR8\n");
 	while (a.process_list)
 	{
 		if (a.process_list->current_op)
@@ -245,6 +261,13 @@ void		update_visu(t_disp *d, t_arena a)
 			d->color.b = (d->color_champ[a.process_list->owner->number] & 0xFF00) >> 8;
 			d->mod.h = 20;
 			d->mod.x = 1995;
+			if (ft_strlen(a.process_list->owner->header.prog_name) > 16)
+			{
+				a.process_list->owner->header.prog_name[13] = '.';
+				a.process_list->owner->header.prog_name[14] = '.';
+				a.process_list->owner->header.prog_name[15] = '.';
+				a.process_list->owner->header.prog_name[16] = '\0';
+			}
 			d->mod.w = ft_strlen(a.process_list->owner->header.prog_name) * 15;
 			disp_ttf(a.process_list->owner->header.prog_name, d->color, d);
 			d->mod.x += 15 + d->mod.w;
@@ -259,6 +282,7 @@ void		update_visu(t_disp *d, t_arena a)
 		}
 		a.process_list = a.process_list->next_list;
 	}
+	printf("BONJOUR9\n");
 	///////////////////////////////////////////////
 	TTF_CloseFont(d->font1);
 	d->font1 = NULL;
@@ -271,4 +295,5 @@ void		update_visu(t_disp *d, t_arena a)
 	if (SDL_RenderCopy(d->rend, d->a_tmp, NULL, NULL) < 0)
 		error("(menu.c) SDL_RenderCopy : ", d);
 	SDL_RenderPresent(d->rend);
+	printf("BONJOUR10\n");
 }
