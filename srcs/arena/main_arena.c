@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/02 18:24:58 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/03/02 18:53:05 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,13 @@ void	print_vm_state(t_arena *arena)
 	{
 		printf("Owner: %s, owner.nb: %d, R1:%d\n", it->owner->header.prog_name, it->owner->number, it->registre[0]);
 		it = it->next_table;
+	}
+	int	i = 0;
+
+	while (i < MAX_PLAYERS)
+	{
+		printf("champ: %d exists: %d\n", i, arena->champion_table[i].exists);
+		i++;
 	}
 }
 
@@ -141,7 +148,7 @@ int		main(int ac, char **av)
 	t_arena		vm;
 	t_champion	*champ;
 	int			i;
-	int			visu = 1;
+	int			visu = 0;
 	unsigned int j;
 
 	i = 0;
@@ -164,7 +171,7 @@ int		main(int ac, char **av)
 	vm.total_process_nb = vm.nb_champs;
 	print_vm_state(&vm);
 	hex_dump(&vm);
-	while (!is_game_over(&vm) && vm.cycle < 20000 && running)
+	while (!is_game_over(&vm) && vm.cycle < 1000 && running)
 	{
 		do_the_cycle(&vm);
 		if (visu)
