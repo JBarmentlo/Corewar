@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/11 14:48:14 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/02 16:00:20 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/02 18:37:00 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,20 @@ int		find_opcode(char *string)
 
 int		encoding_byte(t_instruct *op)
 {
-	int		i;
+	int			i;
 	size_t		k;
 
 	i = 0;
 	k = 0;
-	/// T_IND = 4 ??? //// 
 	while (k < op->nb_args)
 	{
 		i = i | op->argz[k].type;
+		i = i << 2;
+		k++;
+	}
+	while (k < (BITS_IN_OCTET / 2) - 1)
+	{
+		i = i | 0;
 		i = i << 2;
 		k++;
 	}
