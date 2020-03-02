@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 16:14:13 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/02 16:56:08 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/02 18:06:25 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,26 @@ t_argz		is_argument(char *line, int *i, size_t inst_type, t_argz argz)
 		*i += 1;
 	if (line[*i] != '\0' && line[*i] != LABEL_CHAR)
 	{
-		argz.value = ft_atoi_error(line + *i);
-		if (argz.value == -1 || (argz.type == T_REG && argz.value > REG_NUMBER))
+		argz.value = ft_atoi(line + *i);
+		if (argz.type == T_REG && argz.value > REG_NUMBER)
 			return (argz);
 		argz.lab = NULL;
-		while (line[*i] != ',' && line[*i] != '\0')
+		while (line[*i] != ',' && line[*i] != '\0' && line[*i] != COMMENT_CHAR && line[*i] != ALT_COMMENT_CHAR)
+		{
+			if (ft_isdigit(line[*i]) == 0 && line[*i] != ' ' && line[*i] != '\t')
+			{
+				argz.value = -1;
+				argz.type = 0;
+				return (argz);
+			}
 			*i += 1;
+		}
 	}
 	else
 	{
 		*i += 1;
 		save = *i;
-		while (line[*i] != '\0' && line[*i] != SEPARATOR_CHAR)
+		while (line[*i] != '\0' && line[*i] != SEPARATOR_CHAR && line[*i] != COMMENT_CHAR && line[*i] != ALT_COMMENT_CHAR)
 		{
 			*i += 1;
 			k++;
@@ -63,7 +71,7 @@ t_argz		is_argument(char *line, int *i, size_t inst_type, t_argz argz)
 		argz.lab = ft_stricpy(argz.lab, line, save, *i);
 		argz.value = 0;
 	}
-	if (line[*i] == '\0' && *i > 0)
+	if ((line[*i] == '\0' || line[*i] == COMMENT_CHAR || line[*i] == ALT_COMMENT_CHAR) && *i > 0)
 		*i -= 1;
 	return (argz);
 }
@@ -84,21 +92,25 @@ t_instruct		*is_instruct(char *line, int *i, int start, int *cur_octet)
 	op_code = ft_memalloc(sizeof(char) * (*i - start)); 
 	op_code = ft_stricpy(op_code, line, start, *i);
 	op->type = find_opcode(op_code);
+	ft_printf("opcode = [%s]\n", op_code);
 	if (op->type == 0)
-		return (NULL);
+		return (ft_error2("Wrong syntaxe for an op_code", NULL));
 	op->nb_args = g_op_tab[op->type - 1].arg_nb;
 	op->oct = *cur_octet;
 	k = 0;
-	while (line[*i] != '\0')
+	ft_printf("LEN = [%d]\n", ft_strlen(line));
+	while (line[*i] != '\0' && line[*i] != COMMENT_CHAR && line[*i] != ALT_COMMENT_CHAR)
 	{
-		if (line[*i] != ',' && line[*i] != ' ' && line[*i] != '\0')
+		if (line[*i] != ',' && line[*i] != ' ' && line[*i] != '\t' && line[*i] != '\0')
 		{
+			ft_printf("line[i] = [%c]\n", line[*i]);
 			if (k >= g_op_tab[op->type - 1].arg_nb)
 				return (ft_error2("Too many arguments for the op_code:", op_code));
 			argz = op->argz[k];
 			argz = is_argument(line, i, op->type, argz);
-			if (argz.value == -1)
-				return (ft_error2("Wrong syntaxe for the register of the op_code:", op_code));
+			ft_printf("i = [%d]\n", *i);
+			if (argz.value == -1 && argz.type == 0)
+				return (ft_error2("Wrong syntaxe for an argument of the op_code:", op_code));
 			if (argz.type == T_REG && argz.value > REG_NUMBER)
 				return (ft_error2("A register number should be between 1 and 16", NULL));
 			if ((argz.type & g_op_tab[op->type - 1].arg_types[k]) != argz.type)
@@ -110,6 +122,8 @@ t_instruct		*is_instruct(char *line, int *i, int start, int *cur_octet)
 	}
 	if (k < g_op_tab[op->type - 1].arg_nb)
 		return (NULL);
+	if (*i > 0 && (line[*i - 1] == COMMENT_CHAR || line[*i - 1] == ALT_COMMENT_CHAR))
+		return (op);
 	*cur_octet = *cur_octet + 1 + g_op_tab[op->type - 1].encoding_byte;
 	k = 0;
 	while (k < (int)op->nb_args)
@@ -155,7 +169,8 @@ int		is_label_or_op(char *line, t_stack *stack, int *i)
 	label = NULL;
 	op = NULL;
 	start = *i;
-	while (line[*i] != '\0' && line[*i] != ' ' && line[*i] != LABEL_CHAR && line[*i] != COMMENT_CHAR)
+	ft_printf("line = [%s]\n", line);
+	while (line[*i] != '\0' && line[*i] != ' ' && line[*i] != '\t' && line[*i] != LABEL_CHAR && line[*i] != COMMENT_CHAR && line[*i] != ALT_COMMENT_CHAR)
 		*i += 1;
 	if (line[*i] == LABEL_CHAR)
 	{
@@ -175,8 +190,9 @@ int		is_label_or_op(char *line, t_stack *stack, int *i)
 		}
 		return (*i);
 	}
-	else if (line[*i] == ' ')
+	else if (line[*i] == ' ' || line[*i] == '\t')
 	{
+		ft_printf("line [*i] = [%c]\n", line[*i]);
 		op = is_instruct(line, i, start, &stack->cur_octet);
 		if (op == NULL)
 			return (FALSE);
@@ -191,7 +207,7 @@ int		is_label_or_op(char *line, t_stack *stack, int *i)
 			stack->op_list = stack->op_list->next;
 		}
 	}
-	else if (line[*i] == COMMENT_CHAR && *i > 0)
+	else if ((line[*i] == COMMENT_CHAR || line[*i] == ALT_COMMENT_CHAR) && *i > 0)
 		*i -= 1;
 	if (label == NULL && op == NULL)
 		return (ft_error("An instruction should be followed by its arguments", NULL));
@@ -211,7 +227,7 @@ int		parsing_tester(t_stack *stack, int fd)
 	while (get_next_line(fd, &line))
 	{
 		i = 0;
-		while (line[i] != '\0' && line[i] != COMMENT_CHAR)
+		while (line[i] != '\0' && line[i] != COMMENT_CHAR && line[i] != ALT_COMMENT_CHAR)
 		{
 			if (line[i] != ' ' && line[i] != '\t' && line[i])
 			{
