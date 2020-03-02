@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/23 12:34:21 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/02/13 13:27:48 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/19 16:51:00 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void		update_visu(t_disp *d, t_arena a)
 		hex[1] = (hex[1] > '9' ? hex[1] + 7 : hex[1]);
 		d->mod.x = d->arena.x + 10 + 29.7 * (i % 64);
 		d->mod.y = d->arena.y + 14 + 21.4 * (i / 64);
-	d->txt = TTF_RenderText_Solid(d->font1, hex, d->color);
+		d->txt = TTF_RenderText_Solid(d->font1, hex, d->color);
 		SDL_BlitSurface(d->txt, NULL, d->s_arena, &d->mod);
 		SDL_FreeSurface(d->txt);
 		i++;
@@ -102,7 +102,7 @@ void		update_visu(t_disp *d, t_arena a)
 	first = a.process_list;
 	while (a.process_list)
 	{
-		if (SDL_SetRenderDrawColor(d->rend, (d->color_champ[a.process_list->owner->number] & 0xFF000000) >> 24, (d->color_champ[a.process_list->owner->number] & 0xFF0000) >> 16, (d->color_champ[a.process_list->owner->number] & 0xFF00) >> 8, 150) < 0)
+		if (SDL_SetRenderDrawColor(d->rend, (d->color_champ[a.process_list->owner->number] & 0xFF000000) >> 24, (d->color_champ[a.process_list->owner->number] & 0xFF0000) >> 16, (d->color_champ[a.process_list->owner->number] & 0xFF00) >> 8, 110) < 0)
 			error("(disp.c) SDL_SetRenderDrawColor : ", d);
 		d->mod.x = d->arena.x + 10 + 29.7 * (a.process_list->PC % 64);
 		d->mod.y = d->arena.y + 14 + 21.4 * (a.process_list->PC / 64);
@@ -252,12 +252,16 @@ void		update_visu(t_disp *d, t_arena a)
 			disp_ttf(a.process_list->current_op->name, d->color, d);
 			d->mod.x += 15 + d->mod.w;	
 			d->mod.w = ft_nbrlen(a.process_list->current_op->cycle_to_wait) * 15;
-			disp_ttf(ft_itoa2(a.process_list->current_op->cycle_to_wait), d->color, d);
+			info = ft_itoa2(a.process_list->current_op->cycle_to_wait);
+			disp_ttf(info, d->color, d);
+			free(info);
 			d->mod.y += 20;	
 		}
 		a.process_list = a.process_list->next_list;
 	}
 	///////////////////////////////////////////////
+	TTF_CloseFont(d->font1);
+	d->font1 = NULL;
 	if (SDL_SetRenderTarget(d->rend, d->a_tmp) < 0)
 		error("(menu.c) SDL_SetRenderTarget : ", d);
 	if (SDL_RenderCopy(d->rend, d->tmp, NULL, NULL) < 0)
