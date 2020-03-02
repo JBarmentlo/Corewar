@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 15:25:33 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/02/19 18:53:45 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/03/02 15:37:16 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,13 +87,12 @@ void		disp_init_var2(t_disp *d)
 			SDL_TEXTUREACCESS_TARGET, 300, 30);
 	d->f_tmp = SDL_CreateTexture(d->rend, SDL_PIXELFORMAT_RGBA8888,
 			SDL_TEXTUREACCESS_TARGET, 540, (d->process.h / 3) - 20);
-	d->s_arena = SDL_CreateRGBSurface(0, d->screen.w, d->screen.h, 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
 	d->color_champ[0] = 0x8A8A8A00;
 	d->pause = 0;
     d->step = 0;
 	d->color.a = 0;
-    d->delay = 1;
-	d->d_cycle = 250;
+    d->delay = 10;
+	d->d_cycle = 100;
 }
 
 void		disp_init_var(t_disp *d)

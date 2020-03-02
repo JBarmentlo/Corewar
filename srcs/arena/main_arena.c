@@ -157,8 +157,8 @@ int		main(int ac, char **av)
 		do_the_cycle(&vm);
 		if (visu)
 		{
-			timeout = SDL_GetTicks() + 250;
-			i = SDL_GetTicks() + 250;
+			timeout = SDL_GetTicks() + 100;
+			i = SDL_GetTicks() + 100;
 			j = 0;
 			while (j < d.delay)
 			{
