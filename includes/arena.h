@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/25 14:08:31 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/03/02 16:49:38 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,6 +265,7 @@ void				fill_fun_ptr_tab(t_arena *arena);
 int					positive_modulo_memsize(int a);
 int					opcode_to_mask(int opcode);
 void				hex_dump(t_arena *arena);
+void				dump_color(t_arena *arena);
 
 
 //	Display
