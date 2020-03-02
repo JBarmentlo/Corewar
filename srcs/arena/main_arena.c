@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/19 15:34:45 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/03/02 16:03:59 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,8 +134,8 @@ int		main(int ac, char **av)
 		do_the_cycle(&vm);
 		if (visu)
 		{
-			timeout = SDL_GetTicks() + 250;
-			i = SDL_GetTicks() + 250;
+			timeout = SDL_GetTicks() + 100;
+			i = SDL_GetTicks() + 100;
 			j = 0;
 			while (j < d.delay)
 			{
