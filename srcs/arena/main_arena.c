@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/02 16:55:55 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/03/02 18:24:58 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,19 @@ void	print_vm_state(t_arena *arena)
 	{
 		printf("Owner: %s, owner.nb: %d, R1:%d\n", it->owner->header.prog_name, it->owner->number, it->registre[0]);
 		it = it->next_table;
+	}
+}
+
+void	printf_process_PC(t_arena *arena)
+{
+	t_process	*it;
+
+	it = arena->process_list;
+	printf("process list : \n");
+	while (it)
+	{
+		printf("owner: %d PC: %d\n", it->owner->number, it->PC);
+		it = it->next_list;
 	}
 }
 
@@ -95,7 +108,6 @@ void	hex_dump(t_arena *arena)
 		}
 		i++;
 	}
-
 }
 
 void	dump_color(t_arena *arena)
@@ -152,7 +164,7 @@ int		main(int ac, char **av)
 	vm.total_process_nb = vm.nb_champs;
 	print_vm_state(&vm);
 	hex_dump(&vm);
-	while (!is_game_over(&vm) && vm.cycle < 1000 && running)
+	while (!is_game_over(&vm) && vm.cycle < 20000 && running)
 	{
 		do_the_cycle(&vm);
 		if (visu)
