@@ -1,31 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_error.c                                         :+:      :+:    :+:   */
+/*   ft_atoi_error.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/30 16:04:34 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/02 16:18:35 by dberger          ###   ########.fr       */
+/*   Created: 2020/03/02 16:50:31 by dberger           #+#    #+#             */
+/*   Updated: 2020/03/02 16:51:17 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "arena.h"
+#include "libft.h"
 
-void	*ft_error2(char *str, char *str2)
+int		ft_atoi_error(const char *str)
 {
-	if (str2 == NULL)
-		ft_printf("Error: %s\n", str);
-	else
-		ft_printf("Error: %s %s\n", str, str2);
-	return (NULL);
-}
+	long	neg;
+	long	nb;
 
-int		ft_error(char *str, char *str2)
-{
-	if (str2 == NULL)
-		ft_printf("Error: %s\n", str);
-	else
-		ft_printf("Error: %s %s\n", str, str2);
-	return (FALSE);
+	neg = 1;
+	nb = 0;
+	while (*str == ' ' || *str == '\f' || *str == '\t'
+			|| *str == '\n' || *str == '\r' || *str == '\v')
+		str++;
+	if (*str == '-')
+		neg = -1;
+	if (*str == '-' || *str == '+')
+		str++;
+	while (ft_isdigit((int)*str))
+	{
+		nb = 10 * nb + *str - 48;
+		str++;
+	}
+	if (*str != '\0')
+		return (-1);
+	return (nb * neg);
 }

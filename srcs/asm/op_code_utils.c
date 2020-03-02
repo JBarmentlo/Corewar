@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/11 14:48:14 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/19 16:53:09 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/02 16:00:20 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int		write_op_values(t_file *out_file, int *i, t_instruct *op, t_stack stack)
 	label = stack.first_label;
 	while (k < op->nb_args)
 	{
-		if (op->argz[k].type == REG_CODE)
+		if (op->argz[k].type == T_REG)
 		{
 			if (op->argz[k].value > REG_NUMBER)
 				return (FALSE);

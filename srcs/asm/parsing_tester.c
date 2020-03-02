@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 16:14:13 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/19 17:04:41 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/02 16:56:08 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ t_argz		is_argument(char *line, int *i, size_t inst_type, t_argz argz)
 	k = 0;
 	if (line[*i] == 'r')
 	{
-		argz.type = REG_CODE;
+		argz.type = T_REG;
 		argz.oct = T_REG;
 		/// pk reg size a 4 ??? ///
 	}
 	else if (line[*i] == DIRECT_CHAR)
 	{
-		argz.type = DIR_CODE;
+		argz.type = T_DIR;
 		if (g_op_tab[inst_type - 1].is_direct_small == 1)
 			argz.oct = DIR_SIZE / 2; // car DIR SIZE = 4 au lieu de 2
 		else
@@ -35,7 +35,7 @@ t_argz		is_argument(char *line, int *i, size_t inst_type, t_argz argz)
 	}
 	else
 	{
-		argz.type = IND_CODE;
+		argz.type = T_IND;
 		argz.oct = IND_SIZE;
 		/////// indirect devrait etre code sur 2 octets ///
 	}
@@ -43,7 +43,9 @@ t_argz		is_argument(char *line, int *i, size_t inst_type, t_argz argz)
 		*i += 1;
 	if (line[*i] != '\0' && line[*i] != LABEL_CHAR)
 	{
-		argz.value = ft_atoi(line + *i);
+		argz.value = ft_atoi_error(line + *i);
+		if (argz.value == -1 || (argz.type == T_REG && argz.value > REG_NUMBER))
+			return (argz);
 		argz.lab = NULL;
 		while (line[*i] != ',' && line[*i] != '\0')
 			*i += 1;
@@ -61,6 +63,8 @@ t_argz		is_argument(char *line, int *i, size_t inst_type, t_argz argz)
 		argz.lab = ft_stricpy(argz.lab, line, save, *i);
 		argz.value = 0;
 	}
+	if (line[*i] == '\0' && *i > 0)
+		*i -= 1;
 	return (argz);
 }
 
@@ -80,20 +84,32 @@ t_instruct		*is_instruct(char *line, int *i, int start, int *cur_octet)
 	op_code = ft_memalloc(sizeof(char) * (*i - start)); 
 	op_code = ft_stricpy(op_code, line, start, *i);
 	op->type = find_opcode(op_code);
+	if (op->type == 0)
+		return (NULL);
 	op->nb_args = g_op_tab[op->type - 1].arg_nb;
 	op->oct = *cur_octet;
 	k = 0;
 	while (line[*i] != '\0')
 	{
-		if (line[*i] != ',' && line[*i] != ' ' && line[*i] != '\0' && k < 3)
+		if (line[*i] != ',' && line[*i] != ' ' && line[*i] != '\0')
 		{
+			if (k >= g_op_tab[op->type - 1].arg_nb)
+				return (ft_error2("Too many arguments for the op_code:", op_code));
 			argz = op->argz[k];
 			argz = is_argument(line, i, op->type, argz);
+			if (argz.value == -1)
+				return (ft_error2("Wrong syntaxe for the register of the op_code:", op_code));
+			if (argz.type == T_REG && argz.value > REG_NUMBER)
+				return (ft_error2("A register number should be between 1 and 16", NULL));
+			if ((argz.type & g_op_tab[op->type - 1].arg_types[k]) != argz.type)
+				return (ft_error2("Wrong type of arguments for the op_code:", op_code));
 			op->argz[k] = argz;
 			k++;
 		}
 		*i += 1;
 	}
+	if (k < g_op_tab[op->type - 1].arg_nb)
+		return (NULL);
 	*cur_octet = *cur_octet + 1 + g_op_tab[op->type - 1].encoding_byte;
 	k = 0;
 	while (k < (int)op->nb_args)
@@ -177,6 +193,8 @@ int		is_label_or_op(char *line, t_stack *stack, int *i)
 	}
 	else if (line[*i] == COMMENT_CHAR && *i > 0)
 		*i -= 1;
+	if (label == NULL && op == NULL)
+		return (ft_error("An instruction should be followed by its arguments", NULL));
 	return (TRUE);
 }
 

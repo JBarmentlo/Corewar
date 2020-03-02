@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 15:31:05 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/19 15:30:28 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/02 16:55:43 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ enum				e_state
 
 typedef struct			s_argz
 {
-	size_t				type; // 1 pour REGISTRE, 2 pour DIRECT, 3 pour INDIRECT
+	int				type; // 1 pour REGISTRE, 2 pour DIRECT, 3 pour INDIRECT
 	char				*lab; // NULL sauf si appel a label (:live)
 	int					value; // si lab != NULL on ne prend pas en compte value
 	size_t				oct;
