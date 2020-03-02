@@ -106,7 +106,7 @@ int		main(int ac, char **av)
 	t_arena		vm;
 	t_champion	*champ;
 	int			i;
-	int			visu = 1;
+	int			visu = 0;
 	unsigned int j;
 
 	i = 0;

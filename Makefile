@@ -6,10 +6,10 @@
 #    By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/22 19:37:40 by dberger           #+#    #+#              #
-#    Updated: 2020/02/19 15:00:00 by dberger          ###   ########.fr        #
-#    Updated: 2020/02/11 10:00:57 by ncoursol         ###   ########.fr        #
+#    Updated: 2020/02/25 14:56:19 by jbarment         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
 
 NO_COLOR = \033[0m
 YELLOW = \033[33m
@@ -23,7 +23,7 @@ OBJ_FOLDER=out
 
 SRCS_COREWAR_FOLDER=./srcs/arena
 SRCS_UTILS_FOLDER=./srcs/utils
-SRCS_ASM_FOLDER=./srcs/asm
+SRCS_ASM_FOLDER=./srcs/jasm
 
 LIB_DIR= ./includes/libft
 PRINTF_DIR = ./includes/ft_printf
@@ -81,13 +81,8 @@ UTILS_SOURCE_FILES=endian_converter.c \
 	ft_error.c \
 	usage.c
 
-ASM_SOURCE_FILES=main_asm.c \
-	cor_file.c \
-	asm_utils.c \
-	op_code_utils.c \
-	parsing_tester.c \
-	print_tester.c \
-	parse_header.c
+ASM_SOURCE_FILES=main_asm_j.c\
+	open_file.c\
 
 
 INCLUDES_FILES=arena.h \
@@ -122,6 +117,8 @@ $(OBJ_FOLDER)/%.o: $(SRCS_UTILS_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 asm: $(LIB) $(OUT_ASM) libCorewar.a Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $(NAME_ASM) $(OUT_ASM) $(LIBS) $(LIB)
 	echo "$(YELLOW)	--- $(GREEN)ASM$(YELLOW) Compiled ! ---	$(NO_COLOR)"
+
+
 
 $(OBJ_FOLDER)/%.o: $(SRCS_ASM_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $@ -c $<
