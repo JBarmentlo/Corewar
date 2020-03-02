@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 12:00:30 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/03/02 09:39:41 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/03/02 16:25:33 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void        event_keydown(t_disp *d, int *running, int *timeout)
 			d->delay = (d->delay == 100 ? 100 : d->delay + 4);
 		else if (d->event.key.keysym.sym == SDLK_KP_MINUS
 				|| d->event.key.keysym.sym == SDLK_MINUS)
-			d->delay = (d->delay == 1 ? 1 : d->delay - 4);
+			d->delay = (d->delay == 10 ? 10 : d->delay - 4);
 		else if (d->pause == 1 && d->event.key.keysym.sym == SDLK_SPACE)
 			d->pause = 0;
 		else if (d->pause == 0 && d->event.key.keysym.sym == SDLK_SPACE)

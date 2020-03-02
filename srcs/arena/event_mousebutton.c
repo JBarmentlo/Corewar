@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 17:59:26 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/02/20 16:05:59 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/03/02 16:25:37 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void			event_button_bar2(t_disp *d, int i, int *timeout, int *running)
 	if (i == 0)
 		d->delay = (d->delay == 100 ? 100 : d->delay + 4);
 	else if (i == 1)
-		d->delay = (d->delay == 1 ? 1 : d->delay - 4);
+		d->delay = (d->delay == 10 ? 10 : d->delay - 4);
 	else if (i == 2)
 		d->pause = 0;
 	else if (i == 3)
