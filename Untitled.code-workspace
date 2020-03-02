@@ -19,7 +19,8 @@
 			"stdio.h": "c",
 			"libft.h": "c",
 			"bitmasks.h": "c",
-			"cstddef": "c"
+			"cstddef": "c",
+			"asm.h": "c"
 		}
 	}
 }

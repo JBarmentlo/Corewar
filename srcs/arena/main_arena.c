@@ -129,7 +129,7 @@ int		main(int ac, char **av)
 	vm.total_process_nb = vm.nb_champs;
 	print_vm_state(&vm);
 	hex_dump(&vm);
-	while (!is_game_over(&vm) && vm.cycle < MAX_TURNS && running)
+	while (!is_game_over(&vm)/* && vm.cycle < 500*/ && running)
 	{
 		do_the_cycle(&vm);
 		if (visu)
