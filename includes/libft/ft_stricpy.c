@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_stricat.c                                       :+:      :+:    :+:   */
+/*   ft_stricpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/05 14:55:23 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/19 14:01:41 by dberger          ###   ########.fr       */
+/*   Created: 2020/02/19 14:03:26 by dberger           #+#    #+#             */
+/*   Updated: 2020/02/19 14:05:08 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_stricat(char *dest, const char *src, int indx_dest)
+char	*ft_stricpy(char *dest, const char *src, int start, int end)
 {
 	int i;
-	int j;
 
-	i = indx_dest;
-	j = 0;
-	while (src[j])
+	i = 0;
+	while (start < end)
 	{
-		dest[i + j] = src[j];
-		j++;
+		dest[i] = src[start];
+		i++;
+		start++;
 	}
-	dest[i + j] = '\0';
+	dest[i] = '\0';
 	return (dest);
 }

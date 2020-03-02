@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/20 13:57:42 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/02/25 11:58:36 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 typedef unsigned int			uint;
 typedef unsigned char			byte;
 typedef unsigned short			uint16_t;
+
 
 typedef struct			s_op
 {
@@ -65,6 +66,7 @@ typedef struct			s_champion
 	int			lives_since_last_check;
 	int			total_memory_owned;
 	int			total_process;
+	int			exists;
 }						t_champion;
 
 typedef struct			s_process

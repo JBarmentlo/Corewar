@@ -4,13 +4,13 @@
 			"path": "."
 		},
 		{
-			"path": "/Users/jbarment/Documents/Corewar_Copy"
-		},
-		{
-			"path": "/Users/jbarment/Documents/lemin_rendu"
-		},
-		{
 			"path": "/Users/jbarment/Documents/Corewar_Luigi"
+		},
+		{
+			"path": "/Users/jbarment/Documents/bootcamp_machine-learning"
+		},
+		{
+			"path": "/Users/jbarment/Documents/INIT"
 		}
 	],
 	"settings": {
@@ -18,7 +18,8 @@
 			"arena.h": "c",
 			"stdio.h": "c",
 			"libft.h": "c",
-			"bitmasks.h": "c"
+			"bitmasks.h": "c",
+			"cstddef": "c"
 		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 16:14:13 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/14 19:07:04 by dberger          ###   ########.fr       */
+/*   Updated: 2020/02/19 17:04:41 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_argz		is_argument(char *line, int *i, size_t inst_type, t_argz argz)
 		argz.oct = T_REG;
 		/// pk reg size a 4 ??? ///
 	}
-	else if (line[*i] == '%')
+	else if (line[*i] == DIRECT_CHAR)
 	{
 		argz.type = DIR_CODE;
 		if (g_op_tab[inst_type - 1].is_direct_small == 1)
@@ -39,31 +39,32 @@ t_argz		is_argument(char *line, int *i, size_t inst_type, t_argz argz)
 		argz.oct = IND_SIZE;
 		/////// indirect devrait etre code sur 2 octets ///
 	}
-	*i += 1;
-	if (line[*i] != ':')
+	if (line[*i] != LABEL_CHAR)
+		*i += 1;
+	if (line[*i] != '\0' && line[*i] != LABEL_CHAR)
 	{
 		argz.value = ft_atoi(line + *i);
 		argz.lab = NULL;
-		while (line[*i] != ',' && line[*i])
+		while (line[*i] != ',' && line[*i] != '\0')
 			*i += 1;
 	}
 	else
 	{
 		*i += 1;
 		save = *i;
-		while (line[*i] && line[*i] != ',')
+		while (line[*i] != '\0' && line[*i] != SEPARATOR_CHAR)
 		{
 			*i += 1;
 			k++;
 		}
-		argz.lab = (char*)malloc(sizeof(char) * k);
-		argz.lab = ft_memcpy(argz.lab, line + save, k);
+		argz.lab = ft_memalloc(sizeof(char) * k);
+		argz.lab = ft_stricpy(argz.lab, line, save, *i);
 		argz.value = 0;
 	}
 	return (argz);
 }
 
-t_instruct		*is_instruct(char *line, int *i, int *cur_octet)
+t_instruct		*is_instruct(char *line, int *i, int start, int *cur_octet)
 {
 	t_instruct	*op;
 	char		*op_code;
@@ -75,21 +76,9 @@ t_instruct		*is_instruct(char *line, int *i, int *cur_octet)
 	k = 0;
 	w = 0;
 	save = *i;
-	op = malloc(sizeof(t_instruct));
-	while (ft_isalnum(line[*i]) == 1)
-	{
-		*i += 1;
-		k++;
-	}
-	op_code = (char*)malloc(sizeof(char) * k);
-	ft_bzero(op_code, k);
-	while (save < *i && w < k)
-	{
-		op_code[w] = line[save];
-		w++;
-		save++;
-	}
-	op_code[w] = '\0';
+	op = ft_memalloc(sizeof(t_instruct));
+	op_code = ft_memalloc(sizeof(char) * (*i - start)); 
+	op_code = ft_stricpy(op_code, line, start, *i);
 	op->type = find_opcode(op_code);
 	op->nb_args = g_op_tab[op->type - 1].arg_nb;
 	op->oct = *cur_octet;
@@ -112,116 +101,108 @@ t_instruct		*is_instruct(char *line, int *i, int *cur_octet)
 		*cur_octet = *cur_octet + op->argz[k].oct;
 		k++;
 	}
+	op->next = NULL;
+	if (*i > 0)
+		*i -= 1;
 	return (op);
 }
 
-t_label		*is_label(char *line, t_stack *stack, int *i)
+t_label		*is_label(char *line, t_stack *stack, int s, int i)
 {
 	t_label		*label;
+	int			save;
 
 	label = malloc(sizeof(t_label));
 	label->oct = stack->cur_octet;
-	label->nb_instructs= 0;
-	label->op = NULL;
-	label->first_op = NULL;
 	label->next = NULL;
-	while (line[*i] != '\0' && line[*i] != ':')
-		*i += 1;
-	label->name = (char*)malloc(sizeof(char) * *i);
-	label->name = ft_memcpy(label->name, line, *i);
+	save = s;
+	while (s < i)
+	{
+		if (ft_strchr(LABEL_CHARS, (int)line[s]) == NULL)
+		{
+			ft_error("Lexical error for a label", NULL);
+			return (NULL);
+		}
+		s++;
+	}
+	label->name = ft_memalloc(sizeof(char) * s);
+	label->name = ft_stricpy(label->name, line, save, i);
 	return (label);
 }
 
-void	print_tester(t_stack *stack)
+int		is_label_or_op(char *line, t_stack *stack, int *i)
 {
-	t_argz argz;
 	t_label		*label;
 	t_instruct	*op;
-	int			i;
+	int			start;
 
-	i = 0;
-	label = stack->first_label;
-	while (label != NULL)
+	label = NULL;
+	op = NULL;
+	start = *i;
+	while (line[*i] != '\0' && line[*i] != ' ' && line[*i] != LABEL_CHAR && line[*i] != COMMENT_CHAR)
+		*i += 1;
+	if (line[*i] == LABEL_CHAR)
 	{
-		ft_printf("label name = [%s], nb instructs = [%d], octet = [%d]\n", label->name, label->nb_instructs, label->oct);
-		op = label->first_op;
-		while (op != NULL)
+		label = is_label(line, stack, start, *i);
+		if (label == NULL)
+			return (FALSE);
+		label->oct = stack->cur_octet;
+		if (stack->first_label == NULL && stack->label_list == NULL)
 		{
-			ft_printf("\top type = [%d], nb_args = [%d]\n", op->type, op->nb_args);
-			i = 0;
-			while (i < (int)op->nb_args)
-			{
-				argz = op->argz[i];
-				ft_printf("\t\targ n-%d: type = [%d], value = [%d], lab = [%s],  oct = [%d]\n", i, argz.type, argz.value, argz.lab, argz.oct);
-				i++;
-			}
-			op = op->next;
+			stack->first_label = label;
+			stack->label_list = label;
 		}
-		label = label->next;
+		else
+		{
+			stack->label_list->next = label;
+			stack->label_list = stack->label_list->next;
+		}
+		return (*i);
 	}
+	else if (line[*i] == ' ')
+	{
+		op = is_instruct(line, i, start, &stack->cur_octet);
+		if (op == NULL)
+			return (FALSE);
+		if (stack->op_list == NULL && stack->first_op == NULL)
+		{
+			stack->first_op = op;
+			stack->op_list = stack->first_op;
+		}
+		else
+		{
+			stack->op_list->next = op;
+			stack->op_list = stack->op_list->next;
+		}
+	}
+	else if (line[*i] == COMMENT_CHAR && *i > 0)
+		*i -= 1;
+	return (TRUE);
 }
 
-void	parsing_tester(t_stack *stack, int fd)
+int		parsing_tester(t_stack *stack, int fd)
 {
 	char		*line;
-	t_label		*label;
-	t_instruct	*op;
 	int			i;
 
 	i = 0;
-	label = NULL;
 	stack->first_label = NULL;
 	stack->label_list = NULL;
+	stack->first_op = NULL;
+	stack->op_list = NULL;
 	while (get_next_line(fd, &line))
 	{
-		if (i == 2)
-			break;
-		ft_memdel((void**)&line);
-		i++;
-	}
-	while (get_next_line(fd, &line))
-	{
-		if (line[0] != '\0' && line[0] != '\n')
-		{
 		i = 0;
-		while (line[i] != '\0' && i < (int)ft_strlen(line))
+		while (line[i] != '\0' && line[i] != COMMENT_CHAR)
 		{
-			if (i == 0 && ft_isalpha(line[i]))
+			if (line[i] != ' ' && line[i] != '\t' && line[i])
 			{
-				label = is_label(line, stack, &i);
-				label->oct = stack->cur_octet;
-				if (stack->first_label == NULL && stack->label_list == NULL)
-				{
-					stack->first_label = label;
-					stack->label_list = label;
-				}
-				else
-				{
-					stack->label_list->next = label;
-					stack->label_list = stack->label_list->next;
-				}
-			}
-			if (i != 0 && line[i] != '\0' && ft_isalpha(line[i]))
-			{
-				label->nb_instructs += 1;
-				op = is_instruct(line, &i, &stack->cur_octet);
-				op->owner = label;
-				if (label->op == NULL && label->first_op == NULL)
-				{
-					label->op = op;
-					label->first_op = op;
-				}
-				else
-				{
-					label->op->next = op;
-					label->op = label->op->next;
-				}
+				if (is_label_or_op(line, stack, &i) == FALSE)
+					return (FALSE);
 			}
 			i++;
 		}
 		ft_memdel((void**)&line);
-		}
-			else
-		ft_memdel((void**)&line);
 	}
+	return (TRUE);
 }
