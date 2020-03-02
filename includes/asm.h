@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 15:31:05 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/02 16:55:43 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/02 17:22:43 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@
 # define INFO_PROG		4
 # define EMPTY			"\0"
 # define MAX_ARGS		3
+# define ALT_COMMENT_CHAR    ';'
 
 enum				e_state
 {
