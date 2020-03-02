@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 15:42:42 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/02 16:51:38 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/02 17:13:52 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ unsigned long		ft_sizenb_u(unsigned long n);
 long				ft_strlen_l(const char *s);
 char				*ft_stricat(char *dest, const char *src, int indx_dest);
 char				*ft_stricpy(char *dest, const char *src, int start, int end);
-int					ft_atoi_error(const char *str);
 int					get_next_line(int fd, char **line);
 
 #endif
