@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/25 11:58:36 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/02/25 14:08:31 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,11 @@ typedef struct 			s_arena
 	unsigned long		cycles_since_check;
 	uint				cycle_to_die;
 	uint				max_checks;
-	t_args				*args;	
+	t_args				*args;
+	int					verbose;
 }						t_arena;
+
+#define	VERBOSE			1
 
 typedef void 			(*t_fun_ptr)(t_arena*, t_process*);
 
@@ -261,6 +264,8 @@ void				*ind_to_ptr_no_idx(t_arena *arena, int ind, int PC);
 void				fill_fun_ptr_tab(t_arena *arena);
 int					positive_modulo_memsize(int a);
 int					opcode_to_mask(int opcode);
+void				hex_dump(t_arena *arena);
+
 
 //	Display
 
