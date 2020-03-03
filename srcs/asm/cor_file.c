@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:11:09 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/02 18:26:52 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/03 18:02:21 by dberger          ###   ########.fr       */
 /*   Updated: 2020/02/19 18:29:16 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -79,12 +79,13 @@ int		cor_file(char *source_file, t_file *out_file, int fd)
 
 	real_prog_size = 0;
 	///////////////////////////////////////////////////////////////////////////
-	if (!(stack.champion_name = (char*)malloc(sizeof(char) * PROG_NAME_LENGTH)))
+	if (!(stack.champion_name = ft_memalloc(sizeof(char) * PROG_NAME_LENGTH)))
 		return (ft_error("\"stack.champion_name\" allocation fail.", NULL));
-	if (!(stack.comment = (char*)malloc(sizeof(char) * COMMENT_LENGTH)))
+	if (!(stack.comment = ft_memalloc(sizeof(char) * COMMENT_LENGTH)))
 		return (ft_error("\"stack.comment\" allocation fail.", NULL));
 	stack.champion_name[PROG_NAME_LENGTH] = '\0';
 	stack.comment[COMMENT_LENGTH] = '\0';
+	stack.nb_lines = 0;
 	if (!get_header_file(&stack, fd))
 		return (ft_error("Bad Header in .s file", NULL));
 	if (!get_header_file(&stack, fd))

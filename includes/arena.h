@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/02 16:18:57 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/03 16:37:46 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,8 @@ typedef void 			(*t_fun_ptr)(t_arena*, t_process*);
 int						usage(int prog);
 int						ft_error(char *str, char *str2);
 void					*ft_error2(char *str, char *str2);
+void					*ft_error3(char *str, size_t line, size_t col);
+void					*ft_error4(char *str, char *str2, size_t line, size_t col);
 int						pars_num_champ(int *nb, t_arena *vm, int mode);
 int						pars_args(int ac, char **av, t_arena *vm);
 int						pars_header(t_champion *champ);

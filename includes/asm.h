@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 15:31:05 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/02 17:22:43 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/03 16:42:40 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ typedef struct			s_argz
 
 typedef struct 			s_instruct
 {
+	char				*name;
 	size_t				type; // 0x01 si "live" par exemple
 	size_t 				oct; // numero de l'octet ou est ecrit 0x01
 	size_t				nb_args; // si "sti" on sait tout de suite que c'est 3
@@ -143,6 +144,7 @@ typedef struct		s_stack
 	char			*champion_name;
 	char			*comment;
 	int				cur_octet; // permet de savoir ou on se trouve
+	size_t			nb_lines;
 	enum e_state	state;
 	t_instruct		*first_op;
 	t_instruct		*op_list;
