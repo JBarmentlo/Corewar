@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 16:14:13 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/04 14:07:02 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/04 15:14:45 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ t_argz		is_indirect(t_argz argz)
 
 t_argz		numeric_value(char *line, int *i, t_argz argz)
 {
-	argz.value = ft_atoi(line + *i);
+	argz.value = ft_atol(line + *i);
 	if (argz.type == T_REG && (argz.value > REG_NUMBER || argz.value < 1))
 		return (argz);
 	argz.lab = NULL;

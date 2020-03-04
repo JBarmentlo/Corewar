@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 15:31:05 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/04 14:06:59 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/04 15:17:27 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ typedef struct			s_argz
 {
 	int				type; // 1 pour REGISTRE, 2 pour DIRECT, 3 pour INDIRECT
 	char				*lab; // NULL sauf si appel a label (:live)
-	int					value; // si lab != NULL on ne prend pas en compte value
+	long				value; // si lab != NULL on ne prend pas en compte value
 	size_t				oct;
 }						t_argz;
 
@@ -166,8 +166,8 @@ int		ft_error(char *str, char *str2);
 int		cor_file(char *source_file, t_file *out_file, int fd);
 int		get_header_file(t_stack *stack, int fd);
 /////////////////////// asm utils   //////////////////////////
-void		nb_to_binary(t_file *out_file, int octets, int indx, int nb);
-int		count_bits(int nb);
+void		nb_to_binary(t_file *out_file, int octets, int indx, long nb);
+long		count_bits(long nb);
 void		write_in_file(t_file *out_file, int indx, int n);
 void		copy_string(char *dest, char *src, int size, int *indx);
 /////////////////////// op_code utils   //////////////////////////
