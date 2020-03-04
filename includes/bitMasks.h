@@ -39,6 +39,7 @@
 
 
 #define	ALL			(LIVE + LOAD + STORE + ADD + SUB + AND + OR + XOR + ZJUMP + LDI + STI + FORK + LLD + LLDI + LFORK + AFF)
-#define TEST_PRINT	STI
+#define TEST_PRINT	ALL
 #define	HEX_DUMP	0
+#define	VERBOSE		TEST_PRINT
 #define	MAX_TURNS	20

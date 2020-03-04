@@ -75,6 +75,7 @@ COREWAR_SOURCE_FILES=cycle.c \
 	0x14_lldi.c \
 	0x15_lfork.c \
 	0x16_aff.c \
+	debug.c \
 
 UTILS_SOURCE_FILES=endian_converter.c \
 	op.c \

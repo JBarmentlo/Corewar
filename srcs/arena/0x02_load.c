@@ -1,5 +1,5 @@
 #include "arena.h"
-
+#include "bitMasks.h"
 
 //here we assume registres start at 1
 //we write to process->registre[arg - 1]
@@ -18,7 +18,7 @@ void    x02(t_arena *arena, t_process *process)
 		reg_write_int(process, value, arena->args->val[1]);
 	}
 	process->carry = (value == 0);
-	if (VERBOSE)
+	if ((VERBOSE & LOAD) == LOAD)
 	{
 		printf("loaded %d to registre %d\n", value, arena->args->val[1]);
 	}

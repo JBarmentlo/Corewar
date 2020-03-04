@@ -1,4 +1,5 @@
 #include "arena.h"
+#include "bitMasks.h"
 
 // CHECK get_val yet untested
 void	x06(t_arena *arena, t_process *process)
@@ -9,4 +10,8 @@ void	x06(t_arena *arena, t_process *process)
 	val = arena->args->val_read[0] & arena->args->val_read[1];
 	reg_write_int(process, val, arena->args->val[2]);
 	process->carry = (val == 0);
+	if ((VERBOSE & SUB) == SUB)
+	{
+		printf("store %d to register %d\n", val, arena->args->val[2]);
+	}
 }

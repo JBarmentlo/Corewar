@@ -31,7 +31,6 @@ void	mem_write_color(t_arena *arena, uint index, uint size, int champ_nb)
 		arena->memory_color[(index + i) & MODULO_MASK] = champ_nb + '0';
 		i++;
 	}
-	print_color_state(arena);
 }
 
 int		mem_read_int(t_arena *arena, int index)
