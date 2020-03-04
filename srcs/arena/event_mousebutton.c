@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 17:59:26 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/03/02 16:25:37 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/03/02 18:24:30 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,13 @@ void			event_button_players2(t_disp *d, int i, int ph, t_arena a)
 
 	d->mod.y = (ph * i) + d->players.y + (ph - (ph / 10) - 15) + 1;
 	d->mod.h = 8 + (ph / 10);
-	d->mod.w = (d->players.w - 12) / (a.total_process_nb / a.champion_table[i].total_process);
+	d->mod.w = d->players.w - 12;
 	d->mod.x = d->players.x + 6;
+	if (SDL_SetRenderDrawColor(d->rend, 50, 50, 50, 250) < 0)
+		error("(disp.c) SDL_SetRenderDrawColor : ", d);
+	if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
+		error("(disp.c) SDL_RenderDrawRect : ", d);
+	d->mod.w = ((d->players.w - 12) * a.champion_table[i].total_process) / a.total_process_nb;
 	if (SDL_SetRenderDrawColor(d->rend, (d->color_champ[i + 1] & 0xFF000000) >> 24, (d->color_champ[i + 1] & 0xFF0000) >> 16, (d->color_champ[i + 1] & 0xFF00) >> 8, 150) < 0)
 		error("(disp.c) SDL_SetRenderDrawColor : ", d);
 	if (SDL_RenderFillRect(d->rend, &d->mod) < 0)

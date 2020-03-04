@@ -39,6 +39,10 @@
 
 
 #define	ALL			(LIVE + LOAD + STORE + ADD + SUB + AND + OR + XOR + ZJUMP + LDI + STI + FORK + LLD + LLDI + LFORK + AFF)
+<<<<<<< HEAD
 #define TEST_PRINT	0
+=======
+#define TEST_PRINT	STI
+>>>>>>> ae8130a158e8a3b88d14354e1cc748bdd98b85f1
 #define	HEX_DUMP	0
 #define	MAX_TURNS	20
