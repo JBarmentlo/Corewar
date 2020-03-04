@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 17:10:28 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/04 15:17:31 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/04 15:35:12 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ void	nb_to_binary(t_file *out_file, int octets, int indx, long nb)
 	bits = nb != 0 ? count_bits(nb) : 0;
 	zeros = nb != 0 ? ((octets * BITS_IN_OCTET) - bits) / BITS_IN_OCTET : 0;
 	n = nb;
-	ft_printf("nb = %ld\n", nb);
 	while (zeros > 0)
 	{
 		write_in_file(out_file, indx, 0);
