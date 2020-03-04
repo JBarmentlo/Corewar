@@ -6,7 +6,7 @@
 #    By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/22 19:37:40 by dberger           #+#    #+#              #
-#    Updated: 2020/02/19 15:00:00 by dberger          ###   ########.fr        #
+#    Updated: 2020/03/03 18:03:22 by dberger          ###   ########.fr        #
 #    Updated: 2020/02/11 10:00:57 by ncoursol         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -32,7 +32,7 @@ LIB = $(PRINTF_DIR)/libftprintf.a $(LIB_DIR)/libft.a
 
 CC=gcc
 
-CFLAGS=-Wall -Wextra -Werror
+CFLAGS= -Wall -Wextra -Werror
 INCLUDE_PATH=-I $(INCLUDE_FOLDER) -I $(SDL_INCLUDE_FOLDER)
 
 COMPILER=$(CC) $(CFLAGS) $(INCLUDE_PATH)
@@ -104,7 +104,7 @@ OUT_ASM=$(addprefix $(OBJ_FOLDER)/,$(notdir $(SRCS_ASM:.c=.o)))
 OUT_COREWAR=$(addprefix $(OBJ_FOLDER)/,$(notdir $(SRCS_COREWAR:.c=.o)))
 
 
-all: $(OBJ_FOLDER) libCorewar.a asm corewar
+all: $(OBJ_FOLDER) $(LIB) libCorewar.a asm corewar
 
 $(LIB):
 	$(MAKE) -C $(LIB_DIR)
