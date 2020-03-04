@@ -1,4 +1,5 @@
 #include "arena.h"
+#include "bitMasks.h"
 
 
 void    x03(t_arena *arena, t_process *process)
@@ -18,7 +19,7 @@ void    x03(t_arena *arena, t_process *process)
     {
         mem_write_int(arena, process->PC + (arena->args->val[1] % IDX_MOD), val);
 		mem_write_color(arena, process->PC + (arena->args->val[1] % IDX_MOD), 4 , process->owner->number);
-		if (VERBOSE)
+		if ((VERBOSE & STORE) == STORE)
 		{
 			printf("store %d to mem[%d]\n", val, process->PC + (arena->args->val[1] % IDX_MOD));
 		}

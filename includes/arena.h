@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/04 10:13:50 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/03/04 11:01:53 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,6 @@ typedef struct 			s_arena
 	t_args				*args;
 	int					verbose;
 }						t_arena;
-
-#define	VERBOSE			0
 
 typedef void 			(*t_fun_ptr)(t_arena*, t_process*);
 

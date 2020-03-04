@@ -5,9 +5,17 @@ void	x09(t_arena *arena, t_process *process)
 {
 	if (process->carry)
 		process->PC = (process->PC + (arena->args->val[0] % IDX_MOD)) & MODULO_MASK;
-	else if (VERBOSE)
+	if ((VERBOSE & ZJUMP) == ZJUMP)
 	{
-		printf("carry is null\n");
+		if (process->carry == 0)
+		{
+			printf("no jump, carry is null\n");
+		}
+		else
+		{
+			printf("jumped %d spaces to %d\n", (arena->args->val[0] % IDX_MOD), (process->PC + (arena->args->val[0] % IDX_MOD)) & MODULO_MASK);
+		}
+		
 	}
 	
 }

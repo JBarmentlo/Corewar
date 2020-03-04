@@ -1,5 +1,5 @@
 #include "arena.h"
-
+#include "bitMasks.h"
 
 // NEED TO ADD DEAD CHAMPS TO FILL TAB
 void    x01(t_arena *arena, t_process *process)
@@ -16,7 +16,7 @@ void    x01(t_arena *arena, t_process *process)
 		arena->champion_table[arg - 1].lives_since_last_check += 1;
    		arena->last_live_champ_number = arg;
 	}
-	if (VERBOSE)
+	if ((VERBOSE & LIVE) == LIVE)
 	{
 		printf("live %d\n", arg);
 		printf("last_live_nb : %d\n", arena->last_live_champ_number);
