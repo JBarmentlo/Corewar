@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 17:59:26 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/03/02 18:24:30 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/03/03 12:52:19 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,17 @@ void			event_button_players2(t_disp *d, int i, int ph, t_arena a)
 	p[2] = '\0';
 	d->mod.x = d->players.x + 5;
 	d->mod.y = (ph * i) + d->players.y + 5;
-	d->mod.h = 70;
-	d->mod.w = 60;
 	disp_ttf(p, d->color, d);
-	if (!((d->font1 = TTF_OpenFont("img/font2.ttf", 35))))
+	TTF_CloseFont(d->font1);
+	if (!((d->font1 = TTF_OpenFont("img/font2.ttf", ph / 5.5))))
 		error("(menu.c) TTF_OpenFont : ", d);
-	d->mod.x = d->players.x + 85;
+	d->mod.x = d->players.x + 120;
 	d->mod.y = (ph * i) + d->players.y + (ph / 10);
-	d->mod.h = ph / 5;
-	d->mod.w = 200;
-	disp_ttf("name   :", d->color, d);
+	disp_ttf("name", d->color, d);
 	d->mod.y = (ph * i) + d->players.y + (ph / 10) * 3;
-	disp_ttf("area   :", d->color, d);
+	disp_ttf("area", d->color, d);
 	d->mod.y = (ph * i) + d->players.y + (ph / 10) * 5;
-	disp_ttf("lives  :", d->color, d);
+	disp_ttf("lives", d->color, d);
 
 	d->mod.y = (ph * i) + d->players.y + (ph - (ph / 10) - 15) + 1;
 	d->mod.h = 8 + (ph / 10);

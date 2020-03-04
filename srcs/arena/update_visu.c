@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/23 12:34:21 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/03/02 18:20:20 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/03/04 13:31:12 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void		update_visu(t_disp *d, t_arena a)
 	char		hex[3];
 	char		*info;
 	int			ph;
+	t_process	*first;
 
 	ph = (((d->players.y + d->players.h) - d->players.y) / a.nb_champs);
 	i = 0;
@@ -70,7 +71,7 @@ void		update_visu(t_disp *d, t_arena a)
 		error("(menu.c) SDL_SetRenderTarget : ", d);
 	if (SDL_RenderCopy(d->rend, d->b_tmp, NULL, &d->arena) < 0)
 		error("(menu.c) SDL_RenderCopy : ", d);
-	if (!((d->font1 = TTF_OpenFont("img/font2.ttf", 22))))
+	if (!((d->font1 = TTF_OpenFont("img/font2.ttf", 19))))
 		error("(menu.c) TTF_OpenFont : ", d);
 	hex[2] = '\0';
 	///////////////////ARENA/////////////////////////
@@ -100,123 +101,106 @@ void		update_visu(t_disp *d, t_arena a)
 	d->mod.w = 26;
 	if (SDL_SetRenderDrawBlendMode(d->rend, SDL_BLENDMODE_BLEND) < 0)
 		error("(menu.c) SDL_SetRenderDrawBlendMode error : ", d);
-	i = 0;
-	while (a.process_table[i] != NULL)
+	first = a.process_list;
+	while (a.process_list != NULL)
 	{
-		if (SDL_SetRenderDrawColor(d->rend, (d->color_champ[a.process_table[i]->owner->number] & 0xFF000000) >> 24, (d->color_champ[a.process_table[i]->owner->number] & 0xFF0000) >> 16, (d->color_champ[a.process_table[i]->owner->number] & 0xFF00) >> 8, 110) < 0)
+		if (SDL_SetRenderDrawColor(d->rend, (d->color_champ[a.process_list->owner->number] & 0xFF000000) >> 24, (d->color_champ[a.process_list->owner->number] & 0xFF0000) >> 16, (d->color_champ[a.process_list->owner->number] & 0xFF00) >> 8, 110) < 0)
 			error("(disp.c) SDL_SetRenderDrawColor : ", d);
-		d->mod.x = d->arena.x + 10 + 29.7 * (a.process_table[i]->PC % 64);
-		d->mod.y = d->arena.y + 14 + 21.4 * (a.process_table[i]->PC / 64);
+		d->mod.x = d->arena.x + 10 + 29.7 * (a.process_list->PC % 64);
+		d->mod.y = d->arena.y + 14 + 21.4 * (a.process_list->PC / 64);
 		if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
 			error("(disp.c) SDL_RenderFillRect : ", d);
-		i++;
+		a.process_list = a.process_list->next_list;
 	}
+	a.process_list = first;
 	if (SDL_SetRenderDrawBlendMode(d->rend, SDL_BLENDMODE_NONE) < 0)
 		error("(menu.c) SDL_SetRenderDrawBlendMode error : ", d);
 	//////////////////INFO GLOBAL///////////////////////
-	d->mod.h = 30;
+	TTF_CloseFont(d->font1);
+	if (!((d->font1 = TTF_OpenFont("img/font2.ttf", 30))))
+		error("(menu.c) TTF_OpenFont : ", d);
 	i = 0;
 	d->color.r = 255;
 	d->color.g = 255;
 	d->color.b = 255;
+	d->mod.h = 30;
 	while (i < 5)
 	{
-		d->mod.w = 300;
 		d->mod.y = d->process.y + 15 + (60 * i);
 		d->mod.x = d->process.x + 55 + (13 * 15);
+		d->mod.w = 300;
 		if (SDL_RenderCopy(d->rend, d->p_tmp, NULL, &d->mod) < 0)
 			error("(menu.c) SDL_RenderCopy : ", d);
 		d->mod.x += 5;
 		if (i == 0)
-		{
-			d->mod.w = ft_nbrlen(a.cycle_to_die) * 20;
 			info = ft_itoa2(a.cycle_to_die);
-			disp_ttf(info, d->color, d);
-			free(info);
-		}
 		else if (i == 1)
-		{
-			d->mod.w = ft_nbrlen(CYCLE_DELTA) * 20;
 			info = ft_itoa2(CYCLE_DELTA);
-			disp_ttf(info, d->color, d);
-			free(info);
-		}
 		else if (i == 2)
-		{
-			d->mod.w = ft_nbrlen(a.total_live_since_check) * 20;
 			info = ft_itoa2(a.total_live_since_check);
-			disp_ttf(info, d->color, d);
-			free(info);
-		}
 		else if (i == 3)
-		{
-			d->mod.w = ft_nbrlen(a.total_process_nb) * 20;
 			info = ft_itoa2(a.total_process_nb);
-			disp_ttf(info, d->color, d);
-			free(info);
-		}
 		else if (i == 4)
 		{
-			d->mod.w = ft_nbrlen(a.cycle % a.cycle_to_die) * 20;
 			info = ft_itoa2(a.cycle % a.cycle_to_die);
 			disp_ttf(info, d->color, d);
 			free(info);
-			d->mod.x += d->mod.w;
-			d->mod.w = 40;
+			d->mod.x += ft_strlen(ft_itoa2(a.cycle % a.cycle_to_die)) * 18;
 			disp_ttf(" (", d->color, d);
-			d->mod.x += 40;
-			d->mod.w = ft_nbrlen(d->delay * 10) * 20;
+			d->mod.x += 15;
 			info = ft_itoa2(d->delay * 10);
 			disp_ttf(info, d->color, d);
 			free(info);
-			d->mod.x += d->mod.w;
-			d->mod.w = 100;
+			d->mod.x += ft_strlen(ft_itoa2(d->delay * 10)) * 20;
 			disp_ttf(".cps)", d->color, d);
+		}
+		if (i < 4)
+		{
+			disp_ttf(info, d->color, d);
+			free(info);
 		}
 		i++;
 	}
 	////////////////////INFO PLAYERS//////////////////////
 	i = 0;
+	TTF_CloseFont(d->font1);
+	if (!((d->font1 = TTF_OpenFont("img/font2.ttf", ph / 7.2))))
+		error("(menu.c) TTF_OpenFont : ", d);
 	while (i < a.nb_champs)
 	{
 		if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 250) < 0)
 			error("(disp.c) SDL_SetRenderDrawColor : ", d);
-		d->mod.x = d->players.x + (d->players.w / 2) + 14;
 		d->mod.h = 8 + (ph / 10);
+		d->mod.x = d->players.x + (d->players.w / 2) + 15;
 		d->mod.y = (ph * i) + d->players.y + (ph / 9) * 3 + 1;
-		d->mod.w = (d->players.w / 2) - 17;
+		d->mod.w = (d->players.w / 2) - 18;
 		if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
 			error("(disp.c) SDL_RenderDrawRect : ", d);
+		d->mod.y = (ph * i) + d->players.y + (ph / 9.5) * 3;
 		info = ft_itoa(a.champion_table[i].total_memory_owned);
-		d->mod.w = ft_nbrlen(a.champion_table[i].total_memory_owned) * 15;
 		disp_ttf(info, d->color, d);
 		free(info);
-		d->mod.x += d->mod.w;
-		d->mod.w = 30;
-		disp_ttf(" (", d->color, d);
+		d->mod.x += ft_strlen(ft_itoa(a.champion_table[i].total_memory_owned)) * (ph / 8);
+		disp_ttf("(", d->color, d);
 		info = ft_itoa(100 * a.champion_table[i].total_memory_owned / 4096);
-		d->mod.x += 30;
-		d->mod.w = ft_nbrlen(100 * a.champion_table[i].total_memory_owned / 4096) * 15;
+		d->mod.x += ph / 8;
 		disp_ttf(info, d->color, d);
 		free(info);
-		d->mod.x += d->mod.w;
-		d->mod.w = 45;
+		d->mod.x += ft_strlen(ft_itoa(100 * a.champion_table[i].total_memory_owned / 4096)) * 15;
 		disp_ttf(" %)", d->color, d);
-
-		d->mod.x = d->players.x + (d->players.w / 2) + 14;
+		d->mod.h = 8 + (ph / 10);
+		d->mod.x = d->players.x + (d->players.w / 2) + 15;
 		d->mod.y = (ph * i) + 1 + d->players.y + (ph / 9) * 5;
-		d->mod.w = (d->players.w / 2) - 17;
+		d->mod.w = (d->players.w / 2) - 18;
 		if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
 			error("(disp.c) SDL_RenderDrawRect : ", d);
 		info = ft_itoa(a.champion_table[i].lives_since_last_check);
-		d->mod.w = ft_nbrlen(a.champion_table[i].lives_since_last_check) * 15;
 		disp_ttf(info, d->color, d);
 		free(info);
-
 		d->mod.y = (ph * i) + d->players.y + (ph - (ph / 10) - 15) + 1;
-		d->mod.h = 8 + (ph / 10);
 		d->mod.x = d->players.x + 6;
 		d->mod.w = d->players.w - 12;
+		d->mod.h = 8 + (ph / 10);
 		if (SDL_SetRenderDrawColor(d->rend, 50, 50, 50, 250) < 0)
 			error("(disp.c) SDL_SetRenderDrawColor : ", d);
 		if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
@@ -230,6 +214,9 @@ void		update_visu(t_disp *d, t_arena a)
 		i++;
 	}
 	/////////////////FCT LIST////////////////////////
+	TTF_CloseFont(d->font1);
+	if (!((d->font1 = TTF_OpenFont("img/font2.ttf", 18))))
+		error("(menu.c) TTF_OpenFont : ", d);
 	d->mod.x = 1980;
 	d->mod.y = 880 + 20 - (880 / 3);
 	d->mod.w = 540;
@@ -238,35 +225,32 @@ void		update_visu(t_disp *d, t_arena a)
 		error("(menu.c) SDL_RenderCopy : ", d);
 	d->mod.y = 880 + 27 - (880 / 3);
 	i = 0;
-	while (a.process_table[i])
+	while (a.process_list && i < 17)
 	{
-		if (a.process_table[i]->current_op)
+		if (a.process_list->current_op)
 		{
-			d->color.r = (d->color_champ[a.process_table[i]->owner->number] & 0xFF000000) >> 24;
-			d->color.g = (d->color_champ[a.process_table[i]->owner->number] & 0xFF0000) >> 16;
-			d->color.b = (d->color_champ[a.process_table[i]->owner->number] & 0xFF00) >> 8;
-			d->mod.h = 20;
+			d->color.r = (d->color_champ[a.process_list->owner->number] & 0xFF000000) >> 24;
+			d->color.g = (d->color_champ[a.process_list->owner->number] & 0xFF0000) >> 16;
+			d->color.b = (d->color_champ[a.process_list->owner->number] & 0xFF00) >> 8;
 			d->mod.x = 1995;
-			if (ft_strlen(a.process_table[i]->owner->header.prog_name) > 16)
+			if (ft_strlen(a.process_list->owner->header.prog_name) > 18)
 			{
-				a.process_table[i]->owner->header.prog_name[13] = '.';
-				a.process_table[i]->owner->header.prog_name[14] = '.';
-				a.process_table[i]->owner->header.prog_name[15] = '.';
-				a.process_table[i]->owner->header.prog_name[16] = '\0';
+				a.process_list->owner->header.prog_name[15] = '.';
+				a.process_list->owner->header.prog_name[16] = '.';
+				a.process_list->owner->header.prog_name[17] = '.';
+				a.process_list->owner->header.prog_name[18] = '\0';
 			}
-			d->mod.w = ft_strlen(a.process_table[i]->owner->header.prog_name) * 15;
-			disp_ttf(a.process_table[i]->owner->header.prog_name, d->color, d);
+			disp_ttf(a.process_list->owner->header.prog_name, d->color, d);
 			d->mod.x += 15 + d->mod.w;
-			d->mod.w = ft_strlen(a.process_table[i]->current_op->name) * 15;
-			disp_ttf(a.process_table[i]->current_op->name, d->color, d);
+			disp_ttf(a.process_list->current_op->name, d->color, d);
 			d->mod.x += 15 + d->mod.w;	
-			d->mod.w = ft_nbrlen(a.process_table[i]->current_op->cycle_to_wait) * 15;
-			info = ft_itoa2(a.process_table[i]->current_op->cycle_to_wait);
+			info = ft_itoa2(a.process_list->current_op->cycle_to_wait);
 			disp_ttf(info, d->color, d);
 			free(info);
-			d->mod.y += 20;	
+			d->mod.y += 15;
+			i++;
 		}
-		i++;
+		a.process_list = a.process_list->next_list;
 	}
 	///////////////////////////////////////////////
 	TTF_CloseFont(d->font1);

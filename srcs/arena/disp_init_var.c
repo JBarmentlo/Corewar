@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 15:25:33 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/03/02 15:37:16 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/03/02 20:01:32 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void        disp_ttf(char *ttf, SDL_Color color, t_disp *d)
     d->txt = TTF_RenderText_Solid(d->font1, ttf, color);
     d->font = SDL_CreateTextureFromSurface(d->rend, d->txt);
 	SDL_FreeSurface(d->txt);
+	SDL_QueryTexture(d->font, NULL, NULL, &d->mod.w, &d->mod.h);
     if (SDL_RenderCopy(d->rend, d->font, NULL, &d->mod) < 0)
         error("(menuc) SDL_RenderCopy : ", d);
 	SDL_DestroyTexture(d->font);
