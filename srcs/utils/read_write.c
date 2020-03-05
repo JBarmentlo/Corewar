@@ -23,7 +23,7 @@ void	mem_write_color(t_arena *arena, uint index, uint size, int champ_nb)
 	{
 		current_owner = arena->memory_color[(index + i) & MODULO_MASK];
 		current_owner -= '0';
-		if (current_owner >= 0 && current_owner < MAX_PLAYERS && arena->champion_table[current_owner].exists)
+		if (current_owner > 0 && current_owner < MAX_PLAYERS && arena->champion_table[current_owner].exists)
 		{
 			arena->champion_table[current_owner - 1].total_memory_owned -= 1;
 		}
