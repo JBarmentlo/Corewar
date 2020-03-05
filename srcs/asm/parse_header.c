@@ -6,8 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 15:29:26 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/03/05 15:08:04 by dberger          ###   ########.fr       */
-/*   Updated: 2020/03/05 15:27:28 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/03/05 16:13:27 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,22 +60,7 @@ char	*get_header_file3(int fd, char **line, int *i, int *type)
 		*type += 1;
 		*i = 0;
 	}
-	while (line[0][*i] != '\0' && line[0][*i] != '"')
-	{
-		tmp[j] = line[0][*i];
-		*i += 1;
-		j++;
-		if (line[0][*i] == '\0')
-		{
-			ft_memdel((void**)line);
-			if (get_next_line(fd, line) <= 0 || !*line)
-				return (NULL);
-			*type += 1;
-			*i = 0;
-		}
-	}
-	tmp[j] = '\0';
-	if (get_header_file4(line, i) == FALSE)
+	if (get_header_file4(line, i, &tmp, fd) == FALSE)
 		return (NULL);
 	return (tmp);
 }
