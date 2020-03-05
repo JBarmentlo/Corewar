@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2020/01/30 14:24:49 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/03/02 16:07:21 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ typedef struct	s_op
 {
 	char*	name;
 	int		arg_nb;
-	int		arg_types;
+	int		arg_types[MAX_ARGS];
 	int		opcode;
 	int		cycle_to_wait;
 	char*	full_name;

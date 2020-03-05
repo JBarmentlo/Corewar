@@ -1,4 +1,3 @@
-
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
@@ -7,7 +6,7 @@
 #    By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/22 19:37:40 by dberger           #+#    #+#              #
-#    Updated: 2020/02/19 15:00:00 by dberger          ###   ########.fr        #
+#    Updated: 2020/03/04 15:30:03 by dberger          ###   ########.fr        #
 #    Updated: 2020/02/11 10:00:57 by ncoursol         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -33,8 +32,8 @@ LIB = $(PRINTF_DIR)/libftprintf.a $(LIB_DIR)/libft.a
 
 CC=gcc
 
-CFLAGS=-Wall -Wextra -Werror
-INCLUDE_PATH=-I $(INCLUDE_FOLDER) -I $(SDL_INCLUDE_FOLDER) -I $(LIB_DIR)
+CFLAGS= -Wall -Wextra -Werror
+INCLUDE_PATH=-I $(INCLUDE_FOLDER) -I $(SDL_INCLUDE_FOLDER)
 
 COMPILER=$(CC) $(CFLAGS) $(INCLUDE_PATH)
 LIBS=libCorewar.a ./includes/libft/libft.a
@@ -75,7 +74,6 @@ COREWAR_SOURCE_FILES=cycle.c \
 	0x14_lldi.c \
 	0x15_lfork.c \
 	0x16_aff.c \
-	debug.c \
 
 UTILS_SOURCE_FILES=endian_converter.c \
 	op.c \
@@ -91,6 +89,7 @@ ASM_SOURCE_FILES=main_asm.c \
 	print_tester.c \
 	parse_header.c
 
+
 INCLUDES_FILES=arena.h \
 	op.h \
 	bitMasks.h \
@@ -105,7 +104,7 @@ OUT_ASM=$(addprefix $(OBJ_FOLDER)/,$(notdir $(SRCS_ASM:.c=.o)))
 OUT_COREWAR=$(addprefix $(OBJ_FOLDER)/,$(notdir $(SRCS_COREWAR:.c=.o)))
 
 
-all: $(OBJ_FOLDER) libCorewar.a $(LIB) asm corewar
+all: $(OBJ_FOLDER) $(LIB) libCorewar.a asm corewar
 
 $(LIB):
 	$(MAKE) -C $(LIB_DIR)
@@ -137,9 +136,13 @@ $(OBJ_FOLDER)/%.o: $(SRCS_COREWAR_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 clean:
 	rm -rf $(OBJ_FOLDER)
 	rm -f libCorewar.a
+	rm -f $(LIB_DIR)/*.o
+	rm -f $(PRINTF_DIR)/*.o
 	echo "$(BLUE)	--- Binary deleted ! ---	$(NO_COLOR)"
 
 fclean: clean
+	rm -f $(LIB_DIR)/*.a
+	rm -f $(PRINTF_DIR)/*.a
 	rm -f corewar
 	rm -f asm
 	echo "$(PINK)	--- Programm deleted ! ---	$(NO_COLOR)"

@@ -12,7 +12,7 @@
 
 #include "asm.h"
 
-int			get_header_file4(char **line, int *i, char **tmp, int fd)
+int		get_header_file4(char **line, int *i)
 {
 	int		j;
 
@@ -38,53 +38,53 @@ int			get_header_file4(char **line, int *i, char **tmp, int fd)
 			return (ft_error("Wrong header .command format : ", *line));
 		*i += 1;
 	}
+	ft_memdel((void**)line);
 	return (1);
 }
 
-char		*get_header_file3(int fd, char **line, int *i, int type)
+char	*get_header_file3(int fd, char **line, int *i, int *type)
 {
 	char	*tmp;
+	int		j;
 
-	if (!(tmp = (char *)malloc(sizeof(char) * (type == 0 ? 128 : 2048))))
-		return (NULL);
+	j = 0;
+	tmp = (*type == 0 ? ft_memalloc(sizeof(char) * PROG_NAME_LENGTH) : ft_memalloc(sizeof(char) * COMMENT_LENGTH));
+	*type = 0;
 	if (line[0][*i] == '\0')
 	{
 		ft_memdel((void**)line);
 		if (get_next_line(fd, line) <= 0 || !*line)
-		{
-			ft_memdel((void**)&tmp);
 			return (NULL);
-		}
+		*type += 1;
 		*i = 0;
 	}
-	if (!(get_header_file4(line, i, &tmp, fd)))
+	while (line[0][*i] != '\0' && line[0][*i] != '"')
 	{
-		ft_memdel((void**)&tmp);
-		return (NULL);
+		tmp[j] = line[0][*i];
+		*i += 1;
+		j++;
+		if (line[0][*i] == '\0')
+		{
+			ft_memdel((void**)line);
+			if (get_next_line(fd, line) <= 0 || !*line)
+				return (NULL);
+			*type += 1;
+			*i = 0;
+		}
 	}
-	ft_memdel((void**)line);
+	tmp[j] = '\0';
+	get_header_file4(line, i);
 	return (tmp);
 }
 
-int			get_header_file5(char **line, int *i, int *type)
+size_t     get_header_file2(int fd, char **line, int *i, int *type)
 {
-	*i += (*type == 'n' ? 5 : 8);
-	while (line[0][*i] != '\0' && line[0][*i] != '"')
-	{
-		if (line[0][*i] != ' ' && line[0][*i] != '\t')
-			return (ft_error("Wrong header .command format : ", *line));
-		*i += 1;
-	}
-	if (line[0][*i] != '"')
-		return (ft_error("Wrong header .command format : ", *line));
-	*i += 1;
-	return (1);
-}
+	size_t		lines;
 
-int			get_header_file2(int fd, char **line, int *i, int *type)
-{
+	lines = 0;
 	while (get_next_line(fd, line) && *line)
 	{
+		lines += 1;
 		*i = 0;
 		while (line[0][*i] != '\0' && line[0][*i] != '#' && line[0][*i] != '.')
 		{
@@ -105,21 +105,34 @@ int			get_header_file2(int fd, char **line, int *i, int *type)
 	else if (*type == 'c')
 		if (ft_strncmp(*line + *i, ".comment", 8) < 0)
 			return (ft_error("Wrong header .command format : ", *line));
-	if (!get_header_file5(line, i, type))
+	*i += (*type == 'n' ? 5 : 8);
+	while (line[0][*i] != '\0' && line[0][*i] != '"')
+	{
+		if (line[0][*i] != ' ' && line[0][*i] != '\t')
+			return (ft_error("Wrong header .command format : ", *line));
+		*i += 1;
+	}
+	if (line[0][*i] != '"')
 		return (ft_error("Wrong header .command format : ", *line));
-	return (1);
+	*i += 1;
+	return (lines);
 }
 
-int			get_header_file(t_stack *stack, int fd)
+int     get_header_file(t_stack *stack, int fd)
 {
-	char	*line;
-	int		i;
-	int		type;
+	char    *line;
+	int     i;
+	int     type;
 	char	*tmp;
+	int		save;
 
 	line = NULL;
-	if (!get_header_file2(fd, &line, &i, &type)
-	|| (tmp = get_header_file3(fd, &line, &i, type)) == NULL)
+	stack->nb_lines += get_header_file2(fd, &line, &i, &type);
+	save = type;
+	tmp = get_header_file3(fd, &line, &i, &type);
+	stack->nb_lines += type;
+	type = save;
+	if (stack->nb_lines == FALSE || tmp == NULL)
 	{
 		ft_memdel((void**)&line);
 		return (0);
