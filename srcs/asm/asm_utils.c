@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 17:10:28 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/14 18:59:39 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/05 12:31:21 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ void	copy_string(char *dest, char *src, int size, int *indx)
 	}
 }
 
-int		count_bits(int nb)
+long		count_bits(long nb)
 {
-	int	bits;
+	long	bits;
 
 	bits = 0;
 	if (nb < 0)
@@ -58,13 +58,14 @@ int		count_bits(int nb)
 	return (bits);
 }
 
-void	nb_to_binary(t_file *out_file, int octets, int indx, int nb)
+void	nb_to_binary(t_file *out_file, int octets, int indx, long nb)
 {
-	int n;
-	int	bits;
-	int	zeros;
+	long	n;
+	long	bits;
+	long	zeros;
 
 	bits = nb != 0 ? count_bits(nb) : 0;
+//	ft_printf("nb = [%ld], bits = [%d]\n", nb, bits);
 	zeros = nb != 0 ? ((octets * BITS_IN_OCTET) - bits) / BITS_IN_OCTET : 0;
 	n = nb;
 	while (zeros > 0)
