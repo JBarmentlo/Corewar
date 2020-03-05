@@ -6,13 +6,13 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 15:29:26 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/03/04 16:34:32 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/03/05 15:27:28 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-int		get_header_file4(char **line, int *i)
+int		get_header_file4(char **line, int *i, char **tmp, int fd)
 {
 	int		j;
 
@@ -20,10 +20,12 @@ int		get_header_file4(char **line, int *i)
 	while (line[0][*i] != '\0' && line[0][*i] != '"')
 	{
 		tmp[0][j] = line[0][*i];
-//		*i += 1;
+		*i += 1;
 		j++;
 		if (line[0][*i] == '\0')
 		{
+			tmp[0][j] = '\n';
+			j++;
 			ft_memdel((void**)line);
 			if (get_next_line(fd, line) <= 0 || !*line)
 				return (0);
@@ -58,22 +60,7 @@ char	*get_header_file3(int fd, char **line, int *i, int *type)
 		*type += 1;
 		*i = 0;
 	}
-	while (line[0][*i] != '\0' && line[0][*i] != '"')
-	{
-		tmp[j] = line[0][*i];
-		*i += 1;
-		j++;
-		if (line[0][*i] == '\0')
-		{
-			ft_memdel((void**)line);
-			if (get_next_line(fd, line) <= 0 || !*line)
-				return (NULL);
-			*type += 1;
-			*i = 0;
-		}
-	}
-	tmp[j] = '\0';
-	get_header_file4(line, i);
+	get_header_file4(line, i, &tmp, fd);
 	return (tmp);
 }
 
