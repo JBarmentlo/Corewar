@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 16:14:13 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/04 15:14:45 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/05 13:02:17 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,40 @@ t_argz		is_indirect(t_argz argz)
 	return (argz);
 }
 
+int		ft_atolong(const char *str, t_argz *argz)
+{
+	long	neg;
+	long	nb;
+	long	bits;
+
+	neg = 1;
+	nb = 0;
+	bits = 0;
+	while (*str == ' ' || *str == '\f' || *str == '\t'
+			|| *str == '\n' || *str == '\r' || *str == '\v')
+		str++;
+	if (*str == '-')
+		neg = -1;
+	if (*str == '-' || *str == '+')
+		str++;
+	while (ft_isdigit((long)*str))
+	{
+		nb = 10 * nb + *str - 48;
+		bits = count_bits(nb);
+		if (bits >= 63)
+		{
+			argz->value = 4294967295;
+			return (TRUE);
+		}
+		str++;
+	}
+	argz->value = nb * neg;
+	return (TRUE);
+}
+
 t_argz		numeric_value(char *line, int *i, t_argz argz)
 {
-	argz.value = ft_atol(line + *i);
+	ft_atolong(line + *i, &argz);
 	if (argz.type == T_REG && (argz.value > REG_NUMBER || argz.value < 1))
 		return (argz);
 	argz.lab = NULL;
