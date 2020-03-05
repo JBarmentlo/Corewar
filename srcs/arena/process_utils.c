@@ -57,6 +57,7 @@ void	add_process_to_table(t_process *process, t_arena *arena, uint table_index)
 
 void	add_process_to_list(t_process *process, t_arena *arena)
 {
+
 	process->next_list = arena->process_list;
 	arena->process_list = process;
 }

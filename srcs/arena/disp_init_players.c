@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 16:07:12 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/02/12 16:14:51 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/03/03 16:46:46 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ void			disp_init_players3(t_disp *d, int i, int ph, char *nb_p)
 {
 	d->mod.x = d->players.x + 5;
 	d->mod.y = (ph * (i - 1)) + d->players.y + 5;
-	d->mod.h = 70;
-	d->mod.w = 60;
 	disp_ttf(nb_p, d->color, d);
 	d->mod.y = (ph * (i - 1)) + d->players.y + (ph - (ph / 10) - 15);
 	d->mod.h = 10 + (ph / 10);
@@ -61,21 +59,19 @@ void			disp_init_players3(t_disp *d, int i, int ph, char *nb_p)
 		error("(disp.c) SDL_RenderDrawRect : ", d);
 	if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 250) < 0)
 		error("(disp.c) SDL_SetRenderDrawColor : ", d);
-	if (!((d->font1 = TTF_OpenFont("img/font2.ttf", 35))))
+	if (!((d->font1 = TTF_OpenFont("img/font2.ttf", ph / 5.5))))
 		error("(menu.c) TTF_OpenFont : ", d);
-	d->mod.x = d->players.x + 85;
+	d->mod.x = d->players.x + 120;
 	d->mod.y = (ph * (i - 1)) + d->players.y + (ph / 10);
-	d->mod.h = ph / 5;
-	d->mod.w = 200;
-	disp_ttf("name   :", d->color, d);
+	disp_ttf("name", d->color, d);
 	d->mod.y = (ph * (i - 1)) + d->players.y + (ph / 10) * 3;
 }
 
 void			disp_init_players4(t_disp *d, int i, int ph)
 {
-	disp_ttf("area   :", d->color, d);
+	disp_ttf("area", d->color, d);
 	d->mod.y = (ph * (i - 1)) + d->players.y + (ph / 10) * 5;
-	disp_ttf("lives  :", d->color, d);
+	disp_ttf("lives", d->color, d);
 	d->mod.x = d->players.x + (d->players.w / 2) + 10;
 	d->mod.y = (ph * (i - 1)) + d->players.y + (ph / 9);
 	d->mod.h = 10 + (ph / 10);
@@ -110,9 +106,29 @@ void			disp_init_players5(t_disp *d, t_arena a, int i, int ph)
 		error("(disp.c) SDL_RenderDrawRect : ", d);
 	if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 250) < 0)
 		error("(disp.c) SDL_SetRenderDrawColor : ", d);
+	d->mod.y = (ph * (i - 1)) + d->players.y + (ph / 13);
+	if (ft_strlen(a.champion_table[i - 1].header.prog_name) > 21)
+	{
+		a.champion_table[i - 1].header.prog_name[18] = '.';
+		a.champion_table[i - 1].header.prog_name[19] = '.';
+		a.champion_table[i - 1].header.prog_name[20] = '.';
+		a.champion_table[i - 1].header.prog_name[21] = '\0';
+	}
+	if (a.nb_champs == 2)
+	{
+		d->mod.y += 5;
+		TTF_CloseFont(d->font1);
+		if (!((d->font1 = TTF_OpenFont("img/font2.ttf", ph / 8.7))))
+			error("(menu.c) TTF_OpenFont : ", d);
+	}
+	else if (a.nb_champs == 3)
+	{
+		d->mod.y += 2;
+		TTF_CloseFont(d->font1);
+		if (!((d->font1 = TTF_OpenFont("img/font2.ttf", ph / 5.7))))
+			error("(menu.c) TTF_OpenFont : ", d);
+	}
 	d->mod.x += 5;
-	d->mod.w = ft_strlen(a.champion_table[i - 1].header.prog_name) * 15;
-	d->mod.y = (ph * (i - 1)) + d->players.y + (ph / 9);
 	d->color.r = 255;
 	d->color.g = 255;
 	d->color.b = 255;

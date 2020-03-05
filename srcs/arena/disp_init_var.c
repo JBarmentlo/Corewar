@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 15:25:33 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/02/13 12:43:35 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/03/02 20:01:32 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,11 @@ void        disp_ttf(char *ttf, SDL_Color color, t_disp *d)
 {
     d->txt = TTF_RenderText_Solid(d->font1, ttf, color);
     d->font = SDL_CreateTextureFromSurface(d->rend, d->txt);
+	SDL_FreeSurface(d->txt);
+	SDL_QueryTexture(d->font, NULL, NULL, &d->mod.w, &d->mod.h);
     if (SDL_RenderCopy(d->rend, d->font, NULL, &d->mod) < 0)
         error("(menuc) SDL_RenderCopy : ", d);
 	SDL_DestroyTexture(d->font);
-	SDL_FreeSurface(d->txt);
 }
 
 /*
@@ -87,12 +88,12 @@ void		disp_init_var2(t_disp *d)
 			SDL_TEXTUREACCESS_TARGET, 300, 30);
 	d->f_tmp = SDL_CreateTexture(d->rend, SDL_PIXELFORMAT_RGBA8888,
 			SDL_TEXTUREACCESS_TARGET, 540, (d->process.h / 3) - 20);
-	d->s_arena = SDL_CreateRGBSurface(0, d->screen.w, d->screen.h, 32, 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff);
-	d->color_champ[0] = 0xFFFFFF00;
+	d->color_champ[0] = 0x8A8A8A00;
 	d->pause = 0;
     d->step = 0;
 	d->color.a = 0;
-    d->delay = 1;
+    d->delay = 10;
+	d->d_cycle = 100;
 }
 
 void		disp_init_var(t_disp *d)

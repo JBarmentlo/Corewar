@@ -8,3 +8,7 @@ carry starts at 0  or 1 ?
 champions can "resurrect"
 
 option -n nous nique car on utilise champ number comme indice ds le tableau
+
+memory_numbers + '0' or not (in fill_arena)
+
+wrong color first last octet

@@ -7,6 +7,11 @@ int		positive_modulo_memsize(int a)
 	return (a & (MEM_SIZE - 1));
 }
 
+void	print_color_state(t_arena *vm)
+{
+	printf("total mem: %d\n", vm->champion_table[0].total_memory_owned);
+}
+
 // CHAMP NUMBER TO champion_table INDEX RELATIONSHIP unknown
 void	mem_write_color(t_arena *arena, uint index, uint size, int champ_nb)
 {
@@ -17,9 +22,13 @@ void	mem_write_color(t_arena *arena, uint index, uint size, int champ_nb)
 	while (i < size)
 	{
 		current_owner = arena->memory_color[(index + i) & MODULO_MASK];
-		arena->champion_table[current_owner - 1].total_memory_owned -= 1;
+		current_owner -= '0';
+		if (current_owner >= 0 && current_owner < MAX_PLAYERS && arena->champion_table[current_owner].exists)
+		{
+			arena->champion_table[current_owner - 1].total_memory_owned -= 1;
+		}
 		arena->champion_table[champ_nb - 1].total_memory_owned += 1;
-		arena->memory_color[(index + i) & MODULO_MASK] = champ_nb;
+		arena->memory_color[(index + i) & MODULO_MASK] = champ_nb + '0';
 		i++;
 	}
 }

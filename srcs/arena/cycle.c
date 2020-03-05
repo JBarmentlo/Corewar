@@ -85,11 +85,15 @@ void	run_function(t_arena *arena, t_process *process)
 {
 	if (TEST_PRINT & opcode_to_mask(process->current_op->opcode))
 	{
-		printf("RUNNING : %s\n", process->current_op->name);
-		printf("Owner: %d\n", process->owner->number);
+		printf("RUNNING : \t%s\n", process->current_op->name);
+		printf("Owner: \t\t%d\n", process->owner->number);
 		print_t_args(arena->args);
 	}
 	arena->op_fun_tab[process->current_op->opcode - 1](arena, process);
+	if (HEX_DUMP && TEST_PRINT & opcode_to_mask(process->current_op->opcode))
+	{
+		hex_dump(arena);
+	}
 }
 
 void	update_champion_alive(t_arena *arena)

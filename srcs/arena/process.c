@@ -37,7 +37,7 @@ void	execute_process(t_arena *arena, t_process *process)
 		return ;
 	}
 	run_function(arena, process);
-	if (process->current_op->opcode != 9)
+	if (process->current_op->opcode != 9 || process->carry == 0)
 		process->PC += PC_jump + process->current_op->encoding_byte + 1;
 	process->current_op = NULL;
 	add_process_to_table(process, arena, arena->cycle + 1);
@@ -73,8 +73,8 @@ void	execute_processes(t_arena *arena)
 			if (opcode_to_mask(it->current_op->opcode) & TEST_PRINT)
 			{
 				printf("\n\n");
-				printf("cycle : %lu\n", arena->cycle);
-				printf("PC:%d\n", it->PC);
+				printf("cycle : \t%lu\n", arena->cycle);
+				printf("PC:\t\t%d\n", it->PC);
 			}
 
 			execute_process(arena, it);	
