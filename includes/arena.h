@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arena.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/14 12:07:38 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/03 16:37:46 by dberger          ###   ########.fr       */
+/*   Created: 2020/03/05 14:40:40 by dberger           #+#    #+#             */
+/*   Updated: 2020/03/05 14:41:09 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 typedef unsigned int			uint;
 typedef unsigned char			byte;
 typedef unsigned short			uint16_t;
+
 
 typedef struct			s_op
 {
@@ -65,6 +66,7 @@ typedef struct			s_champion
 	int			lives_since_last_check;
 	int			total_memory_owned;
 	int			total_process;
+	int			exists;
 }						t_champion;
 
 typedef struct			s_process
@@ -113,7 +115,8 @@ typedef struct 			s_arena
 	unsigned long		cycles_since_check;
 	uint				cycle_to_die;
 	uint				max_checks;
-	t_args				*args;	
+	t_args				*args;
+	int					verbose;
 }						t_arena;
 
 typedef void 			(*t_fun_ptr)(t_arena*, t_process*);
@@ -262,6 +265,10 @@ void				*ind_to_ptr_no_idx(t_arena *arena, int ind, int PC);
 void				fill_fun_ptr_tab(t_arena *arena);
 int					positive_modulo_memsize(int a);
 int					opcode_to_mask(int opcode);
+void				hex_dump(t_arena *arena);
+void				dump_color(t_arena *arena);
+void				print_vm_state(t_arena *arena);
+
 
 //	Display
 

@@ -6,7 +6,7 @@
 #    By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/22 19:37:40 by dberger           #+#    #+#              #
-#    Updated: 2020/03/04 15:30:03 by dberger          ###   ########.fr        #
+#    Updated: 2020/03/05 14:44:03 by dberger          ###   ########.fr        #
 #    Updated: 2020/02/11 10:00:57 by ncoursol         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -74,6 +74,7 @@ COREWAR_SOURCE_FILES=cycle.c \
 	0x14_lldi.c \
 	0x15_lfork.c \
 	0x16_aff.c \
+	debug.c
 
 UTILS_SOURCE_FILES=endian_converter.c \
 	op.c \
