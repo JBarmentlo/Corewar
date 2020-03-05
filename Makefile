@@ -6,10 +6,10 @@
 #    By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/22 19:37:40 by dberger           #+#    #+#              #
-#    Updated: 2020/03/05 14:44:03 by dberger          ###   ########.fr        #
-#    Updated: 2020/02/11 10:00:57 by ncoursol         ###   ########.fr        #
+#    Updated: 2020/03/05 17:03:11 by jbarment         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
 
 NO_COLOR = \033[0m
 YELLOW = \033[33m
@@ -31,7 +31,6 @@ PRINTF_DIR = ./includes/ft_printf
 LIB = $(PRINTF_DIR)/libftprintf.a $(LIB_DIR)/libft.a 
 
 CC=gcc
-
 CFLAGS= -Wall -Wextra -Werror
 INCLUDE_PATH=-I $(INCLUDE_FOLDER) -I $(SDL_INCLUDE_FOLDER)
 

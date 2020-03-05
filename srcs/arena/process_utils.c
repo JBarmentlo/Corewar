@@ -27,16 +27,23 @@ t_process	*process_copy(t_process *src)
 void	remove_process_from_table(t_arena *arena, t_process *process) //wildly unchecked
 {
 	t_process	*it;
-	t_process	**prev;
 
-	it = arena->process_table[process->table_pos];
-	prev = &it;
-	while (it != process)
+	it = arena->process_table[process->table_pos % PROCESS_TABLE_SIZE];
+	if (it == process)
 	{
-		prev = &it->next_table;
-		it = it->next_table;
+		arena->process_table[process->table_pos  % PROCESS_TABLE_SIZE] = it->next_table;
 	}
-	*prev = it->next_table;
+	else
+	{
+		while (it)
+		{
+			if (it->next_table == process)
+			{
+				it->next_table = process->next_table;
+			}
+			it = it->next_table;
+		}
+	}
 }
 
 void	kill_process(t_arena *arena, t_process *it, t_process **prev)
@@ -52,6 +59,7 @@ void	add_process_to_table(t_process *process, t_arena *arena, uint table_index)
 {
 	process->next_table = arena->process_table[table_index % PROCESS_TABLE_SIZE];
 	arena->process_table[table_index % PROCESS_TABLE_SIZE] = process;
+	process->table_pos = table_index;
 }
 
 

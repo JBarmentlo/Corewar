@@ -5,13 +5,14 @@ void	print_vm_state(t_arena *arena)
 	t_process	*it;
 
 	it = arena->process_list;
+	printf("cycle:%lu\n", arena->cycle);
 	printf("process list : \n");
 	while (it)
 	{
 		printf("Owner: %s, owner.nb: %d, R1:%d, R2:%d\n", it->owner->header.prog_name, it->owner->number, it->registre[0], it->registre[1]);
 		it = it->next_list;
 	}
-	it = arena->process_table[0];
+	it = arena->process_table[arena->cycle % PROCESS_TABLE_SIZE];
 	printf("process table : \n");
 	while (it)
 	{

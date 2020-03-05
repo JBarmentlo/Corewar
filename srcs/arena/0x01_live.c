@@ -20,7 +20,7 @@ void    x01(t_arena *arena, t_process *process)
 	{
 		printf("live %d\n", arg);
 		printf("last_live_nb : %d\n", arena->last_live_champ_number);
-		if (arg <= MAX_PLAYERS && arg >= 0)
+		if (arg <= MAX_PLAYERS && arg > 0)
 			printf("total lives: %d\n", arena->champion_table[arg - 1].lives_since_last_check);
 	}
 	
