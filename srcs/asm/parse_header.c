@@ -7,13 +7,33 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 15:29:26 by ncoursol          #+#    #+#             */
 /*   Updated: 2020/03/05 15:08:04 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/05 15:27:28 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-int		get_header_file4(char **line, int *i)
+int		get_header_file4(char **line, int *i, char **tmp, int fd)
 {
+	int		j;
+
+	j = 0;
+	while (line[0][*i] != '\0' && line[0][*i] != '"')
+	{
+		tmp[0][j] = line[0][*i];
+		*i += 1;
+		j++;
+		if (line[0][*i] == '\0')
+		{
+			tmp[0][j] = '\n';
+			j++;
+			ft_memdel((void**)line);
+			if (get_next_line(fd, line) <= 0 || !*line)
+				return (0);
+			*i = 0;
+		}
+	}
+	tmp[0][j] = '\0';
 	*i += 1;
 	while (line[0][*i] != '\0' && line[0][*i] != '#')
 	{
