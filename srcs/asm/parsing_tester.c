@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 16:14:13 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/05 15:19:47 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/05 15:56:14 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,19 +134,14 @@ t_instruct		*check_args(char *line, int *i, t_instruct *op, t_stack *stack)
 	t_argz		argz;
 	int			sep_char;
 	int			save;
-//	int			boucle;
 
 	k = 0;
 	sep_char = 0;
 	save = 0;
-	boucle = 0;
 	while (line[*i] != '\0' && line[*i] != COMMENT_CHAR && line[*i] != ALT_COMMENT_CHAR)
 	{
 		if (line[*i] != SEPARATOR_CHAR && line[*i] != ' ' && line[*i] != '\t' && line[*i] != '\0')
 		{
-		//	boucle += 1;
-		//	if (boucle > g_op_tab[op_type - 1].arg_nb)
-		//		return (ft_error
 			if (k > 0 && (k < g_op_tab[op->type - 1].arg_nb) && k > sep_char)
 				return (ft_error4("Missing separator_char before the argument", line + *i, stack->nb_lines, *i));
 			if (k > 0 && (k < g_op_tab[op->type - 1].arg_nb) && k < sep_char)
