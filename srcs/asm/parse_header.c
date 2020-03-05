@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 15:29:26 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/03/03 18:00:15 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/05 14:32:56 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,8 @@ int     get_header_file(t_stack *stack, int fd)
 
 	line = NULL;
 	stack->nb_lines += get_header_file2(fd, &line, &i, &type);
+	if (stack->nb_lines == FALSE)
+		return (FALSE);
 	save = type;
 	tmp = get_header_file3(fd, &line, &i, &type);
 	stack->nb_lines += type;
