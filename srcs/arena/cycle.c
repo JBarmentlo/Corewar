@@ -132,7 +132,6 @@ void	check_lives(t_arena *arena)
 	while (it)
 	{
 		next = it->next_list;
-//		printf("cycle %lu, it->last_live %lu, cycleTpDie %d\n", arena->cycle , it->last_live, arena->cycle_to_die);
 		if (arena->cycle - it->last_live > arena->cycle_to_die) // gt or gteq ?
 			kill_process(arena, it, prev);
 		it = next;
