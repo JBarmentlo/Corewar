@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 15:29:26 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/03/04 15:42:11 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/03/04 16:34:32 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int			get_header_file4(char **line, int *i, char **tmp, int fd)
 	while (line[0][*i] != '\0' && line[0][*i] != '"')
 	{
 		tmp[0][j] = line[0][*i];
-		*i += 1;
+//		*i += 1;
 		j++;
 		if (line[0][*i] == '\0')
 		{
