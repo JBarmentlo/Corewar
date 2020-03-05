@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 15:29:26 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/03/05 14:32:56 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/05 15:08:04 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ char	*get_header_file3(int fd, char **line, int *i, int *type)
 		}
 	}
 	tmp[j] = '\0';
-	get_header_file4(line, i);
+	if (get_header_file4(line, i) == FALSE)
+		return (NULL);
 	return (tmp);
 }
 
@@ -110,14 +111,20 @@ int     get_header_file(t_stack *stack, int fd)
 	int		save;
 
 	line = NULL;
+	stack->nb_lines = 0;
 	stack->nb_lines += get_header_file2(fd, &line, &i, &type);
 	if (stack->nb_lines == FALSE)
 		return (FALSE);
 	save = type;
 	tmp = get_header_file3(fd, &line, &i, &type);
+	if (tmp == NULL)
+	{
+		ft_memdel((void**)&line);
+		return (0);
+	}
 	stack->nb_lines += type;
 	type = save;
-	if (stack->nb_lines == FALSE || tmp == NULL)
+	if (stack->nb_lines == FALSE)
 	{
 		ft_memdel((void**)&line);
 		return (0);
