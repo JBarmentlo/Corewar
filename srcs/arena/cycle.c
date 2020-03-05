@@ -113,7 +113,7 @@ void	update_champion_alive(t_arena *arena)
 	it = arena->process_list;
 	while (it)
 	{
-		arena->champion_table[it->owner->number].alive = 1;
+		arena->champion_table[it->owner->number - 1].alive = 1;
 		total_alive += 1;
 		it = it->next_list;
 	}
@@ -132,6 +132,7 @@ void	check_lives(t_arena *arena)
 	while (it)
 	{
 		next = it->next_list;
+//		printf("cycle %lu, it->last_live %lu, cycleTpDie %d\n", arena->cycle , it->last_live, arena->cycle_to_die);
 		if (arena->cycle - it->last_live > arena->cycle_to_die) // gt or gteq ?
 			kill_process(arena, it, prev);
 		it = next;
@@ -153,7 +154,6 @@ int		do_the_cycle(t_arena *arena)
 {	
 	if (arena->cycles_since_check == arena->cycle_to_die)
 	{
-		printf("check\n");
 		check_lives(arena);
 		update_champion_alive(arena);
 	}
