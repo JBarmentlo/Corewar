@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/11 14:48:14 by dberger           #+#    #+#             */
-/*   Updated: 2020/02/19 16:53:09 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/03 20:14:12 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,20 @@ int		find_opcode(char *string)
 
 int		encoding_byte(t_instruct *op)
 {
-	int		i;
+	int			i;
 	size_t		k;
 
 	i = 0;
 	k = 0;
-	/// T_IND = 4 ??? //// 
 	while (k < op->nb_args)
 	{
 		i = i | op->argz[k].type;
+		i = i << 2;
+		k++;
+	}
+	while (k < (BITS_IN_OCTET / 2) - 1)
+	{
+		i = i | 0;
 		i = i << 2;
 		k++;
 	}
@@ -78,7 +83,7 @@ int		write_op_values(t_file *out_file, int *i, t_instruct *op, t_stack stack)
 	label = stack.first_label;
 	while (k < op->nb_args)
 	{
-		if (op->argz[k].type == REG_CODE)
+		if (op->argz[k].type == T_REG)
 		{
 			if (op->argz[k].value > REG_NUMBER)
 				return (FALSE);
