@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 16:07:12 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/03/03 16:46:46 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/03/09 14:36:25 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,18 @@
 void			disp_init_players2(t_disp *d, int i, int ph, char *nb_p)
 {
 	if (!((d->font1 = TTF_OpenFont("img/font1.ttf", 65))))
-		error("(menu.c) TTF_OpenFont : ", d);
+		error("(disp_init_players.c) TTF_OpenFont : ", d);
 	if (SDL_RenderDrawLine(d->rend, d->players.x, (ph * i) + d->players.y,
 				(d->players.x + d->players.w), (ph * i) + d->players.y) < 0)
-		error("(disp.c) SDL_RenderDrawLine : ", d);
+		error("(disp_init_players.c) SDL_RenderDrawLine : ", d);
 	if (SDL_RenderDrawLine(d->rend, d->players.x,
 				d->players.y + 70 + (ph * (i - 1)), d->players.x + 70,
 				d->players.y + 70 + (ph * (i - 1))) < 0)
-		error("(disp.c) SDL_RenderDrawLine : ", d);
+		error("(disp_init_players.c) SDL_RenderDrawLine : ", d);
 	if (SDL_RenderDrawLine(d->rend, d->players.x + 70,
 				d->players.y + (ph * (i - 1)), d->players.x + 70,
 				d->players.y + 70 + (ph * (i - 1))) < 0)
-		error("(disp.c) SDL_RenderDrawLine : ", d);
+		error("(disp_init_players.c) SDL_RenderDrawLine : ", d);
 	if (i == 1)
 		d->color_champ[i] = 0xFF000000;
 	else if (i == 2)
@@ -50,17 +50,17 @@ void			disp_init_players3(t_disp *d, int i, int ph, char *nb_p)
 	d->mod.h = 10 + (ph / 10);
 	d->mod.w = d->players.w - 10;
 	if (SDL_SetRenderDrawColor(d->rend, 50, 50, 50, 250) < 0)
-		error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		error("(disp_init_players.c) SDL_SetRenderDrawColor : ", d);
 	if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
-		error("(disp.c) SDL_RenderDrawRect : ", d);
+		error("(disp_init_players.c) SDL_RenderDrawRect : ", d);
 	if (SDL_SetRenderDrawColor(d->rend, 255, 255, 255, 250) < 0)
-		error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		error("(disp_init_players.c) SDL_SetRenderDrawColor : ", d);
 	if (SDL_RenderDrawRect(d->rend, &d->mod) < 0)
-		error("(disp.c) SDL_RenderDrawRect : ", d);
+		error("(disp_init_players.c) SDL_RenderDrawRect : ", d);
 	if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 250) < 0)
-		error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		error("(disp_init_players.c) SDL_SetRenderDrawColor : ", d);
 	if (!((d->font1 = TTF_OpenFont("img/font2.ttf", ph / 5.5))))
-		error("(menu.c) TTF_OpenFont : ", d);
+		error("(disp_init_players.c) TTF_OpenFont : ", d);
 	d->mod.x = d->players.x + 120;
 	d->mod.y = (ph * (i - 1)) + d->players.y + (ph / 10);
 	disp_ttf("name", d->color, d);
@@ -77,56 +77,56 @@ void			disp_init_players4(t_disp *d, int i, int ph)
 	d->mod.h = 10 + (ph / 10);
 	d->mod.w = (d->players.w / 2) - 15;
 	if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
-		error("(disp.c) SDL_RenderDrawRect : ", d);
+		error("(disp_init_players.c) SDL_RenderDrawRect : ", d);
 	if (SDL_SetRenderDrawColor(d->rend, 255, 255, 255, 250) < 0)
-		error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		error("(disp_init_players.c) SDL_SetRenderDrawColor : ", d);
 	if (SDL_RenderDrawRect(d->rend, &d->mod) < 0)
-		error("(disp.c) SDL_RenderDrawRect : ", d);
+		error("(disp_init_players.c) SDL_RenderDrawRect : ", d);
 	if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 250) < 0)
-		error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		error("(disp_init_players.c) SDL_SetRenderDrawColor : ", d);
 	d->mod.y = (ph * (i - 1)) + d->players.y + (ph / 9) * 3;
 	if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
-		error("(disp.c) SDL_RenderDrawRect : ", d);
+		error("(disp_init_players.c) SDL_RenderDrawRect : ", d);
 	if (SDL_SetRenderDrawColor(d->rend, 255, 255, 255, 250) < 0)
-		error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		error("(disp_init_players.c) SDL_SetRenderDrawColor : ", d);
 	if (SDL_RenderDrawRect(d->rend, &d->mod) < 0)
-		error("(disp.c) SDL_RenderDrawRect : ", d);
+		error("(disp_init_players.c) SDL_RenderDrawRect : ", d);
 	if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 250) < 0)
-		error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		error("(disp_init_players.c) SDL_SetRenderDrawColor : ", d);
 	d->mod.y = (ph * (i - 1)) + d->players.y + (ph / 9) * 5;
 }
 
 void			disp_init_players5(t_disp *d, t_arena a, int i, int ph)
 {
 	if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
-		error("(disp.c) SDL_RenderDrawRect : ", d);
+		error("(disp_init_players.c) SDL_RenderDrawRect : ", d);
 	if (SDL_SetRenderDrawColor(d->rend, 255, 255, 255, 250) < 0)
-		error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		error("(disp_init_players.c) SDL_SetRenderDrawColor : ", d);
 	if (SDL_RenderDrawRect(d->rend, &d->mod) < 0)
-		error("(disp.c) SDL_RenderDrawRect : ", d);
+		error("(disp_init_players.c) SDL_RenderDrawRect : ", d);
 	if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 250) < 0)
-		error("(disp.c) SDL_SetRenderDrawColor : ", d);
+		error("(disp_init_players.c) SDL_SetRenderDrawColor : ", d);
 	d->mod.y = (ph * (i - 1)) + d->players.y + (ph / 13);
-	if (ft_strlen(a.champion_table[i - 1].header.prog_name) > 21)
+	if (ft_strlen(a.champion_table[i - 1].header.prog_name) > 18)
 	{
-		a.champion_table[i - 1].header.prog_name[18] = '.';
-		a.champion_table[i - 1].header.prog_name[19] = '.';
-		a.champion_table[i - 1].header.prog_name[20] = '.';
-		a.champion_table[i - 1].header.prog_name[21] = '\0';
+		a.champion_table[i - 1].header.prog_name[15] = '.';
+		a.champion_table[i - 1].header.prog_name[16] = '.';
+		a.champion_table[i - 1].header.prog_name[17] = '.';
+		a.champion_table[i - 1].header.prog_name[18] = '\0';
 	}
 	if (a.nb_champs == 2)
 	{
 		d->mod.y += 5;
 		TTF_CloseFont(d->font1);
 		if (!((d->font1 = TTF_OpenFont("img/font2.ttf", ph / 8.7))))
-			error("(menu.c) TTF_OpenFont : ", d);
+			error("(disp_init_players.c) TTF_OpenFont : ", d);
 	}
 	else if (a.nb_champs == 3)
 	{
 		d->mod.y += 2;
 		TTF_CloseFont(d->font1);
 		if (!((d->font1 = TTF_OpenFont("img/font2.ttf", ph / 5.7))))
-			error("(menu.c) TTF_OpenFont : ", d);
+			error("(disp_init_players.c) TTF_OpenFont : ", d);
 	}
 	d->mod.x += 5;
 	d->color.r = 255;

@@ -113,13 +113,14 @@ void	update_champion_alive(t_arena *arena)
 	it = arena->process_list;
 	while (it)
 	{
-		arena->champion_table[it->owner->number].alive = 1;
+		arena->champion_table[it->owner->number - 1].alive = 1;
 		total_alive += 1;
 		it = it->next_list;
 	}
 	arena->nb_live_champions = total_alive;
 }
 
+// gt or gteq ?
 void	check_lives(t_arena *arena)
 {
 	t_process	*it;
@@ -135,7 +136,7 @@ void	check_lives(t_arena *arena)
 			kill_process(arena, it, prev);
 		it = next;
 	}
-	if (arena->total_live_since_check >= NBR_LIVE || arena->max_checks >= MAX_CHECKS)		//what happens when it reaches 0 or negative values?
+	if (arena->total_live_since_check >= NBR_LIVE || arena->max_checks >= MAX_CHECKS)
 	{
 		if (arena->cycle_to_die > CYCLE_DELTA)
 			arena->cycle_to_die -= CYCLE_DELTA;
@@ -157,5 +158,6 @@ int		do_the_cycle(t_arena *arena)
 	}
 	execute_processes(arena);	//skip empty turns for performance
 	arena->cycle += 1;
+	arena->cycles_since_check += 1;
 	return (1);
 }

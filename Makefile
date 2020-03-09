@@ -8,8 +8,10 @@
 #    Created: 2020/01/22 19:37:40 by dberger           #+#    #+#              #
 #    Updated: 2020/03/09 16:46:21 by dberger          ###   ########.fr        #
 #    Updated: 2020/02/11 10:00:57 by ncoursol         ###   ########.fr        #
+#    Updated: 2020/03/05 17:03:11 by jbarment         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
 
 NO_COLOR = \033[0m
 YELLOW = \033[33m
@@ -32,7 +34,6 @@ LIB = $(PRINTF_DIR)/libftprintf.a $(LIB_DIR)/libft.a
 
 SCANNER=/Users/dberger/static_analyzer/bin/scan-build
 CC=gcc
-
 CFLAGS= -Wall -Wextra -Werror
 INCLUDE_PATH=-I $(INCLUDE_FOLDER) -I $(SDL_INCLUDE_FOLDER)
 
