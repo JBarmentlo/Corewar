@@ -6,24 +6,28 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:11:09 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/04 18:48:13 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/09 15:55:38 by dberger          ###   ########.fr       */
 /*   Updated: 2020/02/19 18:29:16 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-int		init_file(t_file *out_file, char *source_file, int i)
+int		init_file(t_file *out_file, char *source_file)
 {
+	int		i;
+
+	i = 0;
+	while (source_file[i] && source_file[i] != '.')
+		i++;
+	if (source_file[i] == '\0' || source_file[i + 1] == '\0' || source_file[i + 1] != 's' || source_file[i + 2] != '\0')
+		return (ft_error("Wrong source file format", NULL));
 	out_file->total_size = 0;
 	out_file->prog_size = 0;
 	out_file->name = ft_memalloc(i + 4);
 	out_file->content = ft_memalloc(MAX_SIZE_FILE);
 	out_file->name = ft_memcpy(out_file->name, source_file, i + 1); 
 	out_file->name = ft_stricat(out_file->name, "cor", i + 1); 
-	out_file->fd = open(out_file->name, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
-	if (out_file->fd <= 0)
-		return (ft_error("Can't create the file", out_file->name));
 	return (TRUE);
 }
 
@@ -71,46 +75,45 @@ int		fill_opcode(t_file *out_file, t_stack stack)
 	return (TRUE);
 }
 
+int		parsing_header(t_stack *stack, int fd)
+{
+	if (!(stack->champion_name = ft_memalloc(sizeof(char) * PROG_NAME_LENGTH)))
+		return (ft_error("\"stack->champion_name\" allocation fail.", NULL));
+	if (!(stack->comment = ft_memalloc(sizeof(char) * COMMENT_LENGTH)))
+		return (ft_error("\"stack->comment\" allocation fail.", NULL));
+	stack->champion_name[PROG_NAME_LENGTH] = '\0';
+	stack->comment[COMMENT_LENGTH] = '\0';
+	stack->nb_lines = 0;
+	if (!get_header_file(stack, fd))
+		return (FALSE);
+	if (!get_header_file(stack, fd))
+		return (FALSE);
+	return (TRUE);
+}
+
 int		cor_file(char *source_file, t_file *out_file, int fd)
 {	
 	t_stack		stack;
-	int		real_prog_size;
-	int		i;
+	int			real_prog_size;
 
 	real_prog_size = 0;
-	///////////////////////////////////////////////////////////////////////////
-	if (!(stack.champion_name = ft_memalloc(sizeof(char) * PROG_NAME_LENGTH)))
-		return (ft_error("\"stack.champion_name\" allocation fail.", NULL));
-	if (!(stack.comment = ft_memalloc(sizeof(char) * COMMENT_LENGTH)))
-		return (ft_error("\"stack.comment\" allocation fail.", NULL));
-	stack.champion_name[PROG_NAME_LENGTH] = '\0';
-	stack.comment[COMMENT_LENGTH] = '\0';
-	stack.nb_lines = 0;
-	if (!get_header_file(&stack, fd))
-		return (ft_error("Bad Header in .s file", NULL));
-	if (!get_header_file(&stack, fd))
-		return (ft_error("Bad Header in .s file", NULL));
-//	ft_printf("name = [%s]\ncomment = [%s]\n", stack.champion_name, stack.comment);
-	///////////////////////////////////////////////////////////////////////////
-	i = 0;
-	while (source_file[i] && source_file[i] != '.')
-		i++;
-	if (source_file[i] == '\0' || source_file[i + 1] == '\0' || source_file[i + 1] != 's' || source_file[i + 2] != '\0')
-		return (ft_error("Wrong source file format", NULL));
-	if (init_file(out_file, source_file, i) == FALSE)
+	if (parsing_header(&stack, fd) == FALSE)
+		return (FALSE);
+	if (init_file(out_file, source_file) == FALSE)
 		return (FALSE);
 	if (fill_header(out_file, fd, &stack) == FALSE)
 		return (FALSE);
 	stack.cur_octet = out_file->total_size;
-////// to delete: /////// 
-	if (parsing_tester(&stack, fd) == FALSE)
+	if (parsing_exec(&stack, fd) == FALSE)
 		return (FALSE);
 //	print_tester(&stack);
-///////////////////////// 
 	if (fill_opcode(out_file, stack) == FALSE)
 		return (FALSE);
 	real_prog_size = out_file->total_size - SIZE_HEADER;
 	nb_to_binary(out_file, INFO_PROG, out_file->prog_size, real_prog_size);
 	out_file->total_size -= INFO_PROG;
+	out_file->fd = open(out_file->name, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
+	if (out_file->fd <= 0)
+		return (ft_error("Can't create the file", out_file->name));
 	return (TRUE);
 }
