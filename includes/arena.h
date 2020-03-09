@@ -195,8 +195,6 @@ void				event_mousemotion(t_disp *d, int *timeout, t_arena a);
 void				event_mousebutton(t_disp *d, int *running, int *timeout, t_arena a);
 void				disp_ttf(char *ttf, SDL_Color color, t_disp *d);
 void				update_visu(t_disp *d, t_arena a);
-char				*ft_itoa2(int n);
-size_t				ft_nbrlen(int nbr);
 //
 
 void				bit_dump(void *ptr, int size);
