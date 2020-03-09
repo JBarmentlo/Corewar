@@ -6,7 +6,7 @@
 #    By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/22 19:37:40 by dberger           #+#    #+#              #
-#    Updated: 2020/03/05 14:44:03 by dberger          ###   ########.fr        #
+#    Updated: 2020/03/09 16:46:21 by dberger          ###   ########.fr        #
 #    Updated: 2020/02/11 10:00:57 by ncoursol         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -30,6 +30,7 @@ PRINTF_DIR = ./includes/ft_printf
 
 LIB = $(PRINTF_DIR)/libftprintf.a $(LIB_DIR)/libft.a 
 
+SCANNER=/Users/dberger/static_analyzer/bin/scan-build
 CC=gcc
 
 CFLAGS= -Wall -Wextra -Werror
@@ -86,7 +87,7 @@ ASM_SOURCE_FILES=main_asm.c \
 	cor_file.c \
 	asm_utils.c \
 	op_code_utils.c \
-	parsing_tester.c \
+	parsing_exec.c \
 	print_tester.c \
 	parse_header.c
 
@@ -142,6 +143,7 @@ clean:
 	echo "$(BLUE)	--- Binary deleted ! ---	$(NO_COLOR)"
 
 fclean: clean
+	$(RM) log
 	rm -f $(LIB_DIR)/*.a
 	rm -f $(PRINTF_DIR)/*.a
 	rm -f corewar
@@ -151,6 +153,8 @@ fclean: clean
 brew:
 	sh brew_check.sh
 
-re: fclean all
+re: fclean
+	$(MAKE)
 
+.PHONY: re all fclean clean asm corewar
 .SILENT:

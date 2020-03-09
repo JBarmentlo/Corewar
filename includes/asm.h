@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 15:31:05 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/05 12:31:01 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/09 13:22:53 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,8 +174,8 @@ void		copy_string(char *dest, char *src, int size, int *indx);
 int		find_opcode(char *string);
 int		encoding_byte(t_instruct *op);
 int		write_op_values(t_file *out_file, int *i, t_instruct *op, t_stack stack);
+int			parsing_exec(t_stack *stack, int fd);
 /////////////////////// To delete   //////////////////////////
-int			parsing_tester(t_stack *stack, int fd);
 void		print_tester(t_stack *stack);
 
 #endif

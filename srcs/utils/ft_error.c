@@ -6,11 +6,17 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 16:04:34 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/03 16:39:03 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/09 16:02:55 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "arena.h"
+
+int		ft_error5(char *str, size_t line, size_t col)
+{
+	ft_printf("Error [%d:%d]: %s\n", line, col, str);
+	return (FALSE);
+}
 
 void	*ft_error4(char *str, char *str2, size_t line, size_t col)
 {
