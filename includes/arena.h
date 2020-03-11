@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/05 14:40:40 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/09 16:03:28 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/11 16:23:12 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,6 +246,7 @@ t_process			*process_copy(t_process *src);
 void				add_process_to_table(t_process *process, t_arena *arena, uint table_index);
 void				add_process_to_list(t_process *process, t_arena *arena);
 void				free_all_processes(t_arena *arena);
+
 // READ WRITE
 
 
@@ -270,6 +271,10 @@ void				hex_dump(t_arena *arena);
 void				dump_color(t_arena *arena);
 void				print_vm_state(t_arena *arena);
 void				free_all(t_arena *arena);
+void				count_color(t_champion *champ, t_arena *arena);
+void				count_owned_space(t_arena *arena);
+
+
 
 
 //	Display
