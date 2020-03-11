@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/11 16:26:40 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/03/11 17:10:38 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,18 +53,18 @@ int		main(int ac, char **av)
 		init_window(&d, vm);
 	running = 1;
 	vm.total_process_nb = vm.nb_champs;
-	
-
 	count_owned_space(&vm);
-	while (!is_game_over(&vm) && running)
+
+	while (!is_game_over(&vm) && running && ((vm.cycle < (unsigned long)vm.option_dump) || vm.option_dump == 0))
 	{
-		do_the_cycle(&vm);
+		if (!visu)
+			do_the_cycle(&vm);
 		if (visu)
 		{
 			timeout = SDL_GetTicks() + 100;
 			i = SDL_GetTicks() + 100;
 			j = 0;
-			while (j < d.delay)
+			while (j < d.delay && ((vm.cycle < (unsigned long)vm.option_dump) || vm.option_dump == 0))
 			{
 				do_the_cycle(&vm);
 				j++;
@@ -91,6 +91,8 @@ int		main(int ac, char **av)
 			update_visu(&d, vm);
 		}   
 	}
+	if (vm.option_dump != 0)
+		hex_dump_ugly(&vm);
 	if (visu)
 		error("End.", &d);
 	free_all(&vm);

@@ -31,8 +31,6 @@ void	execute_process(t_arena *arena, t_process *process)
 	if (!is_valid_args_value(arena->args))
 	{
 		process_invalid(process);
-		printf("invalid argument value (register > 16)\n");
-		printf("PC: %d, owner: %d\n", process->PC, process->owner->number);
 		return ;
 	}
 	run_function(arena, process);

@@ -87,6 +87,24 @@ void	hex_dump(t_arena *arena)
 	}
 }
 
+void	hex_dump_ugly(t_arena *arena)
+{
+	size_t		i;
+	int			zeroes;
+	int			offset;
+
+	zeroes = 0;
+	offset = 0;
+	i = 0;
+	while (i < MEM_SIZE)
+	{	
+		if (i % 32 == 0)
+			printf ("\n");
+		printf("%02x ", arena->memory[i]);
+		i++;
+	}
+}
+
 void	dump_color(t_arena *arena)
 {
 	int	i = 0;
