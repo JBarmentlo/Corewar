@@ -1,15 +1,15 @@
 #include "arena.h"
 #include "bitMasks.h"
 
-//here we assume registres start at 1
-//we write to process->registre[arg - 1]
-void    x02(t_arena *arena, t_process *process)
+void	x02(t_arena *arena, t_process *process)
 {
 	int	value;
+	int	fk_norm;
 
 	if (arena->args->type[0] == T_IND)
 	{
-		value = mem_read_int(arena, process->PC + (arena->args->val[0] % IDX_MOD));
+		fk_norm = process->PC + (arena->args->val[0] % IDX_MOD);
+		value = mem_read_int(arena, fk_norm);
 		reg_write_int(process, value, arena->args->val[1]);
 	}
 	else
