@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/05 14:40:40 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/11 16:23:12 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/03/11 17:10:56 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,6 +281,7 @@ void				count_owned_space(t_arena *arena);
 
 void				mem_write_color(t_arena *arena, uint index, uint size, int champ_nb);
 void				update_champion_alive(t_arena *arena);
+void				hex_dump_ugly(t_arena *arena);
 
 
 

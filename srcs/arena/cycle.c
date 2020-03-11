@@ -138,6 +138,10 @@ void	check_lives(t_arena *arena)
 	{
 		if (arena->cycle_to_die > CYCLE_DELTA)
 			arena->cycle_to_die -= CYCLE_DELTA;
+		else
+		{
+			arena->cycle_to_die = 1;
+		}
 		arena->max_checks = 0;
 	}
 	else
