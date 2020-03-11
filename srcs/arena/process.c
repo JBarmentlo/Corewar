@@ -19,7 +19,6 @@ void	execute_process(t_arena *arena, t_process *process)
 		if (!is_valid_encoding_byte(arena, process))
 		{
 			process_invalid(process);		//check reinsertion inta table
-			printf("invalid encoding_byte\n");
 			return ;
 		}
 	}
@@ -76,7 +75,6 @@ void	execute_processes(t_arena *arena)
 				printf("cycle : \t%lu\n", arena->cycle);
 				printf("PC:\t\t%d\n", it->PC);
 			}
-
 			execute_process(arena, it);	
 		}
 		it = next;
