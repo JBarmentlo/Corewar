@@ -3,8 +3,11 @@
 
 void	x09(t_arena *arena, t_process *process)
 {
+	int	norm;
+
+	norm = (process->PC + (arena->args->val[0] % IDX_MOD));
 	if (process->carry)
-		process->PC = (process->PC + (arena->args->val[0] % IDX_MOD)) & MODULO_MASK;
+		process->PC = norm & MODULO_MASK;
 	if ((VERBOSE & ZJUMP))
 	{
 		if (process->carry == 0)
@@ -13,9 +16,8 @@ void	x09(t_arena *arena, t_process *process)
 		}
 		else
 		{
-			printf("jumped %d spaces to %d\n", (arena->args->val[0] % IDX_MOD), (process->PC + (arena->args->val[0] % IDX_MOD)) & MODULO_MASK);
+			printf("jumped %d spaces to %d\n",
+				(arena->args->val[0] % IDX_MOD), norm & MODULO_MASK);
 		}
-
 	}
-
 }

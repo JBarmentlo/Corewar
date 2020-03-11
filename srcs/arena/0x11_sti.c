@@ -11,6 +11,8 @@ void	x11(t_arena *arena, t_process *process)
 	mem_write_color(arena, process->PC + pos, 4, process->owner->number);
 	if ((VERBOSE & STI))
 	{
-		printf("wrote %d from register %d to mem[%d]\n", arena->args->val_read[0], arena->args->val[0], pos + process->PC);
+		printf("wrote %d from register %d to mem[%d]\n",
+			arena->args->val_read[0], arena->args->val[0],
+			pos + process->PC);
 	}
 }
