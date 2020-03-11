@@ -87,6 +87,19 @@ void	hex_dump(t_arena *arena)
 	}
 }
 
+void	check_negative_PC(t_arena *arena)
+{
+	t_process	*it;
+
+	it = arena->process_list;
+	while (it)
+	{
+		if ((int16_t)it->PC < 0)
+			printf("YOOOOOOOOOOSEF NEGATIV PC BRO \n KJBASFDKJNSDF\n JHABSDFKJHBSEF\n");
+		it = it->next_list;
+	}
+}
+
 void	hex_dump_ugly(t_arena *arena)
 {
 	size_t		i;

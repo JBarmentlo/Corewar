@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/05 14:40:40 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/11 17:10:56 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/03/11 17:20:55 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,6 +273,8 @@ void				print_vm_state(t_arena *arena);
 void				free_all(t_arena *arena);
 void				count_color(t_champion *champ, t_arena *arena);
 void				count_owned_space(t_arena *arena);
+void				check_negative_PC(t_arena *arena);
+
 
 
 
