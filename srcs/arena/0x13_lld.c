@@ -9,7 +9,7 @@ void    x13(t_arena *arena, t_process *process)
 	{
 		value = mem_read_int(arena, process->PC + arena->args->val[0]);
 		reg_write_int(process, value, arena->args->val[1]);
-		if ((VERBOSE & LLD) == LLD)
+		if ((VERBOSE & LLD))
 		{
 			printf("store %d from mem[%d]to register %d\n", value, process->PC + arena->args->val[0], arena->args->val[1]);
 		}
@@ -18,7 +18,7 @@ void    x13(t_arena *arena, t_process *process)
 	{
 		value = arena->args->val[0];
 		reg_write_int(process, value, arena->args->val[1]);
-		if ((VERBOSE & LLD) == LLD)
+		if ((VERBOSE & LLD))
 		{
 			printf("store %d to register %d\n", value, arena->args->val[1]);
 		}

@@ -6,10 +6,10 @@
 #    By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/22 19:37:40 by dberger           #+#    #+#              #
-#    Updated: 2020/03/09 16:46:21 by dberger          ###   ########.fr        #
-#    Updated: 2020/02/11 10:00:57 by ncoursol         ###   ########.fr        #
-#    Updated: 2020/03/05 17:03:11 by jbarment         ###   ########.fr        #
+#    Updated: 2020/03/11 16:21:56 by jbarment         ###   ########.fr        #
 #                                                                              #
+# **************************************************************************** #
+
 # **************************************************************************** #
 
 
@@ -83,7 +83,8 @@ UTILS_SOURCE_FILES=endian_converter.c \
 	op.c \
 	read_write.c \
 	ft_error.c \
-	usage.c
+	usage.c \
+	mem_color.c
 
 ASM_SOURCE_FILES=main_asm.c \
 	cor_file.c \

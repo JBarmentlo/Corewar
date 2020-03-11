@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/11 15:27:16 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/03/11 16:26:40 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int		main(int ac, char **av)
 	t_arena		vm;
 	t_champion	*champ;
 	int			i;
-	int			visu = 0;
+	int			visu = 1;
 	unsigned int j;
 
 	i = 0;
@@ -54,7 +54,9 @@ int		main(int ac, char **av)
 	running = 1;
 	vm.total_process_nb = vm.nb_champs;
 	
-	while (!is_game_over(&vm) && vm.cycle < 6000 && running)
+
+	count_owned_space(&vm);
+	while (!is_game_over(&vm) && running)
 	{
 		do_the_cycle(&vm);
 		if (visu)
@@ -89,16 +91,9 @@ int		main(int ac, char **av)
 			update_visu(&d, vm);
 		}   
 	}
-	
-	printf("sizeof process %lu\n", sizeof(t_process));
 	if (visu)
 		error("End.", &d);
 	free_all(&vm);
 	return (TRUE);
 }
 
-__attribute__((destructor))
-void	end()
-{
-	while (1);
-}
