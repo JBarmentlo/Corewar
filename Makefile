@@ -6,7 +6,7 @@
 #    By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/22 19:37:40 by dberger           #+#    #+#              #
-#    Updated: 2020/03/05 17:03:11 by jbarment         ###   ########.fr        #
+#    Updated: 2020/03/11 15:22:55 by jbarment         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ PRINTF_DIR = ./includes/ft_printf
 LIB = $(PRINTF_DIR)/libftprintf.a $(LIB_DIR)/libft.a 
 
 CC=gcc
-CFLAGS= -Wall -Wextra -Werror
+CFLAGS= -Wall -Wextra -Werror -g3
 INCLUDE_PATH=-I $(INCLUDE_FOLDER) -I $(SDL_INCLUDE_FOLDER)
 
 COMPILER=$(CC) $(CFLAGS) $(INCLUDE_PATH)
@@ -73,7 +73,8 @@ COREWAR_SOURCE_FILES=cycle.c \
 	0x14_lldi.c \
 	0x15_lfork.c \
 	0x16_aff.c \
-	debug.c
+	debug.c \
+	end_free.c
 
 UTILS_SOURCE_FILES=endian_converter.c \
 	op.c \

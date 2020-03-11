@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arena.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/05 14:40:40 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/05 14:41:09 by dberger          ###   ########.fr       */
+/*   Updated: 2020/03/11 15:51:46 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,6 +228,8 @@ uint16_t			fill_args(t_arena *arena, t_process *process);
 void				copy_to_args_tmp(t_arena *arena, t_process *process);
 void				no_encoding_byte(t_arena *arena, t_process *process);
 void				get_val(t_arena *arena, t_process *process);
+int					opcode_to_mask(int opcode);
+
 
 // CYCLE & PROCESS
 
@@ -239,12 +241,12 @@ void				execute_process(t_arena *arena, t_process *process);
 void				process_invalid(t_process *process);
 void				execute_process(t_arena *arena, t_process *process);
 void				execute_processes(t_arena *arena);
-void				kill_process(t_arena *arena, t_process *it, t_process **prev);
+void				kill_process(t_arena *arena, t_process *it);
 void				remove_process_from_table(t_arena *arena, t_process *process); //wildly unchecked
 t_process			*process_copy(t_process *src);
 void				add_process_to_table(t_process *process, t_arena *arena, uint table_index);
 void				add_process_to_list(t_process *process, t_arena *arena);
-
+void				free_all_processes(t_arena *arena);
 // READ WRITE
 
 
@@ -268,6 +270,7 @@ int					opcode_to_mask(int opcode);
 void				hex_dump(t_arena *arena);
 void				dump_color(t_arena *arena);
 void				print_vm_state(t_arena *arena);
+void				free_all(t_arena *arena);
 
 
 //	Display
