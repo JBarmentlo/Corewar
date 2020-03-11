@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/05 14:40:40 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/11 15:51:46 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/03/09 16:03:28 by dberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ int						ft_error(char *str, char *str2);
 void					*ft_error2(char *str, char *str2);
 void					*ft_error3(char *str, size_t line, size_t col);
 void					*ft_error4(char *str, char *str2, size_t line, size_t col);
+int						ft_error5(char *str, size_t line, size_t col);
 int						pars_num_champ(int *nb, t_arena *vm, int mode);
 int						pars_args(int ac, char **av, t_arena *vm);
 int						pars_header(t_champion *champ);
@@ -195,8 +196,6 @@ void				event_mousemotion(t_disp *d, int *timeout, t_arena a);
 void				event_mousebutton(t_disp *d, int *running, int *timeout, t_arena a);
 void				disp_ttf(char *ttf, SDL_Color color, t_disp *d);
 void				update_visu(t_disp *d, t_arena a);
-char				*ft_itoa2(int n);
-size_t				ft_nbrlen(int nbr);
 //
 
 void				bit_dump(void *ptr, int size);

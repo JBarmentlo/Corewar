@@ -6,13 +6,13 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 12:00:30 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/03/02 16:25:33 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/03/09 10:35:20 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "arena.h"
 
-void        event_keydown(t_disp *d, int *running, int *timeout)
+void		event_keydown(t_disp *d, int *running, int *timeout)
 {
 	if (d->event.key.type == SDL_KEYDOWN)
 	{

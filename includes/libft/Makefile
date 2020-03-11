@@ -6,7 +6,7 @@
 #    By: dberger <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/08 10:16:12 by dberger           #+#    #+#              #
-#    Updated: 2020/03/02 17:13:46 by dberger          ###   ########.fr        #
+#    Updated: 2020/03/09 16:38:30 by dberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -108,6 +108,7 @@ clean:
 fclean: clean
 	rm -rf $(NAME)
 
-re: fclean all
+re: fclean
+	$(MAKE)
 
 .SILENT:

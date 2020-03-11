@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:36:59 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/02/19 18:56:06 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/03/09 10:28:19 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 void		disp_init_main(t_disp *d)
 {
 	if (SDL_SetRenderTarget(d->rend, d->tmp) < 0)
-		error("(menu.c) SDL_SetRenderTarget : ", d);
+		error("(disp.c) SDL_SetRenderTarget : ", d);
 	if (SDL_RenderCopy(d->rend, d->back, NULL, &d->screen) < 0)
-		error("(menu.c) SDL_RenderCopy : ", d);
+		error("(disp.c) SDL_RenderCopy : ", d);
 	if (SDL_SetRenderDrawBlendMode(d->rend, SDL_BLENDMODE_BLEND) < 0)
-		error("(menu.c) SDL_SetRenderDrawBlendMode error : ", d);
+		error("(disp.c) SDL_SetRenderDrawBlendMode error : ", d);
 	if (SDL_SetRenderDrawColor(d->rend, 186, 186, 186, 100) < 0)
 		error("(disp.c) SDL_SetRenderDrawColor : ", d);
 	if (SDL_RenderFillRect(d->rend, &d->arena) < 0)
@@ -29,7 +29,7 @@ void		disp_init_main(t_disp *d)
 	if (SDL_RenderFillRect(d->rend, &d->process) < 0)
 		error("(disp.c) SDL_RenderFillRect : ", d);
 	if (SDL_SetRenderDrawBlendMode(d->rend, SDL_BLENDMODE_NONE) < 0)
-		error("(menu.c) SDL_SetRenderDrawBlendMode error : ", d);
+		error("(disp.c) SDL_SetRenderDrawBlendMode error : ", d);
 	if (SDL_SetRenderDrawColor(d->rend, 0, 0, 0, 250) < 0)
 		error("(disp.c) SDL_SetRenderDrawColor : ", d);
 	if (SDL_RenderDrawRect(d->rend, &d->arena) < 0)
@@ -47,31 +47,31 @@ void		disp_init_layer(t_disp *d)
 	d->arena.w -= 2;
 	d->arena.h -= 2;
 	if (SDL_SetRenderTarget(d->rend, d->b_tmp) < 0)
-		error("(menu.c) SDL_SetRenderTarget : ", d);
+		error("(disp.c) SDL_SetRenderTarget : ", d);
 	if (SDL_SetRenderDrawBlendMode(d->rend, SDL_BLENDMODE_BLEND) < 0)
-		error("(menu.c) SDL_SetRenderDrawBlendMode error : ", d);
+		error("(disp.c) SDL_SetRenderDrawBlendMode error : ", d);
 	if (SDL_SetRenderDrawColor(d->rend, 186, 186, 186, 100) < 0)
 		error("(disp.c) SDL_SetRenderDrawColor : ", d);
 	if (SDL_RenderCopy(d->rend, d->back, &d->arena, NULL) < 0)
-		error("(menu.c) SDL_RenderCopy : ", d);
+		error("(disp.c) SDL_RenderCopy : ", d);
 	if (SDL_RenderFillRect(d->rend, NULL) < 0)
 		error("(disp.c) SDL_RenderDrawRect : ", d);
 	if (SDL_SetRenderDrawBlendMode(d->rend, SDL_BLENDMODE_NONE) < 0)
-		error("(menu.c) SDL_SetRenderDrawBlendMode error : ", d);
+		error("(disp.c) SDL_SetRenderDrawBlendMode error : ", d);
 	if (SDL_SetRenderTarget(d->rend, NULL) < 0)
-		error("(menu.c) SDL_SetRenderTarget : ", d);
+		error("(disp.c) SDL_SetRenderTarget : ", d);
 }
 
-void			init_img_load(t_disp *d, SDL_Texture **tex, char *filename)
+void		init_img_load(t_disp *d, SDL_Texture **tex, char *filename)
 {
 	if (!(d->img = IMG_Load(filename)))
-		error("(main.c) IMG_Load : ", d);
+		error("(disp.c) IMG_Load : ", d);
 	if (!(*tex = SDL_CreateTextureFromSurface(d->rend, d->img)))
-		error("(main.c) SDL_CreateTextureFromSurface : ", d);
+		error("(disp.c) SDL_CreateTextureFromSurface : ", d);
 	SDL_FreeSurface(d->img);
 }
 
-void			disp_init_img(t_disp *d)
+void		disp_init_img(t_disp *d)
 {
 	init_img_load(d, &d->back, "img/back2.jpg");
 	init_img_load(d, &d->title, "img/core_title.xcf");
@@ -93,4 +93,4 @@ void		init_window(t_disp *d, t_arena a)
 	disp_init_info(d);
 	disp_init_layer(d);
 	SDL_RenderPresent(d->rend);
-} 
+}
