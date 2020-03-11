@@ -125,15 +125,13 @@ void	check_lives(t_arena *arena)
 {
 	t_process	*it;
 	t_process	*next;
-	t_process	**prev;
 
 	it = arena->process_list;
-	prev = &arena->process_list;
 	while (it)
 	{
 		next = it->next_list;
 		if (arena->cycle - it->last_live > arena->cycle_to_die) // gt or gteq ?
-			kill_process(arena, it, prev);
+			kill_process(arena, it);
 		it = next;
 	}
 	if (arena->total_live_since_check >= NBR_LIVE || arena->max_checks >= MAX_CHECKS)
@@ -150,7 +148,7 @@ void	check_lives(t_arena *arena)
 }
 
 int		do_the_cycle(t_arena *arena)
-{	
+{
 	if (arena->cycles_since_check == arena->cycle_to_die)
 	{
 		check_lives(arena);
