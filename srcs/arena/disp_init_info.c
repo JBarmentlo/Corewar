@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 16:08:57 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/03/09 14:33:13 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/03/12 12:45:13 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,6 @@ void			disp_init_info3(t_disp *d)
 	d->font1 = NULL;
 	if (!((d->font1 = TTF_OpenFont("img/font2.ttf", 25))))
 		error("(disp_init_info.c) TTF_OpenFont : ", d);
-	if (SDL_RenderCopy(d->rend, d->f_tmp, NULL, &d->mod) < 0)
-		error("(disp_init_info.c) SDL_RenderCopy : ", d);
 	d->process.x = 1960;
 	d->process.y = 188;
 	d->process.w = 580;
@@ -133,4 +131,5 @@ void			disp_init_info(t_disp *d)
 	if (SDL_RenderCopy(d->rend, d->tmp, NULL, NULL) < 0)
 		error("(disp_init_info.c) SDL_RenderCopy : ", d);
 	TTF_CloseFont(d->font1);
+	d->font1 = NULL;
 }

@@ -6,25 +6,15 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 15:25:33 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/03/09 14:33:18 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/03/12 17:17:31 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "arena.h"
 
-void		error(char *src, t_disp *d)
+void		error2(t_disp *d)
 {
-	if (ft_strcmp(src, "TTF"))
-		printf("%s%s\n", src, TTF_GetError());
-	else if (ft_strcmp(src, "SDL"))
-		printf("%s%s\n", src, SDL_GetError());
-	else if (ft_strcmp(src, "IMG"))
-		printf("%s%s\n", src, IMG_GetError());
-	else
-		printf("%s\n", src);
 	SDL_DestroyTexture(d->back);
-	SDL_DestroyRenderer(d->rend);
-	///////////////////////////////////////////////////////
 	SDL_DestroyTexture(d->title);
 	SDL_DestroyTexture(d->bar);
 	SDL_DestroyTexture(d->bar_plus);
@@ -39,26 +29,48 @@ void		error(char *src, t_disp *d)
 	SDL_DestroyTexture(d->b_tmp);
 	SDL_DestroyTexture(d->p_tmp);
 	SDL_DestroyTexture(d->f_tmp);
-	///////////////////////////////////////////////////////
 	SDL_DestroyWindow(d->win);
-	TTF_CloseFont(d->font1);
+	SDL_DestroyRenderer(d->rend);
 	TTF_Quit();
 	SDL_Quit();
 	exit(1);
 }
 
+void		error(char *src, t_disp *d)
+{
+	if (ft_strcmp(src, "TTF"))
+		printf("%s%s\n", src, TTF_GetError());
+	else if (ft_strcmp(src, "SDL"))
+		printf("%s%s\n", src, SDL_GetError());
+	else if (ft_strcmp(src, "IMG"))
+		printf("%s%s\n", src, IMG_GetError());
+	else
+		printf("%s\n", src);
+	if (d->img != NULL)
+		SDL_FreeSurface(d->img);
+	if (d->txt != NULL)
+		SDL_FreeSurface(d->txt);
+	if (d->s_arena != NULL)
+		SDL_FreeSurface(d->s_arena);
+	if (d->font1 != NULL)
+		TTF_CloseFont(d->font1);
+	error2(d);
+}
+
 void		disp_ttf(char *ttf, SDL_Color color, t_disp *d)
 {
-	if ((d->txt = TTF_RenderText_Solid(d->font1, ttf, color)) == NULL)
-		error("(disp_init_var.c) TTF_RenderText_Solid : ", d);
+	if ((d->txt = TTF_RenderText_Blended(d->font1, ttf, color)) == NULL)
+		error("(disp_init_var.c) TTF_RenderText_Blended : ", d);
 	if ((d->font = SDL_CreateTextureFromSurface(d->rend, d->txt)) == NULL)
 		error("(disp_init_var.c) SDL_CreateTextureFromSurface : ", d);
 	SDL_FreeSurface(d->txt);
+	d->txt = NULL;
 	if (SDL_QueryTexture(d->font, NULL, NULL, &d->mod.w, &d->mod.h) < 0)
 		error("(disp_init_var.c) SDL_QueryTexture : ", d);
 	if (SDL_RenderCopy(d->rend, d->font, NULL, &d->mod) < 0)
 		error("(disp_init_var.c) SDL_RenderCopy : ", d);
 	SDL_DestroyTexture(d->font);
+	d->font = NULL;
 }
 
 void		disp_init_var2(t_disp *d)
