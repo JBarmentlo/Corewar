@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/05 14:40:40 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/11 17:20:55 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/03/12 17:39:39 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,12 +192,20 @@ void				disp_init_var(t_disp *d);
 void				disp_init_players(t_disp *d, t_arena a);
 void				disp_init_info(t_disp *d);
 void				events(t_disp *d, int *running, int *timeout, t_arena a);
-void				event_mousemotion(t_disp *d, int *timeout, t_arena a);
+void				event_mousemotion(t_disp *d, int *timeout, t_arena a, int ph);
 void				event_mousebutton(t_disp *d, int *running, int *timeout, t_arena a);
 void				disp_ttf(char *ttf, SDL_Color color, t_disp *d);
 void				update_visu(t_disp *d, t_arena a);
-//
+void				update_info_op(t_disp *d, t_arena a, char *info, int i);
+void				update_info_global(t_disp *d, t_arena a, char *info, int i);
+void				update_info_players(t_disp *d, t_arena a, char *info, int i);
+void				update_arena(t_disp *d, t_arena a, int i);
+void				event_motion_bar3(t_disp *d, int i);
+void				event_button_players3(t_disp *d, int i, t_arena a);
 
+
+
+//
 void				bit_dump(void *ptr, int size);
 byte				*int_to_big_endian(int val, int size);
 byte				*endian_switch(void *val, int size);

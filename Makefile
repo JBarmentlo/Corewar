@@ -6,12 +6,9 @@
 #    By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/22 19:37:40 by dberger           #+#    #+#              #
-#    Updated: 2020/03/11 16:21:56 by jbarment         ###   ########.fr        #
+#    Updated: 2020/03/12 17:29:19 by ncoursol         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
-# **************************************************************************** #
-
 
 NO_COLOR = \033[0m
 YELLOW = \033[33m
@@ -53,6 +50,10 @@ COREWAR_SOURCE_FILES=cycle.c \
 	event_mousebutton.c \
 	event_mousemotion.c \
 	update_visu.c \
+	update_info_op.c \
+	update_info_players.c \
+	update_info_global.c \
+	update_info_arena.c \
 	args_utils.c \
 	process.c \
 	process_utils.c \
@@ -77,7 +78,7 @@ COREWAR_SOURCE_FILES=cycle.c \
 	0x15_lfork.c \
 	0x16_aff.c \
 	debug.c \
-	end_free.c
+	end_free.c \
 
 UTILS_SOURCE_FILES=endian_converter.c \
 	op.c \
@@ -161,3 +162,4 @@ re: fclean
 
 .PHONY: re all fclean clean asm corewar
 .SILENT:
+scan=/Users/ncoursol/Documents/corewar/static_analyzer/bin/scan-build
