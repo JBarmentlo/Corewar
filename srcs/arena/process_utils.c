@@ -46,13 +46,29 @@ void	remove_process_from_table(t_arena *arena, t_process *process) //wildly unch
 	}
 }
 
-void	kill_process(t_arena *arena, t_process *it, t_process **prev)
+void	kill_process(t_arena *arena, t_process *process)
 {
-	it->owner->total_process -= 1;
-	arena->total_process_nb -= 1;
-	*prev = it->next_list; //remove it form process_list in arena;
-	remove_process_from_table(arena, it);
-	free(it);
+	t_process *it;
+
+	it = arena->process_list;
+	if (arena->process_list == process)
+	{
+		arena->process_list = it->next_list;
+		remove_process_from_table(arena, process);
+		free(process);
+		return ;
+	}
+	while (it)
+	{
+		if (it->next_list == process)
+		{
+			it->next_list = process->next_list;
+			remove_process_from_table(arena, process);
+			free(process);
+			return ;
+		}
+		it = it->next_list;
+	}
 }
 
 void	add_process_to_table(t_process *process, t_arena *arena, uint table_index)
@@ -65,7 +81,21 @@ void	add_process_to_table(t_process *process, t_arena *arena, uint table_index)
 
 void	add_process_to_list(t_process *process, t_arena *arena)
 {
-
 	process->next_list = arena->process_list;
 	arena->process_list = process;
+}
+
+void	free_all_processes(t_arena *arena)
+{
+	t_process	*it;
+	t_process	*tmp;
+
+	it = arena->process_list;
+	while (it)
+	{
+		tmp = it->next_list;
+		bzero(it, sizeof(t_process));
+		free(it);
+		it = tmp;
+	}
 }

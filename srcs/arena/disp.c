@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:36:59 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/03/09 10:28:19 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/03/12 14:47:01 by ncoursol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void		init_img_load(t_disp *d, SDL_Texture **tex, char *filename)
 	if (!(*tex = SDL_CreateTextureFromSurface(d->rend, d->img)))
 		error("(disp.c) SDL_CreateTextureFromSurface : ", d);
 	SDL_FreeSurface(d->img);
+	d->img = NULL;
 }
 
 void		disp_init_img(t_disp *d)
@@ -86,6 +87,7 @@ void		disp_init_img(t_disp *d)
 
 void		init_window(t_disp *d, t_arena a)
 {
+	(void)a;
 	disp_init_var(d);
 	disp_init_img(d);
 	disp_init_main(d);

@@ -6,13 +6,14 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/05 17:31:54 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/03/11 17:18:45 by jbarment         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "arena.h"
 #include "bitMasks.h"
 #include "stdio.h"
+#include "limits.h"
 
 t_arena		init_vm()
 {
@@ -32,7 +33,7 @@ int		main(int ac, char **av)
 	t_arena		vm;
 	t_champion	*champ;
 	int			i;
-	int			visu = 0;
+	int			visu = 1;
 	unsigned int j;
 
 	i = 0;
@@ -53,18 +54,22 @@ int		main(int ac, char **av)
 		init_window(&d, vm);
 	running = 1;
 	vm.total_process_nb = vm.nb_champs;
-//	print_vm_state(&vm);
-//	hex_dump(&vm);
-printf("CYCLO TO DIE %d\n", vm.cycle_to_die);
-	while (!is_game_over(&vm) && vm.cycle < 10000 && running)
+	count_owned_space(&vm);
+	while (!is_game_over(&vm) && running && ((vm.cycle < (unsigned long)vm.option_dump) || vm.option_dump == 0))
 	{
-		do_the_cycle(&vm);
+		if (vm.cycle == UINT64_MAX)
+		{
+			printf("dude this is taking forever\n");
+			break ;
+		}
+		if (!visu)
+			do_the_cycle(&vm);
 		if (visu)
 		{
 			timeout = SDL_GetTicks() + 100;
 			i = SDL_GetTicks() + 100;
 			j = 0;
-			while (j < d.delay)
+			while (j < d.delay && ((vm.cycle < (unsigned long)vm.option_dump) || vm.option_dump == 0))
 			{
 				do_the_cycle(&vm);
 				j++;
@@ -91,8 +96,11 @@ printf("CYCLO TO DIE %d\n", vm.cycle_to_die);
 			update_visu(&d, vm);
 		}   
 	}
-	hex_dump(&vm);
+	if (vm.option_dump != 0)
+		hex_dump_ugly(&vm);
 	if (visu)
 		error("End.", &d);
+	free_all(&vm);
 	return (TRUE);
 }
+

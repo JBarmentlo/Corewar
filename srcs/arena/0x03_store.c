@@ -19,7 +19,7 @@ void    x03(t_arena *arena, t_process *process)
     {
         mem_write_int(arena, process->PC + (arena->args->val[1] % IDX_MOD), val);
 		mem_write_color(arena, process->PC + (arena->args->val[1] % IDX_MOD), 4 , process->owner->number);
-		if ((VERBOSE & STORE) == STORE)
+		if (VERBOSE & STORE)
 		{
 			printf("store %d to mem[%d]\n", val, process->PC + (arena->args->val[1] % IDX_MOD));
 		}

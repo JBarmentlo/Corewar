@@ -6,12 +6,9 @@
 #    By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/22 19:37:40 by dberger           #+#    #+#              #
-#    Updated: 2020/03/09 16:46:21 by dberger          ###   ########.fr        #
-#    Updated: 2020/02/11 10:00:57 by ncoursol         ###   ########.fr        #
-#    Updated: 2020/03/05 17:03:11 by jbarment         ###   ########.fr        #
+#    Updated: 2020/03/12 17:29:19 by ncoursol         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
 
 NO_COLOR = \033[0m
 YELLOW = \033[33m
@@ -34,7 +31,7 @@ LIB = $(PRINTF_DIR)/libftprintf.a $(LIB_DIR)/libft.a
 
 SCANNER=/Users/dberger/static_analyzer/bin/scan-build
 CC=gcc
-CFLAGS= -Wall -Wextra -Werror
+CFLAGS= -Wall -Wextra -Werror -g3
 INCLUDE_PATH=-I $(INCLUDE_FOLDER) -I $(SDL_INCLUDE_FOLDER)
 
 COMPILER=$(CC) $(CFLAGS) $(INCLUDE_PATH)
@@ -53,6 +50,10 @@ COREWAR_SOURCE_FILES=cycle.c \
 	event_mousebutton.c \
 	event_mousemotion.c \
 	update_visu.c \
+	update_info_op.c \
+	update_info_players.c \
+	update_info_global.c \
+	update_info_arena.c \
 	args_utils.c \
 	process.c \
 	process_utils.c \
@@ -76,13 +77,15 @@ COREWAR_SOURCE_FILES=cycle.c \
 	0x14_lldi.c \
 	0x15_lfork.c \
 	0x16_aff.c \
-	debug.c
+	debug.c \
+	end_free.c \
 
 UTILS_SOURCE_FILES=endian_converter.c \
 	op.c \
 	read_write.c \
 	ft_error.c \
-	usage.c
+	usage.c \
+	mem_color.c
 
 ASM_SOURCE_FILES=main_asm.c \
 	cor_file.c \
@@ -159,3 +162,4 @@ re: fclean
 
 .PHONY: re all fclean clean asm corewar
 .SILENT:
+scan=/Users/ncoursol/Documents/corewar/static_analyzer/bin/scan-build

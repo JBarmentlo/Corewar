@@ -87,6 +87,37 @@ void	hex_dump(t_arena *arena)
 	}
 }
 
+void	check_negative_PC(t_arena *arena)
+{
+	t_process	*it;
+
+	it = arena->process_list;
+	while (it)
+	{
+		if ((int16_t)it->PC < 0)
+			printf("YOOOOOOOOOOSEF NEGATIV PC BRO \n KJBASFDKJNSDF\n JHABSDFKJHBSEF\n");
+		it = it->next_list;
+	}
+}
+
+void	hex_dump_ugly(t_arena *arena)
+{
+	size_t		i;
+	int			zeroes;
+	int			offset;
+
+	zeroes = 0;
+	offset = 0;
+	i = 0;
+	while (i < MEM_SIZE)
+	{	
+		if (i % 32 == 0)
+			printf ("\n");
+		printf("%02x ", arena->memory[i]);
+		i++;
+	}
+}
+
 void	dump_color(t_arena *arena)
 {
 	int	i = 0;
