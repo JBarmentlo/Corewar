@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "arena.h"
+#include "utils.h"
 
 int		ft_error5(char *str, size_t line, size_t col)
 {
