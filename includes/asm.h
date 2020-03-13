@@ -26,7 +26,8 @@
 
 typedef struct			s_argz
 {
-	int			type; // 1 pour REGISTRE, 2 pour DIRECT, 3 pour INDIRECT
+	int			type; // T_REG, T_DIR, T_IND
+	int			code; // REG_CODE, DIR_CODE, IND_CODE
 	char			*lab; // NULL sauf si appel a label (:live)
 	long			value; // si lab != NULL on ne prend pas en compte value
 	size_t			oct; // nombre d'octets pris en memoire en fonction du type

@@ -15,6 +15,7 @@
 t_argz		is_register(t_argz argz)
 {
 	argz.type = T_REG;
+	argz.code = REG_CODE;
 	argz.oct = T_REG;
 	return (argz);
 }
@@ -22,6 +23,7 @@ t_argz		is_register(t_argz argz)
 t_argz		is_direct(t_argz argz, size_t inst_type)
 {
 	argz.type = T_DIR;
+	argz.code = DIR_CODE;
 	if (g_op_tab[inst_type - 1].is_direct_small == 1)
 		argz.oct = DIR_SIZE / 2; // car DIR SIZE = 4 au lieu de 2
 	else
@@ -32,14 +34,14 @@ t_argz		is_direct(t_argz argz, size_t inst_type)
 
 t_argz		is_indirect(t_argz argz)
 {
-	ft_printf("T_IND = [%d]\n", T_IND);
 	argz.type = T_IND;
+	argz.code = IND_CODE;
 	argz.oct = IND_SIZE;
 	/////// indirect devrait etre code sur 2 octets ///
 	return (argz);
 }
 
-int		ft_atolong(const char *str, t_argz *argz)
+int		ft_atolong(const char *str, t_argz *argz, int *i)
 {
 	long	neg;
 	long	nb;
@@ -48,23 +50,23 @@ int		ft_atolong(const char *str, t_argz *argz)
 	neg = 1;
 	nb = 0;
 	bits = 0;
-	while (*str == ' ' || *str == '\f' || *str == '\t'
-			|| *str == '\n' || *str == '\r' || *str == '\v')
-		str++;
-	if (*str == '-')
+	while (str[*i] == ' ' || str[*i] == '\f' || str[*i] == '\t'
+			|| str[*i] == '\n' || str[*i] == '\r' || str[*i] == '\v')
+		*i += 1;
+	if (str[*i] == '-')
 		neg = -1;
-	if (*str == '-' || *str == '+')
-		str++;
-	while (ft_isdigit((long)*str))
+	if (str[*i] == '-' || str[*i] == '+')
+		*i += 1;
+	while (ft_isdigit((long)str[*i]))
 	{
-		nb = 10 * nb + *str - 48;
+		nb = 10 * nb + str[*i] - 48;
 		bits = count_bits(nb);
 		if (bits >= 63)
 		{
 			argz->value = 4294967295;
 			return (TRUE);
 		}
-		str++;
+		*i += 1;
 	}
 	argz->value = nb * neg;
 	return (TRUE);
@@ -72,22 +74,8 @@ int		ft_atolong(const char *str, t_argz *argz)
 
 t_argz		numeric_value(char *line, int *i, t_argz argz)
 {
-	ft_atolong(line + *i, &argz);
-	if (argz.type == T_REG && (argz.value > REG_NUMBER || argz.value < 1))
-		return (argz);
+	ft_atolong(line, &argz, i);
 	argz.lab = NULL;
-	if (line[*i] == '-')
-		*i += 1;
-	while (line[*i] != SEPARATOR_CHAR && line[*i] != '\0' && line[*i] != COMMENT_CHAR && line[*i] != ALT_COMMENT_CHAR)
-	{
-		if (ft_isdigit(line[*i]) == 0 && line[*i] != ' ' && line[*i] != '\t')
-		{
-			argz.value = -1;
-			argz.type = 0;
-			return (argz);
-		}
-		*i += 1;
-	}
 	return (argz);
 }
 
@@ -118,7 +106,7 @@ t_argz		is_argument(char *line, int *i, size_t inst_type, t_argz argz)
 		argz = is_direct(argz, inst_type);
 	else
 		argz = is_indirect(argz);
-	if (line[*i] != LABEL_CHAR)
+	if (line[*i] != LABEL_CHAR && argz.type != T_IND)
 		*i += 1;
 	if (line[*i] != '\0' && line[*i] != LABEL_CHAR)
 		argz = numeric_value(line, i, argz); // gesstion d'erreur??
@@ -321,5 +309,7 @@ int		parsing_exec(t_stack *stack, int fd)
 		}
 		ft_memdel((void**)&line);
 	}
+	if (stack->first_op == NULL)
+		return ((int)ft_error("Missing exec_code for the champion", NULL));
 	return (TRUE);
 }

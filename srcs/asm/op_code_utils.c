@@ -35,7 +35,7 @@ int		encoding_byte(t_instruct *op)
 	k = 0;
 	while (k < op->nb_args)
 	{
-		i = i | op->argz[k].type;
+		i = i | op->argz[k].code;
 		i = i << 2;
 		k++;
 	}

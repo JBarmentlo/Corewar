@@ -138,7 +138,7 @@ int     get_header_file(t_stack *stack, int fd)
 	else if (type == 'c' && ft_strlen(tmp) < COMMENT_LENGTH)
 		stack->comment = ft_strcpy(stack->comment, tmp);
 	else
-		return ((int)ft_error(".Command too long : ", tmp));
+		return ((int)ft_error(".Command too long", NULL));
 	ft_memdel((void**)&tmp);
 	return (1);
 }
