@@ -37,7 +37,7 @@ int		get_header_file4(char **line, int *i, char **tmp, int fd)
 	while (line[0][*i] != '\0' && line[0][*i] != '#')
 	{
 		if (line[0][*i] != '\0' && line[0][*i] != ' ' && line[0][*i] != '\t')
-			return (ft_error("Wrong header .command format : ", *line));
+			return ((int)ft_error("Wrong header .command format : ", *line));
 		*i += 1;
 	}
 	ft_memdel((void**)line);
@@ -77,7 +77,7 @@ size_t     get_header_file2(int fd, char **line, int *i, int *type)
 		while (line[0][*i] != '\0' && line[0][*i] != '#' && line[0][*i] != '.')
 		{
 			if (line[0][*i] != ' ' && line[0][*i] != '\t')
-				return (ft_error("Wrong header .command format : ", *line));
+				return ((int)ft_error("Wrong header .command format : ", *line));
 			*i += 1;
 		}
 		if (line[0][*i] == '.')
@@ -88,20 +88,20 @@ size_t     get_header_file2(int fd, char **line, int *i, int *type)
 	if (*type == 'n')
 	{
 		if (ft_strncmp(*line + *i, ".name", 5) < 0)
-			return (ft_error("Wrong header .command format : ", *line));
+			return ((int)ft_error("Wrong header .command format : ", *line));
 	}
 	else if (*type == 'c')
 		if (ft_strncmp(*line + *i, ".comment", 8) < 0)
-			return (ft_error("Wrong header .command format : ", *line));
+			return ((int)ft_error("Wrong header .command format : ", *line));
 	*i += (*type == 'n' ? 5 : 8);
 	while (line[0][*i] != '\0' && line[0][*i] != '"')
 	{
 		if (line[0][*i] != ' ' && line[0][*i] != '\t')
-			return (ft_error("Wrong header .command format : ", *line));
+			return ((int)ft_error("Wrong header .command format : ", *line));
 		*i += 1;
 	}
 	if (line[0][*i] != '"')
-		return (ft_error("Wrong header .command format : ", *line));
+		return ((int)ft_error("Wrong header .command format : ", *line));
 	*i += 1;
 	return (lines);
 }
@@ -138,7 +138,7 @@ int     get_header_file(t_stack *stack, int fd)
 	else if (type == 'c' && ft_strlen(tmp) < COMMENT_LENGTH)
 		stack->comment = ft_strcpy(stack->comment, tmp);
 	else
-		return (ft_error(".Command too long : ", tmp));
+		return ((int)ft_error(".Command too long : ", tmp));
 	ft_memdel((void**)&tmp);
 	return (1);
 }

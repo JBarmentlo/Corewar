@@ -144,20 +144,20 @@ t_instruct		*check_args(char *line, int *i, t_instruct *op, t_stack *stack)
 		if (line[*i] != SEPARATOR_CHAR && line[*i] != ' ' && line[*i] != '\t' && line[*i] != '\0')
 		{
 			if (k > 0 && (k < g_op_tab[op->type - 1].arg_nb) && k > sep_char)
-				return (ft_error4("Missing separator_char before the argument", line + *i, stack->nb_lines, *i));
+				return (ft_error_nb("Missing separator_char before the argument", line + *i, stack->nb_lines, *i));
 			if (k > 0 && (k < g_op_tab[op->type - 1].arg_nb) && k < sep_char)
-				return (ft_error4("Too many separator_char before the argument", line + *i, stack->nb_lines, *i));
+				return (ft_error_nb("Too many separator_char before the argument", line + *i, stack->nb_lines, *i));
 			if (k >= g_op_tab[op->type - 1].arg_nb)
-				return (ft_error4("Too many arguments for the op_code", op->name, stack->nb_lines, *i));
+				return (ft_error_nb("Too many arguments for the op_code", op->name, stack->nb_lines, *i));
 			argz = op->argz[k];
 			save = *i;
 			argz = is_argument(line, i, op->type, argz);
 			if (argz.value == -1 && argz.type == 0)
-				return (ft_error4("Wrong syntaxe for first argument of the op_code", op->name, stack->nb_lines, *i));
+				return (ft_error_nb("Wrong syntaxe for first argument of the op_code", op->name, stack->nb_lines, *i));
 			if (argz.type == T_REG && argz.value > REG_NUMBER)
-				return (ft_error3("A register number should be between 1 and 16", stack->nb_lines, *i));
+				return (ft_error_nb("A register number should be between 1 and 16", NULL, stack->nb_lines, *i));
 			if ((argz.type & g_op_tab[op->type - 1].arg_types[k]) != argz.type)
-				return (ft_error4("Wrong type of arguments for the op_code", op->name, stack->nb_lines, *i));
+				return (ft_error_nb("Wrong type of arguments for the op_code", op->name, stack->nb_lines, *i));
 			op->argz[k] = argz;
 			k++;
 		}
@@ -166,7 +166,7 @@ t_instruct		*check_args(char *line, int *i, t_instruct *op, t_stack *stack)
 		*i += 1;
 	}
 	if (k < g_op_tab[op->type - 1].arg_nb)
-		return (ft_error2("Invalid parameter count for instruction", op->name));
+		return (ft_error("Invalid parameter count for instruction", op->name));
 	return (op);
 }
 
@@ -201,10 +201,10 @@ t_instruct		*is_instruct(char *line, int *i, int start, t_stack *stack)
 	if (op->type == 0)
 	{
 		if (!ft_strcmp(op->name, NAME_CMD_STRING))
-			return (ft_error3("Can't have twice the definition of the champion's name", stack->nb_lines, start + 1));
+			return (ft_error_nb("Can't have twice the definition of the champion's name", NULL, stack->nb_lines, start + 1));
 		if (!ft_strcmp(op->name, COMMENT_CMD_STRING))
-			return (ft_error3("Can't have twice the definition of the champion's comment", stack->nb_lines, start + 1));
-		return (ft_error4("Wrong syntaxe for the op_code", op->name, stack->nb_lines, start + 1));
+			return (ft_error_nb("Can't have twice the definition of the champion's comment", NULL, stack->nb_lines, start + 1));
+		return (ft_error_nb("Wrong syntaxe for the op_code", op->name, stack->nb_lines, start + 1));
 	}
 	op->nb_args = g_op_tab[op->type - 1].arg_nb;
 	op->oct = stack->cur_octet;
@@ -228,7 +228,7 @@ t_label		*is_label(char *line, t_stack *stack, int s, int i)
 	while (s < i)
 	{
 		if (ft_strchr(LABEL_CHARS, (int)line[s]) == NULL)
-			return (ft_error3("Lexical error for a label", stack->nb_lines, s + 1));
+			return (ft_error_nb("Lexical error for a label", NULL, stack->nb_lines, s + 1));
 		s++;
 	}
 	label->name = ft_memalloc(sizeof(char) * s);

@@ -34,10 +34,8 @@ typedef struct			s_op
 extern	t_op			g_op_tab[17];
 
 int				usage(int prog);
-int				ft_error(char *str, char *str2);
-void				*ft_error2(char *str, char *str2);
-void				*ft_error3(char *str, size_t line, size_t col);
-void				*ft_error4(char *str, char *str2, size_t line, size_t col);
+void				*ft_error(char *str, char *str2);
+void				*ft_error_nb(char *str, char *str2, size_t line, size_t col);
 int				ft_error5(char *str, size_t line, size_t col);
 
 #endif

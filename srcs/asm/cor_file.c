@@ -21,7 +21,7 @@ int		init_file(t_file *out_file, char *source_file)
 	while (source_file[i] && source_file[i] != '.')
 		i++;
 	if (source_file[i] == '\0' || source_file[i + 1] == '\0' || source_file[i + 1] != 's' || source_file[i + 2] != '\0')
-		return (ft_error("Wrong source file format", NULL));
+		return ((int)ft_error("Wrong source file format", NULL));
 	out_file->total_size = 0;
 	out_file->prog_size = 0;
 	out_file->name = ft_memalloc(i + 4);
@@ -78,9 +78,9 @@ int		fill_opcode(t_file *out_file, t_stack stack)
 int		parsing_header(t_stack *stack, int fd)
 {
 	if (!(stack->champion_name = ft_memalloc(sizeof(char) * PROG_NAME_LENGTH)))
-		return (ft_error("\"stack->champion_name\" allocation fail.", NULL));
+		return ((int)ft_error("\"stack->champion_name\" allocation fail.", NULL));
 	if (!(stack->comment = ft_memalloc(sizeof(char) * COMMENT_LENGTH)))
-		return (ft_error("\"stack->comment\" allocation fail.", NULL));
+		return ((int)ft_error("\"stack->comment\" allocation fail.", NULL));
 	stack->champion_name[PROG_NAME_LENGTH] = '\0';
 	stack->comment[COMMENT_LENGTH] = '\0';
 	stack->nb_lines = 0;
@@ -114,6 +114,6 @@ int		cor_file(char *source_file, t_file *out_file, int fd)
 	out_file->total_size -= INFO_PROG;
 	out_file->fd = open(out_file->name, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
 	if (out_file->fd <= 0)
-		return (ft_error("Can't create the file", out_file->name));
+		return ((int)ft_error("Can't create the file", out_file->name));
 	return (TRUE);
 }

@@ -39,7 +39,7 @@ int		check_errors_nb(int *nb, int i, int k)
 	while (k > 0 && i > 0)
 	{
 		if (nb[i] == NO_NB)
-			return (ft_error("NB higher than the amount of champions", NULL));
+			return ((int)ft_error("NB higher than the amount of champions", NULL));
 		k--;
 		i--;
 	}
