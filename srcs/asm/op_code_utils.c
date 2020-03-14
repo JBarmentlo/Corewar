@@ -50,23 +50,18 @@ int		encoding_byte(t_instruct *op)
 
 int		find_label(char *to_find, t_label *label)
 {
-	t_label *save;
 	int		oct_lab;
 
-	save = label;
-	oct_lab = 0;
 	while (label != NULL)
 	{
 		if (!ft_strcmp(label->name, to_find))
 		{
 			oct_lab = label->oct;
-			label = save;
 			return (oct_lab);
 		}
 		else
 			label = label->next;
 	}
-	label = save;
 	return (FALSE);
 }
 
@@ -74,12 +69,9 @@ int		write_op_values(t_file *out_file, int *i, t_instruct *op, t_stack stack)
 {
 	size_t k;
 	int	to_label;
-	int	oct;
 	t_label	*label;
 
 	k = 0;
-	to_label = 0;
-	oct = 0;
 	label = stack.first_label;
 	while (k < op->nb_args)
 	{

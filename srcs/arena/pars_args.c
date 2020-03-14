@@ -78,7 +78,6 @@ int		option_nb(int *opt, char **av, int *ac, t_arena *vm)
 {
 	int		nb;
 
-	nb = 0;
 	if (ft_strcmp(av[*ac], "-dump"))
 		return (TRUE);
 	if (*opt == 1)

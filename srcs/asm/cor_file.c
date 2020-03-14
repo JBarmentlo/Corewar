@@ -71,7 +71,6 @@ int		fill_opcode(t_file *out_file, t_stack stack)
 			return (FALSE);
 		op = op->next;
 	}
-	op = stack.first_op;
 	return (TRUE);
 }
 
@@ -96,7 +95,6 @@ int		cor_file(char *source_file, t_file *out_file, int fd)
 	t_stack		stack;
 	int			real_prog_size;
 
-	real_prog_size = 0;
 	if (parsing_header(&stack, fd) == FALSE)
 		return (FALSE);
 	if (init_file(out_file, source_file) == FALSE)

@@ -49,7 +49,6 @@ int		ft_atolong(const char *str, t_argz *argz, int *i)
 
 	neg = 1;
 	nb = 0;
-	bits = 0;
 	while (str[*i] == ' ' || str[*i] == '\f' || str[*i] == '\t'
 			|| str[*i] == '\n' || str[*i] == '\r' || str[*i] == '\v')
 		*i += 1;
@@ -126,7 +125,6 @@ t_instruct		*check_args(char *line, int *i, t_instruct *op, t_stack *stack)
 
 	k = 0;
 	sep_char = 0;
-	save = 0;
 	while (line[*i] != '\0' && line[*i] != COMMENT_CHAR && line[*i] != ALT_COMMENT_CHAR)
 	{
 		if (line[*i] != SEPARATOR_CHAR && line[*i] != ' ' && line[*i] != '\t' && line[*i] != '\0')
@@ -177,11 +175,7 @@ void	update_oct(t_instruct *op, int *cur_octet, int *i)
 t_instruct		*is_instruct(char *line, int *i, int start, t_stack *stack)
 {
 	t_instruct	*op;
-	int			k;
-	int			w;
 
-	k = 0;
-	w = 0;
 	op = ft_memalloc(sizeof(t_instruct));
 	op->name = ft_memalloc(sizeof(char) * (*i - start)); 
 	op->name = ft_stricpy(op->name, line, start, *i);

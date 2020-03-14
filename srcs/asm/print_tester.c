@@ -19,7 +19,6 @@ void	print_tester(t_stack *stack)
 	t_instruct	*op;
 	int			i;
 
-	i = 0;
 	label = stack->first_label;
 	while (label != NULL)
 	{
@@ -27,7 +26,6 @@ void	print_tester(t_stack *stack)
 		label = label->next;
 	}
 	ft_printf("\n");
-	label = stack->first_label;
 	op = stack->first_op;
 	while (op != NULL)
 	{
@@ -41,5 +39,4 @@ void	print_tester(t_stack *stack)
 		}
 		op = op->next;
 	}
-	op = stack->first_op;
 }

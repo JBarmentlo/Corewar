@@ -26,7 +26,6 @@ int			stock_file(t_champion *champ)
 	char	buf[SIZE_MAX_PROG + 1];
 	uint	min_header;
 
-	ret = 0;
 	ret = read(champ->fd, buf, SIZE_MAX_PROG);
 	buf[ret] = '\0';
 	min_header = sizeof(COREWAR_EXEC_MAGIC) + PROG_NAME_LENGTH + PADDING;
@@ -55,7 +54,6 @@ int32_t		string_to_int(t_champion *champ, int size, int i)
 
 	k = 0;
 	nb = 0;
-	n = 0;
 	while (k < size)
 	{
 		if (nb == 0)
@@ -85,15 +83,13 @@ int32_t		string_to_int(t_champion *champ, int size, int i)
 int			name_size_comment(t_champion *champ)
 {
 	int		i;
-	uint	nb;
+	uint		nb;
 	int		total_name;
 	int		total_comment;
-	int		size_header;
 
 	total_name = PROG_NAME_LENGTH + PADDING;
 	total_comment = COMMENT_LENGTH + PADDING;
 	i = sizeof(COREWAR_EXEC_MAGIC);
-	size_header = i + total_name + INFO_SIZE_CODE + total_comment;
 	ft_bzero(champ->header.prog_name, PROG_NAME_LENGTH + 1);
 	ft_bzero(champ->header.comment, COMMENT_LENGTH + 1);
 	ft_memcpy(champ->header.prog_name, champ->prog + i, total_name);

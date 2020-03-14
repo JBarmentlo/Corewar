@@ -17,7 +17,6 @@ int main(int ac, char **av)
 	int		fd;
 	t_file	out_file;
 
-	fd = 0;
 	if (ac == 0)
 		return ((int)ft_error("No arguments", NULL));
 	if (ac == 1)

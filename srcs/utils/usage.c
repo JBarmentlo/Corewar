@@ -17,7 +17,6 @@ int		usage(int prog)
 	int		fd;
 	char	*line;
 
-	fd = 0;
 	line = NULL;
 	if (prog == COREWAR)
 		fd = open("./srcs/utils/usage_corewar.txt", O_RDONLY);

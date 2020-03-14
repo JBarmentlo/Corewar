@@ -103,11 +103,7 @@ void	check_negative_PC(t_arena *arena)
 void	hex_dump_ugly(t_arena *arena)
 {
 	size_t		i;
-	int			zeroes;
-	int			offset;
 
-	zeroes = 0;
-	offset = 0;
 	i = 0;
 	while (i < MEM_SIZE)
 	{	

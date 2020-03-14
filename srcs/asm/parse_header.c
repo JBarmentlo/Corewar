@@ -37,7 +37,7 @@ int		get_header_file4(char **line, int *i, char **tmp, int fd)
 	while (line[0][*i] != '\0' && line[0][*i] != '#')
 	{
 		if (line[0][*i] != '\0' && line[0][*i] != ' ' && line[0][*i] != '\t')
-			return ((int)ft_error("Wrong header .command format : ", *line));
+			return ((int)ft_error("6 Wrong header .command format : ", *line));
 		*i += 1;
 	}
 	ft_memdel((void**)line);
@@ -47,9 +47,7 @@ int		get_header_file4(char **line, int *i, char **tmp, int fd)
 char	*get_header_file3(int fd, char **line, int *i, int *type)
 {
 	char	*tmp;
-	int		j;
 
-	j = 0;
 	tmp = (*type == 0 ? ft_memalloc(sizeof(char) * PROG_NAME_LENGTH) : ft_memalloc(sizeof(char) * COMMENT_LENGTH));
 	*type = 0;
 	if (line[0][*i] == '\0')
@@ -77,7 +75,7 @@ size_t     get_header_file2(int fd, char **line, int *i, int *type)
 		while (line[0][*i] != '\0' && line[0][*i] != '#' && line[0][*i] != '.')
 		{
 			if (line[0][*i] != ' ' && line[0][*i] != '\t')
-				return ((int)ft_error("Wrong header .command format : ", *line));
+				return ((int)ft_error("5 Wrong header .command format : ", *line));
 			*i += 1;
 		}
 		if (line[0][*i] == '.')
@@ -88,20 +86,20 @@ size_t     get_header_file2(int fd, char **line, int *i, int *type)
 	if (*type == 'n')
 	{
 		if (ft_strncmp(*line + *i, ".name", 5) < 0)
-			return ((int)ft_error("Wrong header .command format : ", *line));
+			return ((int)ft_error("4 Wrong header .command format : ", *line));
 	}
 	else if (*type == 'c')
 		if (ft_strncmp(*line + *i, ".comment", 8) < 0)
-			return ((int)ft_error("Wrong header .command format : ", *line));
+			return ((int)ft_error("3 Wrong header .command format : ", *line));
 	*i += (*type == 'n' ? 5 : 8);
 	while (line[0][*i] != '\0' && line[0][*i] != '"')
 	{
 		if (line[0][*i] != ' ' && line[0][*i] != '\t')
-			return ((int)ft_error("Wrong header .command format : ", *line));
+			return ((int)ft_error("2 Wrong header .command format : ", *line));
 		*i += 1;
 	}
 	if (line[0][*i] != '"')
-		return ((int)ft_error("Wrong header .command format : ", *line));
+		return ((int)ft_error("1 Wrong header .command format : ", *line));
 	*i += 1;
 	return (lines);
 }
