@@ -116,44 +116,72 @@ t_argz		is_argument(char *line, int *i, size_t inst_type, t_argz argz)
 	return (argz);
 }
 
-t_instruct		*check_args(char *line, int *i, t_instruct *op, t_stack *stack)
+int		check_value(t_argz argz, t_instruct *op, int k, int line, int col)
 {
-	int			k;
-	t_argz		argz;
-	int			sep_char;
-	int			save;
+	if (argz.type == T_REG && argz.value > REG_NUMBER)
+		return ((int)ft_error_nb(WRONG_REG_NUM, NULL, line, col));
+	if ((argz.type & g_op_tab[op->type - 1].arg_types[k]) != argz.type)
+		return ((int)ft_error_nb(WRONG_TYPE_ARG, g_op_tab[op->type - 1].name, line, col));
+	return (TRUE);
+}
 
+int		check_sep(int sep_char, int k, t_token token)
+{
+	if (sep_char >= g_op_tab[token.op_type - 1].arg_nb)
+		return ((int)ft_error_nb(TOO_MANY_SEP_A, token.name, token.line, token.col));
+	if (k == g_op_tab[token.op_type - 1].arg_nb - 1 && sep_char < k)
+		return (TRUE);
+	if (k > 0 && (k < g_op_tab[token.op_type - 1].arg_nb) && k > sep_char)
+		return ((int)ft_error_nb(MISSING_SEP, token.name, token.line, token.col));
+	if (k > 0 && (k < g_op_tab[token.op_type - 1].arg_nb) && k < sep_char)
+		return ((int)ft_error_nb(TOO_MANY_SEP_B, token.name, token.line, token.col));
+	return (TRUE);	
+}
+
+int	check_args(char *line, int *i, t_instruct *op, t_stack *stack)
+{
+	int		k;
+	int		sep_char;
+	t_argz		argz;
+	t_token		token;
+	t_token		last_token;
+	
 	k = 0;
 	sep_char = 0;
+	token.name = NULL;
 	while (line[*i] != '\0' && line[*i] != COMMENT_CHAR && line[*i] != ALT_COMMENT_CHAR)
 	{
-		if (line[*i] != SEPARATOR_CHAR && line[*i] != ' ' && line[*i] != '\t' && line[*i] != '\0')
+		if (line[*i] != ' ' && line[*i] != '\t' && line[*i] != '\0')
 		{
-			if (k > 0 && (k < g_op_tab[op->type - 1].arg_nb) && k > sep_char)
-				return (ft_error_nb("Missing separator_char before the argument", line + *i, stack->nb_lines, *i));
-			if (k > 0 && (k < g_op_tab[op->type - 1].arg_nb) && k < sep_char)
-				return (ft_error_nb("Too many separator_char before the argument", line + *i, stack->nb_lines, *i));
-			if (k >= g_op_tab[op->type - 1].arg_nb)
-				return (ft_error_nb("Too many arguments for the op_code", op->name, stack->nb_lines, *i));
-			argz = op->argz[k];
-			save = *i;
-			argz = is_argument(line, i, op->type, argz);
-			if (argz.value == -1 && argz.type == 0)
-				return (ft_error_nb("Wrong syntaxe for first argument of the op_code", op->name, stack->nb_lines, *i));
-			if (argz.type == T_REG && argz.value > REG_NUMBER)
-				return (ft_error_nb("A register number should be between 1 and 16", NULL, stack->nb_lines, *i));
-			if ((argz.type & g_op_tab[op->type - 1].arg_types[k]) != argz.type)
-				return (ft_error_nb("Wrong type of arguments for the op_code", op->name, stack->nb_lines, *i));
-			op->argz[k] = argz;
-			k++;
+			if (k >= g_op_tab[op->type - 1].arg_nb && line[*i] != SEPARATOR_CHAR)
+				return ((int)ft_error_nb(TOO_MANY_ARGS, g_op_tab[op->type - 1].name, stack->nb_lines, *i));
+			if (line[*i] != SEPARATOR_CHAR)
+			{
+				last_token = token;
+				token = fill_token(line, stack->nb_lines, i, op->type);
+				if (check_sep(sep_char, k, token) == FALSE)
+					return (FALSE);
+				argz = op->argz[k];
+				argz = is_argument(line, i, op->type, argz);
+				if (line[*i] == SEPARATOR_CHAR)
+					sep_char++;
+				last_token = token;
+				token = fill_token(line, stack->nb_lines, i, op->type);
+				if (check_value(argz, op, k, stack->nb_lines, *i) == FALSE)
+					return (FALSE);
+				op->argz[k] = argz;
+				k++;
+			}
+			else
+				sep_char += 1;
 		}
-		if (line[*i] == SEPARATOR_CHAR)
-			sep_char += 1;
 		*i += 1;
 	}
+	if (check_sep(sep_char, k, last_token) == FALSE)
+		return (FALSE);
 	if (k < g_op_tab[op->type - 1].arg_nb)
-		return (ft_error("Invalid parameter count for instruction", op->name));
-	return (op);
+		return ((int)ft_error_nb(MISSING_ARG, g_op_tab[op->type - 1].name, stack->nb_lines, *i));
+	return (TRUE);
 }
 
 void	update_oct(t_instruct *op, int *cur_octet, int *i)
@@ -175,22 +203,23 @@ void	update_oct(t_instruct *op, int *cur_octet, int *i)
 t_instruct		*is_instruct(char *line, int *i, int start, t_stack *stack)
 {
 	t_instruct	*op;
+	char		*op_name;
 
 	op = ft_memalloc(sizeof(t_instruct));
-	op->name = ft_memalloc(sizeof(char) * (*i - start)); 
-	op->name = ft_stricpy(op->name, line, start, *i);
-	op->type = find_opcode(op->name);
+	op_name = ft_memalloc(sizeof(char) * (*i - start)); 
+	op_name = ft_stricpy(op_name, line, start, *i);
+	op->type = find_opcode(op_name);
 	if (op->type == 0)
 	{
-		if (!ft_strcmp(op->name, NAME_CMD_STRING))
-			return (ft_error_nb("Can't have twice the definition of the champion's name", NULL, stack->nb_lines, start + 1));
-		if (!ft_strcmp(op->name, COMMENT_CMD_STRING))
-			return (ft_error_nb("Can't have twice the definition of the champion's comment", NULL, stack->nb_lines, start + 1));
-		return (ft_error_nb("Wrong syntaxe for the op_code", op->name, stack->nb_lines, start + 1));
+		if (!ft_strcmp(op_name, NAME_CMD_STRING))
+			return (ft_error_nb(TOO_MANY_NAMES, NULL, stack->nb_lines, start + 1));
+		if (!ft_strcmp(op_name, COMMENT_CMD_STRING))
+			return (ft_error_nb(TOO_MANY_COMMENTS, NULL, stack->nb_lines, start + 1));
+		return (ft_error_nb(WRONG_SYNTAX_OP, op_name, stack->nb_lines, start + 1));
 	}
 	op->nb_args = g_op_tab[op->type - 1].arg_nb;
 	op->oct = stack->cur_octet;
-	if (check_args(line, i, op, stack) == NULL)
+	if (check_args(line, i, op, stack) == FALSE)
 		return (NULL);
 	if (*i > 0 && (line[*i - 1] == COMMENT_CHAR || line[*i - 1] == ALT_COMMENT_CHAR))
 		return (op);
@@ -210,7 +239,7 @@ t_label		*is_label(char *line, t_stack *stack, int s, int i)
 	while (s < i)
 	{
 		if (ft_strchr(LABEL_CHARS, (int)line[s]) == NULL)
-			return (ft_error_nb("Lexical error for a label", NULL, stack->nb_lines, s + 1));
+			return (ft_error_nb(LABEL_ERROR, NULL, stack->nb_lines, s + 1));
 		s++;
 	}
 	label->name = ft_memalloc(sizeof(char) * s);
@@ -304,6 +333,6 @@ int		parsing_exec(t_stack *stack, int fd)
 		ft_memdel((void**)&line);
 	}
 	if (stack->first_op == NULL)
-		return ((int)ft_error("Missing exec_code for the champion", NULL));
+		return ((int)ft_error(MISSING_CODE, NULL));
 	return (TRUE);
 }

@@ -24,6 +24,29 @@
 # define MAX_ARGS		3
 # define ALT_COMMENT_CHAR    	';'
 
+///// ERROR MESSAGE ///
+# define WRONG_REG_NUM		"A register number should be between 1 and 16"
+# define WRONG_TYPE_ARG		"Wrong type of argument for the op_code"
+# define MISSING_SEP		"Missing separator_char before the argument"
+# define TOO_MANY_SEP_B		"Too many separator_char before the argument"
+# define TOO_MANY_SEP_A		"Too many separator_char after the argument"
+# define MISSING_ARG		"Missing arguments for the op_code"
+# define TOO_MANY_ARGS		"Too many arguments for the op_code"
+# define TOO_MANY_NAMES		"Can't have twice the definition of the champion's name"
+# define TOO_MANY_COMMENTS	"Can't have twice the definition of the champion's comment"
+# define WRONG_SYNTAX_OP	"Wrong syntaxe for the op_code"
+# define LABEL_ERROR		"Lexical error for a label"
+# define MISSING_CODE		"Missing exec_code for this champion"
+
+typedef struct			s_token
+{
+	char			*name;
+	int			line;
+	int			col;
+	int			end;
+	int			op_type;
+}				t_token;
+
 typedef struct			s_argz
 {
 	int			type; // T_REG, T_DIR, T_IND
@@ -79,6 +102,7 @@ long				count_bits(long nb);
 void				write_in_file(t_file *out_file, int indx, int n);
 void				copy_string(char *dest, char *src, int size, int *indx);
 /////////////////////// op_code utils   //////////////////////////
+t_token				fill_token(char *line, int ln, int *i, int op_type);
 int				find_opcode(char *string);
 int				encoding_byte(t_instruct *op);
 int				write_op_values(t_file *out_file, int *i, t_instruct *op, t_stack stack);

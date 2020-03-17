@@ -113,7 +113,7 @@ int     get_header_file(t_stack *stack, int fd)
 	int		save;
 
 	line = NULL;
-	stack->nb_lines = 0;
+	stack->nb_lines = 1;
 	stack->nb_lines += get_header_file2(fd, &line, &i, &type);
 	if (stack->nb_lines == FALSE)
 		return (FALSE);

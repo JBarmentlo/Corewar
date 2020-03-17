@@ -12,6 +12,30 @@
 
 #include "asm.h"
 
+t_token		fill_token(char *line, int ln, int *i, int op_type)
+{
+	int 	l;
+	int 	s;
+	t_token token;
+
+	l = 0;
+	s = *i;
+	while (line[s] != '\0' && line[s] != ' ' && line[s] != '\t'
+		&& line[s] != COMMENT_CHAR && line[s] != ALT_COMMENT_CHAR
+		&& line[s] != SEPARATOR_CHAR)
+	{
+		l++;
+		s++;
+	}
+	token.name = ft_memalloc(sizeof(char *) * l);
+	token.name = ft_strncat(token.name, line + *i, l);
+	token.line = ln;
+	token.col = *i;
+	token.end = *i + l;
+	token.op_type = op_type;
+	return (token);	
+}
+
 int		find_opcode(char *string)
 {
 	int		i;

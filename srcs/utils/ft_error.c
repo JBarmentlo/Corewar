@@ -27,5 +27,5 @@ void	*ft_error(char *str, char *str2)
 		ft_printf("Error: %s\n", str);
 	else
 		ft_printf("Error: %s %s\n", str, str2);
-	return (FALSE);
+	return (NULL);
 }
