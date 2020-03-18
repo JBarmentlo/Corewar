@@ -37,6 +37,7 @@
 # define WRONG_SYNTAX_OP	"Wrong syntaxe for the op_code"
 # define LABEL_ERROR		"Lexical error for a label"
 # define MISSING_CODE		"Missing exec_code for this champion"
+# define LEXICAL_ERROR		"Lexical Error for"
 
 typedef struct			s_token
 {

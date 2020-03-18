@@ -12,33 +12,28 @@
 
 #include "asm.h"
 
-t_argz		is_register(t_argz argz)
+void	is_register(t_argz *argz)
 {
-	argz.type = T_REG;
-	argz.code = REG_CODE;
-	argz.oct = T_REG;
-	return (argz);
+	argz->type = T_REG;
+	argz->code = REG_CODE;
+	argz->oct = T_REG;
 }
 
-t_argz		is_direct(t_argz argz, size_t inst_type)
+void	is_direct(t_argz *argz, size_t inst_type)
 {
-	argz.type = T_DIR;
-	argz.code = DIR_CODE;
+	argz->type = T_DIR;
+	argz->code = DIR_CODE;
 	if (g_op_tab[inst_type - 1].is_direct_small == 1)
-		argz.oct = DIR_SIZE / 2; // car DIR SIZE = 4 au lieu de 2
+		argz->oct = DIR_SIZE / 2;
 	else
-		argz.oct = DIR_SIZE; // = a 4 pourtant reg sur 1 ?? //
-	///// pour cerains arg, direct code sur 4 octets ////
-	return (argz);
+		argz->oct = DIR_SIZE;
 }
 
-t_argz		is_indirect(t_argz argz)
+void	is_indirect(t_argz *argz)
 {
-	argz.type = T_IND;
-	argz.code = IND_CODE;
-	argz.oct = IND_SIZE;
-	/////// indirect devrait etre code sur 2 octets ///
-	return (argz);
+	argz->type = T_IND;
+	argz->code = IND_CODE;
+	argz->oct = IND_SIZE;
 }
 
 int		ft_atolong(const char *str, t_argz *argz, int *i)
@@ -71,14 +66,13 @@ int		ft_atolong(const char *str, t_argz *argz, int *i)
 	return (TRUE);
 }
 
-t_argz		numeric_value(char *line, int *i, t_argz argz)
+void	numeric_value(char *line, int *i, t_argz *argz)
 {
-	ft_atolong(line, &argz, i);
-	argz.lab = NULL;
-	return (argz);
+	ft_atolong(line, argz, i);
+	argz->lab = NULL;
 }
 
-t_argz		argz_is_label(char *line, int *i, t_argz argz)
+void	*argz_is_label(char *line, int *i, t_argz *argz, int ln)
 {
 	int		k;
 	int		save;
@@ -91,26 +85,36 @@ t_argz		argz_is_label(char *line, int *i, t_argz argz)
 		*i += 1;
 		k++;
 	}
-	argz.lab = ft_memalloc(sizeof(char) * k);
-	argz.lab = ft_stricpy(argz.lab, line, save, *i);
-	argz.value = 0;
+	argz->lab = ft_memalloc(sizeof(char) * k); // to protect
+	argz->lab = ft_stricpy(argz->lab, line, save, *i);
+	save = 0;
+	while (save < *i)
+	{
+		if (ft_strchr(LABEL_CHARS, (int)line[save]) == NULL)
+			return (ft_error_nb(LABEL_ERROR, NULL, ln, save + 1));
+		save++;
+	}
+	argz->value = 0;
 	return (argz);
 }
 
-t_argz		is_argument(char *line, int *i, size_t inst_type, t_argz argz)
+void	*is_argument(char *line, int *i, size_t inst_type, t_argz *argz, int ln)
 {
 	if (line[*i] == 'r')
-		argz = is_register(argz);
+		is_register(argz);
 	else if (line[*i] == DIRECT_CHAR)
-		argz = is_direct(argz, inst_type);
+		is_direct(argz, inst_type);
 	else
-		argz = is_indirect(argz);
-	if (line[*i] != LABEL_CHAR && argz.type != T_IND)
+		is_indirect(argz);
+	if (line[*i] != LABEL_CHAR && argz->type != T_IND)
 		*i += 1;
 	if (line[*i] != '\0' && line[*i] != LABEL_CHAR)
-		argz = numeric_value(line, i, argz); // gesstion d'erreur??
+		numeric_value(line, i, argz);  // gesstion d'erreur??
 	else
-		argz = argz_is_label(line, i, argz);
+	{
+		if (argz_is_label(line, i, argz, ln) == NULL)
+			return (NULL);
+	}
 	if ((line[*i] == '\0' || line[*i] == COMMENT_CHAR || line[*i] == ALT_COMMENT_CHAR) && *i > 0)
 		*i -= 1;
 	return (argz);
@@ -162,7 +166,8 @@ int	check_args(char *line, int *i, t_instruct *op, t_stack *stack)
 				if (check_sep(sep_char, k, token) == FALSE)
 					return (FALSE);
 				argz = op->argz[k];
-				argz = is_argument(line, i, op->type, argz);
+				if (is_argument(line, i, op->type, &argz, stack->nb_lines) == NULL)
+					return (FALSE);
 				if (line[*i] == SEPARATOR_CHAR)
 					sep_char++;
 				last_token = token;
@@ -291,8 +296,10 @@ int		is_op(char *line, t_stack *stack, int *i, int start)
 int		is_label_or_op(char *line, t_stack *stack, int *i)
 {
 	int			start;
+	t_token			token;
 
 	start = *i;
+	token = fill_token(line, stack->nb_lines, i, 0);
 	while (line[*i] != '\0' && line[*i] != ' ' && line[*i] != '\t' && line[*i] != LABEL_CHAR && line[*i] != COMMENT_CHAR && line[*i] != ALT_COMMENT_CHAR)
 		*i += 1;
 	if (line[*i] == LABEL_CHAR)
@@ -304,6 +311,8 @@ int		is_label_or_op(char *line, t_stack *stack, int *i)
 	}
 	else if ((line[*i] == COMMENT_CHAR || line[*i] == ALT_COMMENT_CHAR) && *i > 0)
 		*i -= 1;
+	else
+		return ((int)ft_error_nb(LEXICAL_ERROR, token.name, token.line, token.col)); 
 	return (TRUE);
 }
 
