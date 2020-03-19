@@ -12,26 +12,26 @@
 
 #include "asm.h"
 
-t_token		fill_token(char *line, int ln, int *i, int op_type)
+t_token		fill_token(t_s *s, int op_type)
 {
 	int 	l;
-	int 	s;
+	int 	save;
 	t_token token;
 
 	l = 0;
-	s = *i;
-	while (line[s] != '\0' && line[s] != ' ' && line[s] != '\t'
-		&& line[s] != COMMENT_CHAR && line[s] != ALT_COMMENT_CHAR
-		&& line[s] != SEPARATOR_CHAR)
+	save = s->i;
+	while (s->line[save] != '\0' && s->line[save] != ' ' && s->line[save] != '\t'
+		&& s->line[save] != COMMENT_CHAR && s->line[save] != ALT_COMMENT_CHAR
+		&& s->line[save] != SEPARATOR_CHAR)
 	{
 		l++;
-		s++;
+		save++;
 	}
 	token.name = ft_memalloc(sizeof(char *) * l);
-	token.name = ft_strncat(token.name, line + *i, l);
-	token.line = ln;
-	token.col = *i;
-	token.end = *i + l;
+	token.name = ft_strncat(token.name, s->line + s->i, l);
+	token.line = s->l;
+	token.col = s->i;
+	token.end = s->i + l;
 	token.op_type = op_type;
 	return (token);	
 }
@@ -91,7 +91,7 @@ int		find_label(char *to_find, t_label *label)
 
 int		write_op_values(t_file *out_file, int *i, t_instruct *op, t_stack stack)
 {
-	size_t k;
+	size_t	k;
 	int	to_label;
 	t_label	*label;
 
@@ -115,7 +115,7 @@ int		write_op_values(t_file *out_file, int *i, t_instruct *op, t_stack stack)
 		{
 			to_label = find_label(op->argz[k].lab, label);
 			if (to_label == FALSE)
-				return (FALSE);
+				return ((int)ft_error_nb(WRONG_LABEL, op->argz[k].lab, op->argz[k].line, op->argz[k].col));
 			nb_to_binary(out_file, op->argz[k].oct, *i, (to_label - op->oct));
 			*i += op->argz[k].oct;
 		}

@@ -34,7 +34,7 @@ int		get_header_file4(char **line, int *i, char **tmp, int fd)
 	}
 	tmp[0][j] = '\0';
 	*i += 1;
-	while (line[0][*i] != '\0' && line[0][*i] != '#')
+	while (line[0][*i] != '\0' && line[0][*i] != COMMENT_CHAR && line[0][*i] != ALT_COMMENT_CHAR)
 	{
 		if (line[0][*i] != '\0' && line[0][*i] != ' ' && line[0][*i] != '\t')
 			return ((int)ft_error("6 Wrong header .command format : ", *line));
@@ -72,7 +72,7 @@ size_t     get_header_file2(int fd, char **line, int *i, int *type)
 	{
 		lines += 1;
 		*i = 0;
-		while (line[0][*i] != '\0' && line[0][*i] != '#' && line[0][*i] != '.')
+		while (line[0][*i] != '\0' && line[0][*i] != COMMENT_CHAR && line[0][*i] != ALT_COMMENT_CHAR && line[0][*i] != '.')
 		{
 			if (line[0][*i] != ' ' && line[0][*i] != '\t')
 				return ((int)ft_error("5 Wrong header .command format : ", *line));
@@ -85,11 +85,11 @@ size_t     get_header_file2(int fd, char **line, int *i, int *type)
 	*type = line[0][*i + 1];
 	if (*type == 'n')
 	{
-		if (ft_strncmp(*line + *i, ".name", 5) < 0)
+		if (ft_strncmp(*line + *i, NAME_CMD_STRING, 5) < 0)
 			return ((int)ft_error("4 Wrong header .command format : ", *line));
 	}
 	else if (*type == 'c')
-		if (ft_strncmp(*line + *i, ".comment", 8) < 0)
+		if (ft_strncmp(*line + *i, COMMENT_CMD_STRING, 8) < 0)
 			return ((int)ft_error("3 Wrong header .command format : ", *line));
 	*i += (*type == 'n' ? 5 : 8);
 	while (line[0][*i] != '\0' && line[0][*i] != '"')

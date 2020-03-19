@@ -38,6 +38,14 @@
 # define LABEL_ERROR		"Lexical error for a label"
 # define MISSING_CODE		"Missing exec_code for this champion"
 # define LEXICAL_ERROR		"Lexical Error for"
+# define WRONG_LABEL		"The following label doesn't exist"
+
+typedef	struct			s_s
+{
+	char			*line;
+	int			l;
+	int			i;
+}				t_s;
 
 typedef struct			s_token
 {
@@ -55,6 +63,8 @@ typedef struct			s_argz
 	char			*lab; // NULL sauf si appel a label (:live)
 	long			value; // si lab != NULL on ne prend pas en compte value
 	size_t			oct; // nombre d'octets pris en memoire en fonction du type
+	int			line; // for label errors
+	int			col; // for label errors
 }				t_argz;
 
 typedef struct 			s_instruct
@@ -103,7 +113,7 @@ long				count_bits(long nb);
 void				write_in_file(t_file *out_file, int indx, int n);
 void				copy_string(char *dest, char *src, int size, int *indx);
 /////////////////////// op_code utils   //////////////////////////
-t_token				fill_token(char *line, int ln, int *i, int op_type);
+t_token				fill_token(t_s *s, int op_type);
 int				find_opcode(char *string);
 int				encoding_byte(t_instruct *op);
 int				write_op_values(t_file *out_file, int *i, t_instruct *op, t_stack stack);
