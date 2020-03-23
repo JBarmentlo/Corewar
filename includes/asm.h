@@ -25,6 +25,11 @@
 # define ALT_COMMENT_CHAR    	';'
 
 ///// ERROR MESSAGE ///
+# define SYNTAXE_ERROR		"Syntaxe Error in header"
+# define INCOMPLETE		"Incomplete Header"
+# define MISSING_QUOTE		"Missing quotation mark in header"
+# define WRONG_HEADER		"Wrong .command in header"
+# define WRONG_FORMAT		"Wrong format after .command in header"
 # define WRONG_REG_NUM		"A register number should be between 1 and 16"
 # define WRONG_TYPE_ARG		"Wrong type of argument for the op_code"
 # define MISSING_SEP		"Missing separator_char before the argument"
@@ -106,7 +111,7 @@ typedef struct 			s_file
 }				t_file;
 
 int				cor_file(char *source_file, t_file *out_file, int fd);
-int				get_header_file(t_stack *stack, int fd);
+int				get_header_file(t_stack *stack, int fd, t_s *s);
 /////////////////////// asm utils   //////////////////////////
 void				nb_to_binary(t_file *out_file, int octets, int indx, long nb);
 long				count_bits(long nb);
