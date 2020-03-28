@@ -15,25 +15,22 @@
 
 int		init_file(t_file *out_file, char *source_file)
 {
-	int		i;
+	int		l;
 
-	i = 0;
-	while (source_file[i] && source_file[i] != '.')
-		i++;
-	if (source_file[i] == '\0' || source_file[i + 1] == '\0' || source_file[i + 1] != 's' || source_file[i + 2] != '\0')
+	l = ft_strlen(source_file);
+	if (l < 3 || ft_strcmp(source_file + l - 2, ".s"))
 		return ((int)ft_error("Wrong source file format", NULL));
 	out_file->total_size = 0;
 	out_file->prog_size = 0;
-	out_file->name = ft_memalloc(i + 4);
+	out_file->name = ft_memalloc(l + 2);
 	out_file->content = ft_memalloc(MAX_SIZE_FILE);
-	out_file->name = ft_memcpy(out_file->name, source_file, i + 1); 
-	out_file->name = ft_stricat(out_file->name, "cor", i + 1); 
+	out_file->name = ft_memcpy(out_file->name, source_file, l - 1); 
+	out_file->name = ft_stricat(out_file->name, "cor", l - 1); 
 	return (TRUE);
 }
 
-int		fill_header(t_file *out_file, int fd, t_stack *stack)
+int		fill_header(t_file *out_file, t_stack *stack)
 {
-	(void)fd;
 	// write magic number//
 	nb_to_binary(out_file, sizeof(COREWAR_EXEC_MAGIC), out_file->total_size, COREWAR_EXEC_MAGIC);
 	// write name//
@@ -74,18 +71,20 @@ int		fill_opcode(t_file *out_file, t_stack stack)
 	return (TRUE);
 }
 
-int		parsing_header(t_stack *stack, int fd)
+int		parsing_header(t_stack *stack, int fd, t_s *s)
 {
+	s->line = NULL;
+	s->l = 0;
+	s->i = 0;	
 	if (!(stack->champion_name = ft_memalloc(sizeof(char) * PROG_NAME_LENGTH)))
-		return ((int)ft_error("\"stack->champion_name\" allocation fail.", NULL));
+		return ((int)ft_error("Can't allocate champion's name", NULL));
 	if (!(stack->comment = ft_memalloc(sizeof(char) * COMMENT_LENGTH)))
-		return ((int)ft_error("\"stack->comment\" allocation fail.", NULL));
+		return ((int)ft_error("Can't allocate champion's comment", NULL));
 	stack->champion_name[PROG_NAME_LENGTH] = '\0';
 	stack->comment[COMMENT_LENGTH] = '\0';
-	stack->nb_lines = 0;
-	if (!get_header_file(stack, fd))
+	if (!get_header_file(stack, fd, s))
 		return (FALSE);
-	if (!get_header_file(stack, fd))
+	if (!get_header_file(stack, fd, s))
 		return (FALSE);
 	return (TRUE);
 }
@@ -93,13 +92,14 @@ int		parsing_header(t_stack *stack, int fd)
 int		cor_file(char *source_file, t_file *out_file, int fd)
 {	
 	t_stack		stack;
-	int			real_prog_size;
+	int		real_prog_size;
+	t_s		s;
 
-	if (parsing_header(&stack, fd) == FALSE)
+	if (parsing_header(&stack, fd, &s) == FALSE)
 		return (FALSE);
 	if (init_file(out_file, source_file) == FALSE)
 		return (FALSE);
-	if (fill_header(out_file, fd, &stack) == FALSE)
+	if (fill_header(out_file, &stack) == FALSE)
 		return (FALSE);
 	stack.cur_octet = out_file->total_size;
 	if (parsing_exec(&stack, fd) == FALSE)

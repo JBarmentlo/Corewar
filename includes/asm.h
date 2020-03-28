@@ -25,9 +25,9 @@
 # define ALT_COMMENT_CHAR    	';'
 
 ///// ERROR MESSAGE ///
+# define INVALID_COMMAND	"Invalid command"
 # define SYNTAXE_ERROR		"Syntaxe Error in header"
 # define INCOMPLETE		"Incomplete Header"
-# define MISSING_QUOTE		"Missing quotation mark in header"
 # define WRONG_HEADER		"Wrong .command in header"
 # define WRONG_FORMAT		"Wrong format after .command in header"
 # define WRONG_REG_NUM		"A register number should be between 1 and 16"
