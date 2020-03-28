@@ -60,6 +60,10 @@ int		ft_atolong(t_s *s, t_argz *argz)
 		if (bits >= 63)
 		{
 			argz->value = 4294967295;
+			while (ft_isdigit((long)str[s->i]) && str[s->i] != ' ' && str[s->i] != '\t' && str[s->i] != COMMENT_CHAR && str[s->i] != ALT_COMMENT_CHAR && str[s->i] != '\0')
+				s->i += 1;
+			if (s > 0)
+				s->i -= 1;
 			return (TRUE);
 		}
 		s->i += 1;
@@ -114,7 +118,7 @@ void	*is_argument(t_s *s, size_t inst_type, t_argz *argz)
 	if (s->line[s->i] != LABEL_CHAR && argz->type != T_IND)
 		s->i += 1;
 	if (s->line[s->i] != '\0' && s->line[s->i] != LABEL_CHAR)
-		numeric_value(s, argz);  // gesstion d'erreur?? // fucking line
+		numeric_value(s, argz); // gestion d'erreur ?
 	else
 	{
 		if (argz_is_label(s,argz) == NULL)
