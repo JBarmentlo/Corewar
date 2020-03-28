@@ -35,8 +35,13 @@ int		get_header_file4(t_s *s, char **tmp, int fd)
 
 	j = 0;
 	if (s->line[s->i] == '\0')
+	{
 		if (empty_line(s, tmp, fd, &j) == FALSE)
 			return (FALSE);
+		while (s->line != NULL && s->line[0] == '\0')
+			if (empty_line(s, tmp, fd, &j) == FALSE)
+				return (FALSE);
+	}
 	while (s->line[s->i] != '\0' && s->line[s->i] != '"')
 	{
 		tmp[0][j] = s->line[s->i];
@@ -73,20 +78,20 @@ char	*get_header_file3(int fd, t_s *s, int *type)
 
 	tmp = (*type == 0 ? ft_memalloc(sizeof(char) * PROG_NAME_LENGTH) : ft_memalloc(sizeof(char) * COMMENT_LENGTH));
 	*type = 0;
-/*	if (s->line[s->i] == '\0')
-	{
+	/*	if (s->line[s->i] == '\0')
+		{
 		ft_printf("coucou\n");
 		ft_memdel((void**)&s->line);
 		if (get_next_line(fd, &s->line) <= 0 || !s->line[s->i])
 		{
-			ft_printf("ddd line = [%s]\n", s->line);
-			ft_memdel((void**)&s->line);
-			return ((char *)ft_error_nb(INCOMPLETE, "(null)", s->l > 0 ? s->l + 1 : 0, 0));
+		ft_printf("ddd line = [%s]\n", s->line);
+		ft_memdel((void**)&s->line);
+		return ((char *)ft_error_nb(INCOMPLETE, "(null)", s->l > 0 ? s->l + 1 : 0, 0));
 		}
-			ft_printf("llll line = [%s]\n", s->line);
-		*type += 1;
-		s->i = 0;
-	}*/
+		ft_printf("llll line = [%s]\n", s->line);
+	 *type += 1;
+	 s->i = 0;
+	 }*/
 	if (get_header_file4(s, &tmp, fd) == FALSE)
 		return (NULL);
 	return (tmp);
@@ -103,6 +108,7 @@ int     get_header_file2(int fd, t_s *s, int *type, t_token *token)
 		{
 			if (s->line[s->i] != ' ' && s->line[s->i] != '\t')
 			{
+				*token = fill_token(s, 0);
 				ft_memdel((void**)&s->line);
 				return ((int)ft_error_nb(WRONG_HEADER, token->name, token->line, token->col));
 			}
@@ -121,7 +127,7 @@ int     get_header_file2(int fd, t_s *s, int *type, t_token *token)
 	*token = fill_token(s, 0);
 	if (*type == 'n')
 	{
-		if (ft_strncmp(s->line + s->i, NAME_CMD_STRING, 5) < 0)
+		if (ft_strncmp(s->line + s->i, NAME_CMD_STRING, 5) != 0)
 		{	
 			ft_memdel((void**)&s->line);
 			return ((int)ft_error_nb(WRONG_HEADER, token->name, token->line, token->col));
@@ -129,7 +135,7 @@ int     get_header_file2(int fd, t_s *s, int *type, t_token *token)
 	}
 	else if (*type == 'c')
 	{
-		if (ft_strncmp(s->line + s->i, COMMENT_CMD_STRING, 8) < 0)
+		if (ft_strncmp(s->line + s->i, COMMENT_CMD_STRING, 8) != 0)
 		{
 			ft_memdel((void**)&s->line);
 			return ((int)ft_error_nb(WRONG_HEADER, token->name, token->line, token->col));

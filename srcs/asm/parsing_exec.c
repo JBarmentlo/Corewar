@@ -96,10 +96,7 @@ void	*argz_is_label(t_s *s, t_argz *argz)
 	while (save < s->i)
 	{
 		if (ft_strchr(LABEL_CHARS, (int)s->line[save]) == NULL)
-		{
-			ft_printf("coucou\n");
 			return (ft_error_nb(LABEL_ERROR, NULL, s->l, save + 1));
-		}
 		save++;
 	}
 	argz->value = 0;
@@ -130,7 +127,7 @@ void	*is_argument(t_s *s, size_t inst_type, t_argz *argz)
 
 int		check_value(t_argz argz, t_instruct *op, int k, t_s *s)
 {
-	if (argz.type == T_REG && argz.value > REG_NUMBER)
+	if (argz.type == T_REG && (argz.value > REG_NUMBER || argz.value < 1))
 		return ((int)ft_error_nb(WRONG_REG_NUM, NULL, s->l, s->i));
 	if ((argz.type & g_op_tab[op->type - 1].arg_types[k]) != argz.type)
 		return ((int)ft_error_nb(WRONG_TYPE_ARG, g_op_tab[op->type - 1].name, s->l, s->i));
