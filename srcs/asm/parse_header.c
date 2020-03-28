@@ -52,7 +52,6 @@ int		get_header_file4(t_s *s, char **tmp, int fd)
 	{
 		if (s->line[s->i] != '\0' && s->line[s->i] != ' ' && s->line[s->i] != '\t')
 		{
-			ft_printf("s->;line = [%s], s->line[%d] = [%c]\n", s->line, s->i, s->line[s->i]);
 			token = fill_token(s, 0);
 			ft_memdel((void**)&s->line);
 			return ((int)ft_error_nb(SYNTAXE_ERROR, token.name, token.line, token.col));
