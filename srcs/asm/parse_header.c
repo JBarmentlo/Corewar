@@ -12,13 +12,31 @@
 
 #include "asm.h"
 
+int		empty_line(t_s *s, char **tmp, int fd, int *j)
+{
+	int	ret;
+
+	ret = 0;
+	tmp[0][*j] = '\n';
+	*j += 1;
+	ft_memdel((void**)&s->line);
+	ret = get_next_line(fd, &s->line);
+	if (ret <= 0 || s->line == NULL)
+		return ((int)ft_error_nb(SYNTAXE_ERROR, "(null)", s->l > 0 ? s->l + 1 : 0, 0));
+	s->l += 1;
+	s->i = 0;
+	return (TRUE);	
+}
+
 int		get_header_file4(t_s *s, char **tmp, int fd)
 {
 	int		j;
 	t_token		token;
-	int ret;
 
 	j = 0;
+	if (s->line[s->i] == '\0')
+		if (empty_line(s, tmp, fd, &j) == FALSE)
+			return (FALSE);
 	while (s->line[s->i] != '\0' && s->line[s->i] != '"')
 	{
 		tmp[0][j] = s->line[s->i];
@@ -26,24 +44,11 @@ int		get_header_file4(t_s *s, char **tmp, int fd)
 		j++;
 		if (s->line[s->i] == '\0')
 		{
-			tmp[0][j] = '\n';
-			j++;
-			ft_memdel((void**)&s->line);
-			ret = get_next_line(fd, &s->line);
-			if (ret <= 0 || s->line == NULL)
-				return ((int)ft_error_nb(SYNTAXE_ERROR, "(null)", s->l > 0 ? s->l + 1 : 0, 0));
-			s->l += 1;
-			s->i = 0;
-			if (ret == 1 && s->line != NULL && s->line[0] == '\0')
-			{
-				tmp[0][j] = '\n';
-				j++;
-				ft_memdel((void**)&s->line);
-				ret = get_next_line(fd, &s->line);
-				if (ret <= 0 || s->line == NULL)
-					return ((int)ft_error_nb(SYNTAXE_ERROR, "(null)", s->l > 0 ? s->l + 1 : 0, 0));
-				s->l += 1;
-			}
+			if (empty_line(s, tmp, fd, &j) == FALSE)
+				return (FALSE);
+			while (s->line != NULL && s->line[0] == '\0')
+				if (empty_line(s, tmp, fd, &j) == FALSE)
+					return (FALSE);
 		}
 	}
 	tmp[0][j] = '\0';
@@ -68,17 +73,20 @@ char	*get_header_file3(int fd, t_s *s, int *type)
 
 	tmp = (*type == 0 ? ft_memalloc(sizeof(char) * PROG_NAME_LENGTH) : ft_memalloc(sizeof(char) * COMMENT_LENGTH));
 	*type = 0;
-	if (s->line[s->i] == '\0')
+/*	if (s->line[s->i] == '\0')
 	{
+		ft_printf("coucou\n");
 		ft_memdel((void**)&s->line);
 		if (get_next_line(fd, &s->line) <= 0 || !s->line[s->i])
 		{
+			ft_printf("ddd line = [%s]\n", s->line);
 			ft_memdel((void**)&s->line);
 			return ((char *)ft_error_nb(INCOMPLETE, "(null)", s->l > 0 ? s->l + 1 : 0, 0));
 		}
+			ft_printf("llll line = [%s]\n", s->line);
 		*type += 1;
 		s->i = 0;
-	}
+	}*/
 	if (get_header_file4(s, &tmp, fd) == FALSE)
 		return (NULL);
 	return (tmp);
