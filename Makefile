@@ -93,7 +93,8 @@ ASM_SOURCE_FILES=main_asm.c \
 	op_code_utils.c \
 	parsing_exec.c \
 	print_tester.c \
-	parse_header.c
+	parse_header.c \
+	free_error.c
 
 
 INCLUDES_FILES= utils.h\

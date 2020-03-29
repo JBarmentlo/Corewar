@@ -102,7 +102,7 @@ int		cor_file(char *source_file, t_file *out_file, int fd)
 	if (fill_header(out_file, &stack) == FALSE)
 		return (FALSE);
 	stack.cur_octet = out_file->total_size;
-	if (parsing_exec(&stack, fd) == FALSE)
+	if (parsing_exec(&stack, fd, &s) == FALSE)
 		return (FALSE);
 //	print_tester(&stack);
 	if (fill_opcode(out_file, stack) == FALSE)

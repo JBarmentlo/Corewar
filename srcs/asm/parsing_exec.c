@@ -147,7 +147,7 @@ int		check_sep(int sep_char, int k, t_token token, int indx_sep)
 	if (k == g_op_tab[token.op_type - 1].arg_nb - 1 && sep_char < k)
 		return (TRUE);
 	if (k > 0 && (k < g_op_tab[token.op_type - 1].arg_nb) && k > sep_char)
-		return ((int)ft_error_nb(MISSING_SEP, token.name, token.line, token.col));
+		return ((int)free_error(MISSING_SEP, &token));
 	if (k > 0 && (k < g_op_tab[token.op_type - 1].arg_nb) && k < sep_char)
 		return ((int)ft_error_nb(TOO_MANY_SEP_B, token.name, token.line, indx_sep));
 	return (TRUE);	
@@ -174,7 +174,6 @@ int	check_args(t_s *s, t_instruct *op)
 				return ((int)ft_error_nb(TOO_MANY_ARGS, g_op_tab[op->type - 1].name, s->l, s->i));
 			if (s->line[s->i] != SEPARATOR_CHAR)
 			{
-				last_token = token;
 				token = fill_token(s, op->type);
 				if (check_sep(sep_char, k, token, indx_sep) == FALSE)
 					return (FALSE);
@@ -260,9 +259,7 @@ t_label		*is_label(t_s *s, t_stack *stack, int start)
 	while (start < s->i)
 	{
 		if (ft_strchr(LABEL_CHARS, (int)s->line[start]) == NULL)
-		{
-			return (ft_error_nb(LABEL_ERROR, NULL, s->l, start + 1));
-		}
+			return (ft_error_nb(LABEL_ERROR, NULL, s->l, start + 1)); // potential leak of memeory pointed by 'label'
 		start++;
 	}
 	label->name = ft_memalloc(sizeof(char) * start);
@@ -334,31 +331,27 @@ int		is_label_or_op(t_s *s, t_stack *stack)
 	return (TRUE);
 }
 
-int		parsing_exec(t_stack *stack, int fd)
+int		parsing_exec(t_stack *stack, int fd, t_s *s)
 {
-	t_s		s;
-
-	s.i = 0;
-	s.l = stack->nb_lines;
+	s->i = 0;
 	stack->first_label = NULL;
 	stack->label_list = NULL;
 	stack->first_op = NULL;
 	stack->op_list = NULL;
-	while (get_next_line(fd, &s.line))
+	while (get_next_line(fd, &s->line))
 	{
-		s.i = 0;
-		stack->nb_lines += 1;
-		s.l += 1;
-		while (s.line[s.i] != '\0' && s.line[s.i] != COMMENT_CHAR && s.line[s.i] != ALT_COMMENT_CHAR)
+		s->i = 0;
+		s->l += 1;
+		while (s->line[s->i] != '\0' && s->line[s->i] != COMMENT_CHAR && s->line[s->i] != ALT_COMMENT_CHAR)
 		{
-			if (s.line[s.i] != ' ' && s.line[s.i] != '\t' && s.line[s.i] != '\0')
+			if (s->line[s->i] != ' ' && s->line[s->i] != '\t' && s->line[s->i] != '\0')
 			{
-				if (is_label_or_op(&s, stack) == FALSE)
+				if (is_label_or_op(s, stack) == FALSE)
 					return (FALSE);
 			}
-			s.i += 1;
+			s->i += 1;
 		}
-		ft_memdel((void**)&(s.line));
+		ft_memdel((void**)&(s->line));
 	}
 	if (stack->first_op == NULL)
 		return ((int)ft_error(MISSING_CODE, NULL));

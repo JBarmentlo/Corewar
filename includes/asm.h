@@ -122,7 +122,8 @@ t_token				fill_token(t_s *s, int op_type);
 int				find_opcode(char *string);
 int				encoding_byte(t_instruct *op);
 int				write_op_values(t_file *out_file, int *i, t_instruct *op, t_stack stack);
-int				parsing_exec(t_stack *stack, int fd);
+int				parsing_exec(t_stack *stack, int fd, t_s *s);
+void				*free_error(char *str, t_token *token);
 /////////////////////// To delete   //////////////////////////
 void				print_tester(t_stack *stack);
 

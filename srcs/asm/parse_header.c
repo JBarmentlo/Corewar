@@ -16,7 +16,6 @@ int		empty_line(t_s *s, char **tmp, int fd, int *j)
 {
 	int	ret;
 
-	ret = 0;
 	tmp[0][*j] = '\n';
 	*j += 1;
 	ft_memdel((void**)&s->line);
@@ -25,7 +24,7 @@ int		empty_line(t_s *s, char **tmp, int fd, int *j)
 		return ((int)ft_error_nb(SYNTAXE_ERROR, "(null)", s->l > 0 ? s->l + 1 : 0, 0));
 	s->l += 1;
 	s->i = 0;
-	return (TRUE);	
+	return (TRUE);
 }
 
 int		get_header_file4(t_s *s, char **tmp, int fd)
@@ -42,7 +41,7 @@ int		get_header_file4(t_s *s, char **tmp, int fd)
 			if (empty_line(s, tmp, fd, &j) == FALSE)
 				return (FALSE);
 	}
-	while (s->line[s->i] != '\0' && s->line[s->i] != '"')
+	while (s->line && s->line[s->i] != '\0' && s->line[s->i] != '"')
 	{
 		tmp[0][j] = s->line[s->i];
 		s->i += 1;
@@ -64,7 +63,7 @@ int		get_header_file4(t_s *s, char **tmp, int fd)
 		{
 			token = fill_token(s, 0);
 			ft_memdel((void**)&s->line);
-			return ((int)ft_error_nb(SYNTAXE_ERROR, token.name, token.line, token.col));
+			return ((int)free_error(SYNTAXE_ERROR, &token));
 		}
 		s->i += 1;
 	}
@@ -78,20 +77,6 @@ char	*get_header_file3(int fd, t_s *s, int *type)
 
 	tmp = (*type == 0 ? ft_memalloc(sizeof(char) * PROG_NAME_LENGTH) : ft_memalloc(sizeof(char) * COMMENT_LENGTH));
 	*type = 0;
-	/*	if (s->line[s->i] == '\0')
-		{
-		ft_printf("coucou\n");
-		ft_memdel((void**)&s->line);
-		if (get_next_line(fd, &s->line) <= 0 || !s->line[s->i])
-		{
-		ft_printf("ddd line = [%s]\n", s->line);
-		ft_memdel((void**)&s->line);
-		return ((char *)ft_error_nb(INCOMPLETE, "(null)", s->l > 0 ? s->l + 1 : 0, 0));
-		}
-		ft_printf("llll line = [%s]\n", s->line);
-	 *type += 1;
-	 s->i = 0;
-	 }*/
 	if (get_header_file4(s, &tmp, fd) == FALSE)
 		return (NULL);
 	return (tmp);
@@ -110,7 +95,7 @@ int     get_header_file2(int fd, t_s *s, int *type, t_token *token)
 			{
 				*token = fill_token(s, 0);
 				ft_memdel((void**)&s->line);
-				return ((int)ft_error_nb(WRONG_HEADER, token->name, token->line, token->col));
+				return ((int)free_error(WRONG_HEADER, token));
 			}
 			s->i += 1;
 		}
@@ -130,7 +115,7 @@ int     get_header_file2(int fd, t_s *s, int *type, t_token *token)
 		if (ft_strncmp(s->line + s->i, NAME_CMD_STRING, 5) != 0)
 		{	
 			ft_memdel((void**)&s->line);
-			return ((int)ft_error_nb(WRONG_HEADER, token->name, token->line, token->col));
+			return ((int)free_error(WRONG_HEADER, token));
 		}
 	}
 	else if (*type == 'c')
@@ -138,7 +123,7 @@ int     get_header_file2(int fd, t_s *s, int *type, t_token *token)
 		if (ft_strncmp(s->line + s->i, COMMENT_CMD_STRING, 8) != 0)
 		{
 			ft_memdel((void**)&s->line);
-			return ((int)ft_error_nb(WRONG_HEADER, token->name, token->line, token->col));
+			return ((int)free_error(WRONG_HEADER, token));
 		}
 	}
 	*token = fill_token(s, 0);
@@ -148,14 +133,14 @@ int     get_header_file2(int fd, t_s *s, int *type, t_token *token)
 		if (s->line[s->i] != ' ' && s->line[s->i] != '\t')
 		{
 			ft_memdel((void**)&s->line);
-			return ((int)ft_error_nb(WRONG_FORMAT, token->name, token->line, token->col));
+			return ((int)free_error(WRONG_FORMAT, token));
 		}
 		s->i += 1;
 	}
 	if (s->line[s->i] != '"')
 	{
 		ft_memdel((void**)&s->line);
-		return ((int)ft_error_nb(WRONG_FORMAT, token->name, token->line, token->col));
+		return ((int)free_error(WRONG_FORMAT, token));
 	}
 	s->i += 1;
 	return (TRUE);
@@ -168,19 +153,16 @@ int     get_header_file(t_stack *stack, int fd, t_s *s)
 	int	save;
 	t_token token;
 
-	stack->nb_lines = 0;
 	s->i = 0;
 	if (get_header_file2(fd, s, &type, &token) == FALSE)
 		return (FALSE);
-	stack->nb_lines += s->l;
 	save = type;
 	tmp = get_header_file3(fd, s, &type);
 	if (tmp == NULL)
 		return (0);
-	stack->nb_lines += type;
 	s->l += type;
 	type = save;
-	if (stack->nb_lines == FALSE)
+	if (s->l == FALSE)
 		return (0);
 	if (type == 'n')
 	{
@@ -206,7 +188,7 @@ int     get_header_file(t_stack *stack, int fd, t_s *s)
 	{
 		ft_memdel((void**)&s->line);
 		ft_memdel((void**)&tmp);
-		return ((int)ft_error_nb(INVALID_COMMAND, token.name, token.line, token.col));
+		return ((int)free_error(INVALID_COMMAND, &token));
 	}
 	ft_memdel((void**)&tmp);
 	ft_memdel((void**)&s->line);
