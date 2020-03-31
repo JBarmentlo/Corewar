@@ -19,7 +19,7 @@ int		init_file(t_file *out_file, char *source_file)
 
 	l = ft_strlen(source_file);
 	if (l < 3 || ft_strcmp(source_file + l - 2, ".s"))
-		return ((int)ft_error("Wrong source file format", NULL));
+		return ((int)ft_error("Wrong source file format", NULL, NULL));
 	out_file->total_size = 0;
 	out_file->prog_size = 0;
 	out_file->name = ft_memalloc(l + 2);
@@ -45,6 +45,8 @@ int		fill_header(t_file *out_file, t_stack *stack)
 	copy_string(out_file->content, stack->comment,  COMMENT_LENGTH, &(out_file->total_size));
 	// padding //
 	copy_string(out_file->content, EMPTY,  PADDING, &(out_file->total_size));
+	ft_memdel((void**)&stack->champion_name);
+	ft_memdel((void**)&stack->comment);
 	return (TRUE);
 }
 
@@ -75,43 +77,41 @@ int		parsing_header(t_stack *stack, int fd, t_s *s)
 {
 	s->line = NULL;
 	s->l = 0;
-	s->i = 0;	
-	if (!(stack->champion_name = ft_memalloc(sizeof(char) * PROG_NAME_LENGTH)))
-		return ((int)ft_error("Can't allocate champion's name", NULL));
-	if (!(stack->comment = ft_memalloc(sizeof(char) * COMMENT_LENGTH)))
-		return ((int)ft_error("Can't allocate champion's comment", NULL));
-	stack->champion_name[PROG_NAME_LENGTH] = '\0';
-	stack->comment[COMMENT_LENGTH] = '\0';
+	s->i = 0;
+	if (!(stack->champion_name = ft_memalloc(sizeof(char) * PROG_NAME_LENGTH + 1)))
+		return ((int)ft_error("Can't allocate champion's name", NULL, NULL));
+	if (!(stack->comment = ft_memalloc(sizeof(char) * COMMENT_LENGTH + 1)))
+		return ((int)ft_error("Can't allocate champion's comment", NULL, NULL));
 	if (!get_header_file(stack, fd, s))
-		return (FALSE);
+		return ((int)asm_free(stack->champion_name, stack->comment, NULL));
 	if (!get_header_file(stack, fd, s))
-		return (FALSE);
+		return ((int)asm_free(stack->champion_name, stack->comment, NULL));
 	return (TRUE);
 }
 
 int		cor_file(char *source_file, t_file *out_file, int fd)
 {	
 	t_stack		stack;
-	int		real_prog_size;
+//	int		real_prog_size;
 	t_s		s;
 
 	if (parsing_header(&stack, fd, &s) == FALSE)
-		return (FALSE);
+		return ((int)asm_free(s.line, NULL, NULL));
 	if (init_file(out_file, source_file) == FALSE)
-		return (FALSE);
+		return ((int)asm_free(stack.champion_name, stack.comment, NULL));
 	if (fill_header(out_file, &stack) == FALSE)
-		return (FALSE);
+		return ((int)asm_free(out_file->name, out_file->content, NULL));
 	stack.cur_octet = out_file->total_size;
 	if (parsing_exec(&stack, fd, &s) == FALSE)
 		return (FALSE);
 //	print_tester(&stack);
-	if (fill_opcode(out_file, stack) == FALSE)
+/*	if (fill_opcode(out_file, stack) == FALSE)
 		return (FALSE);
 	real_prog_size = out_file->total_size - SIZE_HEADER;
 	nb_to_binary(out_file, INFO_PROG, out_file->prog_size, real_prog_size);
 	out_file->total_size -= INFO_PROG;
 	out_file->fd = open(out_file->name, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
 	if (out_file->fd <= 0)
-		return ((int)ft_error("Can't create the file", out_file->name));
+		return ((int)ft_error("Can't create the file", out_file->name, out_file->name));*/
 	return (TRUE);
 }

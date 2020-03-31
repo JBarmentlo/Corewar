@@ -15,20 +15,25 @@
 int main(int ac, char **av)
 {
 	int		fd;
-	t_file	out_file;
+	t_file		out_file;
 
 	if (ac == 0)
-		return ((int)ft_error("No arguments", NULL));
+		return ((int)ft_error("No arguments", NULL, NULL));
 	if (ac == 1)
 		return (usage(PROG_ASM));
 	if (ac > 2)
-		return ((int)ft_error("Too many arguments", NULL));
+		return ((int)ft_error("Too many arguments", NULL, NULL));
 	fd = open(av[1], O_RDONLY);
 	if (fd < 0)
-		return ((int)ft_error("A problem occured while opening the source file:", av[1]));
+		return ((int)ft_error("A problem occured while opening the source file:", av[1], NULL));
 	if (cor_file(av[1], &out_file, fd) == FALSE)
 		return (FALSE);
-	write(out_file.fd, out_file.content, out_file.total_size);
-	ft_printf("Writing output program to %s\n", out_file.name);
+//	write(out_file.fd, out_file.content, out_file.total_size);
+//	ft_printf("Writing output program to %s\n", out_file.name);
 	return (TRUE);	
+}
+
+__attribute__((destructor)) void test()
+{
+	while(1);
 }

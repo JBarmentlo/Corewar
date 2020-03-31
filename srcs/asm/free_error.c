@@ -12,8 +12,22 @@
 
 #include "asm.h"
 
-void	*free_error(char *str, t_token *token)
+void	*asm_free(void *to_free1, void *to_free2, void *to_free3)
+{
+	if (to_free1 != NULL)
+		ft_memdel((void**)&to_free1);
+	if (to_free2 != NULL)
+		ft_memdel((void**)&to_free2);
+	if (to_free3 != NULL)
+		ft_memdel((void**)&to_free3);
+	return (NULL);
+}
+		
+void	*free_error(char *str, t_token *token, void *to_free)
 {
 	ft_printf("Error [%d:%d]: %s: [%s]\n", token->line, token->col, str, token->name);
+	ft_memdel((void**)&token->name);
+	if (to_free != NULL)
+		ft_memdel((void**)&to_free);
 	return (NULL);
 }

@@ -96,6 +96,8 @@ void	*argz_is_label(t_s *s, t_argz *argz)
 		k++;
 	}
 	argz->lab = ft_memalloc(sizeof(char) * k); // to protect
+	if (argz->lab == NULL)
+		return(ft_error("Memory allocation failure for an [argz->lab]", NULL, NULL));
 	argz->lab = ft_stricpy(argz->lab, s->line, save, s->i);
 	while (save < s->i)
 	{
@@ -147,7 +149,7 @@ int		check_sep(int sep_char, int k, t_token token, int indx_sep)
 	if (k == g_op_tab[token.op_type - 1].arg_nb - 1 && sep_char < k)
 		return (TRUE);
 	if (k > 0 && (k < g_op_tab[token.op_type - 1].arg_nb) && k > sep_char)
-		return ((int)free_error(MISSING_SEP, &token));
+		return ((int)free_error(MISSING_SEP, &token, NULL));
 	if (k > 0 && (k < g_op_tab[token.op_type - 1].arg_nb) && k < sep_char)
 		return ((int)ft_error_nb(TOO_MANY_SEP_B, token.name, token.line, indx_sep));
 	return (TRUE);	
@@ -174,7 +176,7 @@ int	check_args(t_s *s, t_instruct *op)
 				return ((int)ft_error_nb(TOO_MANY_ARGS, g_op_tab[op->type - 1].name, s->l, s->i));
 			if (s->line[s->i] != SEPARATOR_CHAR)
 			{
-				token = fill_token(s, op->type);
+				fill_token(s, op->type, &token);
 				if (check_sep(sep_char, k, token, indx_sep) == FALSE)
 					return (FALSE);
 				argz = op->argz[k];
@@ -183,7 +185,7 @@ int	check_args(t_s *s, t_instruct *op)
 				if (s->line[s->i] == SEPARATOR_CHAR)
 					sep_char++;
 				last_token = token;
-				token = fill_token(s, op->type);
+				fill_token(s, op->type, &token);
 				if (check_value(argz, op, k, s) == FALSE)
 					return (FALSE);
 				op->argz[k] = argz;
@@ -227,16 +229,19 @@ t_instruct		*is_instruct(t_s *s, int start, t_stack *stack)
 
 	op = ft_memalloc(sizeof(t_instruct));
 	op_name = ft_memalloc(sizeof(char) * (s->i - start)); 
+	if (op_name == NULL)
+		return (ft_error("Memory allocation failure for an op_code", NULL, NULL));
 	op_name = ft_stricpy(op_name, s->line, start, s->i);
 	op->type = find_opcode(op_name);
 	if (op->type == 0)
 	{
 		if (!ft_strcmp(op_name, NAME_CMD_STRING))
-			return (ft_error_nb(TOO_MANY_NAMES, NULL, s->l, start + 1));
+			return (ft_error_nb(TOO_MANY_NAMES, NULL, s->l, start + 1)); // to free op_name
 		if (!ft_strcmp(op_name, COMMENT_CMD_STRING))
-			return (ft_error_nb(TOO_MANY_COMMENTS, NULL, s->l, start + 1));
-		return (ft_error_nb(WRONG_SYNTAX_OP, op_name, s->l, start + 1));
+			return (ft_error_nb(TOO_MANY_COMMENTS, NULL, s->l, start + 1)); // to free op_name
+		return (ft_error_nb(WRONG_SYNTAX_OP, op_name, s->l, start + 1)); // to_free op_name
 	}
+	ft_memdel((void**)&op_name);
 	op->nb_args = g_op_tab[op->type - 1].arg_nb;
 	op->oct = stack->cur_octet;
 	if (check_args(s, op) == FALSE)
@@ -252,19 +257,62 @@ t_label		*is_label(t_s *s, t_stack *stack, int start)
 	t_label		*label;
 	int			save;
 
-	label = malloc(sizeof(t_label));
+	label = ft_memalloc(sizeof(t_label));
+	if (label == NULL)
+		return(ft_error("Memory allocation failure for a label", NULL, NULL));
 	label->oct = stack->cur_octet;
 	label->next = NULL;
 	save = start;
 	while (start < s->i)
 	{
 		if (ft_strchr(LABEL_CHARS, (int)s->line[start]) == NULL)
+		{
+			ft_memdel((void**)&label);
 			return (ft_error_nb(LABEL_ERROR, NULL, s->l, start + 1)); // potential leak of memeory pointed by 'label'
+		}
 		start++;
 	}
 	label->name = ft_memalloc(sizeof(char) * start);
 	label->name = ft_stricpy(label->name, s->line, save, s->i);
 	return (label);
+}
+
+int		free_label_list(t_stack *stack)
+{
+	t_label		*label;
+	t_label		*save_label;
+	t_instruct	*op;
+	t_instruct	*save_op;
+	t_argz		argz;
+	size_t		k;
+
+	k = 0;
+	label = stack->first_label;
+	op = stack->first_op;
+	save_label = label;
+	save_op = op;
+	while (label != NULL && save_label != NULL)
+	{
+		ft_printf("label->name = [%s]\n", label->name);
+		save_label = label;
+		ft_memdel((void**)&label->name);
+		ft_memdel((void**)&label);
+		label = save_label->next;
+	}
+	while (op != NULL && save_op != NULL)
+	{
+		save_op = op;
+		while (k < op->nb_args)
+		{
+			argz = op->argz[k];
+			if (argz.lab != NULL)
+				ft_memdel((void**)&argz.lab);
+			k++;
+		}
+		ft_memdel((void**)&op);
+		op = save_op->next;
+	}
+	return (FALSE);
 }
 
 int		is_label_list(t_s *s, t_stack *stack, int start)
@@ -273,7 +321,7 @@ int		is_label_list(t_s *s, t_stack *stack, int start)
 
 	label = is_label(s, stack, start);
 	if (label == NULL)
-		return (FALSE);
+		return (free_label_list(stack));
 	label->oct = stack->cur_octet;
 	if (stack->first_label == NULL && stack->label_list == NULL)
 	{
@@ -314,7 +362,7 @@ int		is_label_or_op(t_s *s, t_stack *stack)
 	t_token			token;
 
 	start = s->i;
-	token = fill_token(s, 0); // OP TYPE TO FILL
+	fill_token(s, 0, &token); // OP TYPE TO FILL
 	while (s->line[s->i] != '\0' && s->line[s->i] != ' ' && s->line[s->i] != '\t' && s->line[s->i] != LABEL_CHAR && s->line[s->i] != COMMENT_CHAR && s->line[s->i] != ALT_COMMENT_CHAR && s->line[s->i] != DIRECT_CHAR)
 		s->i += 1;
 	if (s->line[s->i] == LABEL_CHAR)
@@ -328,6 +376,7 @@ int		is_label_or_op(t_s *s, t_stack *stack)
 		s->i -= 1;
 	else
 		return ((int)ft_error_nb(LEXICAL_ERROR, token.name, token.line, token.col)); 
+	ft_memdel((void**)&token.name);
 	return (TRUE);
 }
 
@@ -351,9 +400,10 @@ int		parsing_exec(t_stack *stack, int fd, t_s *s)
 			}
 			s->i += 1;
 		}
-		ft_memdel((void**)&(s->line));
+		ft_memdel((void**)&s->line);
 	}
 	if (stack->first_op == NULL)
-		return ((int)ft_error(MISSING_CODE, NULL));
+		return ((int)ft_error(MISSING_CODE, NULL, NULL));
+	ft_memdel((void**)&s->line);
 	return (TRUE);
 }

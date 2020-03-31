@@ -12,11 +12,10 @@
 
 #include "asm.h"
 
-t_token		fill_token(t_s *s, int op_type)
+int	fill_token(t_s *s, int op_type, t_token *token)
 {
 	int 	l;
 	int 	save;
-	t_token token;
 
 	l = 0;
 	save = s->i;
@@ -27,13 +26,15 @@ t_token		fill_token(t_s *s, int op_type)
 		l++;
 		save++;
 	}
-	token.name = ft_memalloc(sizeof(char *) * l);
-	token.name = ft_strncat(token.name, s->line + s->i, l);
-	token.line = s->l;
-	token.col = s->i;
-	token.end = s->i + l;
-	token.op_type = op_type;
-	return (token);	
+	token->name = ft_memalloc(sizeof(char *) * l);
+	if (token->name == NULL)
+		return ((int)ft_error("Can't allocate token", NULL, NULL));
+	token->name = ft_strncat(token->name, s->line + s->i, l);
+	token->line = s->l;
+	token->col = s->i;
+	token->end = s->i + l;
+	token->op_type = op_type;
+	return (TRUE);	
 }
 
 int		find_opcode(char *string)
