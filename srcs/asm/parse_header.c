@@ -33,6 +33,7 @@ int		get_header_file4(t_s *s, char **tmp, int fd)
 	t_token		token;
 
 	j = 0;
+	token.name = NULL;
 	if (s->line[s->i] == '\0')
 	{
 		if (empty_line(s, tmp, fd, &j) == FALSE)
@@ -98,7 +99,7 @@ int     get_header_file2(int fd, t_s *s, int *type, t_token *token)
 		ft_memdel((void**)&s->line);
 		ft_memdel((void**)&token->name);
 	}
-	ft_memdel((void**)&token->name);
+//	ft_memdel((void**)&token->name);
 	if (s->line == NULL)
 		return ((int)ft_error_nb(INCOMPLETE, "(null)", s->l > 0 ? s->l + 1 : 0, 0));
 	*type = s->line[s->i + 1];
@@ -109,7 +110,7 @@ int     get_header_file2(int fd, t_s *s, int *type, t_token *token)
 	if (*type == 'c')
 		if (ft_strncmp(s->line + s->i, COMMENT_CMD_STRING, 8) != 0)
 			return ((int)free_error(WRONG_HEADER, token, NULL));
-	ft_memdel((void**)&token->name);
+//	ft_memdel((void**)&token->name);
 	fill_token(s, 0, token);
 	s->i += (*type == 'n' ? 5 : 8);
 	while (s->line[s->i] != '\0' && s->line[s->i] != '"')
@@ -133,6 +134,7 @@ int     get_header_file(t_stack *stack, int fd, t_s *s)
 	t_token token;
 
 	s->i = 0;
+	token.name = NULL;
 	if (get_header_file2(fd, s, &type, &token) == FALSE)
 		return (FALSE);
 	save = type;

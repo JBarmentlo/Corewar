@@ -103,7 +103,7 @@ int		cor_file(char *source_file, t_file *out_file, int fd)
 		return ((int)asm_free(out_file->name, out_file->content, NULL));
 	stack.cur_octet = out_file->total_size;
 	if (parsing_exec(&stack, fd, &s) == FALSE)
-		return (FALSE);
+		return ((int)asm_free(out_file->name, out_file->content, NULL));
 //	print_tester(&stack);
 /*	if (fill_opcode(out_file, stack) == FALSE)
 		return (FALSE);

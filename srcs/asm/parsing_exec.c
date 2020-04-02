@@ -203,6 +203,7 @@ int	check_args(t_s *s, t_instruct *op)
 		return (FALSE);
 	if (k < g_op_tab[op->type - 1].arg_nb)
 		return ((int)ft_error_nb(MISSING_ARG, g_op_tab[op->type - 1].name, s->l, s->i));
+	ft_memdel((void**)&token.name);
 	return (TRUE);
 }
 
@@ -254,7 +255,7 @@ t_instruct		*is_instruct(t_s *s, int start, t_stack *stack)
 
 t_label		*is_label(t_s *s, t_stack *stack, int start)
 {
-	t_label		*label;
+	t_label			*label;
 	int			save;
 
 	label = ft_memalloc(sizeof(t_label));
@@ -277,7 +278,7 @@ t_label		*is_label(t_s *s, t_stack *stack, int start)
 	return (label);
 }
 
-int		free_label_list(t_stack *stack)
+int		free_op_lab(t_stack *stack)
 {
 	t_label		*label;
 	t_label		*save_label;
@@ -293,7 +294,6 @@ int		free_label_list(t_stack *stack)
 	save_op = op;
 	while (label != NULL && save_label != NULL)
 	{
-		ft_printf("label->name = [%s]\n", label->name);
 		save_label = label;
 		ft_memdel((void**)&label->name);
 		ft_memdel((void**)&label);
@@ -315,13 +315,14 @@ int		free_label_list(t_stack *stack)
 	return (FALSE);
 }
 
-int		is_label_list(t_s *s, t_stack *stack, int start)
+int		is_label_list(t_s *s, t_stack *stack, int start, t_token token)
 {
 	t_label		*label;
 
 	label = is_label(s, stack, start);
+	ft_memdel((void**)&token.name);
 	if (label == NULL)
-		return (free_label_list(stack));
+		return (free_op_lab(stack));
 	label->oct = stack->cur_octet;
 	if (stack->first_label == NULL && stack->label_list == NULL)
 	{
@@ -362,15 +363,16 @@ int		is_label_or_op(t_s *s, t_stack *stack)
 	t_token			token;
 
 	start = s->i;
+	token.name = NULL;
 	fill_token(s, 0, &token); // OP TYPE TO FILL
 	while (s->line[s->i] != '\0' && s->line[s->i] != ' ' && s->line[s->i] != '\t' && s->line[s->i] != LABEL_CHAR && s->line[s->i] != COMMENT_CHAR && s->line[s->i] != ALT_COMMENT_CHAR && s->line[s->i] != DIRECT_CHAR)
 		s->i += 1;
 	if (s->line[s->i] == LABEL_CHAR)
-		return (is_label_list(s, stack, start));
+		return (is_label_list(s, stack, start, token));
 	else if (s->line[s->i] == ' ' || s->line[s->i] == '\t' || s->line[s->i] == DIRECT_CHAR)
 	{
 		if (is_op(s, stack, start) == FALSE)
-			return (FALSE);
+			return ((int)asm_free(token.name, NULL, NULL));
 	}
 	else if ((s->line[s->i] == COMMENT_CHAR || s->line[s->i] == ALT_COMMENT_CHAR) && s->i > 0)
 		s->i -= 1;
@@ -394,10 +396,8 @@ int		parsing_exec(t_stack *stack, int fd, t_s *s)
 		while (s->line[s->i] != '\0' && s->line[s->i] != COMMENT_CHAR && s->line[s->i] != ALT_COMMENT_CHAR)
 		{
 			if (s->line[s->i] != ' ' && s->line[s->i] != '\t' && s->line[s->i] != '\0')
-			{
 				if (is_label_or_op(s, stack) == FALSE)
-					return (FALSE);
-			}
+					return ((int)asm_free(s->line, NULL, NULL));
 			s->i += 1;
 		}
 		ft_memdel((void**)&s->line);

@@ -19,6 +19,8 @@ int	fill_token(t_s *s, int op_type, t_token *token)
 
 	l = 0;
 	save = s->i;
+	if (token->name != NULL)
+		ft_memdel((void**)&token->name);
 	while (s->line != NULL && s->line[save] != '\0' && s->line[save] != ' ' && s->line[save] != '\t'
 		&& s->line[save] != COMMENT_CHAR && s->line[save] != ALT_COMMENT_CHAR
 		&& s->line[save] != SEPARATOR_CHAR)
