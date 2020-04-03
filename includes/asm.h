@@ -30,6 +30,8 @@
 # define INCOMPLETE		"Incomplete Header"
 # define WRONG_HEADER		"Wrong .command in header"
 # define WRONG_FORMAT		"Wrong format after .command in header"
+# define TOO_LONG_NAME		"Command [.name] too long"
+# define TOO_LONG_COM		"Command [.comment] too long"
 # define WRONG_REG_NUM		"A register number should be between 1 and 16"
 # define WRONG_TYPE_ARG		"Wrong type of argument for the op_code"
 # define MISSING_SEP		"Missing separator_char before the argument"
@@ -37,8 +39,7 @@
 # define TOO_MANY_SEP_A		"Too many separator_char after the argument"
 # define MISSING_ARG		"Missing arguments for the op_code"
 # define TOO_MANY_ARGS		"Too many arguments for the op_code"
-# define TOO_MANY_NAMES		"Can't have twice the definition of the champion's name"
-# define TOO_MANY_COMMENTS	"Can't have twice the definition of the champion's comment"
+# define COMMAND_TWICE		"Can't have twice the same command"
 # define WRONG_SYNTAX_OP	"Wrong syntaxe for the op_code"
 # define LABEL_ERROR		"Lexical error for a label"
 # define MISSING_CODE		"Missing exec_code for this champion"
@@ -116,6 +117,9 @@ long				count_bits(long nb);
 void				write_in_file(t_file *out_file, int indx, int n);
 void				copy_string(char *dest, char *src, int size, int *indx);
 /////////////////////// op_code utils   //////////////////////////
+void				is_register(t_argz *argz);
+void				is_direct(t_argz *argz, size_t inst_type);
+void				is_indirect(t_argz *argz);
 int				fill_token(t_s *s, int op_type, t_token *token);
 int				find_opcode(char *string);
 int				encoding_byte(t_instruct *op);

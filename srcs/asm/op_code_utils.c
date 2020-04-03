@@ -25,10 +25,12 @@ int	fill_token(t_s *s, int op_type, t_token *token)
 		&& s->line[save] != COMMENT_CHAR && s->line[save] != ALT_COMMENT_CHAR
 		&& s->line[save] != SEPARATOR_CHAR)
 	{
+		if (op_type == 42 && (s->line[save] == LABEL_CHAR || s->line[save] == DIRECT_CHAR))
+			break;
 		l++;
 		save++;
 	}
-	token->name = ft_memalloc(sizeof(char *) * l);
+	token->name = ft_memalloc(sizeof(char *) * l + 1);
 	if (token->name == NULL)
 		return ((int)ft_error("Can't allocate token", NULL, NULL));
 	token->name = ft_strncat(token->name, s->line + s->i, l);

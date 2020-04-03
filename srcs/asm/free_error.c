@@ -25,7 +25,10 @@ void	*asm_free(void *to_free1, void *to_free2, void *to_free3)
 		
 void	*free_error(char *str, t_token *token, void *to_free)
 {
-	ft_printf("Error [%d:%d]: %s: [%s]\n", token->line, token->col, str, token->name);
+	if (token->name != NULL)
+		ft_printf("Error [%d:%d]: %s: [%s]\n", token->line, token->col, str, token->name);
+	else
+		ft_printf("Error [%d:%d]: %s\n", token->line, token->col, str);
 	ft_memdel((void**)&token->name);
 	if (to_free != NULL)
 		ft_memdel((void**)&to_free);

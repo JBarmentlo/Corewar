@@ -12,28 +12,41 @@
 
 #include "asm.h"
 
-void	is_register(t_argz *argz)
+void		*free_op_lab(t_stack *stack)
 {
-	argz->type = T_REG;
-	argz->code = REG_CODE;
-	argz->oct = T_REG;
-}
+	t_label		*label;
+	t_label		*save_label;
+	t_instruct	*op;
+	t_instruct	*save_op;
+	t_argz		argz;
+	size_t		k;
 
-void	is_direct(t_argz *argz, size_t inst_type)
-{
-	argz->type = T_DIR;
-	argz->code = DIR_CODE;
-	if (g_op_tab[inst_type - 1].is_direct_small == 1)
-		argz->oct = DIR_SIZE / 2;
-	else
-		argz->oct = DIR_SIZE;
-}
-
-void	is_indirect(t_argz *argz)
-{
-	argz->type = T_IND;
-	argz->code = IND_CODE;
-	argz->oct = IND_SIZE;
+	k = 0;
+	label = stack->first_label;
+	op = stack->first_op;
+	save_label = label;
+	save_op = op;
+	while (label != NULL && save_label != NULL)
+	{
+		save_label = label;
+		ft_memdel((void**)&label->name);
+		ft_memdel((void**)&label);
+		label = save_label->next;
+	}
+	while (op != NULL && save_op != NULL)
+	{
+		save_op = op;
+		while (k < op->nb_args)
+		{
+			argz = op->argz[k];
+			if (argz.lab != NULL)
+				ft_memdel((void**)&argz.lab);
+			k++;
+		}
+		ft_memdel((void**)&op);
+		op = save_op->next;
+	}
+	return (NULL);
 }
 
 int		ft_atolong(t_s *s, t_argz *argz)
@@ -168,12 +181,16 @@ int	check_args(t_s *s, t_instruct *op)
 	sep_char = 0;
 	indx_sep = 0;
 	token.name = NULL;
+	last_token.name = NULL;
 	while (s->line[s->i] != '\0' && s->line[s->i] != COMMENT_CHAR && s->line[s->i] != ALT_COMMENT_CHAR)
 	{
 		if (s->line[s->i] != ' ' && s->line[s->i] != '\t' && s->line[s->i] != '\0')
 		{
 			if (k >= g_op_tab[op->type - 1].arg_nb && s->line[s->i] != SEPARATOR_CHAR)
+			{
+				ft_memdel((void**)&token.name);
 				return ((int)ft_error_nb(TOO_MANY_ARGS, g_op_tab[op->type - 1].name, s->l, s->i));
+			}
 			if (s->line[s->i] != SEPARATOR_CHAR)
 			{
 				fill_token(s, op->type, &token);
@@ -223,106 +240,59 @@ void	update_oct(t_instruct *op, int *cur_octet, t_s *s)
 		s->i -= 1;
 }
 
-t_instruct		*is_instruct(t_s *s, int start, t_stack *stack)
+t_instruct		*is_instruct(t_s *s, t_stack *stack, t_token *token)
 {
 	t_instruct	*op;
-	char		*op_name;
 
 	op = ft_memalloc(sizeof(t_instruct));
-	op_name = ft_memalloc(sizeof(char) * (s->i - start)); 
-	if (op_name == NULL)
-		return (ft_error("Memory allocation failure for an op_code", NULL, NULL));
-	op_name = ft_stricpy(op_name, s->line, start, s->i);
-	op->type = find_opcode(op_name);
+	op->type = find_opcode(token->name);
 	if (op->type == 0)
 	{
-		if (!ft_strcmp(op_name, NAME_CMD_STRING))
-			return (ft_error_nb(TOO_MANY_NAMES, NULL, s->l, start + 1)); // to free op_name
-		if (!ft_strcmp(op_name, COMMENT_CMD_STRING))
-			return (ft_error_nb(TOO_MANY_COMMENTS, NULL, s->l, start + 1)); // to free op_name
-		return (ft_error_nb(WRONG_SYNTAX_OP, op_name, s->l, start + 1)); // to_free op_name
+		if (!ft_strcmp(token->name, NAME_CMD_STRING) || !ft_strcmp(token->name, COMMENT_CMD_STRING))
+			return (free_error(COMMAND_TWICE, token, op)); // to free op_name
+		return (free_error(WRONG_SYNTAX_OP, token, op)); // to_free op_name
 	}
-	ft_memdel((void**)&op_name);
 	op->nb_args = g_op_tab[op->type - 1].arg_nb;
 	op->oct = stack->cur_octet;
 	if (check_args(s, op) == FALSE)
-		return (NULL);
+		return (asm_free(op, NULL, NULL));
 	if (s->i > 0 && (s->line[(s->i) - 1] == COMMENT_CHAR || s->line[(s->i) - 1] == ALT_COMMENT_CHAR))
 		return (op);
 	update_oct(op, &stack->cur_octet, s);
 	return (op);
 }
 
-t_label		*is_label(t_s *s, t_stack *stack, int start)
+t_label		*is_label(t_stack *stack, t_token *token)
 {
 	t_label			*label;
-	int			save;
+	int			i;
 
+	i = 0;
 	label = ft_memalloc(sizeof(t_label));
 	if (label == NULL)
 		return(ft_error("Memory allocation failure for a label", NULL, NULL));
 	label->oct = stack->cur_octet;
 	label->next = NULL;
-	save = start;
-	while (start < s->i)
+	while (token->name[i])
 	{
-		if (ft_strchr(LABEL_CHARS, (int)s->line[start]) == NULL)
-		{
-			ft_memdel((void**)&label);
-			return (ft_error_nb(LABEL_ERROR, NULL, s->l, start + 1)); // potential leak of memeory pointed by 'label'
-		}
-		start++;
+		if (ft_strchr(LABEL_CHARS, (int)token->name[i]) == NULL)
+			return (free_error(LABEL_ERROR, token, label));
+		i++;
 	}
-	label->name = ft_memalloc(sizeof(char) * start);
-	label->name = ft_stricpy(label->name, s->line, save, s->i);
+	label->name = ft_memalloc(sizeof(char) * i + 1);
+	label->name = ft_memcpy(label->name, token->name, i);
+	ft_memdel((void**)&token->name);
 	return (label);
 }
 
-int		free_op_lab(t_stack *stack)
-{
-	t_label		*label;
-	t_label		*save_label;
-	t_instruct	*op;
-	t_instruct	*save_op;
-	t_argz		argz;
-	size_t		k;
 
-	k = 0;
-	label = stack->first_label;
-	op = stack->first_op;
-	save_label = label;
-	save_op = op;
-	while (label != NULL && save_label != NULL)
-	{
-		save_label = label;
-		ft_memdel((void**)&label->name);
-		ft_memdel((void**)&label);
-		label = save_label->next;
-	}
-	while (op != NULL && save_op != NULL)
-	{
-		save_op = op;
-		while (k < op->nb_args)
-		{
-			argz = op->argz[k];
-			if (argz.lab != NULL)
-				ft_memdel((void**)&argz.lab);
-			k++;
-		}
-		ft_memdel((void**)&op);
-		op = save_op->next;
-	}
-	return (FALSE);
-}
-
-int		is_label_list(t_s *s, t_stack *stack, int start, t_token token)
+int		is_label_list(t_s *s, t_stack *stack, t_token *token)
 {
 	t_label		*label;
 
-	label = is_label(s, stack, start);
-	ft_memdel((void**)&token.name);
+	label = is_label(stack, token);
 	if (label == NULL)
-		return (free_op_lab(stack));
+		return ((int)free_op_lab(stack));
 	label->oct = stack->cur_octet;
 	if (stack->first_label == NULL && stack->label_list == NULL)
 	{
@@ -337,13 +307,13 @@ int		is_label_list(t_s *s, t_stack *stack, int start, t_token token)
 	return (s->i);
 }
 
-int		is_op(t_s *s, t_stack *stack, int start)
+int		is_op(t_s *s, t_stack *stack, t_token *token)
 {
 	t_instruct	*op;
 
-	op = is_instruct(s, start, stack);
+	op = is_instruct(s, stack, token);
 	if (op == NULL)
-		return (FALSE);
+		return ((int)free_op_lab(stack));
 	if (stack->op_list == NULL && stack->first_op == NULL)
 	{
 		stack->first_op = op;
@@ -359,25 +329,26 @@ int		is_op(t_s *s, t_stack *stack, int start)
 
 int		is_label_or_op(t_s *s, t_stack *stack)
 {
-	int			start;
 	t_token			token;
+	int			k;
+	char			*str;
 
-	start = s->i;
 	token.name = NULL;
-	fill_token(s, 0, &token); // OP TYPE TO FILL
-	while (s->line[s->i] != '\0' && s->line[s->i] != ' ' && s->line[s->i] != '\t' && s->line[s->i] != LABEL_CHAR && s->line[s->i] != COMMENT_CHAR && s->line[s->i] != ALT_COMMENT_CHAR && s->line[s->i] != DIRECT_CHAR)
-		s->i += 1;
-	if (s->line[s->i] == LABEL_CHAR)
-		return (is_label_list(s, stack, start, token));
-	else if (s->line[s->i] == ' ' || s->line[s->i] == '\t' || s->line[s->i] == DIRECT_CHAR)
+	fill_token(s, 42, &token); // OP TYPE TO FILL
+	str = s->line;
+	k = token.end;
+	s->i = k;
+	if (str[k] != '\0' && str[k] == LABEL_CHAR)
+		return (is_label_list(s, stack, &token));
+	else if (str[k] && (str[k] == ' ' || str[k] == '\t' || str[k] == DIRECT_CHAR))
 	{
-		if (is_op(s, stack, start) == FALSE)
+		if (is_op(s, stack, &token) == FALSE)
 			return ((int)asm_free(token.name, NULL, NULL));
 	}
-	else if ((s->line[s->i] == COMMENT_CHAR || s->line[s->i] == ALT_COMMENT_CHAR) && s->i > 0)
+	else if (str[k] && k > 0 && (str[k] == COMMENT_CHAR || str[k] == ALT_COMMENT_CHAR))
 		s->i -= 1;
 	else
-		return ((int)ft_error_nb(LEXICAL_ERROR, token.name, token.line, token.col)); 
+		return ((int)free_error(LEXICAL_ERROR, &token, NULL)); 
 	ft_memdel((void**)&token.name);
 	return (TRUE);
 }
