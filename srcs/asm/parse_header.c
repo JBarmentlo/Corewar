@@ -37,10 +37,10 @@ int		get_header_file4(t_s *s, char **tmp, int fd)
 	if (s->line[s->i] == '\0')
 	{
 		if (empty_line(s, tmp, fd, &j) == FALSE)
-			return ((int)asm_free(*tmp, NULL, NULL));
+			return ((int)just_free(*tmp, NULL));
 		while (s->line != NULL && s->line[0] == '\0')
 			if (empty_line(s, tmp, fd, &j) == FALSE)
-				return ((int)asm_free(*tmp, NULL, NULL));
+				return ((int)just_free(*tmp, NULL));
 	}
 	while (s->line && s->line[s->i] != '\0' && s->line[s->i] != '"')
 	{
@@ -50,10 +50,10 @@ int		get_header_file4(t_s *s, char **tmp, int fd)
 		if (s->line[s->i] == '\0')
 		{
 			if (empty_line(s, tmp, fd, &j) == FALSE)
-				return ((int)asm_free(*tmp, NULL, NULL));
+				return ((int)just_free(*tmp, NULL));
 			while (s->line != NULL && s->line[0] == '\0')
 				if (empty_line(s, tmp, fd, &j) == FALSE)
-					return ((int)asm_free(*tmp, NULL, NULL));
+					return ((int)just_free(*tmp, NULL));
 		}
 	}
 	tmp[0][j] = '\0';

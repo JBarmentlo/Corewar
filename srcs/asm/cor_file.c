@@ -83,9 +83,9 @@ int		parsing_header(t_stack *stack, int fd, t_s *s)
 	if (!(stack->comment = ft_memalloc(sizeof(char) * COMMENT_LENGTH + 1)))
 		return ((int)ft_error("Can't allocate champion's comment", NULL, NULL));
 	if (!get_header_file(stack, fd, s))
-		return ((int)asm_free(stack->champion_name, stack->comment, NULL));
+		return ((int)just_free(stack->champion_name, stack->comment));
 	if (!get_header_file(stack, fd, s))
-		return ((int)asm_free(stack->champion_name, stack->comment, NULL));
+		return ((int)just_free(stack->champion_name, stack->comment));
 	return (TRUE);
 }
 
@@ -96,14 +96,14 @@ int		cor_file(char *source_file, t_file *out_file, int fd)
 	t_s		s;
 
 	if (parsing_header(&stack, fd, &s) == FALSE)
-		return ((int)asm_free(s.line, NULL, NULL));
+		return ((int)just_free(s.line, NULL));
 	if (init_file(out_file, source_file) == FALSE)
-		return ((int)asm_free(stack.champion_name, stack.comment, NULL));
+		return ((int)just_free(stack.champion_name, stack.comment));
 	if (fill_header(out_file, &stack) == FALSE)
-		return ((int)asm_free(out_file->name, out_file->content, NULL));
+		return ((int)just_free(out_file->name, out_file->content));
 	stack.cur_octet = out_file->total_size;
 	if (parsing_exec(&stack, fd, &s) == FALSE)
-		return ((int)asm_free(out_file->name, out_file->content, NULL));
+		return ((int)just_free(out_file->name, out_file->content));
 //	print_tester(&stack);
 /*	if (fill_opcode(out_file, stack) == FALSE)
 		return (FALSE);

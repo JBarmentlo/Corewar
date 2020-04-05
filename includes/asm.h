@@ -111,22 +111,31 @@ typedef struct 			s_file
 
 int				cor_file(char *source_file, t_file *out_file, int fd);
 int				get_header_file(t_stack *stack, int fd, t_s *s);
-/////////////////////// asm utils   //////////////////////////
-void				nb_to_binary(t_file *out_file, int octets, int indx, long nb);
-long				count_bits(long nb);
-void				write_in_file(t_file *out_file, int indx, int n);
-void				copy_string(char *dest, char *src, int size, int *indx);
-/////////////////////// op_code utils   //////////////////////////
+int				parsing_exec(t_stack *stack, int fd, t_s *s);
+/////////////////////// parsing arg   //////////////////////////
 void				is_register(t_argz *argz);
 void				is_direct(t_argz *argz, size_t inst_type);
 void				is_indirect(t_argz *argz);
+int				check_args(t_s *s, t_instruct *op);
+/////////////////////// parsing utils   //////////////////////////
 int				fill_token(t_s *s, int op_type, t_token *token);
 int				find_opcode(char *string);
 int				encoding_byte(t_instruct *op);
+int				ft_atolong(t_s *s, t_argz *argz);
+void				update_oct(t_instruct *op, int *cur_octet, t_s *s);
+/////////////////////// writing utils   //////////////////////////
+void				write_in_file(t_file *out_file, int indx, int n);
+void				copy_string(char *dest, char *src, int size, int *indx);
+long				count_bits(long nb);
+void				nb_to_binary(t_file *out_file, int octets, int indx, long nb);
 int				write_op_values(t_file *out_file, int *i, t_instruct *op, t_stack stack);
-int				parsing_exec(t_stack *stack, int fd, t_s *s);
+/////////////////////// free functions ///////////////////////////
 void				*token_free(char *str, t_token *token, void *to_free);
-void				*asm_free(void *to_free1, void *to_free2, void *to_free3);
+
+void				*just_free(void *to_free1, void *to_free2);
+void				*free_op_lab(t_stack *stack);
+void				*free_op(t_instruct *op);
+void				*free_label(t_label *label);
 /////////////////////// To delete   //////////////////////////
 void				print_tester(t_stack *stack);
 
