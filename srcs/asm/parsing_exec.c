@@ -12,30 +12,30 @@
 
 #include "asm.h"
 
-void		*free_op_lab(t_stack *stack)
+void		*free_label(t_label *label)
 {
-	t_label		*label;
 	t_label		*save_label;
-	t_instruct	*op;
+
+	while (label != NULL)
+	{
+		save_label = label->next;
+		ft_memdel((void**)&label->name);
+		ft_memdel((void**)&label);
+		label = save_label;
+	}
+	return (NULL);	
+}
+
+void		*free_op(t_instruct *op)
+{
 	t_instruct	*save_op;
 	t_argz		argz;
 	size_t		k;
 
-	k = 0;
-	label = stack->first_label;
-	op = stack->first_op;
-	save_label = label;
-	save_op = op;
-	while (label != NULL && save_label != NULL)
+	while (op != NULL)
 	{
-		save_label = label;
-		ft_memdel((void**)&label->name);
-		ft_memdel((void**)&label);
-		label = save_label->next;
-	}
-	while (op != NULL && save_op != NULL)
-	{
-		save_op = op;
+		k = 0;
+		save_op = op->next;
 		while (k < op->nb_args)
 		{
 			argz = op->argz[k];
@@ -44,8 +44,24 @@ void		*free_op_lab(t_stack *stack)
 			k++;
 		}
 		ft_memdel((void**)&op);
-		op = save_op->next;
+		op = save_op;
 	}
+	return (NULL);
+}
+
+void		*free_op_lab(t_stack *stack)
+{
+	t_label		*label;
+	t_instruct	*op;
+
+	label = stack->first_label;
+	op = stack->first_op;
+	free_label(label);
+	free_op(op);
+	stack->first_op = NULL;
+	stack->op_list = NULL;
+	stack->first_label = NULL;
+	stack->label_list = NULL;
 	return (NULL);
 }
 
@@ -108,14 +124,14 @@ void	*argz_is_label(t_s *s, t_argz *argz)
 		s->i += 1;
 		k++;
 	}
-	argz->lab = ft_memalloc(sizeof(char) * k); // to protect
+	argz->lab = ft_memalloc(sizeof(char) * k);
 	if (argz->lab == NULL)
 		return(ft_error("Memory allocation failure for an [argz->lab]", NULL, NULL));
 	argz->lab = ft_stricpy(argz->lab, s->line, save, s->i);
 	while (save < s->i)
 	{
 		if (ft_strchr(LABEL_CHARS, (int)s->line[save]) == NULL)
-			return (ft_error_nb(LABEL_ERROR, NULL, s->l, save + 1));
+			return (ft_error_nb(LABEL_ERROR, NULL, s->l, save + 1)); /// FT_ERROR_NB ///
 		save++;
 	}
 	argz->value = 0;
@@ -133,12 +149,10 @@ void	*is_argument(t_s *s, size_t inst_type, t_argz *argz)
 	if (s->line[s->i] != LABEL_CHAR && argz->type != T_IND)
 		s->i += 1;
 	if (s->line[s->i] != '\0' && s->line[s->i] != LABEL_CHAR)
-		numeric_value(s, argz); // gestion d'erreur ?
+		numeric_value(s, argz);
 	else
-	{
 		if (argz_is_label(s,argz) == NULL)
-			return (NULL);
-	}
+			return (asm_free(argz->lab, NULL, NULL)); /// ASM_FREE ///
 	if ((s->line[s->i] == '\0' || s->line[s->i] == COMMENT_CHAR || s->line[s->i] == ALT_COMMENT_CHAR) && s->i > 0)
 		s->i -= 1;
 	return (argz);
@@ -147,24 +161,28 @@ void	*is_argument(t_s *s, size_t inst_type, t_argz *argz)
 int		check_value(t_argz argz, t_instruct *op, int k, t_s *s)
 {
 	if (argz.type == T_REG && (argz.value > REG_NUMBER || argz.value < 1))
-		return ((int)ft_error_nb(WRONG_REG_NUM, NULL, s->l, s->i));
+		return ((int)ft_error_nb(WRONG_REG_NUM, NULL, s->l, s->i)); /// FT_ERROR_NB ///
 	if ((argz.type & g_op_tab[op->type - 1].arg_types[k]) != argz.type)
-		return ((int)ft_error_nb(WRONG_TYPE_ARG, g_op_tab[op->type - 1].name, s->l, s->i));
+		return ((int)ft_error_nb(WRONG_TYPE_ARG, g_op_tab[op->type - 1].name, s->l, s->i)); /// FT_ERROR_NB ///
 	return (TRUE);
 }
 
-int		check_sep(int sep_char, int k, t_token token, int indx_sep)
+int		check_sep(int sep_char, int k, t_token *token, int indx_sep)
 {
+	token->col = indx_sep;
 	if (k == 0 && sep_char > 0)
-		return ((int)ft_error_nb(TOO_MANY_SEP_B, token.name, token.line, indx_sep));
-	if (sep_char >= g_op_tab[token.op_type - 1].arg_nb)
-		return ((int)ft_error_nb(TOO_MANY_SEP_A, token.name, token.line, indx_sep));
-	if (k == g_op_tab[token.op_type - 1].arg_nb - 1 && sep_char < k)
+		return ((int)token_free(TOO_MANY_SEP_B, token, NULL));    //// TOKEN_FREE //// 
+	if (sep_char >= g_op_tab[token->op_type - 1].arg_nb)
+		return ((int)token_free(TOO_MANY_SEP_A, token, NULL));    //// TOKEN_FREE ////
+	if (k == g_op_tab[token->op_type - 1].arg_nb - 1 && sep_char < k)
 		return (TRUE);
-	if (k > 0 && (k < g_op_tab[token.op_type - 1].arg_nb) && k > sep_char)
-		return ((int)free_error(MISSING_SEP, &token, NULL));
-	if (k > 0 && (k < g_op_tab[token.op_type - 1].arg_nb) && k < sep_char)
-		return ((int)ft_error_nb(TOO_MANY_SEP_B, token.name, token.line, indx_sep));
+	if (k > 0 && (k < g_op_tab[token->op_type - 1].arg_nb) && k > sep_char)
+		return ((int)token_free(MISSING_SEP, token, NULL));   //// TOKEN_FREE ////
+	if (k > 0 && (k < g_op_tab[token->op_type - 1].arg_nb) && k < sep_char) 
+	{
+		ft_printf("test99\n");
+		return ((int)token_free(TOO_MANY_SEP_B, token, NULL));   //// TOKEN_FREE ////
+	}
 	return (TRUE);	
 }
 
@@ -188,23 +206,33 @@ int	check_args(t_s *s, t_instruct *op)
 		{
 			if (k >= g_op_tab[op->type - 1].arg_nb && s->line[s->i] != SEPARATOR_CHAR)
 			{
+				ft_printf("test16\n");
 				ft_memdel((void**)&token.name);
 				return ((int)ft_error_nb(TOO_MANY_ARGS, g_op_tab[op->type - 1].name, s->l, s->i));
 			}
 			if (s->line[s->i] != SEPARATOR_CHAR)
 			{
 				fill_token(s, op->type, &token);
-				if (check_sep(sep_char, k, token, indx_sep) == FALSE)
-					return (FALSE);
+				if (check_sep(sep_char, k, &token, indx_sep) == FALSE)
+				{
+					ft_printf("test15\n");
+					return ((int)asm_free(token.name, NULL, NULL));
+				}
 				argz = op->argz[k];
 				if (is_argument(s, op->type, &argz) == NULL)
-					return (FALSE);
+				{
+					ft_printf("test1478\n");
+					return ((int)asm_free(token.name, NULL, NULL));
+				}
 				if (s->line[s->i] == SEPARATOR_CHAR)
 					sep_char++;
 				last_token = token;
 				fill_token(s, op->type, &token);
 				if (check_value(argz, op, k, s) == FALSE)
-					return (FALSE);
+				{
+					ft_printf("test14\n");
+					return ((int)asm_free(token.name, NULL, NULL));
+				}
 				op->argz[k] = argz;
 				k++;
 			}
@@ -216,11 +244,17 @@ int	check_args(t_s *s, t_instruct *op)
 		}
 		s->i += 1;
 	}
-	if (check_sep(sep_char, k, last_token, indx_sep) == FALSE)
-		return (FALSE);
-	if (k < g_op_tab[op->type - 1].arg_nb)
-		return ((int)ft_error_nb(MISSING_ARG, g_op_tab[op->type - 1].name, s->l, s->i));
+	if (check_sep(sep_char, k, &last_token, indx_sep) == FALSE)
+	{
+		ft_printf("test13\n");
+		return ((int)asm_free(token.name, NULL, NULL));
+	}
 	ft_memdel((void**)&token.name);
+	if (k < g_op_tab[op->type - 1].arg_nb)
+	{
+		ft_printf("test12\n");
+		return ((int)ft_error_nb(MISSING_ARG, g_op_tab[op->type - 1].name, s->l, s->i));
+	}
 	return (TRUE);
 }
 
@@ -245,17 +279,26 @@ t_instruct		*is_instruct(t_s *s, t_stack *stack, t_token *token)
 	t_instruct	*op;
 
 	op = ft_memalloc(sizeof(t_instruct));
+	op->next = NULL;
 	op->type = find_opcode(token->name);
 	if (op->type == 0)
 	{
 		if (!ft_strcmp(token->name, NAME_CMD_STRING) || !ft_strcmp(token->name, COMMENT_CMD_STRING))
-			return (free_error(COMMAND_TWICE, token, op)); // to free op_name
-		return (free_error(WRONG_SYNTAX_OP, token, op)); // to_free op_name
+		{
+			ft_printf("test11\n");
+			return (token_free(COMMAND_TWICE, token, op)); // to free op_name
+		}
+		ft_printf("test10\n");
+		return (token_free(WRONG_SYNTAX_OP, token, op)); // to_free op_name
 	}
 	op->nb_args = g_op_tab[op->type - 1].arg_nb;
 	op->oct = stack->cur_octet;
 	if (check_args(s, op) == FALSE)
-		return (asm_free(op, NULL, NULL));
+	{
+		ft_printf("test9\n");
+		//		ft_memdel((void**)&token->name);
+		return (free_op(op));
+	}
 	if (s->i > 0 && (s->line[(s->i) - 1] == COMMENT_CHAR || s->line[(s->i) - 1] == ALT_COMMENT_CHAR))
 		return (op);
 	update_oct(op, &stack->cur_octet, s);
@@ -270,13 +313,19 @@ t_label		*is_label(t_stack *stack, t_token *token)
 	i = 0;
 	label = ft_memalloc(sizeof(t_label));
 	if (label == NULL)
+	{
+		ft_printf("test8\n");
 		return(ft_error("Memory allocation failure for a label", NULL, NULL));
+	}
 	label->oct = stack->cur_octet;
 	label->next = NULL;
 	while (token->name[i])
 	{
 		if (ft_strchr(LABEL_CHARS, (int)token->name[i]) == NULL)
-			return (free_error(LABEL_ERROR, token, label));
+		{
+			ft_printf("test7\n");
+			return (token_free(LABEL_ERROR, token, label));
+		}
 		i++;
 	}
 	label->name = ft_memalloc(sizeof(char) * i + 1);
@@ -292,7 +341,10 @@ int		is_label_list(t_s *s, t_stack *stack, t_token *token)
 
 	label = is_label(stack, token);
 	if (label == NULL)
+	{
+		ft_printf("test6\n");
 		return ((int)free_op_lab(stack));
+	}
 	label->oct = stack->cur_octet;
 	if (stack->first_label == NULL && stack->label_list == NULL)
 	{
@@ -313,7 +365,10 @@ int		is_op(t_s *s, t_stack *stack, t_token *token)
 
 	op = is_instruct(s, stack, token);
 	if (op == NULL)
+	{
+		ft_printf("test5\n");
 		return ((int)free_op_lab(stack));
+	}
 	if (stack->op_list == NULL && stack->first_op == NULL)
 	{
 		stack->first_op = op;
@@ -343,12 +398,18 @@ int		is_label_or_op(t_s *s, t_stack *stack)
 	else if (str[k] && (str[k] == ' ' || str[k] == '\t' || str[k] == DIRECT_CHAR))
 	{
 		if (is_op(s, stack, &token) == FALSE)
+		{
+			ft_printf("test4\n");
 			return ((int)asm_free(token.name, NULL, NULL));
+		}
 	}
 	else if (str[k] && k > 0 && (str[k] == COMMENT_CHAR || str[k] == ALT_COMMENT_CHAR))
 		s->i -= 1;
 	else
-		return ((int)free_error(LEXICAL_ERROR, &token, NULL)); 
+	{
+		ft_printf("test3\n");
+		return ((int)token_free(LEXICAL_ERROR, &token, NULL)); 
+	}
 	ft_memdel((void**)&token.name);
 	return (TRUE);
 }
@@ -368,13 +429,20 @@ int		parsing_exec(t_stack *stack, int fd, t_s *s)
 		{
 			if (s->line[s->i] != ' ' && s->line[s->i] != '\t' && s->line[s->i] != '\0')
 				if (is_label_or_op(s, stack) == FALSE)
+				{
+					ft_printf("test2\n");
+					free_op_lab(stack);
 					return ((int)asm_free(s->line, NULL, NULL));
+				}
 			s->i += 1;
 		}
 		ft_memdel((void**)&s->line);
 	}
 	if (stack->first_op == NULL)
+	{
+		ft_printf("test1\n");
 		return ((int)ft_error(MISSING_CODE, NULL, NULL));
+	}
 	ft_memdel((void**)&s->line);
 	return (TRUE);
 }

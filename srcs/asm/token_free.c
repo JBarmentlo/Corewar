@@ -23,7 +23,7 @@ void	*asm_free(void *to_free1, void *to_free2, void *to_free3)
 	return (NULL);
 }
 		
-void	*free_error(char *str, t_token *token, void *to_free)
+void	*token_free(char *str, t_token *token, void *to_free)
 {
 	if (token->name != NULL)
 		ft_printf("Error [%d:%d]: %s: [%s]\n", token->line, token->col, str, token->name);

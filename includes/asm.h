@@ -125,7 +125,7 @@ int				find_opcode(char *string);
 int				encoding_byte(t_instruct *op);
 int				write_op_values(t_file *out_file, int *i, t_instruct *op, t_stack stack);
 int				parsing_exec(t_stack *stack, int fd, t_s *s);
-void				*free_error(char *str, t_token *token, void *to_free);
+void				*token_free(char *str, t_token *token, void *to_free);
 void				*asm_free(void *to_free1, void *to_free2, void *to_free3);
 /////////////////////// To delete   //////////////////////////
 void				print_tester(t_stack *stack);

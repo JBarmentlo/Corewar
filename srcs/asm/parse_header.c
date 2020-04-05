@@ -61,7 +61,7 @@ int		get_header_file4(t_s *s, char **tmp, int fd)
 	while (s->line[s->i] != '\0' && s->line[s->i] != COMMENT_CHAR && s->line[s->i] != ALT_COMMENT_CHAR)
 	{
 		if (s->line[s->i] != '\0' && s->line[s->i] != ' ' && s->line[s->i] != '\t' && fill_token(s, 0, &token))
-			return ((int)free_error(SYNTAXE_ERROR, &token, *tmp));
+			return ((int)token_free(SYNTAXE_ERROR, &token, *tmp));
 		s->i += 1;
 	}
 	ft_memdel((void**)&s->line);
@@ -91,7 +91,7 @@ int     get_header_file2(int fd, t_s *s, int *type, t_token *token)
 		while (s->line[s->i] != '\0' && s->line[s->i] != COMMENT_CHAR && s->line[s->i] != ALT_COMMENT_CHAR && s->line[s->i] != '.')
 		{
 			if (s->line[s->i] != ' ' && s->line[s->i] != '\t' && fill_token(s, 0, token))
-				return ((int)free_error(WRONG_HEADER, token, NULL));
+				return ((int)token_free(WRONG_HEADER, token, NULL));
 			s->i += 1;
 		}
 		if (s->line[s->i] == '.')
@@ -107,26 +107,26 @@ int     get_header_file2(int fd, t_s *s, int *type, t_token *token)
 	if (*type == 'n')
 	{
 		if (ft_strncmp(s->line + s->i, NAME_CMD_STRING, 5) != 0)
-			return ((int)free_error(WRONG_HEADER, token, NULL));
+			return ((int)token_free(WRONG_HEADER, token, NULL));
 	}
 	else if (*type == 'c')
 	{
 		if (ft_strncmp(s->line + s->i, COMMENT_CMD_STRING, 8) != 0)
-			return ((int)free_error(WRONG_HEADER, token, NULL));
+			return ((int)token_free(WRONG_HEADER, token, NULL));
 	}
 	else
-		return ((int)free_error(INVALID_COMMAND, token, NULL)); // token name ??
+		return ((int)token_free(INVALID_COMMAND, token, NULL)); // token name ??
 //	ft_memdel((void**)&token->name);
 	fill_token(s, 0, token);
 	s->i += (*type == 'n' ? 5 : 8);
 	while (s->line[s->i] != '\0' && s->line[s->i] != '"')
 	{
 		if (s->line[s->i] != ' ' && s->line[s->i] != '\t')
-			return ((int)free_error(WRONG_FORMAT, token, NULL));
+			return ((int)token_free(WRONG_FORMAT, token, NULL));
 		s->i += 1;
 	}
 	if (s->line[s->i] != '"')
-		return ((int)free_error(WRONG_FORMAT, token, NULL));
+		return ((int)token_free(WRONG_FORMAT, token, NULL));
 	s->i += 1;
 	ft_memdel((void**)&token->name);
 	return (TRUE);
@@ -153,13 +153,13 @@ int     get_header_file(t_stack *stack, int fd, t_s *s)
 	if (type == 'n')
 	{
 		if (ft_strlen(tmp) > PROG_NAME_LENGTH)
-			return ((int)free_error(TOO_LONG_NAME, &token, tmp));
+			return ((int)token_free(TOO_LONG_NAME, &token, tmp));
 		stack->champion_name = ft_strcpy(stack->champion_name, tmp);
 	}
 	else if (type == 'c')
 	{
 		if (ft_strlen(tmp) > COMMENT_LENGTH)
-			return ((int)free_error(TOO_LONG_COM, &token, tmp));
+			return ((int)token_free(TOO_LONG_COM, &token, tmp));
 		stack->comment = ft_strcpy(stack->comment, tmp);
 	}
 	ft_memdel((void**)&tmp);
