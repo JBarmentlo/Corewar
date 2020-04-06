@@ -1,5 +1,26 @@
 #include "asm.h"
 
+int	diff_com_end(char c)
+{
+	if (c != '\0' && c != COMMENT_CHAR && c != ALT_COMMENT_CHAR)
+		return (TRUE);
+	return (FALSE);
+}
+
+int	diff_space(char c)
+{
+	if (c != ' ' && c != '\t')
+		return (TRUE);
+	return (FALSE);
+}
+
+void	init_token(t_token *token)
+{
+	token->name = NULL;
+	token->line = 0;
+	token->col = 0;
+}
+
 int	fill_token(t_s *s, int op_type, t_token *token)
 {
 	int 	l;

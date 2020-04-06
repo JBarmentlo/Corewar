@@ -94,16 +94,29 @@ int		check_sep(int sep_char, int k, t_token *token, int indx_sep)
 {
 	token->col = indx_sep;
 	if (k == 0 && sep_char > 0)
-		return ((int)token_free(TOO_MANY_SEP_B, token, NULL));
+		return ((int)token_free(TOO_MANY_SEP_B, token));
 	if (sep_char >= g_op_tab[token->op_type - 1].arg_nb)
-		return ((int)token_free(TOO_MANY_SEP_A, token, NULL));
+	{
+		ft_printf("test0, indx sep = [%d], token->name = [%s]\n", indx_sep, token->name);
+		return ((int)token_free(TOO_MANY_SEP_A, token));
+	}
 	if (k == g_op_tab[token->op_type - 1].arg_nb - 1 && sep_char < k)
 		return (TRUE);
 	if (k > 0 && (k < g_op_tab[token->op_type - 1].arg_nb) && k > sep_char)
-		return ((int)token_free(MISSING_SEP, token, NULL));
+		return ((int)token_free(MISSING_SEP, token));
 	if (k > 0 && (k < g_op_tab[token->op_type - 1].arg_nb) && k < sep_char)
-		return ((int)token_free(TOO_MANY_SEP_B, token, NULL));
+		return ((int)token_free(TOO_MANY_SEP_B, token));
 	return (TRUE);
+}
+
+void	save_token(t_token *token, t_token *last_token)
+{
+	last_token->line = token->line;
+	last_token->col = token->col;
+	if (last_token->name != NULL)
+		ft_memdel((void**)&last_token->name);
+	last_token->name = ft_memalloc(sizeof(char) * (token->end - token->col) + 1);
+	last_token->name = ft_strcpy(last_token->name, token->name);
 }
 
 int	check_args(t_s *s, t_instruct *op)
@@ -133,16 +146,16 @@ int	check_args(t_s *s, t_instruct *op)
 			{
 				fill_token(s, op->type, &token);
 				if (check_sep(sep_char, k, &token, indx_sep) == FALSE)
-					return ((int)just_free(token.name, NULL));
+					return ((int)just_free(token.name, last_token.name));
 				argz = op->argz[k];
 				if (is_argument(s, op->type, &argz) == NULL)
-					return ((int)just_free(token.name, NULL));
+					return ((int)just_free(token.name, last_token.name));
 				if (s->line[s->i] == SEPARATOR_CHAR)
 					sep_char++;
-				last_token = token;
+				save_token(&token, &last_token);
 				fill_token(s, op->type, &token);
 				if (check_value(argz, op, k, s) == FALSE)
-					return ((int)just_free(token.name, NULL));
+					return ((int)just_free(token.name, last_token.name));
 				op->argz[k] = argz;
 				k++;
 			}
@@ -155,8 +168,8 @@ int	check_args(t_s *s, t_instruct *op)
 		s->i += 1;
 	}
 	if (check_sep(sep_char, k, &last_token, indx_sep) == FALSE)
-		return ((int)just_free(token.name, NULL));
-	ft_memdel((void**)&token.name);
+		return ((int)just_free(token.name, last_token.name));
+	just_free(token.name, last_token.name);
 	if (k < g_op_tab[op->type - 1].arg_nb)
 		return ((int)ft_error_nb(MISSING_ARG, g_op_tab[op->type - 1].name, s->l, s->i));
 	return (TRUE);

@@ -26,7 +26,10 @@ t_label		*is_label(t_stack *stack, t_token *token)
 	while (token->name[i])
 	{
 		if (ft_strchr(LABEL_CHARS, (int)token->name[i]) == NULL)
-			return (token_free(LABEL_ERROR, token, label));
+		{
+			ft_memdel((void**)&label);
+			return (token_free(LABEL_ERROR, token));
+		}
 		i++;
 	}
 	label->name = ft_memalloc(sizeof(char) * i + 1);
@@ -66,9 +69,10 @@ t_instruct		*is_op(t_s *s, t_stack *stack, t_token *token)
 	op->type = find_opcode(token->name);
 	if (op->type == 0)
 	{
+		ft_memdel((void**)&op);
 		if (!ft_strcmp(token->name, NAME_CMD_STRING) || !ft_strcmp(token->name, COMMENT_CMD_STRING))
-			return (token_free(COMMAND_TWICE, token, op));
-		return (token_free(WRONG_SYNTAX_OP, token, op));
+			return (token_free(COMMAND_TWICE, token));
+		return (token_free(WRONG_SYNTAX_OP, token));
 	}
 	op->nb_args = g_op_tab[op->type - 1].arg_nb;
 	op->oct = stack->cur_octet;
@@ -121,7 +125,7 @@ int		is_label_or_op(t_s *s, t_stack *stack)
 	else if (str[k] && k > 0 && (str[k] == COMMENT_CHAR || str[k] == ALT_COMMENT_CHAR))
 		s->i -= 1;
 	else
-		return ((int)token_free(LEXICAL_ERROR, &token, NULL)); 
+		return ((int)token_free(LEXICAL_ERROR, &token)); 
 	ft_memdel((void**)&token.name);
 	return (TRUE);
 }

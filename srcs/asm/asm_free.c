@@ -53,15 +53,13 @@ void	*free_op_lab(t_stack *stack)
 	return (NULL);
 }
 
-void	*token_free(char *str, t_token *token, void *to_free)
+void	*token_free(char *str, t_token *token)
 {
 	if (token->name != NULL)
 		ft_printf("Error [%d:%d]: %s: [%s]\n", token->line, token->col, str, token->name);
 	else
 		ft_printf("Error [%d:%d]: %s\n", token->line, token->col, str);
 	ft_memdel((void**)&token->name);
-	if (to_free != NULL)
-		ft_memdel((void**)&to_free);
 	return (NULL);
 }
 

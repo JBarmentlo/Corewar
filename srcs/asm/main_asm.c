@@ -12,7 +12,22 @@
 
 #include "asm.h"
 
-int main(int ac, char **av)
+int	fill_out_file(char *source_file, t_file *out_file, int fd)
+{
+	out_file->fd = 0;
+	out_file->name = NULL;
+	out_file->content = NULL;
+	out_file->total_size = 0;
+	out_file->prog_size = 0;
+	if (cor_file(source_file, out_file, fd) == FALSE)
+		return (FALSE);
+	write(out_file->fd, out_file->content, out_file->total_size);
+	ft_printf("Writing output program to %s\n", out_file->name);
+	just_free(out_file->name, out_file->content);
+	return (TRUE);
+}
+
+int	main(int ac, char **av)
 {
 	int		fd;
 	t_file		out_file;
@@ -26,12 +41,11 @@ int main(int ac, char **av)
 	fd = open(av[1], O_RDONLY);
 	if (fd < 0)
 		return ((int)ft_error("A problem occured while opening the source file:", av[1], NULL));
-	if (cor_file(av[1], &out_file, fd) == FALSE)
+	if (fill_out_file(av[1], &out_file, fd) == FALSE)
 		return (FALSE);
-//	write(out_file.fd, out_file.content, out_file.total_size);
-//	ft_printf("Writing output program to %s\n", out_file.name);
 	return (TRUE);	
 }
+
 
 __attribute__((destructor)) void test()
 {
