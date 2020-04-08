@@ -24,30 +24,19 @@ void	is_indirect(t_argz *argz)
 	argz->oct = IND_SIZE;
 }
 
-void	numeric_value(t_s *s, t_argz *argz)
-{
-	argz->line = s->l;
-	argz->col = s->i;
-	ft_atolong(s, argz);
-	argz->lab = NULL;
-}
-
 void	*argz_is_label(t_s *s, t_argz *argz)
 {
-	int		k;
 	int		save;
 
-	k = 0;
 	s->i += 1;
 	save = s->i;
 	argz->line = s->l;
 	argz->col = save;
-	while (s->line[s->i] != '\0' && s->line[s->i] != SEPARATOR_CHAR && s->line[s->i] != COMMENT_CHAR && s->line[s->i] != ALT_COMMENT_CHAR && s->line[s->i] != ' ' && s->line[s->i] != '\t')
-	{
+	while (diff_com_end(s->line[s->i]) && diff_space(s->line[s->i]) && s->line[s->i] != SEPARATOR_CHAR)
 		s->i += 1;
-		k++;
-	}
-	argz->lab = ft_memalloc(sizeof(char) * k);
+	if (s->i - save == FALSE)
+		return(ft_error_nb(LABEL_ERROR, NULL, s->l, s->i));
+	argz->lab = ft_memalloc(sizeof(char) * s->i - save);
 	if (argz->lab == NULL)
 		return(ft_error("Memory allocation failure for an [argz->lab]", NULL, NULL));
 	argz->lab = ft_stricpy(argz->lab, s->line, save, s->i);
@@ -72,51 +61,51 @@ void	*is_argument(t_s *s, size_t inst_type, t_argz *argz)
 	if (s->line[s->i] != LABEL_CHAR && argz->type != T_IND)
 		s->i += 1;
 	if (s->line[s->i] != '\0' && s->line[s->i] != LABEL_CHAR)
-		numeric_value(s, argz);
+	{
+		argz->line = s->l;
+		argz->col = s->i;
+		ft_atolong(s, argz);
+		argz->lab = NULL;
+	}
 	else
 		if (argz_is_label(s,argz) == NULL)
 			return (just_free(argz->lab, NULL));
-	if ((s->line[s->i] == '\0' || s->line[s->i] == COMMENT_CHAR || s->line[s->i] == ALT_COMMENT_CHAR) && s->i > 0)
+	if ((diff_com_end(s->line[s->i]) == FALSE) && s->i > 0)
 		s->i -= 1;
 	return (argz);
 }
 
-int		check_value(t_argz argz, t_instruct *op, int k, t_s *s)
-{
-	if (argz.type == T_REG && (argz.value > REG_NUMBER || argz.value < 1))
-		return ((int)ft_error_nb(WRONG_REG_NUM, NULL, s->l, s->i));
-	if ((argz.type & g_op_tab[op->type - 1].arg_types[k]) != argz.type)
-		return ((int)ft_error_nb(WRONG_TYPE_ARG, g_op_tab[op->type - 1].name, s->l, s->i));
-	return (TRUE);
-}
-
 int		check_sep(int sep_char, int k, t_token *token, int indx_sep)
 {
+	int	save;
+	
+	save = token->col;
 	token->col = indx_sep;
 	if (k == 0 && sep_char > 0)
 		return ((int)token_free(TOO_MANY_SEP_B, token));
-	if (sep_char >= g_op_tab[token->op_type - 1].arg_nb)
-	{
-		ft_printf("test0, indx sep = [%d], token->name = [%s]\n", indx_sep, token->name);
-		return ((int)token_free(TOO_MANY_SEP_A, token));
-	}
-	if (k == g_op_tab[token->op_type - 1].arg_nb - 1 && sep_char < k)
-		return (TRUE);
 	if (k > 0 && (k < g_op_tab[token->op_type - 1].arg_nb) && k > sep_char)
 		return ((int)token_free(MISSING_SEP, token));
 	if (k > 0 && (k < g_op_tab[token->op_type - 1].arg_nb) && k < sep_char)
 		return ((int)token_free(TOO_MANY_SEP_B, token));
+	token->col = save;
 	return (TRUE);
 }
 
-void	save_token(t_token *token, t_token *last_token)
+void	save_token(t_token *token, t_token *last_token, char *str_op, t_s *s)
 {
 	last_token->line = token->line;
 	last_token->col = token->col;
+	last_token->end = token->end;
+	last_token->op_type = token->op_type;
 	if (last_token->name != NULL)
 		ft_memdel((void**)&last_token->name);
 	last_token->name = ft_memalloc(sizeof(char) * (token->end - token->col) + 1);
 	last_token->name = ft_strcpy(last_token->name, token->name);
+	ft_memdel((void**)&token->name);
+	token->name = ft_memalloc(sizeof(char) * ft_strlen(str_op));
+	token->name = ft_strcpy(token->name, str_op);
+	token->line = s->l;
+	token->col = s->i;
 }
 
 int	check_args(t_s *s, t_instruct *op)
@@ -131,31 +120,39 @@ int	check_args(t_s *s, t_instruct *op)
 	k = 0;
 	sep_char = 0;
 	indx_sep = 0;
-	token.name = NULL;
-	last_token.name = NULL;
-	while (s->line[s->i] != '\0' && s->line[s->i] != COMMENT_CHAR && s->line[s->i] != ALT_COMMENT_CHAR)
+	init_token(&token);
+	init_token(&last_token);
+	while (diff_com_end(s->line[s->i]) == TRUE)
 	{
-		if (s->line[s->i] != ' ' && s->line[s->i] != '\t' && s->line[s->i] != '\0')
+		if (s->line[s->i] != '\0' && (diff_space(s->line[s->i]) == TRUE))
 		{
-			if (k >= g_op_tab[op->type - 1].arg_nb && s->line[s->i] != SEPARATOR_CHAR)
-			{
-				ft_memdel((void**)&token.name);
-				return ((int)ft_error_nb(TOO_MANY_ARGS, g_op_tab[op->type - 1].name, s->l, s->i));
-			}
 			if (s->line[s->i] != SEPARATOR_CHAR)
 			{
 				fill_token(s, op->type, &token);
 				if (check_sep(sep_char, k, &token, indx_sep) == FALSE)
-					return ((int)just_free(token.name, last_token.name));
+					return ((int)just_free(last_token.name, NULL));
 				argz = op->argz[k];
 				if (is_argument(s, op->type, &argz) == NULL)
 					return ((int)just_free(token.name, last_token.name));
 				if (s->line[s->i] == SEPARATOR_CHAR)
 					sep_char++;
-				save_token(&token, &last_token);
-				fill_token(s, op->type, &token);
-				if (check_value(argz, op, k, s) == FALSE)
-					return ((int)just_free(token.name, last_token.name));
+				save_token(&token, &last_token, g_op_tab[op->type - 1].name, s);
+				if (argz.type == T_REG && (argz.value > REG_NUMBER || argz.value < 1))
+				{
+					ft_memdel((void**)&token.name);
+					return ((int)token_free(WRONG_REG_NUM, &last_token));
+				}
+				if (k >= g_op_tab[op->type - 1].arg_nb && s->line[s->i] != SEPARATOR_CHAR)
+				{
+					ft_memdel((void**)&last_token.name);
+					return ((int)token_free(TOO_MANY_ARGS, &token));
+				}
+				if ((argz.type & g_op_tab[op->type - 1].arg_types[k]) != argz.type)
+				{
+					ft_printf("\n***********\n");
+					ft_memdel((void**)&last_token.name);
+					return ((int)token_free(WRONG_TYPE_ARG, &token));
+				}
 				op->argz[k] = argz;
 				k++;
 			}
@@ -167,10 +164,16 @@ int	check_args(t_s *s, t_instruct *op)
 		}
 		s->i += 1;
 	}
-	if (check_sep(sep_char, k, &last_token, indx_sep) == FALSE)
-		return ((int)just_free(token.name, last_token.name));
-	just_free(token.name, last_token.name);
+	if (sep_char >= g_op_tab[op->type - 1].arg_nb && k == g_op_tab[op->type - 1].arg_nb)
+	{
+		ft_memdel((void**)&token.name);
+		return ((int)token_free(TOO_MANY_SEP_A, &last_token));
+	}
 	if (k < g_op_tab[op->type - 1].arg_nb)
-		return ((int)ft_error_nb(MISSING_ARG, g_op_tab[op->type - 1].name, s->l, s->i));
+	{
+		ft_memdel((void**)&last_token.name);
+		return ((int)token_free(MISSING_ARG, &token));
+	}
+	just_free(token.name, last_token.name);
 	return (TRUE);
 }

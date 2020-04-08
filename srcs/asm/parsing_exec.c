@@ -110,7 +110,7 @@ int		is_label_or_op(t_s *s, t_stack *stack)
 	int			k;
 	char			*str;
 
-	token.name = NULL;
+	init_token(&token);
 	fill_token(s, 42, &token); // OP TYPE TO FILL
 	str = s->line;
 	k = token.end;
