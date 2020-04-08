@@ -75,10 +75,22 @@ void	*is_argument(t_s *s, size_t inst_type, t_argz *argz)
 	return (argz);
 }
 
+int	check_value(t_argz argz, int k, t_token *token, t_token *last_token)
+{
+	if (argz.type == T_REG && (argz.value > REG_NUMBER || argz.value < 1))
+		return ((int)token_free(WRONG_REG_NUM, last_token));
+	if (k < g_op_tab[token->op_type - 1].arg_nb
+		&& (argz.type & g_op_tab[token->op_type - 1].arg_types[k]) != argz.type)
+		return ((int)token_free(WRONG_TYPE_ARG, token));
+	if (k >= g_op_tab[token->op_type - 1].arg_nb)
+		return ((int)token_free(TOO_MANY_ARGS, token));
+	return (TRUE);
+}
+
 int		check_sep(int sep_char, int k, t_token *token, int indx_sep)
 {
 	int	save;
-	
+
 	save = token->col;
 	token->col = indx_sep;
 	if (k == 0 && sep_char > 0)
@@ -87,6 +99,8 @@ int		check_sep(int sep_char, int k, t_token *token, int indx_sep)
 		return ((int)token_free(MISSING_SEP, token));
 	if (k > 0 && (k < g_op_tab[token->op_type - 1].arg_nb) && k < sep_char)
 		return ((int)token_free(TOO_MANY_SEP_B, token));
+	if (k == g_op_tab[token->op_type - 1].arg_nb && sep_char >= g_op_tab[token->op_type - 1].arg_nb)
+		return ((int)token_free(TOO_MANY_SEP_A, token));
 	token->col = save;
 	return (TRUE);
 }
@@ -137,22 +151,11 @@ int	check_args(t_s *s, t_instruct *op)
 				if (s->line[s->i] == SEPARATOR_CHAR)
 					sep_char++;
 				save_token(&token, &last_token, g_op_tab[op->type - 1].name, s);
-				if (argz.type == T_REG && (argz.value > REG_NUMBER || argz.value < 1))
-				{
-					ft_memdel((void**)&token.name);
-					return ((int)token_free(WRONG_REG_NUM, &last_token));
-				}
-				if (k >= g_op_tab[op->type - 1].arg_nb && s->line[s->i] != SEPARATOR_CHAR)
-				{
-					ft_memdel((void**)&last_token.name);
-					return ((int)token_free(TOO_MANY_ARGS, &token));
-				}
-				if ((argz.type & g_op_tab[op->type - 1].arg_types[k]) != argz.type)
-				{
-					ft_printf("\n***********\n");
-					ft_memdel((void**)&last_token.name);
-					return ((int)token_free(WRONG_TYPE_ARG, &token));
-				}
+				if (check_value(argz, k, &token, &last_token) == FALSE)
+					return ((int)just_free(token.name, last_token.name));
+				if (s->line[s->i] != SEPARATOR_CHAR)
+					if (check_value(argz, k, &token, &last_token) == FALSE)
+						return ((int)just_free(token.name, last_token.name));
 				op->argz[k] = argz;
 				k++;
 			}
@@ -164,16 +167,11 @@ int	check_args(t_s *s, t_instruct *op)
 		}
 		s->i += 1;
 	}
-	if (sep_char >= g_op_tab[op->type - 1].arg_nb && k == g_op_tab[op->type - 1].arg_nb)
-	{
-		ft_memdel((void**)&token.name);
-		return ((int)token_free(TOO_MANY_SEP_A, &last_token));
-	}
+	if (check_sep(sep_char, k, &last_token, indx_sep) == FALSE)
+		return ((int)just_free(token.name, NULL));
+	ft_memdel((void**)&last_token.name);
 	if (k < g_op_tab[op->type - 1].arg_nb)
-	{
-		ft_memdel((void**)&last_token.name);
 		return ((int)token_free(MISSING_ARG, &token));
-	}
-	just_free(token.name, last_token.name);
+	ft_memdel((void**)&token.name);
 	return (TRUE);
 }
