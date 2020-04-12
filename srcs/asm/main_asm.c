@@ -33,14 +33,14 @@ int	main(int ac, char **av)
 	t_file		out_file;
 
 	if (ac == 0)
-		return ((int)ft_error("No arguments", NULL, NULL));
+		return ((int)ft_error(NO_ARGS, NULL, NULL));
 	if (ac == 1)
 		return (usage(PROG_ASM));
 	if (ac > 2)
-		return ((int)ft_error("Too many arguments", NULL, NULL));
+		return ((int)ft_error(TOO_MUCH_ARGS, NULL, NULL));
 	fd = open(av[1], O_RDONLY);
 	if (fd < 0)
-		return ((int)ft_error("A problem occured while opening the source file:", av[1], NULL));
+		return ((int)ft_error(OPEN_FAIL, av[1], NULL));
 	if (fill_out_file(av[1], &out_file, fd) == FALSE)
 		return (FALSE);
 	return (TRUE);	

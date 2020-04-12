@@ -19,11 +19,11 @@ int		init_file(t_file *out_file, char *source_file)
 
 	l = ft_strlen(source_file);
 	if (l < 3 || ft_strcmp(source_file + l - 2, ".s"))
-		return ((int)ft_error("Wrong source file format", NULL, NULL));
+		return ((int)ft_error(WRONG_SOURCE, NULL, NULL));
 	out_file->name = ft_memalloc(sizeof(char) * (l + 2));
 	out_file->content = ft_memalloc(sizeof(char) * MAX_SIZE_FILE);
 	if (out_file->name == NULL || out_file->content == NULL)
-		return ((int)ft_error("Memory allocation failure", NULL, NULL));
+		return ((int)ft_error(MALLOC_FAIL, NULL, NULL));
 	out_file->name = ft_memcpy(out_file->name, source_file, l - 1); 
 	out_file->name = ft_stricat(out_file->name, "cor", l - 1); 
 	return (TRUE);
@@ -31,7 +31,10 @@ int		init_file(t_file *out_file, char *source_file)
 
 int		fill_header(t_file *out_file, t_stack *stack)
 {
-	nb_to_binary(out_file, sizeof(COREWAR_EXEC_MAGIC), out_file->total_size, COREWAR_EXEC_MAGIC);
+	int	magic;
+
+	magic = COREWAR_EXEC_MAGIC;
+	nb_to_binary(out_file, sizeof(magic), out_file->total_size, magic);
 	copy_string(out_file->content, stack->champion_name,  PROG_NAME_LENGTH, &(out_file->total_size));
 	copy_string(out_file->content, EMPTY,  PADDING, &(out_file->total_size));
 	out_file->prog_size = out_file->total_size;
@@ -68,13 +71,16 @@ int		fill_opcode(t_file *out_file, t_stack stack)
 
 int		parsing_header(t_stack *stack, int fd, t_s *s)
 {
+	int	l_name;
+
 	s->line = NULL;
 	s->l = 0;
 	s->i = 0;
-	if (!(stack->champion_name = ft_memalloc(sizeof(char) * PROG_NAME_LENGTH + 1)))
-		return ((int)ft_error("Can't allocate champion's name", NULL, NULL));
+	l_name = PROG_NAME_LENGTH;
+	if (!(stack->champion_name = ft_memalloc(sizeof(char) * l_name + 1)))
+		return ((int)ft_error(MALLOC_NAME, NULL, NULL));
 	if (!(stack->comment = ft_memalloc(sizeof(char) * COMMENT_LENGTH + 1)))
-		return ((int)ft_error("Can't allocate champion's comment", NULL, NULL));
+		return ((int)ft_error(MALLOC_COMMENT, NULL, NULL));
 	if (!get_header_command(stack, fd, s))
 		return ((int)just_free(stack->champion_name, stack->comment));
 	if (!get_header_command(stack, fd, s))
@@ -107,7 +113,7 @@ int		cor_file(char *source_file, t_file *out_file, int fd)
 	if (out_file->fd <= 0)
 	{
 		ft_memdel((void**)&out_file->content);
-		return ((int)ft_error("Can't create the file", out_file->name, out_file->name));
+		return ((int)ft_error(CREATE_FAIL, out_file->name, out_file->name));
 	}
 	return (TRUE);
 }

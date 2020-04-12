@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_header.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/17 15:29:26 by ncoursol          #+#    #+#             */
+/*   Updated: 2020/03/09 16:05:13 by dberger          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "asm.h"
 
 int	is_valid_command_start(t_s *s, int *type, t_token *token)
@@ -14,7 +26,7 @@ int	is_valid_command_start(t_s *s, int *type, t_token *token)
 			return ((int)token_free(WRONG_HEADER, token));
 	}
 	else
-		return ((int)token_free(INVALID_COMMAND, token)); // token name ??
+		return ((int)token_free(INVALID_COMMAND, token));
 	return (TRUE);
 }
 
@@ -42,9 +54,11 @@ int     get_command_type(int fd, t_s *s, int *type, t_token *token)
 		s->l += 1;
 		s->i = 0;
 		fill_token(s, 0, token);
-		while ((diff_com_end(s->line[s->i]) == TRUE) && s->line[s->i] != '.')
+		while ((diff_com_end(s->line[s->i]) == TRUE)
+			&& s->line[s->i] != '.')
 		{
-			if ((diff_space(s->line[s->i]) == TRUE) && fill_token(s, 0, token))
+			if ((diff_space(s->line[s->i]) == TRUE)
+				&& fill_token(s, 0, token))
 				return ((int)token_free(WRONG_HEADER, token));
 			s->i += 1;
 		}

@@ -55,10 +55,18 @@ void	*free_op_lab(t_stack *stack)
 
 void	*token_free(char *str, t_token *token)
 {
+	char 	*name;
+	int	l;
+	int	c;
+	
+
+	name = token->name;
+	l = token->line;
+	c = token->col;
 	if (token->name != NULL)
-		ft_printf("Error [%d:%d]: %s: [%s]\n", token->line, token->col, str, token->name);
+		ft_printf("Error [%d:%d]: %s: [%s]\n", l, c, str, name);
 	else
-		ft_printf("Error [%d:%d]: %s\n", token->line, token->col, str);
+		ft_printf("Error [%d:%d]: %s\n", l, c, str);
 	ft_memdel((void**)&token->name);
 	return (NULL);
 }

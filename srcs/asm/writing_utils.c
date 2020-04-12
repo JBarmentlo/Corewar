@@ -84,53 +84,26 @@ void	nb_to_binary(t_file *out_file, int octets, int indx, long nb)
 	}
 }
 
-int		find_label(char *to_find, t_label *label)
-{
-	int		oct_lab;
-
-	while (label != NULL)
-	{
-		if (!ft_strcmp(label->name, to_find))
-		{
-			oct_lab = label->oct;
-			return (oct_lab);
-		}
-		else
-			label = label->next;
-	}
-	return (FALSE);
-}
-
 int		write_op_values(t_file *out_file, int *i, t_instruct *op, t_stack stack)
 {
 	size_t	k;
 	int	to_label;
-	t_label	*label;
 
 	k = 0;
-	label = stack.first_label;
 	while (k < op->nb_args)
 	{
 		if (op->argz[k].type == T_REG)
-		{
-			if (op->argz[k].value > REG_NUMBER)
-				return (FALSE);
 			write_in_file(out_file, *i, op->argz[k].value);
-			*i += 1;
-		}
 		else if (op->argz[k].lab == NULL)
-		{
 			nb_to_binary(out_file, op->argz[k].oct, *i, op->argz[k].value);
-			*i += op->argz[k].oct;
-		}
 		else if (op->argz[k].lab != NULL)
 		{
-			to_label = find_label(op->argz[k].lab, label);
+			to_label = find_label(op->argz[k], stack.first_label);
 			if (to_label == FALSE)
-				return ((int)ft_error_nb(WRONG_LABEL, op->argz[k].lab, op->argz[k].line, op->argz[k].col));
+				return (FALSE);
 			nb_to_binary(out_file, op->argz[k].oct, *i, (to_label - op->oct));
-			*i += op->argz[k].oct;
 		}
+		*i += op->argz[k].oct;
 		k++;
 	}
 	return (TRUE);

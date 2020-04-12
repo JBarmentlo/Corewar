@@ -47,9 +47,9 @@ int		check_after_quote(t_s *s, t_token *token)
 {
 
 	s->i += 1;
-	while (s->line[s->i] != '\0' && s->line[s->i] != COMMENT_CHAR && s->line[s->i] != ALT_COMMENT_CHAR)
+	while (diff_com_end(s->line[s->i]))
 	{
-		if (s->line[s->i] != '\0' && s->line[s->i] != ' ' && s->line[s->i] != '\t')
+		if (diff_space(s->line[s->i]))
 		{
 			fill_token(s, 0, token);
 			return ((int)token_free(SYNTAXE_ERROR, token));
@@ -68,9 +68,10 @@ char	*get_header_content(int fd, t_s *s, int *type)
 
 	j = 0;
 	init_token(&token);
-	tmp = *type == 0 ? ft_memalloc(sizeof(char) * PROG_NAME_LENGTH) : ft_memalloc(sizeof(char) * COMMENT_LENGTH);
+	tmp = *type == 0 ? ft_memalloc(sizeof(char) * PROG_NAME_LENGTH)
+			: ft_memalloc(sizeof(char) * COMMENT_LENGTH);
 	if (tmp == NULL)
-		return ((char*)ft_error("Can't allocate memory for [tmp]", NULL, NULL));
+		return ((char*)ft_error(MALLOC_FAIL, NULL, NULL));
 	*type = 0;
 	if (check_empty_line(s, &tmp, fd, &j) == FALSE)
 		return (FALSE);
@@ -86,6 +87,23 @@ char	*get_header_content(int fd, t_s *s, int *type)
 	if (check_after_quote(s, &token) == FALSE)
 		return (just_free(tmp, NULL));
 	return (tmp);
+}
+
+int	fill_name_com(int type, char *tmp, t_stack *stack, t_token *token)
+{
+	if (type == 'n')
+	{
+		if (ft_strlen(tmp) > PROG_NAME_LENGTH)
+			return ((int)token_free(TOO_LONG_NAME, token));
+		stack->champion_name = ft_strcpy(stack->champion_name, tmp);
+	}
+	else if (type == 'c')
+	{
+		if (ft_strlen(tmp) > COMMENT_LENGTH)
+			return ((int)token_free(TOO_LONG_COM, token));
+		stack->comment = ft_strcpy(stack->comment, tmp);
+	}
+	return (TRUE);
 }
 
 int     get_header_command(t_stack *stack, int fd, t_s *s)
@@ -107,24 +125,8 @@ int     get_header_command(t_stack *stack, int fd, t_s *s)
 	type = save;
 	if (s->l == FALSE)
 		return (FALSE);
-	if (type == 'n')
-	{
-		if (ft_strlen(tmp) > PROG_NAME_LENGTH)
-		{
-			ft_memdel((void**)&tmp);
-			return ((int)token_free(TOO_LONG_NAME, &token));
-		}
-		stack->champion_name = ft_strcpy(stack->champion_name, tmp);
-	}
-	else if (type == 'c')
-	{
-		if (ft_strlen(tmp) > COMMENT_LENGTH)
-		{
-			ft_memdel((void**)&tmp);
-			return ((int)token_free(TOO_LONG_COM, &token));
-		}
-		stack->comment = ft_strcpy(stack->comment, tmp);
-	}
+	if (fill_name_com(type, tmp, stack, &token) == FALSE)
+		return ((int)just_free(tmp, NULL));
 	ft_memdel((void**)&tmp);
 	ft_memdel((void**)&s->line);
 	return (TRUE);
