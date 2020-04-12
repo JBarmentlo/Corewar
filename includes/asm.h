@@ -17,7 +17,7 @@
 
 # define PROG_ASM		0
 # define INIT			-1
-# define MAX_SIZE_FILE		2875 // to delete
+# define MAX_SIZE_FILE		2875
 # define BITS_IN_OCTET		8
 # define PADDING		4
 # define INFO_PROG		4
@@ -27,8 +27,14 @@
 # define ARG_N			0
 # define SEP			1
 # define INDX			2
+# define SPACE			1
+# define COMM			2
+# define SPACE_COMM		3
 
-///// ERROR MESSAGE ///
+/*
+** Messages d'erreur
+*/
+
 # define NO_ARGS		"No arguments"
 # define TOO_MUCH_ARGS		"Too many arguments"
 # define OPEN_FAIL		"A problem occured while opening the file"
@@ -59,12 +65,23 @@
 # define LEXICAL_ERROR		"Lexical Error for"
 # define WRONG_LABEL		"The following label doesn't exist"
 
+/*
+** Structure qui contiendra la ligne lue dans get_next_line, le numero de la ligne [l],
+** ainsi que la colonne [i]: permet pour chaque message d'erreur d'afficher son emplacement.
+*/
+
 typedef	struct			s_s
 {
 	char			*line;
 	int			l;
 	int			i;
 }				t_s;
+
+/*
+** Permet d'afficher le ou les characteres qui comportent une erreur. [line] et [col]
+** indiquent ou demarrent le token, [end] ou il se termine, et s'il s'agit d'un argument,
+** [op_type] nous permet d'afficher a quel op_code il appartient.
+*/
 
 typedef struct			s_token
 {
@@ -75,43 +92,85 @@ typedef struct			s_token
 	int			op_type;
 }				t_token;
 
+/*
+** S_argz contient les infos d'un argument d'un op_code.
+** [type] : indique si c'est un registre, un direct, ou un indirect.
+** [code] : permet de calculer l'encoding byte d'un op_code, il vaut 01 pour T_REG,
+** 10 pour T_DIR et 11 pour T_IND.
+** [lab] : contient une chaine de caractere si la valeur de l'argument est un label, sinon == NULL.
+** [value] : contient la valeur numerique d'un argument s'il ne s'agit pas d'un label.
+** [oct] : Nombres d'octets pris en memoire en fonction du type de l'argument et de l'op_code.
+** [line][col]: Garde en memoire l'emplacement de l'argument en cas d'erreur
+*/
+
 typedef struct			s_argz
 {
-	int			type; // T_REG, T_DIR, T_IND
-	int			code; // REG_CODE, DIR_CODE, IND_CODE
-	char			*lab; // NULL sauf si appel a label (:live)
-	long			value; // si lab != NULL on ne prend pas en compte value
-	size_t			oct; // nombre d'octets pris en memoire en fonction du type
-	int			line; // for label errors
-	int			col; // for label errors
+	int			type;
+	int			code;
+	char			*lab;
+	long			value;
+	size_t			oct;
+	int			line;
+	int			col;
 }				t_argz;
+
+/*
+** S_instruct contient les infos sur chaque op_code.
+** [type] : 0x01 si il s'agit de "live" par exemple
+** [oct] : numero de l'octet ou est ecrit cet op_code (utile pour les labels)
+** [nb_args] : nombres d'arguments necessaires pour cet op_code
+** [argz[MAX_ARGS]] : tableau pouvant contenir jusqu'a 3 t_argz
+** [next] : permet de creer une liste chainee d'op_code contenue dans stack
+*/
 
 typedef struct 			s_instruct
 {
-	size_t			type; // 0x01 si "live" par exemple
-	size_t 			oct; // numero de l'octet ou est ecrit 0x01
-	size_t			nb_args; // si "sti" on sait tout de suite que c'est 3
-	t_argz			argz[MAX_ARGS]; // liste chainee ou tableau de structure 
+	size_t			type;
+	size_t 			oct;
+	size_t			nb_args;
+	t_argz			argz[MAX_ARGS]; 
 	struct s_instruct	*next;
 }				t_instruct;
 
+/*
+** S_label est une liste chainee de label avec [name] comme nom et [oct] pour emplacement
+*/
+
 typedef struct 			s_label
 {
-	char			*name; // par exemple "l2" ou "noname1"
-	size_t			oct; // place du label dans 
-	struct s_label		*next; // liste chainee de label
+	char			*name;
+	size_t			oct; 
+	struct s_label		*next;
 }				t_label;
+
+/*
+** S_stack contient les infos necessaires au parsing: (avant l'ecriture)
+** [champion_name] et [comment] pour le header,
+** [cur_octet] : nombre d'octets utilises lorsque l'on remplit le contenu du fichier .cor
+** -> utile pour les calculer l'emplacement des labels
+** [first_op] et [op_list] : liste chainee d'op_code
+** [first_label] et [label_list] : liste chainee de labels
+*/
 
 typedef struct			s_stack
 {
 	char			*champion_name;
 	char			*comment;
-	int			cur_octet; // permet de savoir ou on se trouve
+	int			cur_octet;
 	t_instruct		*first_op;
 	t_instruct		*op_list;
-	t_label			*first_label; // liste chainee de label
-	t_label			*label_list; // liste chainee de label
+	t_label			*first_label;
+	t_label			*label_list;
 }				t_stack;
+
+/*
+** Le fichier .cor : dans [fd] son file_descriptor
+** [name] : son nom - c-a-d celui du fichier .s mais avec .cor a la fin
+** [content] : son contenu, qui se remplit au fur et a mesure
+** [total_size] : un peu equivalent au cur_octet de s_stack: on l'increment des que
+** l'on ajoute du contenu
+** [prog_size] : octet ou doit s'ecrire [total_size] dans le header
+*/
 
 typedef struct 			s_file
 {
@@ -122,39 +181,57 @@ typedef struct 			s_file
 	int			prog_size;
 }				t_file;
 
+
 int				cor_file(char *source_file, t_file *out_file, int fd);
-int				get_header_command(t_stack *stack, int fd, t_s *s);
+int				header_content(t_stack *stack, int fd, t_s *s);
 int				get_command_type(int fd, t_s *s, int *type, t_token *token);
+int				fill_name_com(int type, char *tmp, t_stack *stack, t_token *token);
 int				parsing_exec(t_stack *stack, int fd, t_s *s);
-/////////////////////// parsing arg   //////////////////////////
-void				is_register(t_argz *argz);
-void				is_direct(t_argz *argz, size_t inst_type);
-void				is_indirect(t_argz *argz);
-int				check_args(t_s *s, t_instruct *op);
-/////////////////////// parsing utils   //////////////////////////
-int				diff_com_end(char c);
-int				diff_space(char c);
-void				init_token(t_token *token);
-int				fill_token(t_s *s, int op_type, t_token *token);
+int				parsing_args(t_s *s, t_instruct *op);
+/*
+** parsing_utils
+*/
+int				check_value(t_argz argz, int k, t_token *token, t_token *last_token);
+int				check_sep(int *info, t_token *token);
+int				diff(char c, int mode);
 int				find_opcode(char *string);
 int				find_label(t_argz argz, t_label *label);
+/*
+** token_utils
+*/
+void				save_token(t_token *token, t_token *last_token, char *str_op, t_s *s);
+void				init_token(t_token *token);
+int				fill_token(t_s *s, int op_type, t_token *token);
+/*
+** op_utils
+*/
 int				encoding_byte(t_instruct *op);
 int				ft_atolong(t_s *s, t_argz *argz);
 void				update_oct(t_instruct *op, int *cur_octet, t_s *s);
-/////////////////////// writing utils   //////////////////////////
+t_instruct			*is_op(t_s *s, t_stack *stack, t_token *token);
+/*
+** arg_utils
+*/
+void				is_register(t_argz *argz);
+void				is_direct(t_argz *argz, size_t inst_type);
+void				is_indirect(t_argz *argz);
+void				*argz_is_label(t_s *s, t_argz *argz);
+void				*is_argument(t_s *s, size_t inst_type, t_argz *argz, int *sep_char);
+/*
+** writing_utils
+*/
 void				write_in_file(t_file *out_file, int indx, int n);
 void				copy_string(char *dest, char *src, int size, int *indx);
 long				count_bits(long nb);
 void				nb_to_binary(t_file *out_file, int octets, int indx, long nb);
 int				write_op_values(t_file *out_file, int *i, t_instruct *op, t_stack stack);
-/////////////////////// free functions ///////////////////////////
-void				*token_free(char *str, t_token *token);
-
-void				*just_free(void *to_free1, void *to_free2);
-void				*free_op_lab(t_stack *stack);
-void				*free_op(t_instruct *op);
+/*
+** asm_free
+*/
 void				*free_label(t_label *label);
-/////////////////////// To delete   //////////////////////////
-void				print_tester(t_stack *stack);
+void				*free_op(t_instruct *op);
+void				*free_op_lab(t_stack *stack);
+void				*token_free(char *str, t_token *token);
+void				*just_free(void *to_free1, void *to_free2);
 
 #endif

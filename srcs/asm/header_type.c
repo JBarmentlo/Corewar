@@ -12,6 +12,23 @@
 
 #include "asm.h"
 
+int	fill_name_com(int type, char *tmp, t_stack *stack, t_token *token)
+{
+	if (type == 'n')
+	{
+		if (ft_strlen(tmp) > PROG_NAME_LENGTH)
+			return ((int)token_free(TOO_LONG_NAME, token));
+		stack->champion_name = ft_strcpy(stack->champion_name, tmp);
+	}
+	else if (type == 'c')
+	{
+		if (ft_strlen(tmp) > COMMENT_LENGTH)
+			return ((int)token_free(TOO_LONG_COM, token));
+		stack->comment = ft_strcpy(stack->comment, tmp);
+	}
+	return (TRUE);
+}
+
 int	is_valid_command_start(t_s *s, int *type, t_token *token)
 {
 	fill_token(s, 0, token);
@@ -36,7 +53,7 @@ int	is_valid_command_end(t_s *s, int *type, t_token *token)
 	s->i += (*type == 'n' ? 5 : 8);
 	while (s->line[s->i] != '\0' && s->line[s->i] != '"')
 	{
-		if (diff_space(s->line[s->i]) == TRUE)
+		if (diff(s->line[s->i], SPACE) == TRUE)
 			return ((int)token_free(WRONG_FORMAT, token));
 		s->i += 1;
 	}
@@ -54,10 +71,10 @@ int     get_command_type(int fd, t_s *s, int *type, t_token *token)
 		s->l += 1;
 		s->i = 0;
 		fill_token(s, 0, token);
-		while ((diff_com_end(s->line[s->i]) == TRUE)
+		while ((diff(s->line[s->i], COMM) == TRUE)
 			&& s->line[s->i] != '.')
 		{
-			if ((diff_space(s->line[s->i]) == TRUE)
+			if ((diff(s->line[s->i], SPACE) == TRUE)
 				&& fill_token(s, 0, token))
 				return ((int)token_free(WRONG_HEADER, token));
 			s->i += 1;

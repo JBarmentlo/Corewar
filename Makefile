@@ -92,7 +92,10 @@ ASM_SOURCE_FILES=main_asm.c \
 	header_content.c \
 	header_type.c \
 	parsing_exec.c \
-	parsing_arg.c \
+	parsing_args.c \
+	token_utils.c \
+	op_utils.c \
+	arg_utils.c \
 	parsing_utils.c \
 	writing_utils.c \
 	asm_free.c 

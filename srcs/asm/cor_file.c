@@ -81,9 +81,9 @@ int		parsing_header(t_stack *stack, int fd, t_s *s)
 		return ((int)ft_error(MALLOC_NAME, NULL, NULL));
 	if (!(stack->comment = ft_memalloc(sizeof(char) * COMMENT_LENGTH + 1)))
 		return ((int)ft_error(MALLOC_COMMENT, NULL, NULL));
-	if (!get_header_command(stack, fd, s))
+	if (!header_content(stack, fd, s))
 		return ((int)just_free(stack->champion_name, stack->comment));
-	if (!get_header_command(stack, fd, s))
+	if (!header_content(stack, fd, s))
 		return ((int)just_free(stack->champion_name, stack->comment));
 	return (TRUE);
 }

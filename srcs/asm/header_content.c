@@ -47,9 +47,9 @@ int		check_after_quote(t_s *s, t_token *token)
 {
 
 	s->i += 1;
-	while (diff_com_end(s->line[s->i]))
+	while (diff(s->line[s->i], COMM))
 	{
-		if (diff_space(s->line[s->i]))
+		if (diff(s->line[s->i], SPACE))
 		{
 			fill_token(s, 0, token);
 			return ((int)token_free(SYNTAXE_ERROR, token));
@@ -89,24 +89,7 @@ char	*get_header_content(int fd, t_s *s, int *type)
 	return (tmp);
 }
 
-int	fill_name_com(int type, char *tmp, t_stack *stack, t_token *token)
-{
-	if (type == 'n')
-	{
-		if (ft_strlen(tmp) > PROG_NAME_LENGTH)
-			return ((int)token_free(TOO_LONG_NAME, token));
-		stack->champion_name = ft_strcpy(stack->champion_name, tmp);
-	}
-	else if (type == 'c')
-	{
-		if (ft_strlen(tmp) > COMMENT_LENGTH)
-			return ((int)token_free(TOO_LONG_COM, token));
-		stack->comment = ft_strcpy(stack->comment, tmp);
-	}
-	return (TRUE);
-}
-
-int     get_header_command(t_stack *stack, int fd, t_s *s)
+int     header_content(t_stack *stack, int fd, t_s *s)
 {
 	int     type;
 	char	*tmp;

@@ -60,32 +60,6 @@ int		is_label_list(t_s *s, t_stack *stack, t_token *token)
 	return (s->i);
 }
 
-t_instruct		*is_op(t_s *s, t_stack *stack, t_token *token)
-{
-	t_instruct	*op;
-
-	op = ft_memalloc(sizeof(t_instruct));
-	op->next = NULL;
-	op->type = find_opcode(token->name);
-	if (op->type == 0)
-	{
-		ft_memdel((void**)&op);
-		if (!ft_strcmp(token->name, NAME_CMD_STRING)
-			|| !ft_strcmp(token->name, COMMENT_CMD_STRING))
-			return (token_free(COMMAND_TWICE, token));
-		return (token_free(WRONG_SYNTAX_OP, token));
-	}
-	op->nb_args = g_op_tab[op->type - 1].arg_nb;
-	op->oct = stack->cur_octet;
-	if (check_args(s, op) == FALSE)
-		return (free_op(op));
-	if (s->i > 0 && (s->line[(s->i) - 1] == COMMENT_CHAR
-		|| s->line[(s->i) - 1] == ALT_COMMENT_CHAR))
-		return (op);
-	update_oct(op, &stack->cur_octet, s);
-	return (op);
-}
-
 int		is_op_list(t_s *s, t_stack *stack, t_token *token)
 {
 	t_instruct	*op;
@@ -145,9 +119,9 @@ int		parsing_exec(t_stack *stack, int fd, t_s *s)
 	{
 		s->i = 0;
 		s->l += 1;
-		while (diff_com_end(s->line[s->i]))
+		while (diff(s->line[s->i], COMM))
 		{
-			if (s->line[s->i] != '\0' && diff_space(s->line[s->i]))
+			if (s->line[s->i] != '\0' && diff(s->line[s->i], SPACE))
 				if (is_label_or_op(s, stack) == FALSE)
 				{
 					free_op_lab(stack);
