@@ -89,11 +89,11 @@ UTILS_SOURCE_FILES=endian_converter.c \
 
 ASM_SOURCE_FILES=main_asm.c \
 	cor_file.c \
-	parse_header.c \
+	header_content.c \
+	header_type.c \
 	parsing_exec.c \
 	parsing_arg.c \
 	parsing_utils.c \
-	print_tester.c \
 	writing_utils.c \
 	asm_free.c 
 

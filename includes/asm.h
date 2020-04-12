@@ -16,6 +16,7 @@
 # include "utils.h"
 
 # define PROG_ASM		0
+# define INIT			-1
 # define MAX_SIZE_FILE		2875 // to delete
 # define BITS_IN_OCTET		8
 # define PADDING		4
@@ -23,8 +24,19 @@
 # define EMPTY			"\0"
 # define MAX_ARGS		3
 # define ALT_COMMENT_CHAR    	';'
+# define ARG_N			0
+# define SEP			1
+# define INDX			2
 
 ///// ERROR MESSAGE ///
+# define NO_ARGS		"No arguments"
+# define TOO_MUCH_ARGS		"Too many arguments"
+# define OPEN_FAIL		"A problem occured while opening the file"
+# define WRONG_SOURCE		"Wrong source file format"
+# define MALLOC_FAIL		"Memory allocation failure"
+# define MALLOC_NAME		"Can't allocate champion's name"
+# define MALLOC_COMMENT		"Can't allocate champion's comment"
+# define CREATE_FAIL		"Can't create the file"
 # define INVALID_COMMAND	"Invalid command"
 # define SYNTAXE_ERROR		"Syntaxe Error in header"
 # define INCOMPLETE		"Incomplete Header"
@@ -42,6 +54,7 @@
 # define COMMAND_TWICE		"Can't have twice the same command"
 # define WRONG_SYNTAX_OP	"Wrong syntaxe for the op_code"
 # define LABEL_ERROR		"Lexical error for a label"
+# define LABEL_ALLOC		"Memory allocation failure for a label"
 # define MISSING_CODE		"Missing exec_code for this champion"
 # define LEXICAL_ERROR		"Lexical Error for"
 # define WRONG_LABEL		"The following label doesn't exist"
@@ -110,7 +123,8 @@ typedef struct 			s_file
 }				t_file;
 
 int				cor_file(char *source_file, t_file *out_file, int fd);
-int				get_header_file(t_stack *stack, int fd, t_s *s);
+int				get_header_command(t_stack *stack, int fd, t_s *s);
+int				get_command_type(int fd, t_s *s, int *type, t_token *token);
 int				parsing_exec(t_stack *stack, int fd, t_s *s);
 /////////////////////// parsing arg   //////////////////////////
 void				is_register(t_argz *argz);
@@ -118,8 +132,12 @@ void				is_direct(t_argz *argz, size_t inst_type);
 void				is_indirect(t_argz *argz);
 int				check_args(t_s *s, t_instruct *op);
 /////////////////////// parsing utils   //////////////////////////
+int				diff_com_end(char c);
+int				diff_space(char c);
+void				init_token(t_token *token);
 int				fill_token(t_s *s, int op_type, t_token *token);
 int				find_opcode(char *string);
+int				find_label(t_argz argz, t_label *label);
 int				encoding_byte(t_instruct *op);
 int				ft_atolong(t_s *s, t_argz *argz);
 void				update_oct(t_instruct *op, int *cur_octet, t_s *s);
@@ -130,7 +148,7 @@ long				count_bits(long nb);
 void				nb_to_binary(t_file *out_file, int octets, int indx, long nb);
 int				write_op_values(t_file *out_file, int *i, t_instruct *op, t_stack stack);
 /////////////////////// free functions ///////////////////////////
-void				*token_free(char *str, t_token *token, void *to_free);
+void				*token_free(char *str, t_token *token);
 
 void				*just_free(void *to_free1, void *to_free2);
 void				*free_op_lab(t_stack *stack);
