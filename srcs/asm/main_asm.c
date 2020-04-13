@@ -46,8 +46,8 @@ int	main(int ac, char **av)
 	return (TRUE);	
 }
 
-
+/*
 __attribute__((destructor)) void test()
 {
 	while(1);
-}
+}*/

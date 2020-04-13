@@ -28,10 +28,19 @@ void	update_sep(int *sep_char, int *indx_sep, int i)
 
 int	get_arg(t_token *token, t_s *s, t_instruct *op, int *info)
 {
+	t_argz argz;
+
+	argz = op->argz[info[ARG_N]];
 	fill_token(s, op->type, token);
 	if (check_sep(info, token) == FALSE
-		|| is_argument(s, op->type, &op->argz[info[ARG_N]], &info[SEP]) == NULL)
+		|| is_argument(s, op->type, &argz, &info[SEP]) == NULL)
+	{
+		op->argz[info[ARG_N]] = argz;
+		op->next = NULL;
 		return(FALSE);
+	}
+	op->argz[info[ARG_N]] = argz;
+	op->next = NULL;
 	return (TRUE);
 }
 

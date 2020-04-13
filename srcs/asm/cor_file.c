@@ -20,9 +20,9 @@ int		init_file(t_file *out_file, char *source_file)
 	l = ft_strlen(source_file);
 	if (l < 3 || ft_strcmp(source_file + l - 2, ".s"))
 		return ((int)ft_error(WRONG_SOURCE, NULL, NULL));
-	out_file->name = ft_memalloc(sizeof(char) * (l + 2));
-	out_file->content = ft_memalloc(sizeof(char) * MAX_SIZE_FILE);
-	if (out_file->name == NULL || out_file->content == NULL)
+	if (!(out_file->name = ft_memalloc(sizeof(char) * (l + 2))))
+		return ((int)ft_error(MALLOC_FAIL, NULL, NULL));
+	if (!(out_file->content = ft_memalloc(sizeof(char) * MAX_SIZE_FILE)))
 		return ((int)ft_error(MALLOC_FAIL, NULL, NULL));
 	out_file->name = ft_memcpy(out_file->name, source_file, l - 1); 
 	out_file->name = ft_stricat(out_file->name, "cor", l - 1); 
@@ -82,9 +82,15 @@ int		parsing_header(t_stack *stack, int fd, t_s *s)
 	if (!(stack->comment = ft_memalloc(sizeof(char) * COMMENT_LENGTH + 1)))
 		return ((int)ft_error(MALLOC_COMMENT, NULL, NULL));
 	if (!header_content(stack, fd, s))
+	{
+		ft_memdel((void**)&s->line);
 		return ((int)just_free(stack->champion_name, stack->comment));
+	}
 	if (!header_content(stack, fd, s))
+	{
+		ft_memdel((void**)&s->line);
 		return ((int)just_free(stack->champion_name, stack->comment));
+	}
 	return (TRUE);
 }
 
@@ -94,10 +100,10 @@ int		cor_file(char *source_file, t_file *out_file, int fd)
 	int		real_prog_size;
 	t_s		s;
 
-	if (parsing_header(&stack, fd, &s) == FALSE)
-		return ((int)just_free(s.line, NULL));
 	if (init_file(out_file, source_file) == FALSE)
-		return ((int)just_free(stack.champion_name, stack.comment));
+		return (FALSE);
+	if (parsing_header(&stack, fd, &s) == FALSE)
+		return ((int)just_free(out_file->name, out_file->content));
 	if (fill_header(out_file, &stack) == FALSE)
 		return ((int)just_free(out_file->name, out_file->content));
 	stack.cur_octet = out_file->total_size;
