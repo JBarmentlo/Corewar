@@ -97,9 +97,6 @@ t_instruct		*is_op(t_s *s, t_stack *stack, t_token *token)
 	op->oct = stack->cur_octet;
 	if (parsing_args(s, op) == FALSE)
 		return (free_op(op));
-	if (s->i > 0 && (s->line[(s->i) - 1] == COMMENT_CHAR
-		|| s->line[(s->i) - 1] == ALT_COMMENT_CHAR))
-		return (op);
 	update_oct(op, &stack->cur_octet, s);
 	return (op);
 }

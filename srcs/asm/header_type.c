@@ -12,6 +12,11 @@
 
 #include "asm.h"
 
+/*
+** Once the command is valid, and it's content has the right format, we want to
+** make sure it doesn't exceed the required size.
+*/
+
 int	fill_name_com(int type, char *tmp, t_stack *stack, t_token *token)
 {
 	if (type == 'n')
@@ -28,6 +33,12 @@ int	fill_name_com(int type, char *tmp, t_stack *stack, t_token *token)
 	}
 	return (TRUE);
 }
+
+/*
+** If the first letter comming after [.] is name, the next 4 letter should be
+** name, same thing withe "comment", if it is none of that, it is an invalid
+** command
+*/
 
 int	is_valid_command_start(t_s *s, int *type, t_token *token)
 {
@@ -47,6 +58,11 @@ int	is_valid_command_start(t_s *s, int *type, t_token *token)
 	return (TRUE);
 }
 
+/*
+** After encounting on of the two valid commands, we should only find
+** spaces or a quote.
+*/
+
 int	is_valid_command_end(t_s *s, int *type, t_token *token)
 {
 	fill_token(s, 0, token);
@@ -64,9 +80,18 @@ int	is_valid_command_end(t_s *s, int *type, t_token *token)
 	return (TRUE);
 }
 
+/*
+** We read the .s file line by line, and stock the characters in [s->line]
+** A command can only be [.name] or [.comment]
+** The token help us print the error if there is one. If [is_valid_start]
+** is true it means the begining of the command is correct, and in [is_valid_end]
+** we check if the characters comming after a command like [.name] are only spaces
+** or a quote.
+*/
+
 int     get_command_type(int fd, t_s *s, int *type, t_token *token)
 {
-	while (get_next_line(fd, &s->line) && s->line != NULL)
+	while (gnl(fd, &s->line) && s->line != NULL)
 	{
 		s->l += 1;
 		s->i = 0;

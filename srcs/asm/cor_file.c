@@ -13,21 +13,69 @@
 
 #include "asm.h"
 
+/*
+** [out_file] contains the info on the .cor file : it's name and content
+** It's name is the same as the .s file
+*/
+
 int		init_file(t_file *out_file, char *source_file)
 {
 	int		l;
 
 	l = ft_strlen(source_file);
 	if (l < 3 || ft_strcmp(source_file + l - 2, ".s"))
-		return ((int)ft_error(WRONG_SOURCE, NULL, NULL));
+		return ((int)ft_error(WRONG_SOURCE, NULL));
 	if (!(out_file->name = ft_memalloc(sizeof(char) * (l + 2))))
-		return ((int)ft_error(MALLOC_FAIL, NULL, NULL));
+		return ((int)ft_error(MALLOC_FAIL, NULL));
 	if (!(out_file->content = ft_memalloc(sizeof(char) * MAX_SIZE_FILE)))
-		return ((int)ft_error(MALLOC_FAIL, NULL, NULL));
+		return ((int)ft_error(MALLOC_FAIL, NULL));
 	out_file->name = ft_memcpy(out_file->name, source_file, l - 1); 
 	out_file->name = ft_stricat(out_file->name, "cor", l - 1); 
 	return (TRUE);
 }
+
+/*
+** A header should contain the name of the champion and it's comment
+** We have decided that they could be declared in every order possible.
+** The function [header_content] can parse both of those commands
+** (name and comment)
+** [s->line] will contain the line read by get_next_line
+** [s->l] will correspond to the number of line read
+** [s->i] will correspond to the number of character read in one line
+** [s->l] & [s->i] will help us print detailed error messages
+*/
+
+int		parsing_header(t_stack *stack, int fd, t_s *s)
+{
+	int	l_name;
+
+	s->line = NULL;
+	s->l = 0;
+	s->i = 0;
+	l_name = PROG_NAME_LENGTH;
+	if (!(stack->champion_name = ft_memalloc(sizeof(char) * l_name + 1)))
+		return ((int)ft_error(MALLOC_NAME, NULL));
+	if (!(stack->comment = ft_memalloc(sizeof(char) * COMMENT_LENGTH + 1)))
+		return ((int)ft_error(MALLOC_COMMENT, NULL));
+	if (!header_content(stack, fd, s))
+	{
+		ft_memdel((void**)&s->line);
+		return ((int)just_free(stack->champion_name, stack->comment));
+	}
+	if (!header_content(stack, fd, s))
+	{
+		ft_memdel((void**)&s->line);
+		return ((int)just_free(stack->champion_name, stack->comment));
+	}
+	return (TRUE);
+}
+
+/*
+** Once the header is parsed and valid, we can write in [out_file->content]
+** the header: the magic number + the champion_name + the padding + the size
+** of the exec_code (we don't know it yet so we leave it empty)
+** + the champion's comment + the padding
+*/
 
 int		fill_header(t_file *out_file, t_stack *stack)
 {
@@ -45,6 +93,13 @@ int		fill_header(t_file *out_file, t_stack *stack)
 	ft_memdel((void**)&stack->comment);
 	return (TRUE);
 }
+
+/*
+** Once we have also parsed the exec code, we can write it in
+** [out_file->content]. We need to write the [type of the op],
+** then it's [encoding byte] if there is one, and finally the
+** [value of its arguments] one by one.
+*/
 
 int		fill_opcode(t_file *out_file, t_stack stack)
 {
@@ -69,30 +124,14 @@ int		fill_opcode(t_file *out_file, t_stack stack)
 	return (TRUE);
 }
 
-int		parsing_header(t_stack *stack, int fd, t_s *s)
-{
-	int	l_name;
-
-	s->line = NULL;
-	s->l = 0;
-	s->i = 0;
-	l_name = PROG_NAME_LENGTH;
-	if (!(stack->champion_name = ft_memalloc(sizeof(char) * l_name + 1)))
-		return ((int)ft_error(MALLOC_NAME, NULL, NULL));
-	if (!(stack->comment = ft_memalloc(sizeof(char) * COMMENT_LENGTH + 1)))
-		return ((int)ft_error(MALLOC_COMMENT, NULL, NULL));
-	if (!header_content(stack, fd, s))
-	{
-		ft_memdel((void**)&s->line);
-		return ((int)just_free(stack->champion_name, stack->comment));
-	}
-	if (!header_content(stack, fd, s))
-	{
-		ft_memdel((void**)&s->line);
-		return ((int)just_free(stack->champion_name, stack->comment));
-	}
-	return (TRUE);
-}
+/*
+** In cor_file: we initialize the content and name of the .cor file,
+** parse the header then fill its content in it, parse the exec code,
+** then fill the content, and finally we go back to the header to fill
+** the program size now that we know the [out_file->total_size].
+** Only once the content is valid, we can create the .cor file, and write in
+** it in the main function.
+*/
 
 int		cor_file(char *source_file, t_file *out_file, int fd)
 {	
@@ -118,8 +157,8 @@ int		cor_file(char *source_file, t_file *out_file, int fd)
 	free_op_lab(&stack);
 	if (out_file->fd <= 0)
 	{
-		ft_memdel((void**)&out_file->content);
-		return ((int)ft_error(CREATE_FAIL, out_file->name, out_file->name));
+		ft_error(CREATE_FAIL, out_file->name);
+		return ((int)just_free(out_file->name, out_file->content));
 	}
 	return (TRUE);
 }

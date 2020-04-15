@@ -93,5 +93,13 @@ int	parsing_args(t_s *s, t_instruct *op)
 	init_token(&last_token);
 	if (read_line(s, op, &token, &last_token) == FALSE)
 		return ((int)just_free(token.name, last_token.name));
+	token.name = NULL;
+	token.col = s->i;
+	token.line = s->l;
+	if (s->line[s->i] == COMMENT_CHAR || s->line[s->i] == ALT_COMMENT_CHAR)
+		while (s->line[s->i] != '\0' && s->line[s->i] != '\n')
+			s->i += 1;
+	if (s->line[s->i] != '\n')
+		return ((int)token_free(END_INPUT, &token));
 	return (TRUE);
 }

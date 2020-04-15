@@ -44,7 +44,7 @@ int	fill_token(t_s *s, int op_type, t_token *token)
 	}
 	token->name = ft_memalloc(sizeof(char *) * (save - s->i + 1));
 	if (token->name == NULL)
-		return ((int)ft_error(MALLOC_FAIL, NULL, NULL));
+		return ((int)ft_error(MALLOC_FAIL, NULL));
 	token->name = ft_strncat(token->name, s->line + s->i, (save - s->i));
 	token->line = s->l;
 	token->col = s->i;

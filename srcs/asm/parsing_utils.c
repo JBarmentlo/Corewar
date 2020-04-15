@@ -54,10 +54,10 @@ int	diff(char c, int mode)
 		if (c != ' ' && c != '\t')
 			return (TRUE);
 	if (mode == COMM)
-		if (c != '\0' && c != COMMENT_CHAR && c != ALT_COMMENT_CHAR)
+		if (c != '\0' && c != COMMENT_CHAR && c != ALT_COMMENT_CHAR && c != '\n')
 			return (TRUE);
 	if (mode == SPACE_COMM)
-		if (c != '\0' && c != COMMENT_CHAR && c != ALT_COMMENT_CHAR
+		if (c != '\0' && c != COMMENT_CHAR && c != ALT_COMMENT_CHAR && c != '\n'
 			&& c != ' ' && c != '\t')
 			return (TRUE);
 	return (FALSE);

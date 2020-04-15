@@ -37,7 +37,7 @@ void	*argz_is_label(t_s *s, t_argz *argz)
 	if (s->i - save == FALSE)
 		return(ft_error_nb(LABEL_ERROR, NULL, s->l, s->i));
 	if (!(argz->lab = ft_memalloc(sizeof(char) * s->i - save)))
-		return(ft_error(MALLOC_FAIL, NULL, NULL));
+		return(ft_error(MALLOC_FAIL, NULL));
 	argz->lab = ft_stricpy(argz->lab, s->line, save, s->i);
 	while (save < s->i)
 	{

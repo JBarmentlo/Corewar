@@ -20,7 +20,7 @@ t_label		*is_label(t_stack *stack, t_token *token)
 	i = 0;
 	label = ft_memalloc(sizeof(t_label));
 	if (label == NULL)
-		return(ft_error(LABEL_ALLOC, NULL, NULL));
+		return(ft_error(LABEL_ALLOC, NULL));
 	label->oct = stack->cur_octet;
 	label->next = NULL;
 	while (token->name[i])
@@ -115,7 +115,7 @@ int		parsing_exec(t_stack *stack, int fd, t_s *s)
 	stack->label_list = NULL;
 	stack->first_op = NULL;
 	stack->op_list = NULL;
-	while (get_next_line(fd, &s->line))
+	while (gnl(fd, &s->line))
 	{
 		s->i = 0;
 		s->l += 1;
@@ -132,7 +132,7 @@ int		parsing_exec(t_stack *stack, int fd, t_s *s)
 		ft_memdel((void**)&s->line);
 	}
 	if (stack->first_op == NULL)
-		return ((int)ft_error(MISSING_CODE, NULL, NULL));
+		return ((int)ft_error(MISSING_CODE, NULL));
 	ft_memdel((void**)&s->line);
 	return (TRUE);
 }
