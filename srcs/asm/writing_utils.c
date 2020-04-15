@@ -12,6 +12,11 @@
 
 #include "asm.h"
 
+/*
+** When we write something in the out_file, we need to update the current size
+** of the file (helps us allocate sufficient memory).
+*/
+
 void	write_in_file(t_file *out_file, int indx, int n)
 {
 	out_file->content[indx] = n;
@@ -58,6 +63,12 @@ long		count_bits(long nb)
 	return (bits);
 }
 
+/*
+** To write a number in octet we need to check how many bits it contains,
+** if it is more thant "needed" then it will be filled with zeros. Finally
+** in the last "while" we fill the necessary number, bit by bit.
+*/
+
 void	nb_to_binary(t_file *out_file, int octets, int indx, long nb)
 {
 	long	n;
@@ -83,6 +94,13 @@ void	nb_to_binary(t_file *out_file, int octets, int indx, long nb)
 		indx--;
 	}
 }
+
+/*
+** Here we have parsed almost everything, except if the arguments that are calling
+** a label, are calling an existing one.
+** If the argument is a label we write the difference between the current label
+** and the label that we have "called" (to_label - op->oct).
+*/
 
 int		write_op_values(t_file *out_file, int *i, t_instruct *op, t_stack stack)
 {

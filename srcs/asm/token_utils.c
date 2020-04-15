@@ -1,5 +1,10 @@
 # include "asm.h"
 
+/*
+** The last token takes the info of the current token, and the current token
+** takes the name of the op_code (usefull for error_messages).
+*/
+
 void	save_token(t_token *token, t_token *last_token, char *str_op, t_s *s)
 {
 	int	dif;
@@ -26,6 +31,13 @@ void	init_token(t_token *token)
 	token->line = 0;
 	token->col = 0;
 }
+
+/*
+** Here we free the token to then update it. it corresponds to the characters
+** we are currently reading (s->i) until we find a space or tab, or comment, or end of file
+** The option "42" is a special one for labels or direct arguments (we don't want the
+** token to contain the LABEL_CHAR of the DIRECT_CHAR.
+*/
 
 int	fill_token(t_s *s, int op_type, t_token *token)
 {

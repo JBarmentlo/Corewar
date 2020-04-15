@@ -25,6 +25,13 @@ char		*after_line(char *x, char *tab, int size)
 	return (tab);
 }
 
+/*
+** This strjoin_f is special because it can copy "\0" in the file,
+** because we use [l] (size of the current [gnl->tab], so [s1]), and [ret]
+** (size of the new [buf], so s2), instead of using a [ft_strlen]
+** Finally this function free s1 (since it has copied it in str).
+*/
+
 char	*strjoin_f(char const *s1, char const *s2, int l, int ret)
 {
 	char	*str;
@@ -53,6 +60,16 @@ char	*strjoin_f(char const *s1, char const *s2, int l, int ret)
 	return (str);
 }
 
+/*
+** In content, we check if [gnl->tab] is empty or does not contain any "\n"
+** If so, we call the function read and join the new characters read from
+** [buf] to [gnl->tab].
+** If we have encounter a "\n", [x] will corresponds to [gnl->tab] starting from
+** the "\n". So the [line] we want to send is the beggining of [gnl->tab]
+** to the beggining of [x] (x - gnl->tab + 1). The [+1] helps us keep the "\n"
+** Then we remove the part sent in [line] from [gnl->tab] in [after_line].
+*/
+
 int			content(t_fd *gnl, int fd, char **line)
 {
 	int		ret;
@@ -80,6 +97,11 @@ int			content(t_fd *gnl, int fd, char **line)
 	gnl->tab = ft_strdup("");
 	return (ret == 0 && !gnl->tab ? 0 : 1);
 }
+
+/*
+** This is a homemade gnl, that could be reused later: it sends the [line]
+** wwith the "\n" at the end, and it reads "\0" and stock them in [line]
+*/
 
 int			gnl(int fd, char **line)
 {

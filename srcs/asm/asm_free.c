@@ -1,5 +1,9 @@
 #include "asm.h"
 
+/*
+** Before freeing a label, we need to free its name
+*/
+
 void	*free_label(t_label *label)
 {
 	t_label		*save_label;
@@ -13,6 +17,11 @@ void	*free_label(t_label *label)
 	}
 	return (NULL);
 }
+
+/*
+** Before freeing an op, we need to free the "call to label" that could
+** contain one of it's arguments (argz.lab);
+*/
 
 void	*free_op(t_instruct *op)
 {
@@ -37,6 +46,11 @@ void	*free_op(t_instruct *op)
 	return (NULL);
 }
 
+/*
+** While parsing the file .s, we create a chained list of labels, and of op_codes
+** We need to free them and their content.
+*/
+
 void	*free_op_lab(t_stack *stack)
 {
 	t_label		*label;
@@ -52,6 +66,11 @@ void	*free_op_lab(t_stack *stack)
 	stack->label_list = NULL;
 	return (NULL);
 }
+
+/*
+** Token_free is a function that print an error message corresponding
+** to a certain token and its location. Then it frees the token.
+*/
 
 void	*token_free(char *str, t_token *token)
 {
@@ -70,6 +89,11 @@ void	*token_free(char *str, t_token *token)
 	ft_memdel((void**)&token->name);
 	return (NULL);
 }
+
+/*
+** This is a helpful function to return (NULL) in a function and free what is
+** needed at the same time.
+*/
 
 void	*just_free(void *to_free1, void *to_free2)
 {

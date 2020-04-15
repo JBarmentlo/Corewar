@@ -12,6 +12,12 @@
 
 #include "asm.h"
 
+/*
+** When we stock information on labels we only need there names and the current
+** octet we are at. We also check if all the characters in it correspond to
+** LABEL_CHARS.
+*/
+
 t_label		*is_label(t_stack *stack, t_token *token)
 {
 	t_label			*label;
@@ -38,6 +44,10 @@ t_label		*is_label(t_stack *stack, t_token *token)
 	return (label);
 }
 
+/*
+** If the lavel is valid (is_label) we add it to the list (stack->label_list->next)
+** Otherwise we free the two list we have created (op and labels).
+*/
 
 int		is_label_list(t_s *s, t_stack *stack, t_token *token)
 {
@@ -60,6 +70,11 @@ int		is_label_list(t_s *s, t_stack *stack, t_token *token)
 	return (s->i);
 }
 
+/*
+** When we find a new op, we check if it is valid, if not we need to free the two chained lists
+** we have created. If not, we had the new op to the list (stack->op_list->next).
+*/
+
 int		is_op_list(t_s *s, t_stack *stack, t_token *token)
 {
 	t_instruct	*op;
@@ -79,6 +94,12 @@ int		is_op_list(t_s *s, t_stack *stack, t_token *token)
 	}
 	return (TRUE);
 }
+
+/*
+** If we find a LABEL_CHAR, it corresponds to a label, otherwise to an op_code
+** When we read a line, we make sure that if we encounter [#] or [;] it is like being at
+** the end of a line.
+*/
 
 int		is_label_or_op(t_s *s, t_stack *stack)
 {
@@ -107,6 +128,15 @@ int		is_label_or_op(t_s *s, t_stack *stack)
 	ft_memdel((void**)&token.name);
 	return (TRUE);
 }
+
+/*
+** We enter parsing_exec once we have parsed and fill the header. Here we will
+** need a chained list of labels and of op, contained in [stack]
+** The first character we encounter can be a label or an op. We check wich one it is
+** in [is_label_or_op]. If it is a label, we will be out of the function after the [:] char
+** If it is an op_code, we are out of [is_label_or_op] once we have read the entire line
+** [s->i] keeps track of where we are at in the line.
+*/
 
 int		parsing_exec(t_stack *stack, int fd, t_s *s)
 {

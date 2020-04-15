@@ -26,6 +26,11 @@ void	update_sep(int *sep_char, int *indx_sep, int i)
 	}
 }
 
+/*
+** Here we check if each argument is separated by only one separator_char and
+** if the value and amount of arguments  is correct (direct, indirect or register)
+*/
+
 int	get_arg(t_token *token, t_s *s, t_instruct *op, int *info)
 {
 	t_argz argz;
@@ -44,6 +49,12 @@ int	get_arg(t_token *token, t_s *s, t_instruct *op, int *info)
 	return (TRUE);
 }
 
+/*
+** In final check we have already read all the line: we need to check if there is sufficient
+** arguments (by comparing info[ARG_N] to the number of args necessary according to op.c
+** Then we check if there is not too many separator char after the last argument
+*/
+
 int	final_check(t_token *token, t_token *last_token, int *info, t_instruct *op)
 {
 	if (info[ARG_N] < g_op_tab[op->type - 1].arg_nb)
@@ -53,6 +64,14 @@ int	final_check(t_token *token, t_token *last_token, int *info, t_instruct *op)
 	just_free(token->name, last_token->name);
 	return (TRUE);
 }
+
+/*
+** The function [diff(char c, COMM)] check if we don't encounter "\0", "\n", "#" or ";"
+** The function [diff(char c, SPACE)] check if we don't encounter " " or "\t".
+** In [info] we have the number of arguments we have found [ARG_N], the number of SEPARATOR_CHAR
+** in [info[SEP]] and the index where is this separator_char in info[INDX].
+** We need two token: the current one and the last one, to have error message more understandable.
+*/
 
 int	read_line(t_s *s, t_instruct *op, t_token *t, t_token *last_t)
 {
@@ -83,6 +102,13 @@ int	read_line(t_s *s, t_instruct *op, t_token *t, t_token *last_t)
 	}
 	return (final_check(t, last_t, info, op) == FALSE ? FALSE : TRUE);
 }
+
+/*
+** When we arrive in parsing_args, we already have a valid op_code
+** We need to check if on the same line (read_line) there is all the necessary
+** types of arguments. And finally we want to make sure that any line, so any
+** instruction ends with a "\n" (END_INPUT).
+*/
 
 int	parsing_args(t_s *s, t_instruct *op)
 {

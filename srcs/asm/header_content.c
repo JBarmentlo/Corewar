@@ -14,7 +14,7 @@
 
 /*
 ** Once we have encountered our second quote, we want to make sure the
-** rest of the line is empty or is a comment [#].
+** rest of the line is empty or is a comment [#][;].
 */
 
 int		check_after_quote(t_s *s, t_token *token)

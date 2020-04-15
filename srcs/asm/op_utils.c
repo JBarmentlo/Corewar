@@ -1,5 +1,11 @@
 # include "asm.h"
 
+/*
+** On octet is on 4 bits. if the arguments are a register, a direct and
+** an indirect: the encoding byte will be 01-10-11, so in binary 00011011
+** which is in decimal: 27 (the number we need to write on this octet).
+*/
+
 int		encoding_byte(t_instruct *op)
 {
 	int			i;
@@ -32,6 +38,10 @@ int		big_number(t_s *s, t_argz *argz, char *str)
 	return (TRUE);
 }
 
+/*
+** This atolong is special: if we overcome the 63 bits for a number we imitate
+** the behavior of the zaz_vm (the number becomes automatically 0xffff)
+*/
 
 int		ft_atolong(t_s *s, t_argz *argz)
 {
@@ -62,6 +72,12 @@ int		ft_atolong(t_s *s, t_argz *argz)
 	return (TRUE);
 }
 
+/*
+** An op_code takes : 1 octet to write its type, then 1 octet if there is
+** an encoding_byte need, then finally the octet taken by its arguments
+** (it can be 1, 2 or 4 according to their types).
+*/
+
 void	update_oct(t_instruct *op, int *cur_octet, t_s *s)
 {
 	int	k;
@@ -77,6 +93,14 @@ void	update_oct(t_instruct *op, int *cur_octet, t_s *s)
 	if (s->i > 0)
 		s->i -= 1;
 }
+
+/*
+** Here we have found a character that is not a label (so not ending with [:])
+** Now we need to see if it is a correct op_code (find_op_code).
+** Then we need to check if its argument are valid [parsing_args].
+** Finally in update_oct we calculate how many octet we would move forward
+** if we were writing this in the final .cor file
+*/
 
 t_instruct		*is_op(t_s *s, t_stack *stack, t_token *token)
 {

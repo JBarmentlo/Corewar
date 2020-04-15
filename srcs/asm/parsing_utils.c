@@ -12,6 +12,13 @@
 
 #include "asm.h"
 
+/*
+** If the argument is a register, it should have a value betweem 1 and 16
+** Here we also check if the type of arg (T_REG, T_DIR or T_IND) is
+** corresponding to the ones listed in op.c (g_op_tab[op_type].arg_types[K]).
+** [k] is the number of arguments we have found.
+*/
+
 int	check_value(t_argz argz, int k, t_token *token, t_token *last_token)
 {
 	int	t;
@@ -26,6 +33,11 @@ int	check_value(t_argz argz, int k, t_token *token, t_token *last_token)
 		return ((int)token_free(TOO_MANY_ARGS, token));
 	return (TRUE);
 }
+
+/*
+** An op_code should be followed by it's argument, each of them separated by only
+** one SEPARATOR_CHAR. info[ARG_N] is the number of argument we are dealing with.
+*/
 
 int		check_sep(int *info, t_token *token)
 {
@@ -48,6 +60,11 @@ int		check_sep(int *info, t_token *token)
 	return (TRUE);
 }
 
+/*
+** We often need to check if we encounter space, tabs, comment, "\n" or "\0" while
+** reading a line.
+*/
+
 int	diff(char c, int mode)
 {
 	if (mode == SPACE)
@@ -63,6 +80,13 @@ int	diff(char c, int mode)
 	return (FALSE);
 }
 
+/*
+** There is only a limited list of op_code available (16) with specific names
+** we can compare the name we have read with the names contains in op.c
+** If we find it we return its index ("live" is at the index "0" of g_op_tab,
+** so it is the op_code number 1).
+*/
+
 int		find_opcode(char *string)
 {
 	int		i;
@@ -76,6 +100,13 @@ int		find_opcode(char *string)
 	}
 	return (0);
 }
+
+/*
+** Find_label is used at the end: when an argument is a "call to label" we need to check if this
+** label exists or not. If it does we return the octet [oct_lab] of the label we found so
+** we can write in our file the difference between the current op_code and this label's oct.
+** If not, then it means this label doesn't exist in our chained list.
+*/
 
 int		find_label(t_argz argz, t_label *label)
 {
