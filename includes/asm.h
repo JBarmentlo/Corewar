@@ -35,35 +35,37 @@
 ** Messages d'erreur
 */
 
-# define NO_ARGS		"No arguments"
-# define TOO_MUCH_ARGS		"Too many arguments"
-# define OPEN_FAIL		"A problem occured while opening the file"
-# define WRONG_SOURCE		"Wrong source file format"
+# define CREATE_FAIL		"Can't create the file"
+# define COMMAND_TWICE		"Can't have twice the same command"
+# define END_INPUT		"Syntax error - unexpected end of input"
+# define INVALID_COMMAND	"Invalid command"
+# define INCOMPLETE		"Incomplete Header"
+# define LABEL_ALLOC		"Memory allocation failure for a label"
+# define LABEL_ERROR		"Lexical error for a label"
+# define LEXICAL_ERROR		"Lexical Error for"
+# define MALLOC_COMMENT		"Can't allocate champion's comment"
 # define MALLOC_FAIL		"Memory allocation failure"
 # define MALLOC_NAME		"Can't allocate champion's name"
-# define MALLOC_COMMENT		"Can't allocate champion's comment"
-# define CREATE_FAIL		"Can't create the file"
-# define INVALID_COMMAND	"Invalid command"
+# define MISSING_ARG		"Missing arguments for the op_code"
+# define MISSING_CODE		"Missing exec_code for this champion"
+# define MISSING_QUOTE		"Missing quote in header"
+# define MISSING_SEP		"Missing separator_char before the argument"
+# define NO_ARGS		"No arguments"
+# define OPEN_FAIL		"A problem occured while opening the file"
 # define SYNTAXE_ERROR		"Syntaxe Error in header"
-# define INCOMPLETE		"Incomplete Header"
-# define WRONG_HEADER		"Wrong .command in header"
-# define WRONG_FORMAT		"Wrong format after .command in header"
-# define TOO_LONG_NAME		"Command [.name] too long"
 # define TOO_LONG_COM		"Command [.comment] too long"
+# define TOO_LONG_NAME		"Command [.name] too long"
+# define TOO_MANY_ARGS		"Too many arguments for the op_code"
+# define TOO_MANY_SEP_A		"Too many separator_char after the argument"
+# define TOO_MANY_SEP_B		"Too many separator_char before the argument"
+# define TOO_MUCH_ARGS		"Too many arguments"
+# define WRONG_FORMAT		"Wrong format after .command in header"
+# define WRONG_HEADER		"Wrong .command in header"
+# define WRONG_LABEL		"The following label doesn't exist"
+# define WRONG_SOURCE		"Wrong source file format"
 # define WRONG_REG_NUM		"A register number should be between 1 and 16"
 # define WRONG_TYPE_ARG		"Wrong type of argument for the op_code"
-# define MISSING_SEP		"Missing separator_char before the argument"
-# define TOO_MANY_SEP_B		"Too many separator_char before the argument"
-# define TOO_MANY_SEP_A		"Too many separator_char after the argument"
-# define MISSING_ARG		"Missing arguments for the op_code"
-# define TOO_MANY_ARGS		"Too many arguments for the op_code"
-# define COMMAND_TWICE		"Can't have twice the same command"
 # define WRONG_SYNTAX_OP	"Wrong syntaxe for the op_code"
-# define LABEL_ERROR		"Lexical error for a label"
-# define LABEL_ALLOC		"Memory allocation failure for a label"
-# define MISSING_CODE		"Missing exec_code for this champion"
-# define LEXICAL_ERROR		"Lexical Error for"
-# define WRONG_LABEL		"The following label doesn't exist"
 
 /*
 ** Structure qui contiendra la ligne lue dans get_next_line, le numero de la ligne [l],
@@ -181,7 +183,7 @@ typedef struct 			s_file
 	int			prog_size;
 }				t_file;
 
-
+int				gnl(int fd, char **line);
 int				cor_file(char *source_file, t_file *out_file, int fd);
 int				header_content(t_stack *stack, int fd, t_s *s);
 int				get_command_type(int fd, t_s *s, int *type, t_token *token);

@@ -88,6 +88,7 @@ UTILS_SOURCE_FILES=endian_converter.c \
 	mem_color.c
 
 ASM_SOURCE_FILES=main_asm.c \
+	gnl.c \
 	cor_file.c \
 	header_content.c \
 	header_type.c \
