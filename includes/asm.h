@@ -53,6 +53,7 @@
 # define NO_ARGS		"No arguments"
 # define OPEN_FAIL		"A problem occured while opening the file"
 # define SYNTAXE_ERROR		"Syntaxe Error in header"
+# define TOO_BIG		"Programm exceeding the Maximum size"
 # define TOO_LONG_COM		"Command [.comment] too long"
 # define TOO_LONG_NAME		"Command [.name] too long"
 # define TOO_MANY_ARGS		"Too many arguments for the op_code"
@@ -225,7 +226,7 @@ void				*is_argument(t_s *s, size_t inst_type, t_argz *argz, int *sep_char);
 void				write_in_file(t_file *out_file, int indx, int n);
 void				copy_string(char *dest, char *src, int size, int *indx);
 long				count_bits(long nb);
-void				nb_to_binary(t_file *out_file, int octets, int indx, long nb);
+int				nb_to_binary(t_file *out_file, int octets, int indx, long nb);
 int				write_op_values(t_file *out_file, int *i, t_instruct *op, t_stack stack);
 /*
 ** asm_free
