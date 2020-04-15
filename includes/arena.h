@@ -15,16 +15,26 @@
 
 # include "utils.h"
 
-#define COREWAR			1
-#define	INIT_NUM		-1
-#define	NO_NB			-1
-#define	PADDING			4
-#define	INFO_SIZE_CODE		4
-#define	SIZE_MAX_PROG		2875 // = sizeof(COREWAR_EXEC_MAGIC) + PROG_NAME_LENGTH + PADDING + INFO_SIZE_CODE + COMMENT_LENGTH + PADDING + CHAMP_MAX_SIZE + 1 //
+# define COREWAR		1
+# define INIT_NUM		-1
+# define NO_NB			-1
+# define INFO_SIZE_CODE		4
+# define MAX_ARGS_SIZE		16
+# define PROCESS_TABLE_SIZE	1001
+# define MAX_BYTECODE_SIZE	18
 
-#define	MAX_ARGS_SIZE		16
-#define PROCESS_TABLE_SIZE	1001
-#define MAX_BYTECODE_SIZE	18
+# define FAIL_ARG		"Can't read the arguments"
+# define TOO_HIGH		"NB higher than the amount of champions"
+# define OPTION_TWICE		"Can't have twice the same option"
+# define WRONG_NB		"Wrong number for a champion"
+# define SAME_NB		"Same number for two champions"
+# define CANT_READ		"Can't read source file"
+# define WRONG_FORMAT_COR	"The source file should be a '.cor' file"
+# define TOO_MANY_CHAMP		"Too many champions"
+# define WRONG_MAGIC_NB		"Incorrect magic number"
+# define TOO_SMALL		"Missing exec code"
+# define TOO_BIG		"The source file is exceeding the maximum size"
+# define WRONG_PROG_SIZE	"Wrong prog_size in header"
 
 typedef struct			s_champion
 {

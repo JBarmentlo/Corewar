@@ -31,10 +31,10 @@ int		main(int ac, char **av)
 	int		timeout;
 	int		running;
 	t_arena		vm;
-	t_champion	*champ;
-	int			i;
-	int			visu = 1;
-	unsigned int j;
+	t_champion	champ;
+	int		i;
+	int		visu = 1;
+	unsigned int 	j;
 
 	i = 0;
 	vm = init_vm();
@@ -42,13 +42,12 @@ int		main(int ac, char **av)
 		return (FALSE);
 	while (i < vm.nb_champs)
 	{
-		champ = &vm.champion_table[i];
-		if (pars_header(champ) == FALSE)
+		champ = vm.champion_table[i];
+		if (pars_header(&champ) == FALSE)
 			return (FALSE);
-		printf("champ.name = %s, number = [%d]\n", champ->header.prog_name, champ->number);
 		i++;
 	}
-	if (start_arena(&vm, champ) == FALSE)
+	if (start_arena(&vm, &champ) == FALSE)
 		return (FALSE);
 	if (visu)
 		init_window(&d, vm);
@@ -104,3 +103,9 @@ int		main(int ac, char **av)
 	return (TRUE);
 }
 
+
+/*
+__attribute__((destructor)) void test()
+{
+	while(1);
+}*/

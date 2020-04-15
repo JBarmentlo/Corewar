@@ -11,8 +11,9 @@
 
 # define	TRUE		1
 # define	FALSE		0
+# define	PADDING		4
 # define	SIZE_HEADER	2192
-#define		SIZE_MAX_PROG	2875 // changed to MAX_SIZE_FILE pour asm
+#define		SIZE_MAX_PROG	2875
 
 typedef unsigned int		uint;
 typedef unsigned char		byte;
