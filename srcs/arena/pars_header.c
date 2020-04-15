@@ -20,9 +20,9 @@
 **	'prog'.
 */
 
-int			stock_file(t_champion *champ)
+int		stock_file(t_champion *champ)
 {
-	int		ret;
+	int	ret;
 	char	buf[SIZE_MAX_PROG + 1];
 	uint	min_header;
 
@@ -33,10 +33,10 @@ int			stock_file(t_champion *champ)
 	champ->header.prog_size = ret - min_header + 1;
 // dois je mettre le +1??
 	if ((uint)ret < min_header)
-		return ((int)ft_error("The source file too small", NULL));
+		return ((int)ft_error(TOO_SMALL, NULL));
 	ft_memcpy(champ->prog, buf, ret);
 	if ((ret = read(champ->fd, buf, 2)))
-		return ((int)ft_error("The source file too big", NULL));
+		return ((int)ft_error(TOO_BIG, NULL));
 	return (TRUE);
 }
 
@@ -95,7 +95,7 @@ int			name_size_comment(t_champion *champ)
 	ft_memcpy(champ->header.prog_name, champ->prog + i, total_name);
 	nb = string_to_int(champ, INFO_SIZE_CODE, i + total_name);
 	if (nb != champ->header.prog_size)
-		return ((int)ft_error("Wrong instruction section size in header", NULL));
+		return ((int)ft_error(WRONG_PROG_SIZE, NULL));
 	i += total_name + INFO_SIZE_CODE;
 	ft_memcpy(champ->header.comment, champ->prog + i, total_comment);
 	return (TRUE);
@@ -116,7 +116,7 @@ int			pars_header(t_champion *champ)
 		return (FALSE);
 	nb = string_to_int(champ, sizeof(COREWAR_EXEC_MAGIC), 0);
 	if (nb != COREWAR_EXEC_MAGIC)
-		return ((int)ft_error("The magic number isn't correct", NULL));
+		return ((int)ft_error(WRONG_MAGIC_NB, NULL));
 	else
 		champ->header.magic = nb;
 	if (name_size_comment(champ) == FALSE)

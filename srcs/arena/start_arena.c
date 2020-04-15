@@ -25,9 +25,9 @@
 t_process	*make_process(void)
 {
 	t_process	*process;
-	int			i;
+	int		i;
 
-	if (!(process = malloc(sizeof(t_process))))
+	if (!(process = ft_memalloc(sizeof(t_process))))
 		return (NULL);
 	process->bytecode_size = 0;
 	process->carry = 0;
@@ -51,8 +51,8 @@ t_process	*make_process(void)
 t_process	*make_process_list(t_arena *vm)
 {
 	t_process	*process;
-	int			i;
-	int			pc;
+	int		i;
+	int		pc;
 
 	i = 0;
 	pc = 0;
@@ -75,7 +75,7 @@ t_args		*make_args(void)
 {
 	t_args *args;
 
-	if (!(args = malloc(sizeof(t_args))))
+	if (!(args = ft_memalloc(sizeof(t_args))))
 		return (NULL);
 	set_args_to_zero(args);
 	return (args);
@@ -86,10 +86,13 @@ int			init_var(t_arena *vm)
 	t_process	*process;
 	t_args		*args;
 
-	process = make_process_list(vm);
-	args = make_args();
-	if (process == NULL || args == NULL)
+	if (!(process = make_process_list(vm)))
 		return (FALSE);
+	if (!(args = make_args()))
+	{
+		ft_memdel((void**)&process);
+		return (FALSE);
+	}
 	vm->last_live_champ_number = vm->nb_champs;
 	vm->cycle = 0;
 	vm->total_live_since_check = 0;

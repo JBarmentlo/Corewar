@@ -26,11 +26,11 @@ int		is_champ(char *av, t_arena *vm, int n, int *i)
 	l = ft_strlen(av);
 	fd = open(av, O_RDONLY);
 	if (fd == -1)
-		return ((int)ft_error("Can't read source file", av));
+		return ((int)ft_error(CANT_READ, av));
 	if (l <= 4 || ft_strcmp(av + (l - 4), ".cor"))
-		return ((int)ft_error("The source file should be a '.cor' file", NULL));
+		return ((int)ft_error(WRONG_FORMAT_COR, NULL));
 	if (*i == MAX_PLAYERS)
-		return ((int)ft_error("Too many champions", NULL));
+		return ((int)ft_error(TOO_MANY_CHAMP, NULL));
 	vm->champion_table[*i].number = n;
 	vm->champion_table[*i].fd = fd;
 	vm->nb_champs = vm->nb_champs + 1;
@@ -59,9 +59,9 @@ int		champ_num(int *ac, char **av, int *nb, int *n)
 	if (av[*ac] == NULL || av[*ac + 1] == NULL || *n == -1)
 		return (usage(COREWAR));
 	if (*n <= 0 || *n > MAX_PLAYERS)
-		return ((int)ft_error("Wrong number for a champion", NULL));
+		return ((int)ft_error(WRONG_NB, NULL));
 	if (nb[*n - 1] == NO_NB)
-		return ((int)ft_error("Same number for two champions", NULL));
+		return ((int)ft_error(SAME_NB, NULL));
 	if (*n > 0 && *n != NO_NB)
 		nb[*n - 1] = NO_NB;
 	*ac += 1;
@@ -81,7 +81,7 @@ int		option_nb(int *opt, char **av, int *ac, t_arena *vm)
 	if (ft_strcmp(av[*ac], "-dump"))
 		return (TRUE);
 	if (*opt == 1)
-		return ((int)ft_error("Can't have twice the option", av[*ac]));
+		return ((int)ft_error(OPTION_TWICE, av[*ac]));
 	if (av[*ac + 1] == NULL)
 		return (usage(COREWAR));
 	nb = ft_atou(av[*ac + 1]);
@@ -110,7 +110,7 @@ int		pars_args(int ac, char **av, t_arena *vm)
 	i = 0;
 	d = 0;
 	if (ac <= 1)
-		return (ac == 1 ? usage(COREWAR) : (int)ft_error("can't read the arguments", NULL));
+		return (ac == 1 ? usage(COREWAR) : (int)ft_error(FAIL_ARG, NULL));
 	ac = 1;
 	pars_num_champ(nb, vm, 1);
 	while (av[ac])

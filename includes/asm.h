@@ -17,9 +17,7 @@
 
 # define PROG_ASM		0
 # define INIT			-1
-# define MAX_SIZE_FILE		2875
 # define BITS_IN_OCTET		8
-# define PADDING		4
 # define INFO_PROG		4
 # define EMPTY			"\0"
 # define MAX_ARGS		3
