@@ -77,21 +77,24 @@ int		parsing_header(t_stack *stack, int fd, t_s *s)
 ** + the champion's comment + the padding
 */
 
-int		fill_header(t_file *out_file, t_stack *stack)
+void		fill_header(t_file *out_file, t_stack *stack)
 {
 	int	magic;
+	char	*name;
+	char	*comm;
 
 	magic = COREWAR_EXEC_MAGIC;
+	name = stack->champion_name;
+	comm = stack->comment;
 	nb_to_binary(out_file, sizeof(magic), out_file->total_size, magic);
-	copy_string(out_file->content, stack->champion_name,  PROG_NAME_LENGTH, &(out_file->total_size));
+	copy_string(out_file->content, name,  PROG_NAME_LENGTH, &(out_file->total_size));
 	copy_string(out_file->content, EMPTY,  PADDING, &(out_file->total_size));
 	out_file->prog_size = out_file->total_size;
 	copy_string(out_file->content, EMPTY,  INFO_PROG, &(out_file->total_size));
-	copy_string(out_file->content, stack->comment,  COMMENT_LENGTH, &(out_file->total_size));
+	copy_string(out_file->content, comm,  COMMENT_LENGTH, &(out_file->total_size));
 	copy_string(out_file->content, EMPTY,  PADDING, &(out_file->total_size));
 	ft_memdel((void**)&stack->champion_name);
 	ft_memdel((void**)&stack->comment);
-	return (TRUE);
 }
 
 /*
@@ -143,8 +146,7 @@ int		cor_file(char *source_file, t_file *out_file, int fd)
 		return (FALSE);
 	if (parsing_header(&stack, fd, &s) == FALSE)
 		return ((int)just_free(out_file->name, out_file->content));
-	if (fill_header(out_file, &stack) == FALSE)
-		return ((int)just_free(out_file->name, out_file->content));
+	fill_header(out_file, &stack);
 	stack.cur_octet = out_file->total_size;
 	if (parsing_exec(&stack, fd, &s) == FALSE)
 		return ((int)just_free(out_file->name, out_file->content));

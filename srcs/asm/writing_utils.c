@@ -69,7 +69,7 @@ long		count_bits(long nb)
 ** in the last "while" we fill the necessary number, bit by bit.
 */
 
-void	nb_to_binary(t_file *out_file, int octets, int indx, long nb)
+int	nb_to_binary(t_file *out_file, int octets, int indx, long nb)
 {
 	long	n;
 	long	bits;
@@ -93,6 +93,7 @@ void	nb_to_binary(t_file *out_file, int octets, int indx, long nb)
 		octets--;
 		indx--;
 	}
+	return (TRUE);
 }
 
 /*
