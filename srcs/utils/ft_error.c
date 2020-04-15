@@ -10,40 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "arena.h"
+#include "utils.h"
 
-int		ft_error5(char *str, size_t line, size_t col)
+void	*ft_error_nb(char *str, char *str2, int line, int col)
 {
-	ft_printf("Error [%d:%d]: %s\n", line, col, str);
-	return (FALSE);
-}
-
-void	*ft_error4(char *str, char *str2, size_t line, size_t col)
-{
-	ft_printf("Error [%d:%d]: %s: [%s]\n", line, col, str, str2);
+	if (str2 == NULL)
+		ft_printf("Error [%d:%d]: %s\n", line, col, str);
+	else
+		ft_printf("Error [%d:%d]: %s: [%s]\n", line, col, str, str2);
 	return (NULL);
 }
 
-void	*ft_error3(char *str, size_t line, size_t col)
-{
-	ft_printf("Error [%d:%d]: %s\n", line, col, str);
-	return (NULL);
-}
-
-void	*ft_error2(char *str, char *str2)
+void	*ft_error(char *str, char *str2)
 {
 	if (str2 == NULL)
 		ft_printf("Error: %s\n", str);
 	else
 		ft_printf("Error: %s %s\n", str, str2);
 	return (NULL);
-}
-
-int		ft_error(char *str, char *str2)
-{
-	if (str2 == NULL)
-		ft_printf("Error: %s\n", str);
-	else
-		ft_printf("Error: %s %s\n", str, str2);
-	return (FALSE);
 }

@@ -12,237 +12,50 @@
 
 #include "asm.h"
 
-t_argz		is_register(t_argz argz)
+/*
+** When we stock information on labels we only need there names and the current
+** octet we are at. We also check if all the characters in it correspond to
+** LABEL_CHARS.
+*/
+
+t_label		*is_label(t_stack *stack, t_token *token)
 {
-	argz.type = T_REG;
-	argz.oct = T_REG;
-	return (argz);
-}
+	t_label			*label;
+	int			i;
 
-t_argz		is_direct(t_argz argz, size_t inst_type)
-{
-	argz.type = T_DIR;
-	if (g_op_tab[inst_type - 1].is_direct_small == 1)
-		argz.oct = DIR_SIZE / 2; // car DIR SIZE = 4 au lieu de 2
-	else
-		argz.oct = DIR_SIZE; // = a 4 pourtant reg sur 1 ?? //
-	///// pour cerains arg, direct code sur 4 octets ////
-	return (argz);
-}
-
-t_argz		is_indirect(t_argz argz)
-{
-	ft_printf("T_IND = [%d]\n", T_IND);
-	argz.type = T_IND;
-	argz.oct = IND_SIZE;
-	/////// indirect devrait etre code sur 2 octets ///
-	return (argz);
-}
-
-int		ft_atolong(const char *str, t_argz *argz)
-{
-	long	neg;
-	long	nb;
-	long	bits;
-
-	neg = 1;
-	nb = 0;
-	bits = 0;
-	while (*str == ' ' || *str == '\f' || *str == '\t'
-			|| *str == '\n' || *str == '\r' || *str == '\v')
-		str++;
-	if (*str == '-')
-		neg = -1;
-	if (*str == '-' || *str == '+')
-		str++;
-	while (ft_isdigit((long)*str))
-	{
-		nb = 10 * nb + *str - 48;
-		bits = count_bits(nb);
-		if (bits >= 63)
-		{
-			argz->value = 4294967295;
-			return (TRUE);
-		}
-		str++;
-	}
-	argz->value = nb * neg;
-	return (TRUE);
-}
-
-t_argz		numeric_value(char *line, int *i, t_argz argz)
-{
-	ft_atolong(line + *i, &argz);
-	if (argz.type == T_REG && (argz.value > REG_NUMBER || argz.value < 1))
-		return (argz);
-	argz.lab = NULL;
-	if (line[*i] == '-')
-		*i += 1;
-	while (line[*i] != SEPARATOR_CHAR && line[*i] != '\0' && line[*i] != COMMENT_CHAR && line[*i] != ALT_COMMENT_CHAR)
-	{
-		if (ft_isdigit(line[*i]) == 0 && line[*i] != ' ' && line[*i] != '\t')
-		{
-			argz.value = -1;
-			argz.type = 0;
-			return (argz);
-		}
-		*i += 1;
-	}
-	return (argz);
-}
-
-t_argz		argz_is_label(char *line, int *i, t_argz argz)
-{
-	int		k;
-	int		save;
-
-	k = 0;
-	*i += 1;
-	save = *i;
-	while (line[*i] != '\0' && line[*i] != SEPARATOR_CHAR && line[*i] != COMMENT_CHAR && line[*i] != ALT_COMMENT_CHAR && line[*i] != ' ' && line[*i] != '\t')
-	{
-		*i += 1;
-		k++;
-	}
-	argz.lab = ft_memalloc(sizeof(char) * k);
-	argz.lab = ft_stricpy(argz.lab, line, save, *i);
-	argz.value = 0;
-	return (argz);
-}
-
-t_argz		is_argument(char *line, int *i, size_t inst_type, t_argz argz)
-{
-	if (line[*i] == 'r')
-		argz = is_register(argz);
-	else if (line[*i] == DIRECT_CHAR)
-		argz = is_direct(argz, inst_type);
-	else
-		argz = is_indirect(argz);
-	if (line[*i] != LABEL_CHAR)
-		*i += 1;
-	if (line[*i] != '\0' && line[*i] != LABEL_CHAR)
-		argz = numeric_value(line, i, argz); // gesstion d'erreur??
-	else
-		argz = argz_is_label(line, i, argz);
-	if ((line[*i] == '\0' || line[*i] == COMMENT_CHAR || line[*i] == ALT_COMMENT_CHAR) && *i > 0)
-		*i -= 1;
-	return (argz);
-}
-
-t_instruct		*check_args(char *line, int *i, t_instruct *op, t_stack *stack)
-{
-	int			k;
-	t_argz		argz;
-	int			sep_char;
-	int			save;
-
-	k = 0;
-	sep_char = 0;
-	save = 0;
-	while (line[*i] != '\0' && line[*i] != COMMENT_CHAR && line[*i] != ALT_COMMENT_CHAR)
-	{
-		if (line[*i] != SEPARATOR_CHAR && line[*i] != ' ' && line[*i] != '\t' && line[*i] != '\0')
-		{
-			if (k > 0 && (k < g_op_tab[op->type - 1].arg_nb) && k > sep_char)
-				return (ft_error4("Missing separator_char before the argument", line + *i, stack->nb_lines, *i));
-			if (k > 0 && (k < g_op_tab[op->type - 1].arg_nb) && k < sep_char)
-				return (ft_error4("Too many separator_char before the argument", line + *i, stack->nb_lines, *i));
-			if (k >= g_op_tab[op->type - 1].arg_nb)
-				return (ft_error4("Too many arguments for the op_code", op->name, stack->nb_lines, *i));
-			argz = op->argz[k];
-			save = *i;
-			argz = is_argument(line, i, op->type, argz);
-			if (argz.value == -1 && argz.type == 0)
-				return (ft_error4("Wrong syntaxe for first argument of the op_code", op->name, stack->nb_lines, *i));
-			if (argz.type == T_REG && argz.value > REG_NUMBER)
-				return (ft_error3("A register number should be between 1 and 16", stack->nb_lines, *i));
-			if ((argz.type & g_op_tab[op->type - 1].arg_types[k]) != argz.type)
-				return (ft_error4("Wrong type of arguments for the op_code", op->name, stack->nb_lines, *i));
-			op->argz[k] = argz;
-			k++;
-		}
-		if (line[*i] == SEPARATOR_CHAR)
-			sep_char += 1;
-		*i += 1;
-	}
-	if (k < g_op_tab[op->type - 1].arg_nb)
-		return (ft_error2("Invalid parameter count for instruction", op->name));
-	return (op);
-}
-
-void	update_oct(t_instruct *op, int *cur_octet, int *i)
-{
-	int	k;
-
-	k = 0;
-	*cur_octet = *cur_octet + 1 + g_op_tab[op->type - 1].encoding_byte;
-	while (k < (int)op->nb_args)
-	{
-		*cur_octet = *cur_octet + op->argz[k].oct;
-		k++;
-	}
-	op->next = NULL;
-	if (*i > 0)
-		*i -= 1;
-}
-
-t_instruct		*is_instruct(char *line, int *i, int start, t_stack *stack)
-{
-	t_instruct	*op;
-	int			k;
-	int			w;
-
-	k = 0;
-	w = 0;
-	op = ft_memalloc(sizeof(t_instruct));
-	op->name = ft_memalloc(sizeof(char) * (*i - start)); 
-	op->name = ft_stricpy(op->name, line, start, *i);
-	op->type = find_opcode(op->name);
-	if (op->type == 0)
-	{
-		if (!ft_strcmp(op->name, NAME_CMD_STRING))
-			return (ft_error3("Can't have twice the definition of the champion's name", stack->nb_lines, start + 1));
-		if (!ft_strcmp(op->name, COMMENT_CMD_STRING))
-			return (ft_error3("Can't have twice the definition of the champion's comment", stack->nb_lines, start + 1));
-		return (ft_error4("Wrong syntaxe for the op_code", op->name, stack->nb_lines, start + 1));
-	}
-	op->nb_args = g_op_tab[op->type - 1].arg_nb;
-	op->oct = stack->cur_octet;
-	if (check_args(line, i, op, stack) == NULL)
-		return (NULL);
-	if (*i > 0 && (line[*i - 1] == COMMENT_CHAR || line[*i - 1] == ALT_COMMENT_CHAR))
-		return (op);
-	update_oct(op, &stack->cur_octet, i);
-	return (op);
-}
-
-t_label		*is_label(char *line, t_stack *stack, int s, int i)
-{
-	t_label		*label;
-	int			save;
-
-	label = malloc(sizeof(t_label));
+	i = 0;
+	label = ft_memalloc(sizeof(t_label));
+	if (label == NULL)
+		return(ft_error(LABEL_ALLOC, NULL));
 	label->oct = stack->cur_octet;
 	label->next = NULL;
-	save = s;
-	while (s < i)
+	while (token->name[i])
 	{
-		if (ft_strchr(LABEL_CHARS, (int)line[s]) == NULL)
-			return (ft_error3("Lexical error for a label", stack->nb_lines, s + 1));
-		s++;
+		if (ft_strchr(LABEL_CHARS, (int)token->name[i]) == NULL)
+		{
+			ft_memdel((void**)&label);
+			return (token_free(LABEL_ERROR, token));
+		}
+		i++;
 	}
-	label->name = ft_memalloc(sizeof(char) * s);
-	label->name = ft_stricpy(label->name, line, save, i);
+	label->name = ft_memalloc(sizeof(char) * i + 1);
+	label->name = ft_memcpy(label->name, token->name, i);
+	ft_memdel((void**)&token->name);
 	return (label);
 }
 
-int		is_label_list(char *line, t_stack *stack, int *i, int start)
+/*
+** If the lavel is valid (is_label) we add it to the list (stack->label_list->next)
+** Otherwise we free the two list we have created (op and labels).
+*/
+
+int		is_label_list(t_s *s, t_stack *stack, t_token *token)
 {
 	t_label		*label;
 
-	label = is_label(line, stack, start, *i);
+	label = is_label(stack, token);
 	if (label == NULL)
-		return (FALSE);
+		return ((int)free_op_lab(stack));
 	label->oct = stack->cur_octet;
 	if (stack->first_label == NULL && stack->label_list == NULL)
 	{
@@ -254,16 +67,21 @@ int		is_label_list(char *line, t_stack *stack, int *i, int start)
 		stack->label_list->next = label;
 		stack->label_list = stack->label_list->next;
 	}
-	return (*i);
+	return (s->i);
 }
 
-int		is_op(char *line, t_stack *stack, int *i, int start)
+/*
+** When we find a new op, we check if it is valid, if not we need to free the two chained lists
+** we have created. If not, we had the new op to the list (stack->op_list->next).
+*/
+
+int		is_op_list(t_s *s, t_stack *stack, t_token *token)
 {
 	t_instruct	*op;
 
-	op = is_instruct(line, i, start, stack);
+	op = is_op(s, stack, token);
 	if (op == NULL)
-		return (FALSE);
+		return ((int)free_op_lab(stack));
 	if (stack->op_list == NULL && stack->first_op == NULL)
 	{
 		stack->first_op = op;
@@ -277,49 +95,74 @@ int		is_op(char *line, t_stack *stack, int *i, int start)
 	return (TRUE);
 }
 
-int		is_label_or_op(char *line, t_stack *stack, int *i)
-{
-	int			start;
+/*
+** If we find a LABEL_CHAR, it corresponds to a label, otherwise to an op_code
+** When we read a line, we make sure that if we encounter [#] or [;] it is like being at
+** the end of a line.
+*/
 
-	start = *i;
-	while (line[*i] != '\0' && line[*i] != ' ' && line[*i] != '\t' && line[*i] != LABEL_CHAR && line[*i] != COMMENT_CHAR && line[*i] != ALT_COMMENT_CHAR)
-		*i += 1;
-	if (line[*i] == LABEL_CHAR)
-		return (is_label_list(line, stack, i, start));
-	else if (line[*i] == ' ' || line[*i] == '\t')
+int		is_label_or_op(t_s *s, t_stack *stack)
+{
+	t_token			token;
+	int			k;
+	char			*str;
+
+	init_token(&token);
+	fill_token(s, 42, &token);
+	str = s->line;
+	k = token.end;
+	s->i = k;
+	if (str[k] != '\0' && str[k] == LABEL_CHAR)
+		return (is_label_list(s, stack, &token));
+	else if (str[k] && (str[k] == ' ' || str[k] == '\t'
+		|| str[k] == DIRECT_CHAR))
 	{
-		if (is_op(line, stack, i, start) == FALSE)
-			return (FALSE);
+		if (is_op_list(s, stack, &token) == FALSE)
+			return ((int)just_free(token.name, NULL));
 	}
-	else if ((line[*i] == COMMENT_CHAR || line[*i] == ALT_COMMENT_CHAR) && *i > 0)
-		*i -= 1;
+	else if (str[k] && k > 0 && (str[k] == COMMENT_CHAR
+		|| str[k] == ALT_COMMENT_CHAR))
+		s->i -= 1;
+	else
+		return ((int)token_free(LEXICAL_ERROR, &token)); 
+	ft_memdel((void**)&token.name);
 	return (TRUE);
 }
 
-int		parsing_exec(t_stack *stack, int fd)
-{
-	char		*line;
-	int			i;
+/*
+** We enter parsing_exec once we have parsed and fill the header. Here we will
+** need a chained list of labels and of op, contained in [stack]
+** The first character we encounter can be a label or an op. We check wich one it is
+** in [is_label_or_op]. If it is a label, we will be out of the function after the [:] char
+** If it is an op_code, we are out of [is_label_or_op] once we have read the entire line
+** [s->i] keeps track of where we are at in the line.
+*/
 
-	i = 0;
+int		parsing_exec(t_stack *stack, int fd, t_s *s)
+{
+	s->i = 0;
 	stack->first_label = NULL;
 	stack->label_list = NULL;
 	stack->first_op = NULL;
 	stack->op_list = NULL;
-	while (get_next_line(fd, &line))
+	while (gnl(fd, &s->line))
 	{
-		i = 0;
-		stack->nb_lines += 1;
-		while (line[i] != '\0' && line[i] != COMMENT_CHAR && line[i] != ALT_COMMENT_CHAR)
+		s->i = 0;
+		s->l += 1;
+		while (diff(s->line[s->i], COMM))
 		{
-			if (line[i] != ' ' && line[i] != '\t' && line[i] != '\0')
-			{
-				if (is_label_or_op(line, stack, &i) == FALSE)
-					return (FALSE);
-			}
-			i++;
+			if (s->line[s->i] != '\0' && diff(s->line[s->i], SPACE))
+				if (is_label_or_op(s, stack) == FALSE)
+				{
+					free_op_lab(stack);
+					return ((int)just_free(s->line, NULL));
+				}
+			s->i += 1;
 		}
-		ft_memdel((void**)&line);
+		ft_memdel((void**)&s->line);
 	}
+	if (stack->first_op == NULL)
+		return ((int)ft_error(MISSING_CODE, NULL));
+	ft_memdel((void**)&s->line);
 	return (TRUE);
 }

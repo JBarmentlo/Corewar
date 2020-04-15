@@ -26,7 +26,6 @@ int			stock_file(t_champion *champ)
 	char	buf[SIZE_MAX_PROG + 1];
 	uint	min_header;
 
-	ret = 0;
 	ret = read(champ->fd, buf, SIZE_MAX_PROG);
 	buf[ret] = '\0';
 	min_header = sizeof(COREWAR_EXEC_MAGIC) + PROG_NAME_LENGTH + PADDING;
@@ -34,10 +33,10 @@ int			stock_file(t_champion *champ)
 	champ->header.prog_size = ret - min_header + 1;
 // dois je mettre le +1??
 	if ((uint)ret < min_header)
-		return (ft_error("The source file too small", NULL));
+		return ((int)ft_error("The source file too small", NULL));
 	ft_memcpy(champ->prog, buf, ret);
 	if ((ret = read(champ->fd, buf, 2)))
-		return (ft_error("The source file too big", NULL));
+		return ((int)ft_error("The source file too big", NULL));
 	return (TRUE);
 }
 
@@ -55,7 +54,6 @@ int32_t		string_to_int(t_champion *champ, int size, int i)
 
 	k = 0;
 	nb = 0;
-	n = 0;
 	while (k < size)
 	{
 		if (nb == 0)
@@ -85,21 +83,19 @@ int32_t		string_to_int(t_champion *champ, int size, int i)
 int			name_size_comment(t_champion *champ)
 {
 	int		i;
-	uint	nb;
+	uint		nb;
 	int		total_name;
 	int		total_comment;
-	int		size_header;
 
 	total_name = PROG_NAME_LENGTH + PADDING;
 	total_comment = COMMENT_LENGTH + PADDING;
 	i = sizeof(COREWAR_EXEC_MAGIC);
-	size_header = i + total_name + INFO_SIZE_CODE + total_comment;
 	ft_bzero(champ->header.prog_name, PROG_NAME_LENGTH + 1);
 	ft_bzero(champ->header.comment, COMMENT_LENGTH + 1);
 	ft_memcpy(champ->header.prog_name, champ->prog + i, total_name);
 	nb = string_to_int(champ, INFO_SIZE_CODE, i + total_name);
 	if (nb != champ->header.prog_size)
-		return (ft_error("Wrong instruction section size in header", NULL));
+		return ((int)ft_error("Wrong instruction section size in header", NULL));
 	i += total_name + INFO_SIZE_CODE;
 	ft_memcpy(champ->header.comment, champ->prog + i, total_comment);
 	return (TRUE);
@@ -120,7 +116,7 @@ int			pars_header(t_champion *champ)
 		return (FALSE);
 	nb = string_to_int(champ, sizeof(COREWAR_EXEC_MAGIC), 0);
 	if (nb != COREWAR_EXEC_MAGIC)
-		return (ft_error("The magic number isn't correct", NULL));
+		return ((int)ft_error("The magic number isn't correct", NULL));
 	else
 		champ->header.magic = nb;
 	if (name_size_comment(champ) == FALSE)

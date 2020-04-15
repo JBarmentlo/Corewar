@@ -78,7 +78,7 @@ COREWAR_SOURCE_FILES=cycle.c \
 	0x15_lfork.c \
 	0x16_aff.c \
 	debug.c \
-	end_free.c \
+	end_free.c 
 
 UTILS_SOURCE_FILES=endian_converter.c \
 	op.c \
@@ -88,17 +88,24 @@ UTILS_SOURCE_FILES=endian_converter.c \
 	mem_color.c
 
 ASM_SOURCE_FILES=main_asm.c \
+	gnl.c \
 	cor_file.c \
-	asm_utils.c \
-	op_code_utils.c \
+	header_content.c \
+	header_type.c \
 	parsing_exec.c \
-	print_tester.c \
-	parse_header.c
+	parsing_args.c \
+	token_utils.c \
+	op_utils.c \
+	arg_utils.c \
+	parsing_utils.c \
+	writing_utils.c \
+	asm_free.c 
 
-
-INCLUDES_FILES=arena.h \
+INCLUDES_FILES= utils.h\
 	op.h \
-	bitMasks.h \
+	asm.h \
+	arena.h \
+	bitMasks.h 
 
 RELINK_INCUDE=$(addprefix $(INCLUDE_FOLDER)/, $(INCLUDES_FILES))
 SRCS_UTILS=$(addprefix $(SRCS_UTILS_FOLDER)/, $(UTILS_SOURCE_FILES))
