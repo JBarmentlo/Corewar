@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   gnl.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,7 +12,7 @@
 
 #include "asm.h"
 
-char		*after_line(char *x, char *tab, int size)
+char	*after_line(char *x, char *tab, int size)
 {
 	char	*tmp;
 
@@ -35,8 +35,8 @@ char		*after_line(char *x, char *tab, int size)
 char	*strjoin_f(char const *s1, char const *s2, int l, int ret)
 {
 	char	*str;
-	int i;
-	int j;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;
@@ -70,7 +70,7 @@ char	*strjoin_f(char const *s1, char const *s2, int l, int ret)
 ** Then we remove the part sent in [line] from [gnl->tab] in [after_line].
 */
 
-int			content(t_fd *gnl, int fd, char **line)
+int		content(t_fd *gnl, int fd, char **line)
 {
 	int		ret;
 	char	*x;
@@ -103,11 +103,11 @@ int			content(t_fd *gnl, int fd, char **line)
 ** wwith the "\n" at the end, and it reads "\0" and stock them in [line]
 */
 
-int			gnl(int fd, char **line)
+int		gnl(int fd, char **line)
 {
-	int			ret;
+	int				ret;
 	t_list			buf[0];
-	static 	t_fd		*gnl = NULL;
+	static t_fd		*gnl = NULL;
 
 	if (read(fd, buf, 0) == -1)
 		return (-1);

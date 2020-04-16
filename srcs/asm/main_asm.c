@@ -18,7 +18,7 @@
 ** [out_file] will have the content, name and info on the .cor file
 */
 
-int	fill_out_file(char *source_file, t_file *out_file, int fd)
+int		fill_out_file(char *source_file, t_file *out_file, int fd)
 {
 	out_file->fd = 0;
 	out_file->name = NULL;
@@ -33,10 +33,10 @@ int	fill_out_file(char *source_file, t_file *out_file, int fd)
 	return (TRUE);
 }
 
-int	main(int ac, char **av)
+int		main(int ac, char **av)
 {
 	int		fd;
-	t_file		out_file;
+	t_file	out_file;
 
 	if (ac == 0)
 		return ((int)ft_error(NO_ARGS, NULL));
@@ -49,11 +49,12 @@ int	main(int ac, char **av)
 		return ((int)ft_error(OPEN_FAIL, av[1]));
 	if (fill_out_file(av[1], &out_file, fd) == FALSE)
 		return (FALSE);
-	return (TRUE);	
+	return (TRUE);
 }
 
 /*
-__attribute__((destructor)) void test()
-{
-	while(1);
-}*/
+**__attribute__((destructor)) void test()
+**{
+**while(1);
+**}
+*/

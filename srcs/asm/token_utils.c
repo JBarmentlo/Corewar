@@ -1,4 +1,16 @@
-# include "asm.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/03/09 13:23:19 by dberger           #+#    #+#             */
+/*   Updated: 2020/03/09 16:09:25 by dberger          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "asm.h"
 
 /*
 ** The last token takes the info of the current token, and the current token
@@ -34,14 +46,15 @@ void	init_token(t_token *token)
 
 /*
 ** Here we free the token to then update it. it corresponds to the characters
-** we are currently reading (s->i) until we find a space or tab, or comment, or end of file
-** The option "42" is a special one for labels or direct arguments (we don't want the
-** token to contain the LABEL_CHAR of the DIRECT_CHAR.
+** we are currently reading (s->i) until we find a space or tab, or comment,
+** or end of file The option "42" is a special one for labels or direct
+** arguments (we don't want the token to contain the LABEL_CHAR of the
+** DIRECT_CHAR).
 */
 
-int	fill_token(t_s *s, int op_type, t_token *token)
+int		fill_token(t_s *s, int op_type, t_token *token)
 {
-	int 	save;
+	int	save;
 
 	save = s->i;
 	if (token->name != NULL)
@@ -51,7 +64,7 @@ int	fill_token(t_s *s, int op_type, t_token *token)
 	{
 		if (op_type == 42
 		&& (s->line[save] == LABEL_CHAR || s->line[save] == DIRECT_CHAR))
-			break;
+			break ;
 		save++;
 	}
 	token->name = ft_memalloc(sizeof(char *) * (save - s->i + 1));

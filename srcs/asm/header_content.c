@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_header.c                                     :+:      :+:    :+:   */
+/*   header_content.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -19,7 +19,6 @@
 
 int		check_after_quote(t_s *s, t_token *token)
 {
-
 	s->i += 1;
 	while (diff(s->line[s->i], COMM))
 	{
@@ -36,7 +35,7 @@ int		check_after_quote(t_s *s, t_token *token)
 
 int		fill_empty_line(t_s *s, int fd)
 {
-	int	ret;
+	int		ret;
 	t_token	token;
 
 	token.name = NULL;
@@ -56,7 +55,7 @@ int		fill_empty_line(t_s *s, int fd)
 ** there is any character left to read.
 */
 
-int	check_empty_line(t_s *s, char **tmp, int fd)
+int		check_empty_line(t_s *s, char **tmp, int fd)
 {
 	if (s->line[s->i] == '\0')
 	{
@@ -80,7 +79,7 @@ int	check_empty_line(t_s *s, char **tmp, int fd)
 char	*get_header_content(int fd, t_s *s, int *type)
 {
 	char	*tmp;
-	int	j;
+	int		j;
 	t_token	token;
 
 	j = 0;
@@ -115,11 +114,11 @@ char	*get_header_content(int fd, t_s *s, int *type)
 ** established in [op.h]: PROG_NAME_LENGTH or COMMENT_LENGTH.
 */
 
-int     header_content(t_stack *stack, int fd, t_s *s)
+int		header_content(t_stack *stack, int fd, t_s *s)
 {
-	int     type;
 	char	*tmp;
-	int	save;
+	int		type;
+	int		save;
 	t_token token;
 
 	s->i = 0;

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_header.c                                     :+:      :+:    :+:   */
+/*   header_type.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -17,7 +17,7 @@
 ** make sure it doesn't exceed the required size.
 */
 
-int	fill_name_com(int type, char *tmp, t_stack *stack, t_token *token)
+int		fill_name_com(int type, char *tmp, t_stack *stack, t_token *token)
 {
 	if (type == 'n')
 	{
@@ -40,7 +40,7 @@ int	fill_name_com(int type, char *tmp, t_stack *stack, t_token *token)
 ** command
 */
 
-int	is_valid_command_start(t_s *s, int *type, t_token *token)
+int		is_valid_command_start(t_s *s, int *type, t_token *token)
 {
 	fill_token(s, 0, token);
 	if (*type == 'n')
@@ -63,7 +63,7 @@ int	is_valid_command_start(t_s *s, int *type, t_token *token)
 ** spaces or a quote.
 */
 
-int	is_valid_command_end(t_s *s, int *type, t_token *token)
+int		is_valid_command_end(t_s *s, int *type, t_token *token)
 {
 	fill_token(s, 0, token);
 	s->i += (*type == 'n' ? 5 : 8);
@@ -84,12 +84,12 @@ int	is_valid_command_end(t_s *s, int *type, t_token *token)
 ** We read the .s file line by line, and stock the characters in [s->line]
 ** A command can only be [.name] or [.comment]
 ** The token help us print the error if there is one. If [is_valid_start]
-** is true it means the begining of the command is correct, and in [is_valid_end]
-** we check if the characters comming after a command like [.name] are only spaces
-** or a quote.
+** is true it means the begining of the command is correct, and in
+** [is_valid_end] we check if the characters comming after a command
+** like [.name] are only spaces or a quote.
 */
 
-int     get_command_type(int fd, t_s *s, int *type, t_token *token)
+int		get_command_type(int fd, t_s *s, int *type, t_token *token)
 {
 	while (gnl(fd, &s->line) && s->line != NULL)
 	{
@@ -112,9 +112,8 @@ int     get_command_type(int fd, t_s *s, int *type, t_token *token)
 	if (s->line == NULL && (token->line += 1))
 		return ((int)token_free(INCOMPLETE, token));
 	*type = s->line[s->i + 1];
-	if (is_valid_command_start(s, type, token) == FALSE)
-		return (FALSE);
-	if (is_valid_command_end(s, type, token) == FALSE)
+	if (is_valid_command_start(s, type, token) == FALSE
+		|| is_valid_command_end(s, type, token) == FALSE)
 		return (FALSE);
 	return (TRUE);
 }

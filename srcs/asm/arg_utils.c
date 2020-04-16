@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   arg_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/17 15:29:26 by ncoursol          #+#    #+#             */
+/*   Updated: 2020/03/09 16:05:13 by dberger          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "asm.h"
 
 /*
@@ -54,9 +66,9 @@ void	*argz_is_label(t_s *s, t_argz *argz)
 	while (diff(s->line[s->i], SPACE_COMM) && s->line[s->i] != SEPARATOR_CHAR)
 		s->i += 1;
 	if (s->i - save == FALSE)
-		return(ft_error_nb(LABEL_ERROR, NULL, s->l, s->i));
+		return (ft_error_nb(LABEL_ERROR, NULL, s->l, s->i));
 	if (!(argz->lab = ft_memalloc(sizeof(char) * s->i - save)))
-		return(ft_error(MALLOC_FAIL, NULL));
+		return (ft_error(MALLOC_FAIL, NULL));
 	argz->lab = ft_stricpy(argz->lab, s->line, save, s->i);
 	while (save < s->i)
 	{
@@ -95,9 +107,8 @@ void	*is_argument(t_s *s, size_t inst_type, t_argz *argz, int *sep_char)
 		ft_atolong(s, argz);
 		argz->lab = NULL;
 	}
-	else
-		if (argz_is_label(s,argz) == NULL)
-			return (just_free(argz->lab, NULL));
+	else if (argz_is_label(s, argz) == NULL)
+		return (just_free(argz->lab, NULL));
 	if ((diff(s->line[s->i], COMM) == FALSE) && s->i > 0)
 		s->i -= 1;
 	if (s->line[s->i] == SEPARATOR_CHAR)

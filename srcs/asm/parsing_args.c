@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_header.c                                     :+:      :+:    :+:   */
+/*   parsing_args.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -18,7 +18,7 @@ void	update_sep(int *sep_char, int *indx_sep, int i)
 	{
 		*sep_char = 0;
 		*indx_sep = 0;
-	}	
+	}
 	else
 	{
 		*sep_char += 1;
@@ -28,10 +28,11 @@ void	update_sep(int *sep_char, int *indx_sep, int i)
 
 /*
 ** Here we check if each argument is separated by only one separator_char and
-** if the value and amount of arguments  is correct (direct, indirect or register)
+** if the value and amount of arguments  is correct (direct, indirect
+** or register)
 */
 
-int	get_arg(t_token *token, t_s *s, t_instruct *op, int *info)
+int		get_arg(t_token *token, t_s *s, t_instruct *op, int *info)
 {
 	t_argz argz;
 
@@ -42,7 +43,7 @@ int	get_arg(t_token *token, t_s *s, t_instruct *op, int *info)
 	{
 		op->argz[info[ARG_N]] = argz;
 		op->next = NULL;
-		return(FALSE);
+		return (FALSE);
 	}
 	op->argz[info[ARG_N]] = argz;
 	op->next = NULL;
@@ -50,33 +51,36 @@ int	get_arg(t_token *token, t_s *s, t_instruct *op, int *info)
 }
 
 /*
-** In final check we have already read all the line: we need to check if there is sufficient
-** arguments (by comparing info[ARG_N] to the number of args necessary according to op.c
-** Then we check if there is not too many separator char after the last argument
+** In final check we have already read all the line: we need to check if there
+** is sufficient arguments (by comparing info[ARG_N] to the number of args
+** necessary according to op.c. Then we check if there is not too many separator
+** char after the last argument
 */
 
-int	final_check(t_token *token, t_token *last_token, int *info, t_instruct *op)
+int		final_check(t_token *token, t_token *last_t, int *info, t_instruct *op)
 {
 	if (info[ARG_N] < g_op_tab[op->type - 1].arg_nb)
 		return ((int)token_free(MISSING_ARG, token));
-	if (check_sep(info, last_token) == FALSE)
-		return(FALSE);
-	just_free(token->name, last_token->name);
+	if (check_sep(info, last_t) == FALSE)
+		return (FALSE);
+	just_free(token->name, last_t->name);
 	return (TRUE);
 }
 
 /*
-** The function [diff(char c, COMM)] check if we don't encounter "\0", "\n", "#" or ";"
-** The function [diff(char c, SPACE)] check if we don't encounter " " or "\t".
-** In [info] we have the number of arguments we have found [ARG_N], the number of SEPARATOR_CHAR
+** [diff(char c, COMM)] checks if we don't encounter "\0", "\n", "#" or ";"
+** [diff(char c, SPACE)] checks if we don't encounter " " or "\t".
+** In [info] we have the number of arguments we have found [ARG_N],
+** the number of SEPARATOR_CHAR
 ** in [info[SEP]] and the index where is this separator_char in info[INDX].
-** We need two token: the current one and the last one, to have error message more understandable.
+** We need two token: the current one and the last one, to have error message
+** more understandable.
 */
 
-int	read_line(t_s *s, t_instruct *op, t_token *t, t_token *last_t)
+int		read_line(t_s *s, t_instruct *op, t_token *t, t_token *last_t)
 {
 	int		info[3];
-	
+
 	info[ARG_N] = 0;
 	update_sep(&info[SEP], &info[INDX], INIT);
 	while (diff(s->line[s->i], COMM) == TRUE)
@@ -86,13 +90,13 @@ int	read_line(t_s *s, t_instruct *op, t_token *t, t_token *last_t)
 			if (s->line[s->i] != SEPARATOR_CHAR)
 			{
 				if (get_arg(t, s, op, info) == FALSE)
-					return(FALSE);
+					return (FALSE);
 				save_token(t, last_t, g_op_tab[op->type - 1].name, s);
 				if (!(check_value(op->argz[info[ARG_N]], info[ARG_N], t, last_t)))
-					return(FALSE);
+					return (FALSE);
 				if (s->line[s->i] != SEPARATOR_CHAR)
 					if (!(check_value(op->argz[info[ARG_N]], info[ARG_N], t, last_t)))
-						return(FALSE);
+						return (FALSE);
 				info[ARG_N] += 1;
 			}
 			else
@@ -110,7 +114,7 @@ int	read_line(t_s *s, t_instruct *op, t_token *t, t_token *last_t)
 ** instruction ends with a "\n" (END_INPUT).
 */
 
-int	parsing_args(t_s *s, t_instruct *op)
+int		parsing_args(t_s *s, t_instruct *op)
 {
 	t_token		token;
 	t_token		last_token;

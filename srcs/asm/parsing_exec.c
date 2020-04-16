@@ -20,13 +20,13 @@
 
 t_label		*is_label(t_stack *stack, t_token *token)
 {
-	t_label			*label;
+	t_label		*label;
 	int			i;
 
 	i = 0;
 	label = ft_memalloc(sizeof(t_label));
 	if (label == NULL)
-		return(ft_error(LABEL_ALLOC, NULL));
+		return (ft_error(LABEL_ALLOC, NULL));
 	label->oct = stack->cur_octet;
 	label->next = NULL;
 	while (token->name[i])
@@ -45,11 +45,11 @@ t_label		*is_label(t_stack *stack, t_token *token)
 }
 
 /*
-** If the lavel is valid (is_label) we add it to the list (stack->label_list->next)
+** If the lavel is valid (is_label) we add it to the list.
 ** Otherwise we free the two list we have created (op and labels).
 */
 
-int		is_label_list(t_s *s, t_stack *stack, t_token *token)
+int			is_label_list(t_s *s, t_stack *stack, t_token *token)
 {
 	t_label		*label;
 
@@ -71,11 +71,12 @@ int		is_label_list(t_s *s, t_stack *stack, t_token *token)
 }
 
 /*
-** When we find a new op, we check if it is valid, if not we need to free the two chained lists
-** we have created. If not, we had the new op to the list (stack->op_list->next).
+** When we find a new op, we check if it is valid, if not we need to free
+** the two chained lists we have created. If not, we had the new op to
+** the list (stack->op_list->next).
 */
 
-int		is_op_list(t_s *s, t_stack *stack, t_token *token)
+int			is_op_list(t_s *s, t_stack *stack, t_token *token)
 {
 	t_instruct	*op;
 
@@ -97,14 +98,14 @@ int		is_op_list(t_s *s, t_stack *stack, t_token *token)
 
 /*
 ** If we find a LABEL_CHAR, it corresponds to a label, otherwise to an op_code
-** When we read a line, we make sure that if we encounter [#] or [;] it is like being at
-** the end of a line.
+** When we read a line, we make sure that if we encounter [#] or [;] it is like
+** being at the end of a line.
 */
 
-int		is_label_or_op(t_s *s, t_stack *stack)
+int			is_label_or_op(t_s *s, t_stack *stack)
 {
 	t_token			token;
-	int			k;
+	int				k;
 	char			*str;
 
 	init_token(&token);
@@ -124,7 +125,7 @@ int		is_label_or_op(t_s *s, t_stack *stack)
 		|| str[k] == ALT_COMMENT_CHAR))
 		s->i -= 1;
 	else
-		return ((int)token_free(LEXICAL_ERROR, &token)); 
+		return ((int)token_free(LEXICAL_ERROR, &token));
 	ft_memdel((void**)&token.name);
 	return (TRUE);
 }
@@ -132,13 +133,14 @@ int		is_label_or_op(t_s *s, t_stack *stack)
 /*
 ** We enter parsing_exec once we have parsed and fill the header. Here we will
 ** need a chained list of labels and of op, contained in [stack]
-** The first character we encounter can be a label or an op. We check wich one it is
-** in [is_label_or_op]. If it is a label, we will be out of the function after the [:] char
-** If it is an op_code, we are out of [is_label_or_op] once we have read the entire line
-** [s->i] keeps track of where we are at in the line.
+** The first character we encounter can be a label or an op. We check wich one
+** it is in [is_label_or_op]. If it is a label, we will be out of the function
+** after the [:] char. If it is an op_code, we are out of [is_label_or_op] once
+** we have read the entire line [s->i] keeps track of where we are at
+** in the line.
 */
 
-int		parsing_exec(t_stack *stack, int fd, t_s *s)
+int			parsing_exec(t_stack *stack, int fd, t_s *s)
 {
 	s->i = 0;
 	stack->first_label = NULL;

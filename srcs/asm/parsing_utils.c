@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_header.c                                     :+:      :+:    :+:   */
+/*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -19,7 +19,7 @@
 ** [k] is the number of arguments we have found.
 */
 
-int	check_value(t_argz argz, int k, t_token *token, t_token *last_token)
+int		check_value(t_argz argz, int k, t_token *token, t_token *last_token)
 {
 	int	t;
 
@@ -35,8 +35,8 @@ int	check_value(t_argz argz, int k, t_token *token, t_token *last_token)
 }
 
 /*
-** An op_code should be followed by it's argument, each of them separated by only
-** one SEPARATOR_CHAR. info[ARG_N] is the number of argument we are dealing with.
+** An op_code should be followed by it's argument, each of them separated by
+** only one SEP_CHAR. info[ARG_N] is the number of argument we are dealing with.
 */
 
 int		check_sep(int *info, t_token *token)
@@ -61,17 +61,18 @@ int		check_sep(int *info, t_token *token)
 }
 
 /*
-** We often need to check if we encounter space, tabs, comment, "\n" or "\0" while
-** reading a line.
+** We often need to check if we encounter space, tabs, comment, "\n" or "\0"
+** while reading a line.
 */
 
-int	diff(char c, int mode)
+int		diff(char c, int mode)
 {
 	if (mode == SPACE)
 		if (c != ' ' && c != '\t')
 			return (TRUE);
 	if (mode == COMM)
-		if (c != '\0' && c != COMMENT_CHAR && c != ALT_COMMENT_CHAR && c != '\n')
+		if (c != '\0' && c != COMMENT_CHAR
+		&& c != ALT_COMMENT_CHAR && c != '\n')
 			return (TRUE);
 	if (mode == SPACE_COMM)
 		if (c != '\0' && c != COMMENT_CHAR && c != ALT_COMMENT_CHAR && c != '\n'
@@ -102,15 +103,17 @@ int		find_opcode(char *string)
 }
 
 /*
-** Find_label is used at the end: when an argument is a "call to label" we need to check if this
-** label exists or not. If it does we return the octet [oct_lab] of the label we found so
-** we can write in our file the difference between the current op_code and this label's oct.
-** If not, then it means this label doesn't exist in our chained list.
+** Find_label is used at the end: when an argument is a "call to label" we need
+** to check if this label exists or not.
+** If it does we return the octet [oct_lab] of the label we found so we can
+** write in our file the difference between the current op_code and this
+** label's oct. If not, then it means this label doesn't exist in our
+** chained list.
 */
 
 int		find_label(t_argz argz, t_label *label)
 {
-	int		oct_lab;
+	int			oct_lab;
 	t_token		token;
 	char		*to_find;
 

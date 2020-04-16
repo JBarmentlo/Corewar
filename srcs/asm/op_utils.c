@@ -1,4 +1,16 @@
-# include "asm.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   op_utils.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/17 15:29:26 by ncoursol          #+#    #+#             */
+/*   Updated: 2020/03/09 16:05:13 by dberger          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "asm.h"
 
 /*
 ** On octet is on 4 bits. if the arguments are a register, a direct and
@@ -6,7 +18,7 @@
 ** which is in decimal: 27 (the number we need to write on this octet).
 */
 
-int		encoding_byte(t_instruct *op)
+int			encoding_byte(t_instruct *op)
 {
 	int			i;
 	size_t		k;
@@ -28,7 +40,7 @@ int		encoding_byte(t_instruct *op)
 	return (i);
 }
 
-int		big_number(t_s *s, t_argz *argz, char *str)
+int			big_number(t_s *s, t_argz *argz, char *str)
 {
 	argz->value = 4294967295;
 	while (ft_isdigit((long)str[s->i]) && diff(str[s->i], SPACE_COMM))
@@ -43,7 +55,7 @@ int		big_number(t_s *s, t_argz *argz, char *str)
 ** the behavior of the zaz_vm (the number becomes automatically 0xffff)
 */
 
-int		ft_atolong(t_s *s, t_argz *argz)
+int			ft_atolong(t_s *s, t_argz *argz)
 {
 	long	neg;
 	long	nb;
@@ -78,7 +90,7 @@ int		ft_atolong(t_s *s, t_argz *argz)
 ** (it can be 1, 2 or 4 according to their types).
 */
 
-void	update_oct(t_instruct *op, int *cur_octet, t_s *s)
+void		update_oct(t_instruct *op, int *cur_octet, t_s *s)
 {
 	int	k;
 
@@ -102,7 +114,7 @@ void	update_oct(t_instruct *op, int *cur_octet, t_s *s)
 ** if we were writing this in the final .cor file
 */
 
-t_instruct		*is_op(t_s *s, t_stack *stack, t_token *token)
+t_instruct	*is_op(t_s *s, t_stack *stack, t_token *token)
 {
 	t_instruct	*op;
 
