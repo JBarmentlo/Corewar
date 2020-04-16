@@ -91,7 +91,6 @@ char		*ft_changechar(char *fix)
 	int		i;
 
 	i = 0;
-	c = fix[0];
 	if ((fix[0] != '-' && fix[0] == '0' && fix[1] != '\0')
 			|| (fix[0] == '-' && fix[1] == '0' && fix[2] != '\0'))
 	{
@@ -111,14 +110,12 @@ char		*ft_changechar(char *fix)
 
 t_printf	ft_ftoa(t_printf save, int *j, char *fix, char *nb)
 {
-	int		i;
 	int		p;
 	int		f;
 	int		l;
 
 	l = ft_strlen_l(fix);
 	p = save.pre;
-	i = 0;
 	f = save.flags;
 	fix = ft_changechar(fix);
 	if ((f & F_MINUS) || (save.p == 1) || !(save.width))

@@ -17,9 +17,7 @@ t_printf	ft_print_float(t_printf save, int *j, char *fix, char *nb)
 	int		i;
 	int		p;
 	int		f;
-	int		l;
 
-	l = ft_strlen_l(fix);
 	p = save.pre;
 	i = 0;
 	f = save.flags;

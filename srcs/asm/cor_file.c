@@ -27,7 +27,7 @@ int		init_file(t_file *out_file, char *source_file)
 		return ((int)ft_error(WRONG_SOURCE, NULL));
 	if (!(out_file->name = ft_memalloc(sizeof(char) * (l + 2))))
 		return ((int)ft_error(MALLOC_FAIL, NULL));
-	if (!(out_file->content = ft_memalloc(sizeof(char) * MAX_SIZE_FILE)))
+	if (!(out_file->content = ft_memalloc(sizeof(char) * SIZE_MAX_PROG)))
 		return ((int)ft_error(MALLOC_FAIL, NULL));
 	out_file->name = ft_memcpy(out_file->name, source_file, l - 1); 
 	out_file->name = ft_stricat(out_file->name, "cor", l - 1); 
@@ -79,6 +79,7 @@ int		parsing_header(t_stack *stack, int fd, t_s *s)
 
 void		fill_header(t_file *out_file, t_stack *stack)
 {
+	int	ts;
 	int	magic;
 	char	*name;
 	char	*comm;
@@ -87,12 +88,14 @@ void		fill_header(t_file *out_file, t_stack *stack)
 	name = stack->champion_name;
 	comm = stack->comment;
 	nb_to_binary(out_file, sizeof(magic), out_file->total_size, magic);
-	copy_string(out_file->content, name,  PROG_NAME_LENGTH, &(out_file->total_size));
-	copy_string(out_file->content, EMPTY,  PADDING, &(out_file->total_size));
-	out_file->prog_size = out_file->total_size;
-	copy_string(out_file->content, EMPTY,  INFO_PROG, &(out_file->total_size));
-	copy_string(out_file->content, comm,  COMMENT_LENGTH, &(out_file->total_size));
-	copy_string(out_file->content, EMPTY,  PADDING, &(out_file->total_size));
+	ts = out_file->total_size;
+	copy_string(out_file->content, name,  PROG_NAME_LENGTH, &ts);
+	copy_string(out_file->content, EMPTY,  PADDING, &ts);
+	out_file->prog_size = ts;
+	copy_string(out_file->content, EMPTY,  INFO_PROG, &ts);
+	copy_string(out_file->content, comm,  COMMENT_LENGTH, &ts);
+	copy_string(out_file->content, EMPTY,  PADDING, &ts);
+	out_file->total_size = ts;
 	ft_memdel((void**)&stack->champion_name);
 	ft_memdel((void**)&stack->comment);
 }

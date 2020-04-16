@@ -76,9 +76,7 @@ t_printf	ft_num(t_printf save, long s, long type, int *j)
 t_printf	ft_ltoa(t_printf save, int *j, long type)
 {
 	long	s;
-	long	ten;
 
-	ten = 0;
 	s = ft_sizenb_l(type);
 	if ((save.modif & M_H))
 		s = ft_sizenb_l(type);

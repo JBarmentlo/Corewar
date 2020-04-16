@@ -19,8 +19,8 @@ void	*free_label(t_label *label)
 }
 
 /*
-** Before freeing an op, we need to free the "call to label" that could
-** contain one of it's arguments (argz.lab);
+** Before freeing an op, we need to free the "call to label" that
+** could contain one of it's arguments (argz.lab);
 */
 
 void	*free_op(t_instruct *op)
@@ -47,8 +47,8 @@ void	*free_op(t_instruct *op)
 }
 
 /*
-** While parsing the file .s, we create a chained list of labels, and of op_codes
-** We need to free them and their content.
+** While parsing the file .s, we create a chained list of labels,
+** and of op_codes. We need to free them and their content.
 */
 
 void	*free_op_lab(t_stack *stack)
@@ -91,8 +91,8 @@ void	*token_free(char *str, t_token *token)
 }
 
 /*
-** This is a helpful function to return (NULL) in a function and free what is
-** needed at the same time.
+** This is a helpful function to return (NULL) in a function and free
+** what is needed at the same time.
 */
 
 void	*just_free(void *to_free1, void *to_free2)

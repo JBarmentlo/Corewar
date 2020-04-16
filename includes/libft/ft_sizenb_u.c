@@ -24,5 +24,5 @@ unsigned long	ft_sizenb_u(unsigned long n)
 		n = n / 10;
 		i++;
 	}
-	return (i++);
+	return (i + 1);
 }

@@ -18,7 +18,6 @@ t_printf	ft_print_col(t_printf save, int *j, char *col)
 	int		cmpt;
 
 	i = 0;
-	cmpt = 0;
 	while (i < *j)
 	{
 		write(1, &save.buf[i], 1);
