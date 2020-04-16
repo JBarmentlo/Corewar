@@ -35,7 +35,6 @@ t_printf	ft_print_infnan(t_printf save, int *j, char *str)
 	int		f;
 
 	f = save.flags;
-	i = 0;
 	save = ft_begin_inf(save, j, &str);
 	if ((str[0] == 'i') && (f & F_SPACE) && (f & F_MINUS) && (save.width))
 	{

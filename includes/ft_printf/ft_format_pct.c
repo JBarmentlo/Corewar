@@ -16,7 +16,6 @@ t_printf		ft_format_pct(t_printf save, int *j)
 {
 	int		w;
 
-	w = 0;
 	if (save.width > 0)
 	{
 		w = save.width - 1;

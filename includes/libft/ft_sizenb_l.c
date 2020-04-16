@@ -31,5 +31,5 @@ long	ft_sizenb_l(long n)
 		nb = nb / 10;
 		i++;
 	}
-	return (i++);
+	return (i + 1);
 }

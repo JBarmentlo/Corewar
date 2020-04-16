@@ -81,10 +81,8 @@ void		ft_del(t_list *link, t_list **begin)
 {
 	t_list	*tmp;
 	t_list	*prev;
-	int		i;
 
 	prev = 0;
-	i = 0;
 	tmp = *begin;
 	while (tmp && tmp != link)
 	{

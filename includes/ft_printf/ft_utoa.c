@@ -55,9 +55,7 @@ t_printf	ft_num_u(t_printf save, unsigned long s, unsigned long type, int *j)
 t_printf	ft_utoa(t_printf save, int *j, unsigned long type)
 {
 	unsigned long	s;
-	unsigned long	ten;
 
-	ten = 0;
 	s = ft_sizenb_u(type);
 	if ((save.modif & M_H))
 		s = ft_sizenb_u(type);
