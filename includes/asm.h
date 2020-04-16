@@ -204,62 +204,63 @@ int							parsing_args(t_s *s, t_instruct *op);
 ** parsing_utils
 */
 
-int						check_value(t_argz argz, int k, t_token *token,
-						t_token *last_token);
-int						check_sep(int *info, t_token *token);
-int						diff(char c, int mode);
-int						find_opcode(char *string);
-int						find_label(t_argz argz, t_label *label);
+int							check_value(t_argz argz, int k, t_token *token,
+							t_token *last_token);
+int							check_sep(int *info, t_token *token);
+int							diff(char c, int mode);
+int							find_opcode(char *string);
+int							find_label(t_argz argz, t_label *label);
 
 /*
 ** token_utils
 */
 
-void					save_token(t_token *token, t_token *last_token,
-						char *str_op, t_s *s);
-void					init_token(t_token *token);
-int						fill_token(t_s *s, int op_type, t_token *token);
+void						save_token(t_token *token, t_token *last_token,
+							char *str_op, t_s *s);
+void						init_token(t_token *token);
+int							fill_token(t_s *s, int op_type, t_token *token);
 
 /*
 ** op_utils
 */
 
-int						encoding_byte(t_instruct *op);
-int						ft_atolong(t_s *s, t_argz *argz);
-void					update_oct(t_instruct *op, int *cur_octet, t_s *s);
-t_instruct				*is_op(t_s *s, t_stack *stack, t_token *token);
+int							encoding_byte(t_instruct *op);
+int							ft_atolong(t_s *s, t_argz *argz);
+void						update_oct(t_instruct *op, int *cur_octet, t_s *s);
+t_instruct					*is_op(t_s *s, t_stack *stack, t_token *token);
 
 /*
 ** arg_utils
 */
 
-void					is_register(t_argz *argz);
-void					is_direct(t_argz *argz, size_t inst_type);
-void					is_indirect(t_argz *argz);
-void					*argz_is_label(t_s *s, t_argz *argz);
-void					*is_argument(t_s *s, size_t inst_type, t_argz *argz,
-						int *sep_char);
+void						is_register(t_argz *argz);
+void						is_direct(t_argz *argz, size_t inst_type);
+void						is_indirect(t_argz *argz);
+void						*argz_is_label(t_s *s, t_argz *argz);
+void						*is_argument(t_s *s, size_t inst_type, t_argz *argz,
+							int *sep_char);
 
 /*
 ** writing_utils
 */
 
-void					write_in_file(t_file *out_file, int indx, int n);
-void					copy_string(char *dest, char *src, int size, int *indx);
-long					count_bits(long nb);
-int						nb_to_binary(t_file *out_file, int octets, int indx,
-						long nb);
-int						write_op_values(t_file *out_file, int *i,
-						t_instruct *op, t_stack stack);
+void						write_in_file(t_file *out_file, int indx, int n);
+void						copy_string(char *dest, char *src, int size,
+							int *indx);
+long						count_bits(long nb);
+int							nb_to_binary(t_file *out_file, int octets, int indx,
+							long nb);
+int							write_op_values(t_file *out_file, int *i,
+							t_instruct *op, t_stack stack);
 
 /*
 ** asm_free
 */
 
-void					*free_label(t_label *label);
-void					*free_op(t_instruct *op);
-void					*free_op_lab(t_stack *stack);
-void					*token_free(char *str, t_token *token);
-void					*just_free(void *to_free1, void *to_free2);
+void						*free_label(t_label *label);
+void						*free_op(t_instruct *op);
+void						*free_op_lab(t_stack *stack);
+void						*token_free(char *str, t_token *token);
+void						*just_free(void *to_free1, void *to_free2);
 
 #endif
