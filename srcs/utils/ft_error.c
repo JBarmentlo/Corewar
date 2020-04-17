@@ -12,15 +12,6 @@
 
 #include "utils.h"
 
-void	*ft_error_nb(char *str, char *str2, int line, int col)
-{
-	if (str2 == NULL)
-		ft_printf("Error [%d:%d]: %s\n", line, col, str);
-	else
-		ft_printf("Error [%d:%d]: %s: [%s]\n", line, col, str, str2);
-	return (NULL);
-}
-
 void	*ft_error(char *str, char *str2)
 {
 	if (str2 == NULL)

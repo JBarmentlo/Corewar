@@ -58,15 +58,19 @@ void	is_indirect(t_argz *argz)
 void	*argz_is_label(t_s *s, t_argz *argz)
 {
 	int		save;
+	t_token		token;
 
 	s->i += 1;
 	save = s->i;
 	argz->line = s->l;
 	argz->col = save;
+	token.name = NULL;
 	while (diff(s->line[s->i], SPACE_COMM) && s->line[s->i] != SEPARATOR_CHAR)
 		s->i += 1;
+	token.line = s->l;
+	token.col = s->i;
 	if (s->i - save == FALSE)
-		return (ft_error_nb(LABEL_ERROR, NULL, s->l, s->i));
+		return (token_free(LABEL_ERROR, &token));
 	if (!(argz->lab = ft_memalloc(sizeof(char) * s->i - save)))
 		return (ft_error(MALLOC_FAIL, NULL));
 	argz->lab = ft_stricpy(argz->lab, s->line, save, s->i);
@@ -75,7 +79,8 @@ void	*argz_is_label(t_s *s, t_argz *argz)
 		if (ft_strchr(LABEL_CHARS, (int)s->line[save]) == NULL)
 		{
 			ft_memdel((void**)&argz->lab);
-			return (ft_error_nb(LABEL_ERROR, NULL, s->l, save + 1));
+			token.col = save + 1;
+			return (token_free(LABEL_ERROR, &token));
 		}
 		save++;
 	}

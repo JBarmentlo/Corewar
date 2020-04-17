@@ -36,6 +36,5 @@ extern	t_op			g_op_tab[17];
 
 int				usage(int prog);
 void				*ft_error(char *str, char *str2);
-void				*ft_error_nb(char *str, char *str2, int line, int col);
 
 #endif
