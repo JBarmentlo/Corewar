@@ -14,45 +14,56 @@
 #include "ft_printf.h"
 #include <limits.h>
 #include <float.h>
+#include <stdio.h>
 
-t_printf	ft_format(char c, t_printf save, va_list ap, int *j)
+t_printf	ft_print(t_printf save, int *j, char *str, int i)
 {
-	if (c == 'c' || c == 's' || c == 'p')
-		save = ft_format_csp(save, ap, j, c);
-	else if (c == 'd' || c == 'i')
-		save = ft_format_di(save, ap, j);
-	else if (c == 'x' || c == 'X')
-		save = ft_format_xx(save, ap, j, c);
-	else if (c == 'f' || c == 'F')
-		save = ft_format_f(save, ap, j);
-	else if (c == 'o')
-		save = ft_format_o(save, ap, j);
-	else if (c == 'u')
-		save = ft_format_u(save, ap, j);
-	else if (c == 'b')
-		save = ft_format_b(save, ap, j);
-	else if (c == '%')
-		save = ft_format_pct(save, j);
+	char	nul[6];
+
+	nul[0] = '(';
+	nul[1] = 'n';
+	nul[2] = 'u';
+	nul[3] = 'l';
+	nul[4] = 'l';
+	nul[5] = ')';
+	if (!str)
+	{
+		while ((i <= 5))
+		{
+			save = ft_check_add(save, j, nul[i]);
+			i += 1;
+		}
+		return (save);
+	}
+	while (str[i])
+	{
+		save = ft_check_add(save, j, str[i]);
+		i += 1;
+	}
 	return (save);
 }
 
-t_printf	ft_init(t_printf save, char *str, va_list ap, int *j)
+t_printf	ft_format(char c, t_printf save, va_list ap, int *j)
 {
-	int		i;
-	int		s;
+	long	d;
+	int		a;
+	char	*str;
 
-	i = 0;
-	save.flags = 0;
-	save.width = 0;
-	save.pre = 0;
-	save.modif = 0;
-	save.min = 0;
-	save.index = 1;
-	save = ft_convert(save, str, &i, &s);
-	if (s == 2)
+	if (c == 'd')
 	{
-		save.index = i + 2;
-		save = ft_format(str[i], save, ap, j);
+		d = va_arg(ap, long);
+		save = ft_ltoa(save, j, d);
+	}
+	else if (c == 'c')
+	{
+		a = va_arg(ap, int);
+		save = ft_check_add(save, j, a);
+	}
+	else if (c == 's')
+	{
+		a = 0;
+		str = va_arg(ap, char*);
+		save = ft_print(save, j, str, a);
 	}
 	return (save);
 }
@@ -68,14 +79,13 @@ t_printf	ft_process(t_printf save, const char *restrict format, va_list ap)
 	{
 		while (format[i] && format[i] != '%')
 		{
-			save = format[i] == '{' ? ft_color(&format[i], save, &j, &i) : save;
 			save = ft_check_add(save, &j, format[i]);
 			i++;
 		}
 		if (format[i] == '%' && format[i + 1] != '\0')
 		{
-			save = ft_init(save, (char*)&format[i + 1], ap, &j);
-			i += save.index;
+			save = ft_format(format[i + 1], save, ap, &j);
+			i += 2;
 		}
 		if (format[i] == '%' && format[i + 1] == '\0')
 			i++;
@@ -92,6 +102,7 @@ int			ft_printf(const char *restrict format, ...)
 	t_printf	save;
 
 	save.ret = 0;
+	ft_bzero(save.buf, BUFF_SZ);
 	save.buf[BUFF_SZ] = '\0';
 	va_start(ap, format);
 	save = ft_process(save, format, ap);

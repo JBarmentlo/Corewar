@@ -22,27 +22,9 @@ CFLAGS = -Wall -Wextra -Werror
 
 LIB_DIR = ../libft
 
-SOURCES = ft_format_csp.c\
-ft_format_di.c\
-ft_nan_inf.c\
-ft_print_float.c\
-ft_format_f.c\
-ft_format_u.c\
-ft_format_xx.c\
+SOURCES = ft_printf.c\
 ft_check_add.c\
-ft_check_char.c\
-ft_convert.c\
-ft_printf.c\
-ft_ltoa.c\
-ft_ftoa.c\
-ft_utoa.c\
-ft_dtoh.c\
-ft_format_pct.c\
-ft_format_b.c\
-ft_format_o.c\
-ft_color.c\
-ft_float.c\
-ft_mult2.c
+ft_ltoa.c
 
 OBJECTS = $(patsubst %.c,%.o,$(SOURCES))
 INCLUDE = ft_printf.h
