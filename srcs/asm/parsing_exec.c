@@ -31,7 +31,7 @@ t_label		*is_label(t_stack *stack, t_token *token)
 	label->next = NULL;
 	while (token->name[i])
 	{
-		if (ft_strchr(LABEL_CHARS, (int)token->name[i]) == NULL)
+		if (ft_strchr(LABEL_CHARS, (intptr_t)token->name[i]) == NULL)
 		{
 			ft_memdel((void**)&label);
 			return (token_free(LABEL_ERROR, token));
@@ -55,7 +55,7 @@ int			is_label_list(t_s *s, t_stack *stack, t_token *token)
 
 	label = is_label(stack, token);
 	if (label == NULL)
-		return ((int)free_op_lab(stack));
+		return ((intptr_t)free_op_lab(stack));
 	label->oct = stack->cur_octet;
 	if (stack->first_label == NULL && stack->label_list == NULL)
 	{
@@ -82,7 +82,7 @@ int			is_op_list(t_s *s, t_stack *stack, t_token *token)
 
 	op = is_op(s, stack, token);
 	if (op == NULL)
-		return ((int)free_op_lab(stack));
+		return ((intptr_t)free_op_lab(stack));
 	if (stack->op_list == NULL && stack->first_op == NULL)
 	{
 		stack->first_op = op;
@@ -119,13 +119,13 @@ int			is_label_or_op(t_s *s, t_stack *stack)
 		|| str[k] == DIRECT_CHAR))
 	{
 		if (is_op_list(s, stack, &token) == FALSE)
-			return ((int)just_free(token.name, NULL));
+			return ((intptr_t)just_free(token.name, NULL));
 	}
 	else if (str[k] && k > 0 && (str[k] == COMMENT_CHAR
 		|| str[k] == ALT_COMMENT_CHAR))
 		s->i -= 1;
 	else
-		return ((int)token_free(LEXICAL_ERROR, &token));
+		return ((intptr_t)token_free(LEXICAL_ERROR, &token));
 	ft_memdel((void**)&token.name);
 	return (TRUE);
 }
@@ -157,14 +157,14 @@ int			parsing_exec(t_stack *stack, int fd, t_s *s)
 				if (is_label_or_op(s, stack) == FALSE)
 				{
 					free_op_lab(stack);
-					return ((int)just_free(s->line, NULL));
+					return ((intptr_t)just_free(s->line, NULL));
 				}
 			s->i += 1;
 		}
 		ft_memdel((void**)&s->line);
 	}
 	if (stack->first_op == NULL)
-		return ((int)ft_error(MISSING_CODE, NULL));
+		return ((intptr_t)ft_error(MISSING_CODE, NULL));
 	ft_memdel((void**)&s->line);
 	return (TRUE);
 }

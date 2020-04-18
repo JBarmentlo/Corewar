@@ -25,12 +25,12 @@ int		check_value(t_argz argz, int k, t_token *token, t_token *last_token)
 
 	t = argz.type;
 	if (t == T_REG && (argz.value > REG_NUMBER || argz.value < 1))
-		return ((int)token_free(WRONG_REG_NUM, last_token));
+		return ((intptr_t)token_free(WRONG_REG_NUM, last_token));
 	if (k < g_op_tab[token->op_type - 1].arg_nb
 		&& (t & g_op_tab[token->op_type - 1].arg_types[k]) != t)
-		return ((int)token_free(WRONG_TYPE_ARG, token));
+		return ((intptr_t)token_free(WRONG_TYPE_ARG, token));
 	if (k >= g_op_tab[token->op_type - 1].arg_nb)
-		return ((int)token_free(TOO_MANY_ARGS, token));
+		return ((intptr_t)token_free(TOO_MANY_ARGS, token));
 	return (TRUE);
 }
 
@@ -48,14 +48,14 @@ int		check_sep(int *info, t_token *token)
 	save = token->col;
 	token->col = info[INDX];
 	if (k == 0 && info[SEP] > 0)
-		return ((int)token_free(TOO_MANY_SEP_B, token));
+		return ((intptr_t)token_free(TOO_MANY_SEP_B, token));
 	if (k > 0 && (k < g_op_tab[token->op_type - 1].arg_nb) && k > info[SEP])
-		return ((int)token_free(MISSING_SEP, token));
+		return ((intptr_t)token_free(MISSING_SEP, token));
 	if (k > 0 && (k < g_op_tab[token->op_type - 1].arg_nb) && k < info[SEP])
-		return ((int)token_free(TOO_MANY_SEP_B, token));
+		return ((intptr_t)token_free(TOO_MANY_SEP_B, token));
 	if (k == g_op_tab[token->op_type - 1].arg_nb
 		&& info[SEP] >= g_op_tab[token->op_type - 1].arg_nb)
-		return ((int)token_free(TOO_MANY_SEP_A, token));
+		return ((intptr_t)token_free(TOO_MANY_SEP_A, token));
 	token->col = save;
 	return (TRUE);
 }
@@ -133,5 +133,5 @@ int		find_label(t_argz argz, t_label *label)
 	token.name = ft_strcpy(token.name, to_find);
 	token.line = argz.line;
 	token.col = argz.col;
-	return ((int)token_free(WRONG_LABEL, &token));
+	return ((intptr_t)token_free(WRONG_LABEL, &token));
 }

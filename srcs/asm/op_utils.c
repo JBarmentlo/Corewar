@@ -45,7 +45,7 @@ int			big_number(t_s *s, t_argz *argz, char *str)
 	argz->value = 4294967295;
 	while (ft_isdigit((long)str[s->i]) && diff(str[s->i], SPACE_COMM))
 		s->i += 1;
-	if (s > 0)
+	if (s->i > 0)
 		s->i -= 1;
 	return (TRUE);
 }

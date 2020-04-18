@@ -60,7 +60,7 @@ int		get_arg(t_token *token, t_s *s, t_instruct *op, int *info)
 int		final_check(t_token *token, t_token *last_t, int *info, t_instruct *op)
 {
 	if (info[ARG_N] < g_op_tab[op->type - 1].arg_nb)
-		return ((int)token_free(MISSING_ARG, token));
+		return ((intptr_t)token_free(MISSING_ARG, token));
 	if (check_sep(info, last_t) == FALSE)
 		return (FALSE);
 	just_free(token->name, last_t->name);
@@ -122,7 +122,7 @@ int		parsing_args(t_s *s, t_instruct *op)
 	init_token(&token);
 	init_token(&last_token);
 	if (read_line(s, op, &token, &last_token) == FALSE)
-		return ((int)just_free(token.name, last_token.name));
+		return ((intptr_t)just_free(token.name, last_token.name));
 	token.name = NULL;
 	token.col = s->i;
 	token.line = s->l;
@@ -130,6 +130,6 @@ int		parsing_args(t_s *s, t_instruct *op)
 		while (s->line[s->i] != '\0' && s->line[s->i] != '\n')
 			s->i += 1;
 	if (s->line[s->i] != '\n')
-		return ((int)token_free(END_INPUT, &token));
+		return ((intptr_t)token_free(END_INPUT, &token));
 	return (TRUE);
 }

@@ -39,14 +39,14 @@ int		main(int ac, char **av)
 	t_file	out_file;
 
 	if (ac == 0)
-		return ((int)ft_error(NO_ARGS, NULL));
+		return ((intptr_t)ft_error(NO_ARGS, NULL));
 	if (ac == 1)
 		return (usage(PROG_ASM));
 	if (ac > 2)
-		return ((int)ft_error(TOO_MUCH_ARGS, NULL));
+		return ((intptr_t)ft_error(TOO_MUCH_ARGS, NULL));
 	fd = open(av[1], O_RDONLY);
 	if (fd < 0)
-		return ((int)ft_error(OPEN_FAIL, av[1]));
+		return ((intptr_t)ft_error(OPEN_FAIL, av[1]));
 	if (fill_out_file(av[1], &out_file, fd) == FALSE)
 		return (FALSE);
 	return (TRUE);
