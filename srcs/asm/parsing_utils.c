@@ -44,7 +44,7 @@ int		check_sep(int *info, t_token *token)
 	int	save;
 	int	k;
 
-	k = info[ARG_N];
+	k = info[ARG];
 	save = token->col;
 	token->col = info[INDX];
 	if (k == 0 && info[SEP] > 0)
