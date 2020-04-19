@@ -22,12 +22,15 @@ int			init_file(t_file *out_file, char *source_file)
 	int		l;
 
 	l = ft_strlen(source_file);
-	if (l < 3 || ft_strcmp(source_file + l - 2, ".s"))
+	if (l < 2 || ft_strcmp(source_file + l - 2, ".s"))
 		return ((intptr_t)ft_error(WRONG_SOURCE, NULL));
 	if (!(out_file->name = ft_memalloc(sizeof(char) * (l + 2))))
 		return ((intptr_t)ft_error(MALLOC_FAIL, NULL));
 	if (!(out_file->content = ft_memalloc(sizeof(char) * SIZE_MAX_PROG)))
+	{
+		ft_memdel((void**)&out_file->name);
 		return ((intptr_t)ft_error(MALLOC_FAIL, NULL));
+	}
 	out_file->name = ft_memcpy(out_file->name, source_file, l - 1);
 	out_file->name = ft_stricat(out_file->name, "cor", l - 1);
 	return (TRUE);
@@ -55,7 +58,10 @@ int			parsing_header(t_stack *stack, int fd, t_s *s)
 	if (!(stack->champion_name = ft_memalloc(sizeof(char) * l_name + 1)))
 		return ((intptr_t)ft_error(MALLOC_NAME, NULL));
 	if (!(stack->comment = ft_memalloc(sizeof(char) * COMMENT_LENGTH + 1)))
+	{
+		ft_memdel((void**)&stack->champion_name);
 		return ((intptr_t)ft_error(MALLOC_COMMENT, NULL));
+	}
 	if (!header_content(stack, fd, s))
 	{
 		ft_memdel((void**)&s->line);
