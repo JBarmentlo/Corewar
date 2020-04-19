@@ -59,7 +59,7 @@
 # define TOO_MANY_SEP_B		"Too many separator_char before the argument"
 # define TOO_MUCH_ARGS		"Too many arguments"
 # define WRONG_FORMAT		"Wrong format after .command in header"
-# define WRONG_HEADER		"Wrong .command in header"
+# define WRONG_HEADER		"Wrong instruction in header"
 # define WRONG_LABEL		"The following label doesn't exist"
 # define WRONG_SOURCE		"Wrong source file format"
 # define WRONG_REG_NUM		"A register number should be between 1 and 16"
@@ -215,7 +215,7 @@ int							find_label(t_argz argz, t_label *label);
 ** token_utils
 */
 
-void						save_token(t_token *token, t_token *last_token,
+void						*save_token(t_token *token, t_token *last_token,
 							char *str_op, t_s *s);
 void						init_token(t_token *token);
 int							fill_token(t_s *s, int op_type, t_token *token);

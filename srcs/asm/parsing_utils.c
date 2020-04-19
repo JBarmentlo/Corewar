@@ -129,7 +129,8 @@ int		find_label(t_argz argz, t_label *label)
 		else
 			label = label->next;
 	}
-	token.name = ft_memalloc(sizeof(char) * ft_strlen(to_find) + 1);
+	if (!(token.name = ft_memalloc(sizeof(char) * ft_strlen(to_find) + 1)))
+		return ((intptr_t)ft_error(MALLOC_FAIL, NULL));
 	token.name = ft_strcpy(token.name, to_find);
 	token.line = argz.line;
 	token.col = argz.col;

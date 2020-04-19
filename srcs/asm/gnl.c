@@ -17,7 +17,10 @@ char	*after_line(char *x, char *tab, int size)
 	char	*tmp;
 
 	if (!(tmp = ft_memalloc(sizeof(char) * size + 1)))
+	{
+		ft_memdel((void**)&tab);
 		return (NULL);
+	}
 	tmp[size] = '\0';
 	tmp = ft_memcpy(tmp, x + 1, size);
 	ft_memdel((void**)&tab);
@@ -90,7 +93,8 @@ int		content(t_fd *gnl, int fd, char **line)
 	{
 		*line = ft_strsub(gnl->tab, 0, (x - gnl->tab + 1));
 		gnl->fd -= x - gnl->tab + 1;
-		gnl->tab = after_line(x, gnl->tab, gnl->fd);
+		if (!(gnl->tab = after_line(x, gnl->tab, gnl->fd)))
+			return (0);
 		return (1);
 	}
 	*line = gnl->tab;
@@ -115,7 +119,8 @@ int		gnl(int fd, char **line)
 		return (-1);
 	if (!gnl)
 	{
-		gnl = ft_memalloc(sizeof(t_fd));
+		if (!(gnl = ft_memalloc(sizeof(t_fd))))
+			return (0);
 		gnl->tab = ft_strdup("");
 		gnl->fd = 0;
 	}

@@ -42,7 +42,8 @@ int		fill_name_com(int type, char *tmp, t_stack *stack, t_token *token)
 
 int		is_valid_command_start(t_s *s, int *type, t_token *token)
 {
-	fill_token(s, 0, token);
+	if (fill_token(s, 0, token) == FALSE)
+		return (FALSE);
 	if (*type == 'n')
 	{
 		if (ft_strncmp(s->line + s->i, NAME_CMD_STRING, 5) != 0)
@@ -65,14 +66,16 @@ int		is_valid_command_start(t_s *s, int *type, t_token *token)
 
 int		is_valid_command_end(t_s *s, int *type, t_token *token)
 {
-	fill_token(s, 0, token);
+	if (fill_token(s, 0, token) == FALSE)
+		return (FALSE);
 	s->i += (*type == 'n' ? 5 : 8);
 	while (s->line[s->i] != '\0' && s->line[s->i] != '"')
 	{
 		if (diff(s->line[s->i], SPACE) == TRUE)
 		{
-			fill_token(s, 0, token);
-			return ((intptr_t)token_free(WRONG_FORMAT, token));
+			if (fill_token(s, 0, token))
+				return ((intptr_t)token_free(WRONG_FORMAT, token));
+			return (FALSE);
 		}
 		s->i += 1;
 	}
@@ -98,19 +101,20 @@ int		get_command_type(int fd, t_s *s, int *type, t_token *token)
 	{
 		s->l += 1;
 		s->i = 0;
-		fill_token(s, 0, token);
+		if (fill_token(s, 0, token) == FALSE)
+			return (FALSE);
 		while ((diff(s->line[s->i], COMM) == TRUE)
 			&& s->line[s->i] != '.')
 		{
-			if ((diff(s->line[s->i], SPACE) == TRUE)
-				&& fill_token(s, 0, token))
+			if (!(fill_token(s, 0, token)))
+				return (FALSE);
+			if (diff(s->line[s->i], SPACE) == TRUE)
 				return ((intptr_t)token_free(WRONG_HEADER, token));
 			s->i += 1;
 		}
 		if (s->line[s->i] == '.')
 			break ;
-		ft_memdel((void**)&s->line);
-		ft_memdel((void**)&token->name);
+		just_free(s->line, token->name);
 	}
 	if (s->line == NULL && (token->line += 1))
 		return ((intptr_t)token_free(INCOMPLETE, token));

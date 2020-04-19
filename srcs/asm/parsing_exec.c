@@ -24,8 +24,7 @@ t_label		*is_label(t_stack *stack, t_token *token)
 	int			i;
 
 	i = 0;
-	label = ft_memalloc(sizeof(t_label));
-	if (label == NULL)
+	if (!(label = ft_memalloc(sizeof(t_label))))
 		return (ft_error(LABEL_ALLOC, NULL));
 	label->oct = stack->cur_octet;
 	label->next = NULL;
@@ -38,9 +37,13 @@ t_label		*is_label(t_stack *stack, t_token *token)
 		}
 		i++;
 	}
-	label->name = ft_memalloc(sizeof(char) * i + 1);
+	if (!(label->name = ft_memalloc(sizeof(char) * i + 1)))
+	{
+		ft_memdel((void**)&label);
+		return (ft_error(LABEL_ALLOC, NULL));
+		
+	}
 	label->name = ft_memcpy(label->name, token->name, i);
-	ft_memdel((void**)&token->name);
 	return (label);
 }
 
@@ -54,6 +57,7 @@ int			is_label_list(t_s *s, t_stack *stack, t_token *token)
 	t_label		*label;
 
 	label = is_label(stack, token);
+	ft_memdel((void**)&token->name);
 	if (label == NULL)
 		return ((intptr_t)free_op_lab(stack));
 	label->oct = stack->cur_octet;
@@ -109,7 +113,8 @@ int			is_label_or_op(t_s *s, t_stack *stack)
 	char			*str;
 
 	init_token(&token);
-	fill_token(s, 42, &token);
+	if (fill_token(s, 42, &token) == FALSE)
+		return (FALSE);
 	str = s->line;
 	k = token.end;
 	s->i = k;

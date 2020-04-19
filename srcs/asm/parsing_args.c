@@ -38,7 +38,8 @@ int		get_arg(t_token *token, t_s *s, t_instruct *op, int *info)
 	t_argz argz;
 
 	argz = op->argz[info[ARG]];
-	fill_token(s, op->type, token);
+	if (fill_token(s, op->type, token) == FALSE)
+		return (FALSE);
 	if (check_sep(info, token) == FALSE
 		|| is_argument(s, op->type, &argz, &info[SEP]) == NULL)
 	{
@@ -91,8 +92,8 @@ int		read_line(t_s *s, t_instruct *op, t_token *t, t_token *last_t)
 			{
 				if (get_arg(t, s, op, tab) == FALSE)
 					return (FALSE);
-				save_token(t, last_t, g_op_tab[op->type - 1].name, s);
-				if (!(check_value(op->argz[tab[ARG]], tab[ARG], t, last_t)))
+				if (!(save_token(t, last_t, g_op_tab[op->type - 1].name, s))
+				|| !(check_value(op->argz[tab[ARG]], tab[ARG], t, last_t)))
 					return (FALSE);
 				if (s->line[s->i] != SEPARATOR_CHAR)
 					if (!(check_value(op->argz[tab[ARG]], tab[ARG], t, last_t)))

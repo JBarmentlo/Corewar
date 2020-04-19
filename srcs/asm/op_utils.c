@@ -118,7 +118,8 @@ t_instruct	*is_op(t_s *s, t_stack *stack, t_token *token)
 {
 	t_instruct	*op;
 
-	op = ft_memalloc(sizeof(t_instruct));
+	if (!(op = ft_memalloc(sizeof(t_instruct))))
+		return (NULL);
 	op->next = NULL;
 	op->type = find_opcode(token->name);
 	if (op->type == 0)
