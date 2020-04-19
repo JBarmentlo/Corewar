@@ -57,32 +57,28 @@ void	is_indirect(t_argz *argz)
 
 void	*argz_is_label(t_s *s, t_argz *argz)
 {
-	int		save;
 	t_token		token;
 
 	s->i += 1;
-	save = s->i;
-	argz->line = s->l;
-	argz->col = save;
-	token.name = NULL;
+	argz->col = s->i;
+	init_token(&token);
+	fill_token(s, 0, &token);
 	while (diff(s->line[s->i], SPACE_COMM) && s->line[s->i] != SEPARATOR_CHAR)
 		s->i += 1;
-	token.line = s->l;
-	token.col = s->i;
-	if (s->i - save == FALSE)
+	if (s->i - argz->col == FALSE)
 		return (token_free(LABEL_ERROR, &token));
-	if (!(argz->lab = ft_memalloc(sizeof(char) * s->i - save)))
+	if (!(argz->lab = ft_memalloc(sizeof(char) * s->i - argz->col)))
 		return (ft_error(MALLOC_FAIL, NULL));
-	argz->lab = ft_stricpy(argz->lab, s->line, save, s->i);
-	while (save < s->i)
+	argz->lab = ft_stricpy(argz->lab, s->line, argz->col, s->i);
+	while (argz->col < s->i)
 	{
-		if (ft_strchr(LABEL_CHARS, (int)s->line[save]) == NULL)
+		if (ft_strchr(LABEL_CHARS, (int)s->line[argz->col]) == NULL)
 		{
 			ft_memdel((void**)&argz->lab);
-			token.col = save + 1;
+			token.col = argz->col + 1;
 			return (token_free(LABEL_ERROR, &token));
 		}
-		save++;
+		argz->col += 1;
 	}
 	argz->value = 0;
 	return (argz);
@@ -105,9 +101,9 @@ void	*is_argument(t_s *s, size_t inst_type, t_argz *argz, int *sep_char)
 		is_indirect(argz);
 	if (s->line[s->i] != LABEL_CHAR && argz->type != T_IND)
 		s->i += 1;
+	argz->line = s->l;
 	if (s->line[s->i] != '\0' && s->line[s->i] != LABEL_CHAR)
 	{
-		argz->line = s->l;
 		argz->col = s->i;
 		ft_atolong(s, argz);
 		argz->lab = NULL;

@@ -118,8 +118,8 @@ char	*get_header_content(int fd, t_s *s, int *type)
 int		header_content(t_stack *stack, int fd, t_s *s)
 {
 	char	*tmp;
-	int	type;
-	int	save;
+	int		type;
+	int		save;
 	t_token token;
 
 	s->i = 0;

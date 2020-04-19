@@ -41,7 +41,6 @@ t_label		*is_label(t_stack *stack, t_token *token)
 	{
 		ft_memdel((void**)&label);
 		return (ft_error(LABEL_ALLOC, NULL));
-		
 	}
 	label->name = ft_memcpy(label->name, token->name, i);
 	return (label);

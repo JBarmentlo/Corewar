@@ -84,8 +84,8 @@ int			parsing_header(t_stack *stack, int fd, t_s *s)
 
 void		fill_header(t_file *out_file, t_stack *stack)
 {
-	int	ts;
-	int	magic;
+	int		ts;
+	int		magic;
 	char	*name;
 	char	*comm;
 

@@ -103,8 +103,7 @@ int		get_command_type(int fd, t_s *s, int *type, t_token *token)
 		s->i = 0;
 		if (fill_token(s, 0, token) == FALSE)
 			return (FALSE);
-		while ((diff(s->line[s->i], COMM) == TRUE)
-			&& s->line[s->i] != '.')
+		while (diff(s->line[s->i], COMM) && s->line[s->i] != '.')
 		{
 			if (!(fill_token(s, 0, token)))
 				return (FALSE);

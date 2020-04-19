@@ -33,7 +33,7 @@ void	*save_token(t_token *token, t_token *last_token, char *str_op, t_s *s)
 	last_token->name = ft_strcpy(last_token->name, token->name);
 	ft_memdel((void**)&token->name);
 	if (!(token->name = ft_memalloc(sizeof(char) * ft_strlen(str_op))))
-		return ( NULL);
+		return (NULL);
 	token->name = ft_strcpy(token->name, str_op);
 	token->line = s->l;
 	token->col = s->i;
@@ -73,10 +73,7 @@ int		fill_token(t_s *s, int op_type, t_token *token)
 	if (save - s->i > 0)
 	{
 		if (!(token->name = ft_memalloc(sizeof(char *) * (save - s->i + 1))))
-		{
-			ft_memdel((void**)&token->name);
 			return ((intptr_t)ft_error(MALLOC_FAIL, NULL));
-		}
 		token->name = ft_strncat(token->name, s->line + s->i, (save - s->i));
 	}
 	token->line = s->l;
