@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_header.c                                     :+:      :+:    :+:   */
+/*   header_content.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -19,14 +19,14 @@
 
 int		check_after_quote(t_s *s, t_token *token)
 {
-
 	s->i += 1;
 	while (diff(s->line[s->i], COMM))
 	{
 		if (diff(s->line[s->i], SPACE))
 		{
-			fill_token(s, 0, token);
-			return ((int)token_free(SYNTAXE_ERROR, token));
+			if (fill_token(s, 0, token))
+				return ((intptr_t)token_free(SYNTAXE_ERROR, token));
+			return (FALSE);
 		}
 		s->i += 1;
 	}
@@ -36,7 +36,7 @@ int		check_after_quote(t_s *s, t_token *token)
 
 int		fill_empty_line(t_s *s, int fd)
 {
-	int	ret;
+	int		ret;
 	t_token	token;
 
 	token.name = NULL;
@@ -45,7 +45,7 @@ int		fill_empty_line(t_s *s, int fd)
 	ft_memdel((void**)&s->line);
 	ret = gnl(fd, &s->line);
 	if (ret <= 0 || s->line == NULL)
-		return ((int)token_free(MISSING_QUOTE, &token));
+		return ((intptr_t)token_free(MISSING_QUOTE, &token));
 	s->l += 1;
 	s->i = 0;
 	return (TRUE);
@@ -56,15 +56,15 @@ int		fill_empty_line(t_s *s, int fd)
 ** there is any character left to read.
 */
 
-int	check_empty_line(t_s *s, char **tmp, int fd)
+int		check_empty_line(t_s *s, char **tmp, int fd)
 {
 	if (s->line[s->i] == '\0')
 	{
 		if (fill_empty_line(s, fd) == FALSE)
-			return ((int)just_free(*tmp, NULL));
+			return ((intptr_t)just_free(*tmp, NULL));
 		while (s->line != NULL && s->line[0] == '\0')
 			if (fill_empty_line(s, fd) == FALSE)
-				return ((int)just_free(*tmp, NULL));
+				return ((intptr_t)just_free(*tmp, NULL));
 	}
 	return (TRUE);
 }
@@ -80,7 +80,7 @@ int	check_empty_line(t_s *s, char **tmp, int fd)
 char	*get_header_content(int fd, t_s *s, int *type)
 {
 	char	*tmp;
-	int	j;
+	int		j;
 	t_token	token;
 
 	j = 0;
@@ -115,11 +115,11 @@ char	*get_header_content(int fd, t_s *s, int *type)
 ** established in [op.h]: PROG_NAME_LENGTH or COMMENT_LENGTH.
 */
 
-int     header_content(t_stack *stack, int fd, t_s *s)
+int		header_content(t_stack *stack, int fd, t_s *s)
 {
-	int     type;
 	char	*tmp;
-	int	save;
+	int		type;
+	int		save;
 	t_token token;
 
 	s->i = 0;
@@ -135,7 +135,7 @@ int     header_content(t_stack *stack, int fd, t_s *s)
 	if (s->l == FALSE)
 		return (FALSE);
 	if (fill_name_com(type, tmp, stack, &token) == FALSE)
-		return ((int)just_free(tmp, NULL));
+		return ((intptr_t)just_free(tmp, NULL));
 	ft_memdel((void**)&tmp);
 	ft_memdel((void**)&s->line);
 	return (TRUE);

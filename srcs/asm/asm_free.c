@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   asm_free.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/17 15:29:26 by ncoursol          #+#    #+#             */
+/*   Updated: 2020/03/09 16:05:13 by dberger          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "asm.h"
 
 /*
@@ -74,10 +86,9 @@ void	*free_op_lab(t_stack *stack)
 
 void	*token_free(char *str, t_token *token)
 {
-	char 	*name;
-	int	l;
-	int	c;
-	
+	int		l;
+	int		c;
+	char	*name;
 
 	name = token->name;
 	l = token->line;

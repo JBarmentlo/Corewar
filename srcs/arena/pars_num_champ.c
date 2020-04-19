@@ -39,7 +39,7 @@ int		check_errors_nb(int *nb, int i, int k)
 	while (k > 0 && i > 0)
 	{
 		if (nb[i] == NO_NB)
-			return ((int)ft_error(TOO_HIGH, NULL));
+			return ((intptr_t)ft_error(TOO_HIGH, NULL));
 		k--;
 		i--;
 	}
