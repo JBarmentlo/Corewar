@@ -80,31 +80,31 @@ int		final_check(t_token *token, t_token *last_t, int *info, t_instruct *op)
 
 int		read_line(t_s *s, t_instruct *op, t_token *t, t_token *last_t)
 {
-	int		t[3];
+	int		tab[3];
 
-	update_sep(t, INIT);
+	update_sep(tab, INIT);
 	while (diff(s->line[s->i], COMM) == TRUE)
 	{
 		if (s->line[s->i] != '\0' && (diff(s->line[s->i], SPACE) == TRUE))
 		{
 			if (s->line[s->i] != SEPARATOR_CHAR)
 			{
-				if (get_arg(t, s, op, t) == FALSE)
+				if (get_arg(t, s, op, tab) == FALSE)
 					return (FALSE);
 				save_token(t, last_t, g_op_tab[op->type - 1].name, s);
-				if (!(check_value(op->argz[t[ARG]], t[ARG], t, last_t)))
+				if (!(check_value(op->argz[tab[ARG]], tab[ARG], t, last_t)))
 					return (FALSE);
 				if (s->line[s->i] != SEPARATOR_CHAR)
-					if (!(check_value(op->argz[t[ARG]], t[ARG], t, last_t)))
+					if (!(check_value(op->argz[tab[ARG]], tab[ARG], t, last_t)))
 						return (FALSE);
-				t[ARG] += 1;
+				tab[ARG] += 1;
 			}
 			else
-				update_sep(t, s->i);
+				update_sep(tab, s->i);
 		}
 		s->i += 1;
 	}
-	return (final_check(t, last_t, t, op) == FALSE ? FALSE : TRUE);
+	return (final_check(t, last_t, tab, op) == FALSE ? FALSE : TRUE);
 }
 
 /*

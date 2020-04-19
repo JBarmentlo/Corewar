@@ -70,7 +70,10 @@ int		is_valid_command_end(t_s *s, int *type, t_token *token)
 	while (s->line[s->i] != '\0' && s->line[s->i] != '"')
 	{
 		if (diff(s->line[s->i], SPACE) == TRUE)
+		{
+			fill_token(s, 0, token);
 			return ((intptr_t)token_free(WRONG_FORMAT, token));
+		}
 		s->i += 1;
 	}
 	if (s->line[s->i] != '"')

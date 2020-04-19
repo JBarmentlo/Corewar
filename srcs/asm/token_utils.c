@@ -67,10 +67,12 @@ int		fill_token(t_s *s, int op_type, t_token *token)
 			break ;
 		save++;
 	}
-	token->name = ft_memalloc(sizeof(char *) * (save - s->i + 1));
-	if (token->name == NULL)
-		return ((intptr_t)ft_error(MALLOC_FAIL, NULL));
-	token->name = ft_strncat(token->name, s->line + s->i, (save - s->i));
+	if (save - s->i > 0)
+	{
+		if (!(token->name = ft_memalloc(sizeof(char *) * (save - s->i + 1))))
+			return ((intptr_t)ft_error(MALLOC_FAIL, NULL));
+		token->name = ft_strncat(token->name, s->line + s->i, (save - s->i));
+	}
 	token->line = s->l;
 	token->col = s->i;
 	token->end = save;
