@@ -27,7 +27,7 @@ t_arena		init_vm()
 
 int		main(int ac, char **av)
 {
-	t_disp		d;
+//	t_disp		d;
 //	int		timeout;
 	int		running;
 	t_arena		vm;
@@ -97,8 +97,8 @@ int		main(int ac, char **av)
 */	}
 	if (vm.option_dump != 0)
 		hex_dump_ugly(&vm);
-	if (visu)
-		error("End.", &d);
+//	if (visu)
+//		error("End.", &d);
 	free_all(&vm);
 	return (TRUE);
 }
