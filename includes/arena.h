@@ -77,16 +77,16 @@ typedef struct			s_args
 typedef struct 			s_arena
 {
 	t_process*	 	process_list;
-	int			total_process_nb;
+	int			    total_process_nb;
 	t_process*		process_table[PROCESS_TABLE_SIZE]; // a init vide;
 	t_champion		champion_table[MAX_PLAYERS];
-	int			nb_champs;
-	int			option_dump;
+	int			    nb_champs;
+	int			    option_dump;
 	byte			memory[MEM_SIZE];
 	byte			memory_color[MEM_SIZE];
-	int			last_live_champ_number;
-	int			nb_champions;
-	int			nb_live_champions;
+	int			    last_live_champ_number;
+	int			    nb_champions;
+	int			    nb_live_champions;
 	void 			(**op_fun_tab)(struct s_arena*, t_process*);
 	t_op			g_op_tab[17];
 

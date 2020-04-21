@@ -29,6 +29,7 @@ int		main(int ac, char **av)
 {
 	t_arena		vm;
 	t_champion	champ;
+    t_champion *campo;
 	int		i;
 
 	i = 0;
@@ -37,18 +38,17 @@ int		main(int ac, char **av)
 		return (FALSE);
 	while (i < vm.nb_champs)
 	{
-		champ = vm.champion_table[i];
-		if (pars_header(&champ) == FALSE)
+		campo = &vm.champion_table[i];
+		if (pars_header(campo) == FALSE)
 			return (FALSE);
 		i++;
 	}
-	if (start_arena(&vm, &champ) == FALSE)
+    i = 0;
+    if (start_arena(&vm, &champ) == FALSE)
 		return (FALSE);
 	vm.total_process_nb = vm.nb_champs;
-    printf("nb: %d", vm.total_process_nb);
 	count_owned_space(&vm);
 	hex_dump(&vm);
-    printf("mem 0 : %d\n", vm.memory[20]);
 	while (!is_game_over(&vm) && ((vm.cycle < (unsigned long)vm.option_dump) || vm.option_dump == 0))
 	{
 		if (vm.cycle == UINT64_MAX)
