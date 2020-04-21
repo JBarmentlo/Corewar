@@ -23,6 +23,7 @@ OBJ_FOLDER=out
 SRCS_COREWAR_FOLDER=./srcs/arena
 SRCS_UTILS_FOLDER=./srcs/utils
 SRCS_ASM_FOLDER=./srcs/asm
+SRCS_VISU_FOLDER=./srcs/visu
 
 LIB_DIR= ./includes/libft
 PRINTF_DIR = ./includes/ft_printf
@@ -30,7 +31,7 @@ PRINTF_DIR = ./includes/ft_printf
 LIB = $(PRINTF_DIR)/libftprintf.a $(LIB_DIR)/libft.a 
 
 SCANNER=/Users/dberger/static_analyzer/bin/scan-build
-CC=gcc
+CC=clang
 CFLAGS= -Wall -Wextra -Werror -g3
 INCLUDE_PATH=-I $(INCLUDE_FOLDER) -I $(SDL_INCLUDE_FOLDER)
 
@@ -39,10 +40,7 @@ LIBS=libCorewar.a ./includes/libft/libft.a
 NAME_COREWAR=corewar
 NAME_ASM=asm
 
-COREWAR_SOURCE_FILES=cycle.c \
-	main_arena.c \
-	args.c \
-	disp.c \
+VISU_SOURCE_FILES=disp.c \
 	disp_init_var.c \
 	disp_init_players.c \
 	disp_init_info.c \
@@ -54,6 +52,9 @@ COREWAR_SOURCE_FILES=cycle.c \
 	update_info_players.c \
 	update_info_global.c \
 	update_info_arena.c \
+
+COREWAR_SOURCE_FILES=cycle.c \
+	args.c \
 	args_utils.c \
 	process.c \
 	process_utils.c \
@@ -107,15 +108,21 @@ INCLUDES_FILES= utils.h\
 	arena.h \
 	bitMasks.h 
 
+
 RELINK_INCUDE=$(addprefix $(INCLUDE_FOLDER)/, $(INCLUDES_FILES))
 SRCS_UTILS=$(addprefix $(SRCS_UTILS_FOLDER)/, $(UTILS_SOURCE_FILES))
 SRCS_ASM=$(addprefix $(SRCS_ASM_FOLDER)/, $(ASM_SOURCE_FILES))
 SRCS_COREWAR=$(addprefix $(SRCS_COREWAR_FOLDER)/, $(COREWAR_SOURCE_FILES))
+SRCS_VISU=$(addprefix $(SRCS_VISU_FOLDER)/, $(VISU_SOURCE_FILES))
 
+OUT_VISU=$(addprefix $(OBJ_FOLDER)/,$(notdir $(SRCS_VISU:.c=.o)))
 OUT_UTILS=$(addprefix $(OBJ_FOLDER)/,$(notdir $(SRCS_UTILS:.c=.o)))
 OUT_ASM=$(addprefix $(OBJ_FOLDER)/,$(notdir $(SRCS_ASM:.c=.o)))
 OUT_COREWAR=$(addprefix $(OBJ_FOLDER)/,$(notdir $(SRCS_COREWAR:.c=.o)))
 
+SDLPATH= $(shell locate libSDL2.so | grep -m1 "" | rev | cut -d "/" -f 2- | rev)
+SDLIMAGEPATH= $(shell locate libSDL2_image.so | grep -m1 "" | rev | cut -d "/" -f 2- | rev)
+SDLTTFPATH = $(shell locate libSDL2_ttf.so | grep -m1 "" | rev | cut -d "/" -f 2- | rev)
 
 all: $(OBJ_FOLDER) $(LIB) libCorewar.a asm corewar
 
@@ -140,10 +147,21 @@ $(OBJ_FOLDER)/%.o: $(SRCS_ASM_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $@ -c $<
 
 corewar: $(LIB) $(OUT_COREWAR) libCorewar.a Makefile $(RELINK_INCUDE)
-	$(COMPILER) -o $(NAME_COREWAR) $(OUT_COREWAR) $(LIBS)  $(LIB) -L srcs/sdl_src -l SDL2-2.0.0 -l SDL2_image -l SDL2_ttf
+	$(COMPILER) -o $(NAME_COREWAR) $(OUT_COREWAR) srcs/arena/main_no_visu.c $(LIBS) $(LIB)
 	echo "$(YELLOW)	--- $(GREEN)Corewar$(YELLOW) Compiled ! ---	$(NO_COLOR)"
 
+corewar_visu: visu $(LIB) $(OUT_COREWAR) libCorewar.a Makefile $(RELINK_INCUDE)
+	$(COMPILER) -o $(NAME_COREWAR) $(OUT_COREWAR) srcs/arena/main_arena.c visu.a  $(LIBS) $(LIB) -L $(SDLPATH) -L $(SDLIMAGEPATH) -L $(SDLTTFPATH) -l SDL2 -l SDL2_image -l SDL2_ttf
+	echo "$(YELLOW)	--- $(GREEN)Corewar$(YELLOW) Compiled ! ---	$(NO_COLOR)"
+
+
 $(OBJ_FOLDER)/%.o: $(SRCS_COREWAR_FOLDER)/%.c Makefile $(RELINK_INCUDE)
+	$(COMPILER) -o $@ -c $<
+
+visu: $(OBJ_FOLDER) $(OUT_VISU) $(RELINK_INCUDE)
+	ar cr visu.a $(OUT_VISU)
+
+$(OBJ_FOLDER)/%.o: $(SRCS_VISU_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $@ -c $<
 
 clean:
@@ -151,6 +169,7 @@ clean:
 	rm -f libCorewar.a
 	rm -f $(LIB_DIR)/*.o
 	rm -f $(PRINTF_DIR)/*.o
+	rm -f visu.a
 	echo "$(BLUE)	--- Binary deleted ! ---	$(NO_COLOR)"
 
 fclean: clean
