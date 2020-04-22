@@ -9,19 +9,22 @@ void	print_vm_state(t_arena *arena)
 	printf("process list : \n");
 	while (it)
 	{
-		printf("Owner: %s, owner.nb: %d, R1:%d, R2:%d\n", it->owner->header.prog_name, it->owner->number, it->registre[0], it->registre[1]);
+		printf("Owner: %s, owner.nb: %d, R1:%d, R2:%d\n",
+			it->owner->header.prog_name, it->owner->number,
+			it->registre[0], it->registre[1]);
 		it = it->next_list;
 	}
 	it = arena->process_table[arena->cycle % PROCESS_TABLE_SIZE];
 	printf("process table : \n");
 	while (it)
 	{
-		printf("Owner: %s, owner.nb: %d, R1:%d\n", it->owner->header.prog_name, it->owner->number, it->registre[0]);
+		printf("Owner: %s, owner.nb: %d, R1:%d\n", it->owner->header.prog_name,
+			it->owner->number, it->registre[0]);
 		it = it->next_table;
 	}
 }
 
-void	printf_process_PC(t_arena *arena)
+void	printf_process_pc(t_arena *arena)
 {
 	t_process	*it;
 
@@ -44,14 +47,13 @@ void	hex_dump(t_arena *arena)
 	offset = 0;
 	i = 0;
 	while (i < MEM_SIZE)
-	{	
+	{
 		if (i && offset % 50 == 0)
-			printf ("\n");
+			printf("\n");
 		if (arena->memory[i])
 		{
 			printf("%02x ", arena->memory[i]);
 			zeroes = 0;
-
 		}
 		if (!arena->memory[i])
 		{
@@ -73,11 +75,10 @@ void	hex_dump(t_arena *arena)
 			i--;
 			zeroes = 0;
 		}
-
 		if ((i + 1) % (MEM_SIZE / arena->nb_champs) == 0)
 		{
 			offset = 0;
-			printf ("\n\n%zu",i);
+			printf("\n\n%zu", i);
 		}
 		else
 		{
@@ -87,7 +88,7 @@ void	hex_dump(t_arena *arena)
 	}
 }
 
-void	check_negative_PC(t_arena *arena)
+void	check_negative_pc(t_arena *arena)
 {
 	t_process	*it;
 
@@ -95,7 +96,7 @@ void	check_negative_PC(t_arena *arena)
 	while (it)
 	{
 		if ((int16_t)it->PC < 0)
-			printf("YOOOOOOOOOOSEF NEGATIV PC BRO \n KJBASFDKJNSDF\n JHABSDFKJHBSEF\n");
+			printf("YOOOOOOOOOOSEF NEGATIV PC BRO \n  JHABSDFKJHBSEF\n");
 		it = it->next_list;
 	}
 }
@@ -106,9 +107,9 @@ void	hex_dump_ugly(t_arena *arena)
 
 	i = 0;
 	while (i < MEM_SIZE)
-	{	
+	{
 		if (i % 32 == 0)
-			printf ("\n");
+			printf("\n");
 		printf("%02x ", arena->memory[i]);
 		i++;
 	}
@@ -116,13 +117,14 @@ void	hex_dump_ugly(t_arena *arena)
 
 void	dump_color(t_arena *arena)
 {
-	int	i = 0;
+	int	i;
 
+	i = 0;
 	while (i < MEM_SIZE)
 	{
 		if (i % 50 == 0)
 		{
-			printf ("\n");
+			printf("\n");
 		}
 		if (arena->memory_color[i] != '0')
 		{
@@ -132,7 +134,6 @@ void	dump_color(t_arena *arena)
 		{
 			printf(" . ");
 		}
-	
 		i++;
 	}
 }

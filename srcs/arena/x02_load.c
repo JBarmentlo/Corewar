@@ -1,13 +1,6 @@
 #include "arena.h"
 #include "bitMasks.h"
-<<<<<<< HEAD
-/*
-here we assume registres start at 1
-we write to process->registre[arg - 1]
-*/
-=======
 
->>>>>>> 99ca330b592514c76687f6f4e62c691318d3fe0d
 void	x02(t_arena *arena, t_process *process)
 {
 	int	value;

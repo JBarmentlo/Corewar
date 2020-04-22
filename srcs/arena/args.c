@@ -4,8 +4,6 @@
 
 void		read_encoding_byte(t_arena *arena, t_process *process)
 {
-//	print_t_args(arena->args);
-
 	int		i;
 	byte	mask;
 	byte	val;
@@ -21,21 +19,21 @@ void		read_encoding_byte(t_arena *arena, t_process *process)
 		{
 			arena->args->type[i - 1] = 4;
 		}
-		arena->args->size[i - 1] = type_to_size(arena->args->type[i - 1], process->current_op);
+		arena->args->size[i - 1] = type_to_size(arena->args->type[i - 1],
+			process->current_op);
 		i--;
 	}
 }
 
 void		no_encoding_byte(t_arena *arena, t_process *process)
 {
-//	print_t_args(arena->args);
-
 	int	i;
 
 	i = 0;
 	while (i < process->current_op->arg_nb)
 	{
-		arena->args->size[i] = type_to_size(process->current_op->arg_types[i], process->current_op);
+		arena->args->size[i] = type_to_size(process->current_op->arg_types[i],
+			process->current_op);
 		arena->args->type[i] = process->current_op->arg_types[i];
 		i++;
 	}
@@ -43,36 +41,33 @@ void		no_encoding_byte(t_arena *arena, t_process *process)
 
 void		copy_to_args_tmp(t_arena *arena, t_process *process)
 {
-//	print_t_args(arena->args);
-
 	int	i;
 
 	i = 0;
 	while (i < MAX_ARGS_SIZE)
 	{
-		process->args_tmp[i] = arena->memory[(process->PC + 1 + process->current_op->encoding_byte + i) & MODULO_MASK];
+		process->args_tmp[i] = arena->memory[(process->PC + 1
+			+ process->current_op->encoding_byte + i) & MODULO_MASK];
 		i++;
 	}
 }
 
 uint16_t	read_args(t_args *args, t_process *process)
 {
-//	print_t_args(arena->args);
-
-	uint16_t	PC_tmp;
+	uint16_t	pctmp;
 	byte		size;
 	byte		i;
 
-	PC_tmp = 0;
+	pctmp = 0;
 	i = 0;
 	while (i < MAX_ARGS_NUMBER && args->type[i] != 0)
 	{
 		size = args->size[i];
-		args->val[i] = big_endian_to_int(process->args_tmp + PC_tmp, size);
-		PC_tmp += size;
+		args->val[i] = big_endian_to_int(process->args_tmp + pctmp, size);
+		pctmp += size;
 		i++;
 	}
-	return (PC_tmp);
+	return (pctmp);
 }
 
 void		print_t_args(t_args *args)
@@ -90,5 +85,5 @@ void		print_t_args(t_args *args)
 			printf("T_REG");
 		printf("\t val: %d \t size: %d \n", args->val[i], args->size[i]);
 		i++;
-	} 
+	}
 }

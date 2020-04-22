@@ -1,10 +1,10 @@
 #include "arena.h"
 #include "bitMasks.h"
 
-void    x05(t_arena *arena, t_process *process)
+void	x05(t_arena *arena, t_process *process)
 {
-	int    val1;
-	int    val2;
+	int	val1;
+	int	val2;
 
 	val1 = reg_read_int(process, arena->args->val[0]);
 	val2 = reg_read_int(process, arena->args->val[1]);
