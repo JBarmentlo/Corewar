@@ -112,7 +112,6 @@ void		fill_arena(t_arena *vm, t_champion *champ, int indx)
 
 	size = champ->header.prog_size;
 	i = 0;
-    printf("vm->nb_champs %d \n prog_size: %d\n", vm->nb_champs, size);
 	while (i < MEM_SIZE / vm->nb_champs)
 	{
 		if (i <= size)
@@ -168,7 +167,6 @@ int			start_arena(t_arena *vm, t_champion *champ)
 		champ = &vm->champion_table[i];
 		if (champ->number == s)
 		{
-            printf("fillin champ: %d\n", s);
 			fill_arena(vm, champ, indx);
 			indx += (MEM_SIZE / vm->nb_champs);
 			s++;

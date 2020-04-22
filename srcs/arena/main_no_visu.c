@@ -48,7 +48,6 @@ int		main(int ac, char **av)
 		return (FALSE);
 	vm.total_process_nb = vm.nb_champs;
 	count_owned_space(&vm);
-	hex_dump(&vm);
 	while (!is_game_over(&vm) && ((vm.cycle < (unsigned long)vm.option_dump) || vm.option_dump == 0))
 	{
 		if (vm.cycle == UINT64_MAX)
@@ -59,9 +58,10 @@ int		main(int ac, char **av)
 		do_the_cycle(&vm);
 	}
 	if (vm.option_dump != 0)
-		hex_dump(&vm);
+		hex_dump_ugly(&vm);
+    display_winner(&vm);
 	free_all(&vm);
-	return (TRUE);
+	return (0);
 }
 
 
