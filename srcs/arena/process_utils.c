@@ -24,14 +24,16 @@ t_process	*process_copy(t_process *src)
 	return (out);
 }
 
-void	remove_process_from_table(t_arena *arena, t_process *process) //wildly unchecked
+void		remove_process_from_table(t_arena *arena, t_process *process) // extra testing ?
 {
 	t_process	*it;
+	int			norm;
 
 	it = arena->process_table[process->table_pos % PROCESS_TABLE_SIZE];
 	if (it == process)
 	{
-		arena->process_table[process->table_pos  % PROCESS_TABLE_SIZE] = it->next_table;
+		norm = process->table_pos % PROCESS_TABLE_SIZE;
+		arena->process_table[norm] = it->next_table;
 	}
 	else
 	{
@@ -46,7 +48,7 @@ void	remove_process_from_table(t_arena *arena, t_process *process) //wildly unch
 	}
 }
 
-void	kill_process(t_arena *arena, t_process *process)
+void		kill_process(t_arena *arena, t_process *process)
 {
 	t_process *it;
 
@@ -71,21 +73,23 @@ void	kill_process(t_arena *arena, t_process *process)
 	}
 }
 
-void	add_process_to_table(t_process *process, t_arena *arena, uint table_index)
+void		add_process_to_table(t_process *process, t_arena *arena, uint indx)
 {
-	process->next_table = arena->process_table[table_index % PROCESS_TABLE_SIZE];
-	arena->process_table[table_index % PROCESS_TABLE_SIZE] = process;
-	process->table_pos = table_index;
+	int	norm;
+
+	norm = indx % PROCESS_TABLE_SIZE;
+	process->next_table = arena->process_table[norm];
+	arena->process_table[indx % PROCESS_TABLE_SIZE] = process;
+	process->table_pos = indx;
 }
 
-
-void	add_process_to_list(t_process *process, t_arena *arena)
+void		add_process_to_list(t_process *process, t_arena *arena)
 {
 	process->next_list = arena->process_list;
 	arena->process_list = process;
 }
 
-void	free_all_processes(t_arena *arena)
+void		free_all_processes(t_arena *arena)
 {
 	t_process	*it;
 	t_process	*tmp;

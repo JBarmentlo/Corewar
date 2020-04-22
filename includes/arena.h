@@ -15,26 +15,29 @@
 
 # include "utils.h"
 
-# define COREWAR		1
-# define INIT_NUM		-1
-# define NO_NB			-1
+# define COREWAR			1
+# define INIT_NUM			-1
+# define NO_NB				-1
 # define INFO_SIZE_CODE		4
 # define MAX_ARGS_SIZE		16
 # define PROCESS_TABLE_SIZE	1001
 # define MAX_BYTECODE_SIZE	18
 
-# define FAIL_ARG		"Can't read the arguments"
-# define TOO_HIGH		"NB higher than the amount of champions"
+# define FAIL_ARG		    "Can't read the arguments"
+# define TOO_HIGH		    "NB higher than the amount of champions"
 # define OPTION_TWICE		"Can't have twice the same option"
-# define WRONG_NB		"Wrong number for a champion"
-# define SAME_NB		"Same number for two champions"
-# define CANT_READ		"Can't read source file"
+# define WRONG_NB		    "Wrong number for a champion"
+# define SAME_NB		    "Same number for two champions"
+# define CANT_READ		    "Can't read source file"
 # define WRONG_FORMAT_COR	"The source file should be a '.cor' file"
 # define TOO_MANY_CHAMP		"Too many champions"
 # define WRONG_MAGIC_NB		"Incorrect magic number"
-# define TOO_SMALL		"Missing exec code"
-# define TOO_BIG		"The source file is exceeding the maximum size"
+# define TOO_SMALL		    "Missing exec code"
+# define TOO_BIG		    "The source file is exceeding the maximum size"
 # define WRONG_PROG_SIZE	"Wrong prog_size in header"
+
+
+
 
 typedef struct			s_champion
 {
@@ -77,27 +80,27 @@ typedef struct			s_args
 typedef struct 			s_arena
 {
 	t_process*	 	process_list;
-	int			total_process_nb;
+	int			    total_process_nb;
 	t_process*		process_table[PROCESS_TABLE_SIZE]; // a init vide;
 	t_champion		champion_table[MAX_PLAYERS];
-	int			nb_champs;
-	int			option_dump;
+	int			    nb_champs;
+	int			    option_dump;
 	byte			memory[MEM_SIZE];
 	byte			memory_color[MEM_SIZE];
-	int			last_live_champ_number;
-	int			nb_champions;
-	int			nb_live_champions;
+	int			    last_live_champ_number;
+	int			    nb_champions;
+	int			    nb_live_champions;
 	void 			(**op_fun_tab)(struct s_arena*, t_process*);
 	t_op			g_op_tab[17];
 
-	unsigned long		cycle;
-	unsigned long		total_live_since_check;
-	unsigned long		cycles_since_check;
+	unsigned long	cycle;
+	unsigned long	total_live_since_check;
+	unsigned long	cycles_since_check;
 	uint			cycle_to_die;
 	uint			max_checks;
 	t_args			*args;
-	int			verbose;
-}				t_arena;
+	int			    verbose;
+}				        t_arena;
 
 typedef void 			(*t_fun_ptr)(t_arena*, t_process*);
 
@@ -237,8 +240,8 @@ void				*reg_nb_to_ptr(t_process *process, int nb);
 void				*ind_to_ptr_idx(t_arena *arena, int ind, int PC);
 void				*ind_to_ptr_no_idx(t_arena *arena, int ind, int PC);
 void				fill_fun_ptr_tab(t_arena *arena);
-int				positive_modulo_memsize(int a);
-int				opcode_to_mask(int opcode);
+int					positive_modulo_memsize(int a);
+int					opcode_to_mask(int opcode);
 void				hex_dump(t_arena *arena);
 void				dump_color(t_arena *arena);
 void				print_vm_state(t_arena *arena);
@@ -253,6 +256,7 @@ void				check_negative_PC(t_arena *arena);
 void				mem_write_color(t_arena *arena, uint index, uint size, int champ_nb);
 void				update_champion_alive(t_arena *arena);
 void				hex_dump_ugly(t_arena *arena);
+int					display_winner(t_arena *vm);
 
 
 // OPCODE FUNCTIONS

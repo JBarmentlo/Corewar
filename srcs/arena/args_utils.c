@@ -51,10 +51,8 @@ uint16_t	type_to_size(byte type, t_op *op)
 	}
 	if (type == T_REG)
 		return (1);
-	
 	if (type == T_IND)
 		return (2);
-
 	if (type == T_DIR)
 	{
 		if (op->is_direct_small == 1)
@@ -72,7 +70,8 @@ int			is_valid_encoding_byte(t_arena *arena, t_process *process)
 	i = 0;
 	while (i < process->current_op->arg_nb)
 	{
-		if (arena->args->type[i] == 0 ||  ((arena->args->type[i] & process->current_op->arg_types[i]) != arena->args->type[i]))
+		if (arena->args->type[i] == 0 || ((arena->args->type[i]
+		& process->current_op->arg_types[i]) != arena->args->type[i]))
 			return (0);
 		i++;
 	}
@@ -86,14 +85,15 @@ int			is_valid_args_value(t_args *args)
 	i = 0;
 	while (i < MAX_ARGS_NUMBER && args->type[i] != 0)
 	{
-		if (args->type[i] == T_REG && (args->val[i] > REG_NUMBER || args->val[i] < 1))
+		if (args->type[i] == T_REG
+		&& (args->val[i] > REG_NUMBER || args->val[i] < 1))
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
-void	get_val(t_arena *arena, t_process *process)
+void		get_val(t_arena *arena, t_process *process)
 {
 	int	i;
 
@@ -106,11 +106,13 @@ void	get_val(t_arena *arena, t_process *process)
 		}
 		else if (arena->args->type[i] == T_IND)
 		{
-			arena->args->val_read[i] = mem_ind_to_int(arena, process, (int)arena->args->val[i]);
+			arena->args->val_read[i] = mem_ind_to_int(arena, process,
+			(int)arena->args->val[i]);
 		}
 		else if (arena->args->type[i] == T_REG)
 		{
-			arena->args->val_read[i] = reg_read_int(process, arena->args->val[i]);
+			arena->args->val_read[i] = reg_read_int(process,
+			arena->args->val[i]);
 		}
 		i++;
 	}
