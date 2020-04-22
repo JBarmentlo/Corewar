@@ -115,7 +115,6 @@ int			pars_header(t_champion *champ)
 		return (FALSE);
 	nb = string_to_int(champ, sizeof(COREWAR_EXEC_MAGIC), 0);
 	if (nb != COREWAR_EXEC_MAGIC)
-    
 		return ((intptr_t)ft_error(WRONG_MAGIC_NB, NULL));
 	else
 		champ->header.magic = nb;
