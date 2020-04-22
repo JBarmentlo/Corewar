@@ -1,7 +1,6 @@
 #include "arena.h"
 #include "bitMasks.h"
 
-// CHECK get_val yet untested
 void	x06(t_arena *arena, t_process *process)
 {
 	int	val;
