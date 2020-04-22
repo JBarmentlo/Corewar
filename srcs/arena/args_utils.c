@@ -4,7 +4,6 @@
 
 t_args		*new_t_args(void)
 {
-//	print_t_args(arena->args);
 	t_args	*out;
 	int		i;
 
@@ -22,9 +21,8 @@ t_args		*new_t_args(void)
 
 void		set_args_to_zero(t_args *args)
 {
-//	print_t_args(arena->args);
-
 	int i;
+
 	i = 0;
 	args->opcode = 0;
 	while (i < MAX_ARGS_NUMBER)
@@ -38,10 +36,8 @@ void		set_args_to_zero(t_args *args)
 
 byte		is_valid_opcode(byte opcode)
 {
-
 	if (opcode <= 16 && opcode > 0)
 	{
-	//	print_t_args(arena->args);
 		return (1);
 	}
 	return (0);
@@ -49,8 +45,6 @@ byte		is_valid_opcode(byte opcode)
 
 uint16_t	type_to_size(byte type, t_op *op)
 {
-//	print_t_args(arena->args);
-
 	if (type == 0)
 	{
 		return (0);
@@ -68,13 +62,11 @@ uint16_t	type_to_size(byte type, t_op *op)
 		else
 			return (4);
 	}
-	printf("THIS SHOULD NEVER BE PRINTED type_to_size\n");
 	return (0);
 }
 
 int			is_valid_encoding_byte(t_arena *arena, t_process *process)
 {
-//	print_t_args(arena->args);
 	int	i;
 
 	i = 0;
@@ -89,8 +81,6 @@ int			is_valid_encoding_byte(t_arena *arena, t_process *process)
 
 int			is_valid_args_value(t_args *args)
 {
-//	print_t_args(arena->args);
-
 	int	i;
 
 	i = 0;
@@ -101,10 +91,8 @@ int			is_valid_args_value(t_args *args)
 		i++;
 	}
 	return (1);
-
 }
 
-// Assumes type[] and val[] are defined
 void	get_val(t_arena *arena, t_process *process)
 {
 	int	i;

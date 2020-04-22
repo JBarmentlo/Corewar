@@ -1,7 +1,7 @@
 #include "arena.h"
 #include "bitMasks.h"
 
-void    x12(t_arena *arena, t_process *process)
+void	x12(t_arena *arena, t_process *process)
 {
 	t_process	*new;
 
@@ -13,6 +13,8 @@ void    x12(t_arena *arena, t_process *process)
 	arena->total_process_nb += 1;
 	if ((VERBOSE & FORK))
 	{
-		printf("forked process to PC: %d with R1: %d\n", (process->PC + (arena->args->val[0] % IDX_MOD)) & MODULO_MASK, new->registre[0]);
+		printf("forked process to PC: %d with R1: %d\n",
+			(process->PC + (arena->args->val[0] % IDX_MOD)) & MODULO_MASK,
+			new->registre[0]);
 	}
 }
