@@ -62,22 +62,22 @@ COREWAR_SOURCE_FILES=cycle.c \
 	pars_num_champ.c \
 	pars_header.c \
 	start_arena.c \
-	0x01_live.c \
-	0x02_load.c \
-	0x03_store.c \
-	0x04_add.c \
-	0x05_sub.c \
-	0x06_and.c \
-	0x07_or.c \
-	0x08_xor.c \
-	0x09_zjump.c \
-	0x10_ldi.c \
-	0x11_sti.c \
-	0x12_fork.c \
-	0x13_lld.c \
-	0x14_lldi.c \
-	0x15_lfork.c \
-	0x16_aff.c \
+	x01_live.c \
+	x02_load.c \
+	x03_store.c \
+	x04_add.c \
+	x05_sub.c \
+	x06_and.c \
+	x07_or.c \
+	x08_xor.c \
+	x09_zjump.c \
+	x10_ldi.c \
+	x11_sti.c \
+	x12_fork.c \
+	x13_lld.c \
+	x14_lldi.c \
+	x15_lfork.c \
+	x16_aff.c \
 	debug.c \
 	end_free.c 
 
@@ -86,7 +86,8 @@ UTILS_SOURCE_FILES=endian_converter.c \
 	read_write.c \
 	ft_error.c \
 	usage.c \
-	mem_color.c
+	mem_color.c \
+	display_winner.c
 
 ASM_SOURCE_FILES=main_asm.c \
 	gnl.c \
