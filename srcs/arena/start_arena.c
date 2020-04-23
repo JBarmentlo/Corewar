@@ -25,7 +25,7 @@
 t_process	*make_process(void)
 {
 	t_process	*process;
-	int		i;
+	int			i;
 
 	if (!(process = ft_memalloc(sizeof(t_process))))
 		return (NULL);
@@ -51,8 +51,8 @@ t_process	*make_process(void)
 t_process	*make_process_list(t_arena *vm)
 {
 	t_process	*process;
-	int		i;
-	int		pc;
+	int			i;
+	int			pc;
 
 	i = 0;
 	pc = 0;
@@ -128,11 +128,9 @@ void		fill_arena(t_arena *vm, t_champion *champ, int indx)
 	}
 }
 
-
-void	fill_fun_ptr_tab(t_arena *arena)
+void		fill_fun_ptr_tab(t_arena *arena)
 {
 	arena->op_fun_tab = malloc(17 * sizeof(t_fun_ptr));
-
 	arena->op_fun_tab[0] = &x01;
 	arena->op_fun_tab[1] = &x02;
 	arena->op_fun_tab[2] = &x03;

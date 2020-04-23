@@ -76,7 +76,7 @@ int32_t		string_to_int(t_champion *champ, int size, int i)
 ** size of the code: it is a number, written on 4 bytes, the should indicates
 ** the size in octet that occupies the code section. So it is should be equal
 ** to the size of the entire file (prog_size) minus the size of the header.
-** Finally comes the comment and it's padding that we just need to stock.
+** Finally comes the comment and its padding that we just need to stock.
 */
 
 int			name_size_comment(t_champion *champ)

@@ -4,30 +4,24 @@
 void	process_invalid(t_process *process)
 {
 	process->PC++;
-	process->PC = process->PC  & MODULO_MASK;
-	process->current_op = NULL;	//will be made obsolete by architecture
+	process->PC = process->PC & MODULO_MASK;
+	process->current_op = NULL;
 }
 
 void	execute_process(t_arena *arena, t_process *process)
 {
-	int	PC_jump;
-//	printf("opcode: %u\n", process->current_op->opcode);
+	int	pc_jump;
 	set_args_to_zero(arena->args);
 	if (process->current_op->encoding_byte)
 	{
 		read_encoding_byte(arena, process);
 		if (!is_valid_encoding_byte(arena, process))
-		{
-			process_invalid(process);		//check reinsertion inta table
-			return ;
-		}
+			return (process_invalid(process));
 	}
 	else
-	{
 		no_encoding_byte(arena, process);
-	}
 	copy_to_args_tmp(arena, process);
-	PC_jump = read_args(arena->args, process);
+	pc_jump = read_args(arena->args, process);
 	if (!is_valid_args_value(arena->args))
 	{
 		process_invalid(process);
@@ -35,11 +29,10 @@ void	execute_process(t_arena *arena, t_process *process)
 	}
 	run_function(arena, process);
 	if (process->current_op->opcode != 9 || process->carry == 0)
-		process->PC = (process->PC + PC_jump + process->current_op->encoding_byte + 1) & MODULO_MASK;
+		process->PC = (process->PC + pc_jump +
+			process->current_op->encoding_byte + 1) & MODULO_MASK;
 	process->current_op = NULL;
 	add_process_to_table(process, arena, arena->cycle + 1);
-
-	//reinsert into table ?
 }
 
 void	execute_processes(t_arena *arena)
@@ -50,18 +43,18 @@ void	execute_processes(t_arena *arena)
 	it = arena->process_table[arena->cycle % PROCESS_TABLE_SIZE];
 	while (it != NULL)
 	{
-
 		next = it->next_table;
 		if (it->current_op == NULL)
 		{
 			if (is_valid_opcode(arena->memory[it->PC]))
 			{
 				it->current_op = &g_op_tab[arena->memory[it->PC] - 1];
-				add_process_to_table(it, arena, arena->cycle + it->current_op->cycle_to_wait);
+				add_process_to_table(it, arena, arena->cycle +
+					it->current_op->cycle_to_wait);
 			}
 			else
 			{
-				it->PC = (it->PC + 1)  & MODULO_MASK;
+				it->PC = (it->PC + 1) & MODULO_MASK;
 				add_process_to_table(it, arena, arena->cycle + 1);
 			}
 		}
@@ -73,7 +66,7 @@ void	execute_processes(t_arena *arena)
 				printf("cycle : \t%lu\n", arena->cycle);
 				printf("PC:\t\t%d\n", it->PC);
 			}
-			execute_process(arena, it);	
+			execute_process(arena, it);
 		}
 		it = next;
 	}

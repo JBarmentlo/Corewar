@@ -53,9 +53,9 @@ else
 fi
 echo "\033[32mcopy all brew .a and .dylib in srcs/sdl_src\033[00m"
 cp ~/.brew/Cellar/sdl2/*/lib/*.a srcs/sdl_src/
-cp ~/.brew/Cellar/sdl2/*/lib/*.dylib srcs/sdl_src/
-cp ~/.brew/Cellar/sdl2_image/*/lib/*.dylib srcs/sdl_src/
+cp ~/.brew/Cellar/sdl2/*/lib/*.so srcs/sdl_src/
+cp ~/.brew/Cellar/sdl2_image/*/lib/*.so srcs/sdl_src/
 cp ~/.brew/Cellar/sdl2_image/*/lib/*.a srcs/sdl_src/
 cp ~/.brew/Cellar/sdl2_ttf/*/lib/*.a srcs/sdl_src/
-cp ~/.brew/Cellar/sdl2_ttf/*/lib/*.dylib srcs/sdl_src/
+cp ~/.brew/Cellar/sdl2_ttf/*/lib/*.so srcs/sdl_src/
 
