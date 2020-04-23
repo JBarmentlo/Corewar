@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/05 14:40:40 by dberger           #+#    #+#             */
-/*   Updated: 2020/04/23 13:53:25 by deyaberge        ###   ########.fr       */
+/*   Updated: 2020/04/23 14:04:03 by deyaberge        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,14 +166,20 @@ void						init_window(t_disp *d, t_arena a);
 void						disp_init_var(t_disp *d);
 void						disp_init_players(t_disp *d, t_arena a);
 void						disp_init_info(t_disp *d);
-void						events(t_disp *d, int *running, int *timeout, t_arena a);
-void						event_mousemotion(t_disp *d, int *timeout, t_arena a, int ph);
-void						event_mousebutton(t_disp *d, int *running, int *timeout, t_arena a);
+void						events(t_disp *d, int *running, int *timeout,
+							t_arena a);
+void						event_mousemotion(t_disp *d, int *timeout,
+							t_arena a, int ph);
+void						event_mousebutton(t_disp *d, int *running,
+							int *timeout, t_arena a);
 void						disp_ttf(char *ttf, SDL_Color color, t_disp *d);
 void						update_visu(t_disp *d, t_arena a);
-void						update_info_op(t_disp *d, t_arena a, char *info, int i);
-void						update_info_global(t_disp *d, t_arena a, char *info, int i);
-void						update_info_players(t_disp *d, t_arena a, char *info, int i);
+void						update_info_op(t_disp *d, t_arena a, char *info,
+							int i);
+void						update_info_global(t_disp *d, t_arena a, char *info,
+							int i);
+void						update_info_players(t_disp *d, t_arena a,
+							char *info, int i);
 void						update_arena(t_disp *d, t_arena a, int i);
 void						event_motion_bar3(t_disp *d, int i);
 void						event_button_players3(t_disp *d, int i, t_arena a);
@@ -189,7 +195,8 @@ t_byte						*uint_to_big_endian(uint val, int size);
 unsigned int				big_endian_to_uint(void *val, int size);
 int							big_endian_to_int(void *vall, int size);
 t_byte						*endian_switch(void *val, int size);
-void						memcopy_endian_flip(void *src, void *dest, uint16_t size);
+void						memcopy_endian_flip(void *src, void *dest,
+							uint16_t size);
 void						memcopy(void *src, void *dest, uint16_t size);
 
 /*
@@ -198,14 +205,18 @@ void						memcopy(void *src, void *dest, uint16_t size);
 void						set_args_to_zero(t_args *args);
 t_args						*new_t_args(void);
 int							is_valid_args_value(t_args *args);
-int							is_valid_encoding_byte(t_arena *arena, t_process *process);
+int							is_valid_encoding_byte(t_arena *arena,
+							t_process *process);
 t_byte						is_valid_opcode(t_byte);
-void						read_encoding_byte(t_arena *arena, t_process *process);
+void						read_encoding_byte(t_arena *arena,
+							t_process *process);
 uint16_t					type_to_size(t_byte type, t_op *op);
 uint16_t					read_args(t_args *args, t_process *process);
 uint16_t					fill_args(t_arena *arena, t_process *process);
-void						copy_to_args_tmp(t_arena *arena, t_process *process);
-void						no_encoding_byte(t_arena *arena, t_process *process);
+void						copy_to_args_tmp(t_arena *arena,
+							t_process *process);
+void						no_encoding_byte(t_arena *arena,
+							t_process *process);
 void						get_val(t_arena *arena, t_process *process);
 int							opcode_to_mask(int opcode);
 
@@ -219,18 +230,23 @@ void						process_invalid(t_process *process);
 void						execute_process(t_arena *arena, t_process *process);
 void						execute_processes(t_arena *arena);
 void						kill_process(t_arena *arena, t_process *it);
-void						remove_process_from_table(t_arena *arena, t_process *process); //wildly unchecked
+void						remove_process_from_table(t_arena *arena,
+							t_process *process); //wildly unchecked
 t_process					*process_copy(t_process *src);
-void						add_process_to_table(t_process *process, t_arena *arena, uint table_index);
-void						add_process_to_list(t_process *process, t_arena *arena);
+void						add_process_to_table(t_process *process,
+							t_arena *arena, uint table_index);
+void						add_process_to_list(t_process *process,
+							t_arena *arena);
 void						free_all_processes(t_arena *arena);
 
 /*
 ** READ WRITE
 */
 int							reg_read_int(t_process *process, int reg_nb);
-void						reg_write_int(t_process *process, int val, int reg_number);
-int							mem_ind_to_int(t_arena *arena, t_process *process, int ind);
+void						reg_write_int(t_process *process, int val,
+							int reg_number);
+int							mem_ind_to_int(t_arena *arena, t_process *process,
+							int ind);
 int							mem_read_int(t_arena *arena, int index);
 void						mem_write_int(t_arena *arena, int index, int val);
 
@@ -254,7 +270,8 @@ void						check_negative_PC(t_arena *arena);
 /*
 ** DISPLAY
 */
-void						mem_write_color(t_arena *arena, uint index, uint size, int champ_nb);
+void						mem_write_color(t_arena *arena, uint index,
+							uint size, int champ_nb);
 void						update_champion_alive(t_arena *arena);
 void						hex_dump_ugly(t_arena *arena);
 int							display_winner(t_arena *vm);
