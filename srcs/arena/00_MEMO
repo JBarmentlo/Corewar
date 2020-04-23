@@ -5,10 +5,8 @@ NEED TO ADD DEAD CHAMPS TO FILL TAB or live will segfault
 
 carry starts at 0  or 1 ?
 
-champions can "resurrect"
-
 option -n nous nique car on utilise champ number comme indice ds le tableau
 
-memory_numbers + '0' or not (in fill_arena)
+live isnt checking champion numbers properly ?
 
-wrong color first last octet
+-- pour noms de ficher -dump et tout -- ends options

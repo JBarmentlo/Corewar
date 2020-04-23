@@ -2,4 +2,4 @@ Usage: ./corewar [-dump N] [[-n N] <champion1.cor>] <...>
 #### TEXT OUTPUT MODE ##########################################################
 	-dump N		: Dumps memory after N cycles then exits
 ###### CHAMPION SPECIFICATION  #################################################
-	-n N		: fixes the number of the champion followed by this option
+	-n N		: fixes the number of the champion followed by this option (Must be between 1 and nb_players + 1)

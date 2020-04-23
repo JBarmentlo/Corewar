@@ -25,7 +25,7 @@
 t_process	*make_process(void)
 {
 	t_process	*process;
-	int		i;
+	int			i;
 
 	if (!(process = ft_memalloc(sizeof(t_process))))
 		return (NULL);
@@ -33,7 +33,7 @@ t_process	*make_process(void)
 	process->carry = 0;
 	process->PC = 0;
 	process->current_op = NULL;
-	process->last_live = 0;
+	process->last_live = -123456798;
 	process->table_pos = 0;
 	process->alive = 1;
 	process->owner = NULL;
@@ -51,17 +51,16 @@ t_process	*make_process(void)
 t_process	*make_process_list(t_arena *vm)
 {
 	t_process	*process;
-	int		i;
-	int		pc;
+	int			i;
+	int			pc;
 
 	i = 0;
 	pc = 0;
 	while (i < vm->nb_champs)
 	{
 		process = make_process();
-		process->registre[0] = ((-1) * (i + 1));
-		// what about (-) ? //
 		process->owner = &vm->champion_table[i];
+		process->registre[0] = -process->owner->number;
 		process->PC = pc;
 		add_process_to_list(process, vm);
 		add_process_to_table(process, vm, 0);
@@ -128,11 +127,9 @@ void		fill_arena(t_arena *vm, t_champion *champ, int indx)
 	}
 }
 
-
-void	fill_fun_ptr_tab(t_arena *arena)
+void		fill_fun_ptr_tab(t_arena *arena)
 {
 	arena->op_fun_tab = malloc(17 * sizeof(t_fun_ptr));
-
 	arena->op_fun_tab[0] = &x01;
 	arena->op_fun_tab[1] = &x02;
 	arena->op_fun_tab[2] = &x03;
@@ -149,7 +146,6 @@ void	fill_fun_ptr_tab(t_arena *arena)
 	arena->op_fun_tab[13] = &x14;
 	arena->op_fun_tab[14] = &x15;
 	arena->op_fun_tab[15] = &x16;
-//	arena->op_fun_tab[16] = &x17;
 }
 
 int			start_arena(t_arena *vm, t_champion *champ)

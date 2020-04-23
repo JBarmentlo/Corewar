@@ -58,7 +58,10 @@ int		main(int ac, char **av)
 		do_the_cycle(&vm);
 	}
 	if (vm.option_dump != 0)
-		hex_dump_ugly(&vm);
+	{
+		hex_dump(&vm);
+		//hex_dump_ugly(&vm);
+	}
     display_winner(&vm);
 	free_all(&vm);
 	return (0);
