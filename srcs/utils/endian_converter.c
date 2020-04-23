@@ -9,11 +9,11 @@
 //returns a pointer to switched endian value.
 // the macs are little endian I believe ?
 // it's malloc so free it later
-byte	*endian_switch(void *vall, int size)
+t_byte	*endian_switch(void *vall, int size)
 {
 	int		i;
-	byte	*out;
-	byte	*val;
+	t_byte	*out;
+	t_byte	*val;
 
 	i = 0;
 	val = vall;
@@ -30,8 +30,8 @@ byte	*endian_switch(void *vall, int size)
 // untested
 uint		big_endian_to_uint(void *vall, int size)
 {
-	byte	*tmp;
-	byte	*val;
+	t_byte	*tmp;
+	t_byte	*val;
 	uint	out;
 	val = vall;
 	tmp = endian_switch(val, size);
@@ -46,7 +46,7 @@ uint		big_endian_to_uint(void *vall, int size)
 	}
 	else if (size == 1)
 	{
-		out = ((uint)*((byte*)tmp));
+		out = ((uint)*((t_byte*)tmp));
 	}
 	free(tmp);
 	return (out);
@@ -54,8 +54,8 @@ uint		big_endian_to_uint(void *vall, int size)
 
 int		big_endian_to_int(void *vall, int size)
 {
-	byte	*tmp;
-	byte	*val;
+	t_byte	*tmp;
+	t_byte	*val;
 	int	out;
 	val = vall;
 	tmp = endian_switch(val, size);
@@ -70,21 +70,21 @@ int		big_endian_to_int(void *vall, int size)
 	}
 	else if (size == 1)
 	{
-		out = ((int)*((byte*)tmp));
+		out = ((int)*((t_byte*)tmp));
 	}
 	free(tmp);
 	return (out);
 }
 
-byte				*uint_to_big_endian(uint val, int size)
+t_byte				*uint_to_big_endian(uint val, int size)
 {
-	return (endian_switch((byte*)&val, size));
+	return (endian_switch((t_byte*)&val, size));
 }
 
 void			bit_dump(void *ptrr, int size)
 {
 	int		i;
-	byte	*ptr;
+	t_byte	*ptr;
 
 	ptr = ptrr;
 	i = 0;
@@ -108,8 +108,8 @@ void			bit_dump(void *ptrr, int size)
 void					memcopy(void *src, void *dest, uint16_t size)	// DOES this work for static arrays ?
 {
 	int		i;
-	byte	*srcc;
-	byte	*destt;
+	t_byte	*srcc;
+	t_byte	*destt;
 
 	srcc = src;
 	destt = dest;
@@ -126,8 +126,8 @@ void					memcopy(void *src, void *dest, uint16_t size)	// DOES this work for sta
 void					memcopy_endian_flip(void *src, void *dest, uint16_t size)
 {
 	int		i;
-	byte	*srcc;
-	byte	*destt;
+	t_byte	*srcc;
+	t_byte	*destt;
 
 	srcc = src;
 	destt = dest;

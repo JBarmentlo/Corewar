@@ -35,7 +35,7 @@ void	mem_write_color(t_arena *arena, uint index, uint size, int champ_nb)
 
 int		mem_read_int(t_arena *arena, int index)
 {
-	byte	out[REG_SIZE];
+	t_byte	out[REG_SIZE];
 	int		i;
 
 	i = 0;
@@ -49,10 +49,10 @@ int		mem_read_int(t_arena *arena, int index)
 
 void	mem_write_int(t_arena *arena, int index, int val)
 {
-	byte	*value;
+	t_byte	*value;
 	int		i;
 
-	value =  (byte*)&val;
+	value =  (t_byte*)&val;
 	i = 0;
 	while (i < REG_SIZE)
 	{

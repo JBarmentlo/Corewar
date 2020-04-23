@@ -14,6 +14,7 @@
 # define ARENA_H
 
 # include "utils.h"
+# include <stdint.h>
 
 # define COREWAR			1
 # define INIT_NUM			-1
@@ -44,7 +45,7 @@ typedef struct			s_champion
 	header_t		header;
 	int			number;
 	int			fd;
-	byte			prog[SIZE_MAX_PROG];
+	t_byte			prog[SIZE_MAX_PROG];
 	int			alive;
 	int			lives_since_last_check;
 	int			total_memory_owned;
@@ -55,7 +56,7 @@ typedef struct			s_champion
 typedef struct			s_process
 {
 	int			registre[REG_NUMBER];
-	byte			args_tmp[MAX_ARGS_SIZE];
+	t_byte			args_tmp[MAX_ARGS_SIZE];
 	int			bytecode_size;
 	int			carry;
 	uint16_t		PC;
@@ -70,9 +71,9 @@ typedef struct			s_process
 
 typedef struct			s_args
 {
-	byte			opcode;
-	byte			type[MAX_ARGS_NUMBER];
-	byte			size[MAX_ARGS_NUMBER];
+	t_byte			opcode;
+	t_byte			type[MAX_ARGS_NUMBER];
+	t_byte			size[MAX_ARGS_NUMBER];
 	int			val[MAX_ARGS_NUMBER];
 	int			val_read[MAX_ARGS_NUMBER];
 }				t_args;
@@ -85,8 +86,8 @@ typedef struct 			s_arena
 	t_champion		champion_table[MAX_PLAYERS];
 	int			    nb_champs;
 	int			    option_dump;
-	byte			memory[MEM_SIZE];
-	byte			memory_color[MEM_SIZE];
+	t_byte			memory[MEM_SIZE];
+	t_byte			memory_color[MEM_SIZE];
 	int			    last_live_champ_number;
 	int			    nb_live_champions;
 	void 			(**op_fun_tab)(struct s_arena*, t_process*);
@@ -177,16 +178,16 @@ void				event_button_players3(t_disp *d, int i, t_arena a);
 
 //
 void				bit_dump(void *ptr, int size);
-byte				*int_to_big_endian(int val, int size);
-byte				*endian_switch(void *val, int size);
+t_byte				*int_to_big_endian(int val, int size);
+t_byte				*endian_switch(void *val, int size);
 
 
 // ENDIAN
 
-byte				*uint_to_big_endian(uint val, int size);
+t_byte				*uint_to_big_endian(uint val, int size);
 unsigned int			big_endian_to_uint(void *val, int size);
 int				big_endian_to_int(void *vall, int size);
-byte				*endian_switch(void *val, int size);
+t_byte				*endian_switch(void *val, int size);
 void				memcopy_endian_flip(void *src, void *dest, uint16_t size);
 void				memcopy(void *src, void *dest, uint16_t size);
 
@@ -196,9 +197,9 @@ void				set_args_to_zero(t_args *args);
 t_args				*new_t_args(void);
 int				is_valid_args_value(t_args *args);
 int				is_valid_encoding_byte(t_arena *arena, t_process *process);
-byte				is_valid_opcode(byte);
+t_byte				is_valid_opcode(t_byte);
 void				read_encoding_byte(t_arena *arena, t_process *process);
-uint16_t			type_to_size(byte type, t_op *op);
+uint16_t			type_to_size(t_byte type, t_op *op);
 uint16_t			read_args(t_args *args, t_process *process);
 uint16_t			fill_args(t_arena *arena, t_process *process);
 void				copy_to_args_tmp(t_arena *arena, t_process *process);
@@ -281,7 +282,7 @@ void				x16(t_arena *arena, t_process *process);
 
 
 // 	TESTING FUNCTIONS
-byte				bytecode_gen(int one, int two, int three);
+t_byte				bytecode_gen(int one, int two, int three);
 t_arena 			*make_vm();
 void				bit_dump(void *ptr, int size);
 void				print_t_args(t_args *args);
