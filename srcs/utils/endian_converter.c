@@ -1,15 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   endian_converter.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: deyaberger <marvin@42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/04/23 13:26:34 by deyaberge         #+#    #+#             */
+/*   Updated: 2020/04/23 13:28:19 by deyaberge        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "arena.h"
-#include "stdlib.h"
-#include "stdio.h"
-#include "bitMasks.h"
 
 // write bit printer to test these
-
 
 //returns a pointer to switched endian value.
 // the macs are little endian I believe ?
 // it's malloc so free it later
-t_byte	*endian_switch(void *vall, int size)
+t_byte		*endian_switch(void *vall, int size)
 {
 	int		i;
 	t_byte	*out;
@@ -33,6 +41,7 @@ uint		big_endian_to_uint(void *vall, int size)
 	t_byte	*tmp;
 	t_byte	*val;
 	uint	out;
+
 	val = vall;
 	tmp = endian_switch(val, size);
 	out = 0;
@@ -52,11 +61,12 @@ uint		big_endian_to_uint(void *vall, int size)
 	return (out);
 }
 
-int		big_endian_to_int(void *vall, int size)
+int			big_endian_to_int(void *vall, int size)
 {
 	t_byte	*tmp;
 	t_byte	*val;
-	int	out;
+	int		out;
+
 	val = vall;
 	tmp = endian_switch(val, size);
 	out = 0;
@@ -76,12 +86,12 @@ int		big_endian_to_int(void *vall, int size)
 	return (out);
 }
 
-t_byte				*uint_to_big_endian(uint val, int size)
+t_byte		*uint_to_big_endian(uint val, int size)
 {
 	return (endian_switch((t_byte*)&val, size));
 }
 
-void			bit_dump(void *ptrr, int size)
+void		bit_dump(void *ptrr, int size)
 {
 	int		i;
 	t_byte	*ptr;
@@ -105,7 +115,7 @@ void			bit_dump(void *ptrr, int size)
 }
 
 // not safe for use on MEM
-void					memcopy(void *src, void *dest, uint16_t size)	// DOES this work for static arrays ?
+void		memcopy(void *src, void *dest, uint16_t size)	// DOES this work for static arrays ?
 {
 	int		i;
 	t_byte	*srcc;
@@ -123,7 +133,7 @@ void					memcopy(void *src, void *dest, uint16_t size)	// DOES this work for sta
 }
 
 // not safe for use on MEM
-void					memcopy_endian_flip(void *src, void *dest, uint16_t size)
+void		memcopy_endian_flip(void *src, void *dest, uint16_t size)
 {
 	int		i;
 	t_byte	*srcc;
