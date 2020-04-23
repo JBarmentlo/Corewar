@@ -27,14 +27,14 @@ t_arena		init_vm()
 
 int		main(int ac, char **av)
 {
-	t_disp		d;
-	int		timeout;
+//	t_disp		d;
+//	int		timeout;
 	int		running;
 	t_arena		vm;
 	t_champion	champ;
 	int		i;
 	int		visu = 1;
-	unsigned int 	j;
+//	unsigned int 	j;
 
 	i = 0;
 	vm = init_vm();
@@ -49,8 +49,8 @@ int		main(int ac, char **av)
 	}
 	if (start_arena(&vm, &champ) == FALSE)
 		return (FALSE);
-	if (visu)
-		init_window(&d, vm);
+//	if (visu)
+//		init_window(&d, vm);
 	running = 1;
 	vm.total_process_nb = vm.nb_champs;
 	count_owned_space(&vm);
@@ -63,7 +63,7 @@ int		main(int ac, char **av)
 		}
 		if (!visu)
 			do_the_cycle(&vm);
-		if (visu)
+/*		if (visu)
 		{
 			timeout = SDL_GetTicks() + 100;
 			i = SDL_GetTicks() + 100;
@@ -94,11 +94,11 @@ int		main(int ac, char **av)
 			}
 			update_visu(&d, vm);
 		}   
-	}
+*/	}
 	if (vm.option_dump != 0)
 		hex_dump_ugly(&vm);
-	if (visu)
-		error("End.", &d);
+//	if (visu)
+//		error("End.", &d);
 	free_all(&vm);
 	return (TRUE);
 }

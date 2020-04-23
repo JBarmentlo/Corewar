@@ -1,23 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_arena.c                                       :+:      :+:    :+:   */
+/*   main_no_visu.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/11 17:18:45 by jbarment         ###   ########.fr       */
+/*   Updated: 2020/04/23 13:20:45 by deyaberge        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "arena.h"
-#include "bitMasks.h"
-#include "stdio.h"
-#include "limits.h"
 
-t_arena		init_vm()
+t_arena		init_vm(void)
 {
-	t_arena vm;
+	t_arena	vm;
 
 	vm.nb_champs = 0;
 	vm.option_dump = 0;
@@ -25,12 +22,12 @@ t_arena		init_vm()
 	return (vm);
 }
 
-int		main(int ac, char **av)
+int			main(int ac, char **av)
 {
 	t_arena		vm;
 	t_champion	champ;
-    t_champion *campo;
-	int		i;
+	t_champion	*campo;
+	int			i;
 
 	i = 0;
 	vm = init_vm();
@@ -43,12 +40,13 @@ int		main(int ac, char **av)
 			return (FALSE);
 		i++;
 	}
-    i = 0;
-    if (start_arena(&vm, &champ) == FALSE)
+	i = 0;
+	if (start_arena(&vm, &champ) == FALSE)
 		return (FALSE);
 	vm.total_process_nb = vm.nb_champs;
 	count_owned_space(&vm);
-	while (!is_game_over(&vm) && ((vm.cycle < (unsigned long)vm.option_dump) || vm.option_dump == 0))
+	while (!is_game_over(&vm) && ((vm.cycle < (unsigned long)vm.option_dump)
+			|| vm.option_dump == 0))
 	{
 		if (vm.cycle == UINT64_MAX)
 		{
@@ -62,14 +60,14 @@ int		main(int ac, char **av)
 		hex_dump(&vm);
 		//hex_dump_ugly(&vm);
 	}
-    display_winner(&vm);
+	display_winner(&vm);
 	free_all(&vm);
 	return (0);
 }
 
-
 /*
-__attribute__((destructor)) void test()
-{
-	while(1);
-}*/
+**__attribute__((destructor)) void test()
+**{
+**	while(1);
+**}
+*/

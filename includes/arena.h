@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/05 14:40:40 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/12 17:39:39 by ncoursol         ###   ########.fr       */
+/*   Updated: 2020/04/23 13:10:03 by deyaberge        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 
 # include "utils.h"
 # include <stdint.h>
+# include "bitMasks.h"
+# include "stdlib.h"
+# include "limits.h"
 
 # define COREWAR			1
 # define INIT_NUM			-1

@@ -1,5 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   process.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: deyaberger <marvin@42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/04/23 13:11:21 by deyaberge         #+#    #+#             */
+/*   Updated: 2020/04/23 13:12:19 by deyaberge        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "arena.h"
-#include "bitMasks.h"
 
 void	process_invalid(t_process *process)
 {
@@ -11,6 +22,7 @@ void	process_invalid(t_process *process)
 void	execute_process(t_arena *arena, t_process *process)
 {
 	int	pc_jump;
+
 	set_args_to_zero(arena->args);
 	if (process->current_op->encoding_byte)
 	{
