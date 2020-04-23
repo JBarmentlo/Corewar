@@ -5,8 +5,8 @@
 void		read_encoding_byte(t_arena *arena, t_process *process)
 {
 	int		i;
-	byte	mask;
-	byte	val;
+	t_byte	mask;
+	t_byte	val;
 
 	val = arena->memory[(process->PC + 1) & MODULO_MASK];
 	mask = 3;
@@ -55,8 +55,8 @@ void		copy_to_args_tmp(t_arena *arena, t_process *process)
 uint16_t	read_args(t_args *args, t_process *process)
 {
 	uint16_t	pctmp;
-	byte		size;
-	byte		i;
+	t_byte		size;
+	t_byte		i;
 
 	pctmp = 0;
 	i = 0;

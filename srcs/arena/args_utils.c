@@ -34,7 +34,7 @@ void		set_args_to_zero(t_args *args)
 	}
 }
 
-byte		is_valid_opcode(byte opcode)
+t_byte		is_valid_opcode(t_byte opcode)
 {
 	if (opcode <= 16 && opcode > 0)
 	{
@@ -43,7 +43,7 @@ byte		is_valid_opcode(byte opcode)
 	return (0);
 }
 
-uint16_t	type_to_size(byte type, t_op *op)
+uint16_t	type_to_size(t_byte type, t_op *op)
 {
 	if (type == 0)
 	{

@@ -33,7 +33,7 @@ t_process	*make_process(void)
 	process->carry = 0;
 	process->PC = 0;
 	process->current_op = NULL;
-	process->last_live = 0;
+	process->last_live = -123456798;
 	process->table_pos = 0;
 	process->alive = 1;
 	process->owner = NULL;
@@ -59,9 +59,8 @@ t_process	*make_process_list(t_arena *vm)
 	while (i < vm->nb_champs)
 	{
 		process = make_process();
-		process->registre[0] = ((-1) * (i + 1));
-		// what about (-) ? //
 		process->owner = &vm->champion_table[i];
+		process->registre[0] = -process->owner->number;
 		process->PC = pc;
 		add_process_to_list(process, vm);
 		add_process_to_table(process, vm, 0);
@@ -147,7 +146,6 @@ void		fill_fun_ptr_tab(t_arena *arena)
 	arena->op_fun_tab[13] = &x14;
 	arena->op_fun_tab[14] = &x15;
 	arena->op_fun_tab[15] = &x16;
-//	arena->op_fun_tab[16] = &x17;
 }
 
 int			start_arena(t_arena *vm, t_champion *champ)
