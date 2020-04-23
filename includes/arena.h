@@ -88,7 +88,6 @@ typedef struct 			s_arena
 	byte			memory[MEM_SIZE];
 	byte			memory_color[MEM_SIZE];
 	int			    last_live_champ_number;
-	int			    nb_champions;
 	int			    nb_live_champions;
 	void 			(**op_fun_tab)(struct s_arena*, t_process*);
 	t_op			g_op_tab[17];

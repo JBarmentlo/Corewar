@@ -3,6 +3,7 @@
 void	print_vm_state(t_arena *arena)
 {
 	t_process	*it;
+	int			i;
 
 	it = arena->process_list;
 	printf("cycle:%lu\n", arena->cycle);
@@ -21,6 +22,14 @@ void	print_vm_state(t_arena *arena)
 		printf("Owner: %s, owner.nb: %d, R1:%d\n", it->owner->header.prog_name,
 			it->owner->number, it->registre[0]);
 		it = it->next_table;
+	}
+	printf("champions: \n");
+	i = 0;
+	printf("arena->nb_champs: %d \n", arena->nb_champs);
+	while (i < arena->nb_champs)
+	{
+		printf("nb %d, name %s\n", arena->champion_table[i].number, arena->champion_table[i].header.prog_name);
+		i++;
 	}
 }
 
@@ -110,7 +119,7 @@ void	hex_dump_ugly(t_arena *arena)
 	{
 		if (i % 32 == 0)
 			printf("\n");
-		printf("%02x ", arena->memory[i]);
+		printf("%02x", arena->memory[i]);
 		i++;
 	}
 }
