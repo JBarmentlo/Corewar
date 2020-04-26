@@ -59,18 +59,21 @@ void		error(char *src, t_disp *d)
 
 void		disp_ttf(char *ttf, SDL_Color color, t_disp *d)
 {
-	if ((d->txt = TTF_RenderText_Blended(d->font1, ttf, color)) == NULL)
-		error("(disp_init_var.c) TTF_RenderText_Blended : ", d);
-	if ((d->font = SDL_CreateTextureFromSurface(d->rend, d->txt)) == NULL)
-		error("(disp_init_var.c) SDL_CreateTextureFromSurface : ", d);
-	SDL_FreeSurface(d->txt);
-	d->txt = NULL;
-	if (SDL_QueryTexture(d->font, NULL, NULL, &d->mod.w, &d->mod.h) < 0)
-		error("(disp_init_var.c) SDL_QueryTexture : ", d);
-	if (SDL_RenderCopy(d->rend, d->font, NULL, &d->mod) < 0)
-		error("(disp_init_var.c) SDL_RenderCopy : ", d);
-	SDL_DestroyTexture(d->font);
-	d->font = NULL;
+	if (ttf[0] != '\0')
+	{
+		if ((d->txt = TTF_RenderText_Blended(d->font1, ttf, color)) == NULL)
+			error("(disp_init_var.c) TTF_RenderText_Blended : ", d);
+		if ((d->font = SDL_CreateTextureFromSurface(d->rend, d->txt)) == NULL)
+			error("(disp_init_var.c) SDL_CreateTextureFromSurface : ", d);
+		SDL_FreeSurface(d->txt);
+		d->txt = NULL;
+		if (SDL_QueryTexture(d->font, NULL, NULL, &d->mod.w, &d->mod.h) < 0)
+			error("(disp_init_var.c) SDL_QueryTexture : ", d);
+		if (SDL_RenderCopy(d->rend, d->font, NULL, &d->mod) < 0)
+			error("(disp_init_var.c) SDL_RenderCopy : ", d);
+		SDL_DestroyTexture(d->font);
+		d->font = NULL;
+	}
 }
 
 void		disp_init_var2(t_disp *d)
