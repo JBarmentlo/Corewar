@@ -1,5 +1,20 @@
 #include "arena.h"
 
+void	print_champions(t_arena *arena)
+{
+	int	i;
+
+	printf("champions: \n");
+	i = 0;
+	printf("arena->nb_champs: %d \n", arena->nb_champs);
+	while (i < arena->nb_champs)
+	{
+		printf("nb %d, name %s\n", arena->champion_table[i].number,
+			arena->champion_table[i].header.prog_name);
+		i++;
+	}
+}
+
 void	print_vm_state(t_arena *arena)
 {
 	t_process	*it;
@@ -23,14 +38,7 @@ void	print_vm_state(t_arena *arena)
 			it->owner->number, it->registre[0]);
 		it = it->next_table;
 	}
-	printf("champions: \n");
-	i = 0;
-	printf("arena->nb_champs: %d \n", arena->nb_champs);
-	while (i < arena->nb_champs)
-	{
-		printf("nb %d, name %s\n", arena->champion_table[i].number, arena->champion_table[i].header.prog_name);
-		i++;
-	}
+	print_champions(arena);
 }
 
 void	printf_process_pc(t_arena *arena)

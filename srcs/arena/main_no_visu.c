@@ -15,7 +15,7 @@
 #include "stdio.h"
 #include "limits.h"
 
-t_arena		init_vm()
+t_arena	init_vm()
 {
 	t_arena vm;
 
@@ -30,7 +30,7 @@ int		main(int ac, char **av)
 	t_arena		vm;
 	t_champion	champ;
     t_champion *campo;
-	int		i;
+	int			i;
 
 	i = 0;
 	vm = init_vm();
@@ -66,7 +66,6 @@ int		main(int ac, char **av)
 	free_all(&vm);
 	return (0);
 }
-
 
 /*
 __attribute__((destructor)) void test()

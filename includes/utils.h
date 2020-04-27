@@ -14,13 +14,13 @@
 # define UTILS_H
 
 # include <stdio.h>
-# include <stdint.h>
 # include "op.h"
 # include "libft/libft.h"
 # include "ft_printf/ft_printf.h"
 # include "sdl_include/SDL.h"
 # include "sdl_include/SDL_image.h"
 # include "sdl_include/SDL_ttf.h"
+# include <stdint.h>
 
 # define TRUE				1
 # define FALSE				0
