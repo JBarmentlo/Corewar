@@ -6,7 +6,7 @@
 #    By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/22 19:37:40 by dberger           #+#    #+#              #
-#    Updated: 2020/04/28 09:21:18 by deyaberge        ###   ########.fr        #
+#    Updated: 2020/04/28 10:00:39 by user42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -121,9 +121,9 @@ OUT_UTILS=$(addprefix $(OBJ_FOLDER)/,$(notdir $(SRCS_UTILS:.c=.o)))
 OUT_ASM=$(addprefix $(OBJ_FOLDER)/,$(notdir $(SRCS_ASM:.c=.o)))
 OUT_COREWAR=$(addprefix $(OBJ_FOLDER)/,$(notdir $(SRCS_COREWAR:.c=.o)))
 
-SDLPATH =  /Users/deyaberger/.brew/Cellar/sdl2/2.0.12_1/lib
-SDLIMAGEPATH =  /Users/deyaberger/.brew/Cellar/sdl2_image/2.0.5/lib
-SDLTTFPATH =  /Users/deyaberger/.brew/Cellar/sdl2_ttf/2.0.15/lib
+SDLPATH= $(shell locate libSDL2.so | grep -m1 "" | rev | cut -d "/" -f 2- | rev)
+SDLIMAGEPATH= $(shell locate libSDL2_image.so | grep -m1 "" | rev | cut -d "/" -f 2- | rev)
+SDLTTFPATH = $(shell locate libSDL2_ttf.so | grep -m1 "" | rev | cut -d "/" -f 2- | rev)
 
 all: $(OBJ_FOLDER) $(LIB) libCorewar.a asm corewar
 
@@ -153,7 +153,7 @@ corewar: $(LIB) $(OUT_COREWAR) libCorewar.a Makefile $(RELINK_INCUDE) srcs/arena
 
 corewar_visu: visu $(LIB) $(OUT_COREWAR) libCorewar.a Makefile $(RELINK_INCUDE) srcs/arena/main_arena.c
 	$(COMPILER) -o $(NAME_COREWAR) $(OUT_COREWAR) srcs/arena/main_arena.c visu.a  $(LIBS) $(LIB) -L $(SDLPATH) -L $(SDLIMAGEPATH) -L $(SDLTTFPATH) -l SDL2 -l SDL2_image -l SDL2_ttf
-	echo "$(YELLOW)	--- $(GREEN)Corewar$(YELLOW) Compiled ! ---	$(NO_COLOR)"
+	echo "$(YELLOW)	--- $(GREEN)corewar_visu$(YELLOW) Compiled ! ---	$(NO_COLOR)"
 
 $(OBJ_FOLDER)/%.o: $(SRCS_COREWAR_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $@ -c $<
