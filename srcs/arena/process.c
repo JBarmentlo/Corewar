@@ -47,6 +47,21 @@ void	execute_process(t_arena *arena, t_process *process)
 	add_process_to_table(process, arena, arena->cycle + 1);
 }
 
+void	execute_processes_splice(t_arena *arena, t_process *it)
+{
+	if (is_valid_opcode(arena->memory[it->PC]))
+	{
+		it->current_op = &g_op_tab[arena->memory[it->PC] - 1];
+		add_process_to_table(it, arena, arena->cycle +
+			it->current_op->cycle_to_wait);
+	}
+	else
+	{
+		it->PC = (it->PC + 1) & MODULO_MASK;
+		add_process_to_table(it, arena, arena->cycle + 1);
+	}
+}
+
 void	execute_processes(t_arena *arena)
 {
 	t_process	*it;
@@ -58,17 +73,7 @@ void	execute_processes(t_arena *arena)
 		next = it->next_table;
 		if (it->current_op == NULL)
 		{
-			if (is_valid_opcode(arena->memory[it->PC]))
-			{
-				it->current_op = &g_op_tab[arena->memory[it->PC] - 1];
-				add_process_to_table(it, arena, arena->cycle +
-					it->current_op->cycle_to_wait);
-			}
-			else
-			{
-				it->PC = (it->PC + 1) & MODULO_MASK;
-				add_process_to_table(it, arena, arena->cycle + 1);
-			}
+			execute_processes_splice(arena, it);
 		}
 		else
 		{

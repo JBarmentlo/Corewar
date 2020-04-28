@@ -36,7 +36,7 @@ t_process	*process_copy(t_process *src)
 	return (out);
 }
 
-void		remove_process_from_table(t_arena *arena, t_process *process) // extra testing ?
+void		remove_process_from_table(t_arena *arena, t_process *process)
 {
 	t_process	*it;
 	int			norm;
@@ -101,17 +101,3 @@ void		add_process_to_list(t_process *process, t_arena *arena)
 	arena->process_list = process;
 }
 
-void		free_all_processes(t_arena *arena)
-{
-	t_process	*it;
-	t_process	*tmp;
-
-	it = arena->process_list;
-	while (it)
-	{
-		tmp = it->next_list;
-		bzero(it, sizeof(t_process));
-		free(it);
-		it = tmp;
-	}
-}

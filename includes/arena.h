@@ -259,7 +259,6 @@ void						*ind_to_ptr_no_idx(t_arena *arena, int ind, int PC);
 void						fill_fun_ptr_tab(t_arena *arena);
 int							positive_modulo_memsize(int a);
 int							opcode_to_mask(int opcode);
-void						hex_dump(t_arena *arena);
 void						dump_color(t_arena *arena);
 void						print_vm_state(t_arena *arena);
 void						free_all(t_arena *arena);
