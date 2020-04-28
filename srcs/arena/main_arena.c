@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:24:17 by dberger           #+#    #+#             */
-/*   Updated: 2020/04/28 08:48:30 by deyaberge        ###   ########.fr       */
+/*   Updated: 2020/04/28 09:56:33 by deyaberge        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int		main(int ac, char **av)
 		champ = vm.champion_table[i];
 		if (pars_header(&champ) == FALSE)
 			return (FALSE);
+		vm.champion_table[i] = champ;
 		i++;
 	}
 	if (start_arena(&vm, &champ) == FALSE)
