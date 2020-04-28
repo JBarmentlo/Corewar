@@ -6,7 +6,7 @@
 #    By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/22 19:37:40 by dberger           #+#    #+#              #
-#    Updated: 2020/03/12 17:29:19 by ncoursol         ###   ########.fr        #
+#    Updated: 2020/04/28 10:00:39 by user42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -153,7 +153,7 @@ corewar: $(LIB) $(OUT_COREWAR) libCorewar.a Makefile $(RELINK_INCUDE) srcs/arena
 
 corewar_visu: visu $(LIB) $(OUT_COREWAR) libCorewar.a Makefile $(RELINK_INCUDE) srcs/arena/main_arena.c
 	$(COMPILER) -o $(NAME_COREWAR) $(OUT_COREWAR) srcs/arena/main_arena.c visu.a  $(LIBS) $(LIB) -L $(SDLPATH) -L $(SDLIMAGEPATH) -L $(SDLTTFPATH) -l SDL2 -l SDL2_image -l SDL2_ttf
-	echo "$(YELLOW)	--- $(GREEN)Corewar$(YELLOW) Compiled ! ---	$(NO_COLOR)"
+	echo "$(YELLOW)	--- $(GREEN)corewar_visu$(YELLOW) Compiled ! ---	$(NO_COLOR)"
 
 $(OBJ_FOLDER)/%.o: $(SRCS_COREWAR_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $@ -c $<
