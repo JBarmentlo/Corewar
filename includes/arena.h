@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/05 14:40:40 by dberger           #+#    #+#             */
-/*   Updated: 2020/04/23 14:04:03 by deyaberge        ###   ########.fr       */
+/*   Updated: 2020/04/30 18:35:07 by deyaberge        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ typedef struct				s_disp
 int							pars_num_champ(int *nb, t_arena *vm, int mode);
 int							pars_args(int ac, char **av, t_arena *vm);
 int							pars_header(t_champion *champ);
-int							start_arena(t_arena *vm, t_champion *champ);
+int							start_arena(t_arena *vm);
 
 /*
 ** VISU

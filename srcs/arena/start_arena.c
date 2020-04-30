@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 11:30:14 by dberger           #+#    #+#             */
-/*   Updated: 2020/04/23 13:21:06 by deyaberge        ###   ########.fr       */
+/*   Updated: 2020/04/30 18:35:40 by deyaberge        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,11 +147,12 @@ void		fill_fun_ptr_tab(t_arena *arena)
 	arena->op_fun_tab[15] = &x16;
 }
 
-int			start_arena(t_arena *vm, t_champion *champ)
+int			start_arena(t_arena *vm)
 {
 	int			i;
 	int			s;
 	int			indx;
+	t_champion	champ;
 
 	i = 0;
 	s = 1;
@@ -159,10 +160,10 @@ int			start_arena(t_arena *vm, t_champion *champ)
 	init_var(vm);
 	while (i < vm->nb_champs && s <= vm->nb_champs && indx < MEM_SIZE)
 	{
-		champ = &vm->champion_table[i];
-		if (champ->number == s)
+		champ = vm->champion_table[i];
+		if (champ.number == s)
 		{
-			fill_arena(vm, champ, indx);
+			fill_arena(vm, &champ, indx);
 			indx += (MEM_SIZE / vm->nb_champs);
 			s++;
 			i = 0;
