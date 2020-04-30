@@ -39,13 +39,13 @@ void		error2(t_disp *d)
 void		error(char *src, t_disp *d)
 {
 	if (ft_strcmp(src, "TTF"))
-		printf("%s%s\n", src, TTF_GetError());
+		ft_printf("%s%s\n", src, TTF_GetError());
 	else if (ft_strcmp(src, "SDL"))
-		printf("%s%s\n", src, SDL_GetError());
+		ft_printf("%s%s\n", src, SDL_GetError());
 	else if (ft_strcmp(src, "IMG"))
-		printf("%s%s\n", src, IMG_GetError());
+		ft_printf("%s%s\n", src, IMG_GetError());
 	else
-		printf("%s\n", src);
+		ft_printf("%s\n", src);
 	if (d->img != NULL)
 		SDL_FreeSurface(d->img);
 	if (d->txt != NULL)

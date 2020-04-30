@@ -18,33 +18,33 @@ void	print_vm_state(t_arena *arena)
 	int			i;
 
 	it = arena->process_list;
-	printf("cycle:%lu\n process list : \n", arena->cycle);
+	ft_printf("cycle:%lu\n process list : \n", arena->cycle);
 	while (it)
 	{
-		printf("Owner: %s, owner.nb: %d, R1:%d, R2:%d\n",
+		ft_printf("Owner: %s, owner.nb: %d, R1:%d, R2:%d\n",
 			it->owner->header.prog_name, it->owner->number,
 			it->registre[0], it->registre[1]);
 		it = it->next_list;
 	}
 	i = 0;
-	printf("champions: \n arena->nb_champs: %d \n", arena->nb_champs);
+	ft_printf("champions: \n arena->nb_champs: %d \n", arena->nb_champs);
 	while (i < arena->nb_champs)
 	{
-		printf("nb %d, name %s\n", arena->champion_table[i].number,
+		ft_printf("nb %d, name %s\n", arena->champion_table[i].number,
 			arena->champion_table[i].header.prog_name);
 		i++;
 	}
 }
 
-void	printf_process_pc(t_arena *arena)
+void	ft_printf_process_pc(t_arena *arena)
 {
 	t_process	*it;
 
 	it = arena->process_list;
-	printf("process list : \n");
+	ft_printf("process list : \n");
 	while (it)
 	{
-		printf("owner: %d PC: %d\n", it->owner->number, it->PC);
+		ft_printf("owner: %d PC: %d\n", it->owner->number, it->PC);
 		it = it->next_list;
 	}
 }
@@ -57,8 +57,8 @@ void	hex_dump_ugly(t_arena *arena)
 	while (i < MEM_SIZE)
 	{
 		if (i % 32 == 0)
-			printf("\n");
-		printf("%02x", arena->memory[i]);
+			ft_printf("\n");
+		ft_printf("%02x", arena->memory[i]);
 		i++;
 	}
 }
@@ -72,15 +72,15 @@ void	dump_color(t_arena *arena)
 	{
 		if (i % 50 == 0)
 		{
-			printf("\n");
+			ft_printf("\n");
 		}
 		if (arena->memory_color[i] != '0')
 		{
-			printf("%02x ", arena->memory_color[i] - '0');
+			ft_printf("%02x ", arena->memory_color[i] - '0');
 		}
 		else
 		{
-			printf(" . ");
+			ft_printf(" . ");
 		}
 		i++;
 	}

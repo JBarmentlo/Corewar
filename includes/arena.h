@@ -6,7 +6,7 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/05 14:40:40 by dberger           #+#    #+#             */
-/*   Updated: 2020/04/23 14:04:03 by deyaberge        ###   ########.fr       */
+/*   Updated: 2020/04/30 19:29:51 by deyaberge        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,9 @@ typedef struct				s_disp
 int							pars_num_champ(int *nb, t_arena *vm, int mode);
 int							pars_args(int ac, char **av, t_arena *vm);
 int							pars_header(t_champion *champ);
-int							start_arena(t_arena *vm, t_champion *champ);
+int							fill_fun_ptr_tab(t_arena *arena);
+void						fill_arena(t_arena *vm, t_champion *champ, int indx);
+int							start_arena(t_arena *vm);
 
 /*
 ** VISU
@@ -256,7 +258,6 @@ void						mem_write_int(t_arena *arena, int index, int val);
 void						*reg_nb_to_ptr(t_process *process, int nb);
 void						*ind_to_ptr_idx(t_arena *arena, int ind, int PC);
 void						*ind_to_ptr_no_idx(t_arena *arena, int ind, int PC);
-void						fill_fun_ptr_tab(t_arena *arena);
 int							positive_modulo_memsize(int a);
 int							opcode_to_mask(int opcode);
 void						dump_color(t_arena *arena);

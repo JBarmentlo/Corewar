@@ -88,12 +88,12 @@ void		print_t_args(t_args *args)
 	while (i < MAX_ARGS_NUMBER && args->type[i])
 	{
 		if (args->type[i] == T_IND)
-			printf("T_IND");
+			ft_printf("T_IND");
 		if (args->type[i] == T_DIR)
-			printf("T_DIR");
+			ft_printf("T_DIR");
 		if (args->type[i] == T_REG)
-			printf("T_REG");
-		printf("\t val: %d \t size: %d \n", args->val[i], args->size[i]);
+			ft_printf("T_REG");
+		ft_printf("\t val: %d \t size: %d \n", args->val[i], args->size[i]);
 		i++;
 	}
 }

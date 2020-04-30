@@ -1,0 +1,5 @@
+.name "Zork"
+.comment "Comment zork"
+.name "Krozalkdffaklsdjfljsadflkjldfjlkjjlasjflasdlkjfkajslfkjsdafklasjdflkasdlkfjksaldjfkljasldkfjaslfdjlaffakljdflkjasdfjalkfjlkasdflkjalkdjsfljalfkasdjfl
+
+live %1

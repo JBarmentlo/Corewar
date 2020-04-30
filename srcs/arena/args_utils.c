@@ -6,7 +6,7 @@
 /*   By: deyaberger <marvin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/23 13:08:16 by deyaberge         #+#    #+#             */
-/*   Updated: 2020/04/23 13:08:19 by deyaberge        ###   ########.fr       */
+/*   Updated: 2020/04/30 19:37:33 by deyaberge        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ t_args		*new_t_args(void)
 	int		i;
 
 	i = 0;
-	out = malloc(sizeof(t_args));
+	if (!(out = malloc(sizeof(t_args))))
+		return (NULL);
 	while (i < MAX_ARGS_NUMBER)
 	{
 		out->type[i] = 0;
