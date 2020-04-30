@@ -56,8 +56,10 @@ VISU_SOURCE_FILES=disp.c \
 COREWAR_SOURCE_FILES=cycle.c \
 	args.c \
 	args_utils.c \
+	args_utils2.c \
 	process.c \
 	process_utils.c \
+	process_utils2.c \
 	pars_args.c \
 	pars_num_champ.c \
 	pars_header.c \

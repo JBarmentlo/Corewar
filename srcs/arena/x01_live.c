@@ -24,8 +24,7 @@ void	x01(t_arena *arena, t_process *process)
 	{
 		arena->champion_table[arg - 1].lives_since_last_check += 1;
 		arena->last_live_champ_number = arg;
-		//printf("un processus dit que le joueur %d(%s) est en vie\n", arg, arena->champion_table[arg - 1].header.prog_name);
-		// a remettre, mis en commentaire pour ne pas remplir le terminal
+		printf("un processus dit que le joueur %d(%s) est en vie\n", arg, arena->champion_table[arg - 1].header.prog_name);
 	}
 	if ((VERBOSE & LIVE))
 	{

@@ -18,78 +18,6 @@ int		is_game_over(t_arena *arena)
 	(((uint)arena->option_dump == arena->cycle) && arena->cycle != 0));
 }
 
-int		opcode_to_mask(int opcode)
-{
-	int	o;
-
-	o = opcode;
-	if (o == 1)
-	{
-		return (ONE);
-	}
-	else if (o == 2)
-	{
-		return (TWO);
-	}
-	else if (o == 3)
-	{
-		return (THREE);
-	}
-	else if (o == 4)
-	{
-		return (FOUR);
-	}
-	else if (o == 5)
-	{
-		return (FIVE);
-	}
-	else if (o == 6)
-	{
-		return (SIX);
-	}
-	else if (o == 7)
-	{
-		return (SEVEN);
-	}
-	else if (o == 8)
-	{
-		return (EIGHT);
-	}
-	else if (o == 9)
-	{
-		return (NINE);
-	}
-	else if (o == 10)
-	{
-		return (TEN);
-	}
-	else if (o == 11)
-	{
-		return (ELEVEN);
-	}
-	else if (o == 12)
-	{
-		return (TWELVE);
-	}
-	else if (o == 13)
-	{
-		return (THIRTEEN);
-	}
-	else if (o == 14)
-	{
-		return (FOURTEEN);
-	}
-	else if (o == 15)
-	{
-		return (FIFTEEN);
-	}
-	else if (o == 16)
-	{
-		return (SIXTEEN);
-	}
-	return (0);
-}
-
 void	run_function(t_arena *arena, t_process *process)
 {
 	if (TEST_PRINT & opcode_to_mask(process->current_op->opcode))
@@ -101,7 +29,7 @@ void	run_function(t_arena *arena, t_process *process)
 	arena->op_fun_tab[process->current_op->opcode - 1](arena, process);
 	if (HEX_DUMP && TEST_PRINT & opcode_to_mask(process->current_op->opcode))
 	{
-		hex_dump(arena);
+		hex_dump_ugly(arena);
 	}
 }
 
