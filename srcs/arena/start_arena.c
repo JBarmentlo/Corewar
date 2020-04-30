@@ -6,14 +6,14 @@
 /*   By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 11:30:14 by dberger           #+#    #+#             */
-/*   Updated: 2020/04/30 18:35:40 by deyaberge        ###   ########.fr       */
+/*   Updated: 2020/04/30 19:30:16 by deyaberge        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "arena.h"
 
 /*
-** We initiate the arena by copying the executable code of its champion in the
+** We initialize the arena by copying the executable code of its champion in the
 ** arena. The code of the champion number 1, will be copied from the beggining
 ** of the VM (index 0). Then for the 2nd champion, we move to the index:
 ** (0 + MEM_SIZE / number of champions). If there are, for instance,
@@ -57,7 +57,8 @@ t_process	*make_process_list(t_arena *vm)
 	pc = 0;
 	while (i < vm->nb_champs)
 	{
-		process = make_process();
+		if (!(process = make_process()))
+			return (NULL);
 		process->owner = &vm->champion_table[i];
 		process->registre[0] = -process->owner->number;
 		process->PC = pc;
@@ -99,52 +100,9 @@ int			init_var(t_arena *vm)
 	vm->args = args;
 	vm->process_list = process;
 	vm->max_checks = 0;
-	fill_fun_ptr_tab(vm);
+	if (fill_fun_ptr_tab(vm) == FALSE)
+		return (FALSE);
 	return (TRUE);
-}
-
-void		fill_arena(t_arena *vm, t_champion *champ, int indx)
-{
-	int		size;
-	int		i;
-
-	size = champ->header.prog_size;
-	i = 0;
-	while (i < MEM_SIZE / vm->nb_champs)
-	{
-		if (i <= size)
-		{
-			vm->memory[indx + i] = champ->prog[SIZE_HEADER + i];
-			vm->memory_color[indx + i] = champ->number + '0';
-		}
-		else
-		{
-			vm->memory[indx + i] = '\0';
-			vm->memory_color[indx + i] = '0';
-		}
-		i++;
-	}
-}
-
-void		fill_fun_ptr_tab(t_arena *arena)
-{
-	arena->op_fun_tab = malloc(17 * sizeof(t_fun_ptr));
-	arena->op_fun_tab[0] = &x01;
-	arena->op_fun_tab[1] = &x02;
-	arena->op_fun_tab[2] = &x03;
-	arena->op_fun_tab[3] = &x04;
-	arena->op_fun_tab[4] = &x05;
-	arena->op_fun_tab[5] = &x06;
-	arena->op_fun_tab[6] = &x07;
-	arena->op_fun_tab[7] = &x08;
-	arena->op_fun_tab[8] = &x09;
-	arena->op_fun_tab[9] = &x10;
-	arena->op_fun_tab[10] = &x11;
-	arena->op_fun_tab[11] = &x12;
-	arena->op_fun_tab[12] = &x13;
-	arena->op_fun_tab[13] = &x14;
-	arena->op_fun_tab[14] = &x15;
-	arena->op_fun_tab[15] = &x16;
 }
 
 int			start_arena(t_arena *vm)

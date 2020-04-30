@@ -49,7 +49,7 @@ void		run_game(t_arena *vm)
 	{
 		if (vm->cycle == UINT64_MAX)
 		{
-			printf("dude this is taking forever\n");
+			ft_printf("dude this is taking forever\n");
 			break ;
 		}
 		do_the_cycle(vm);

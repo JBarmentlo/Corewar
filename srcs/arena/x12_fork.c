@@ -6,7 +6,7 @@
 /*   By: deyaberger <marvin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/23 13:15:51 by deyaberge         #+#    #+#             */
-/*   Updated: 2020/04/23 13:15:52 by deyaberge        ###   ########.fr       */
+/*   Updated: 2020/04/30 19:36:48 by deyaberge        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	x12(t_arena *arena, t_process *process)
 	arena->total_process_nb += 1;
 	if ((VERBOSE & FORK))
 	{
-		printf("forked process to PC: %d with R1: %d\n",
+		ft_printf("forked process to PC: %d with R1: %d\n",
 			(process->PC + (arena->args->val[0] % IDX_MOD)) & MODULO_MASK,
 			new->registre[0]);
 	}

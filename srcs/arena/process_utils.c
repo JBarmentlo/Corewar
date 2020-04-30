@@ -6,7 +6,7 @@
 /*   By: deyaberger <marvin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/23 13:12:30 by deyaberge         #+#    #+#             */
-/*   Updated: 2020/04/23 13:12:33 by deyaberge        ###   ########.fr       */
+/*   Updated: 2020/04/30 19:32:02 by deyaberge        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ t_process	*process_copy(t_process *src)
 	t_process	*out;
 	int			i;
 
-	out = malloc(sizeof(t_process));
+	if (!(out = malloc(sizeof(t_process))))
+		return (NULL);
 	i = 0;
 	while (i < REG_NUMBER)
 	{
@@ -100,4 +101,3 @@ void		add_process_to_list(t_process *process, t_arena *arena)
 	process->next_list = arena->process_list;
 	arena->process_list = process;
 }
-

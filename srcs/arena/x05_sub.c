@@ -1,3 +1,4 @@
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -23,6 +24,6 @@ void	x05(t_arena *arena, t_process *process)
 	process->carry = ((val1 - val2) == 0);
 	if ((VERBOSE & SUB))
 	{
-		printf("store %d to register %d\n", val1 - val2, arena->args->val[2]);
+		ft_printf("store %d to register %d\n", val1 - val2, arena->args->val[2]);
 	}
 }
