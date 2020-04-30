@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
+#    MakefileLinux                                      :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/22 19:37:40 by dberger           #+#    #+#              #
-#    Updated: 2020/04/30 20:42:08 by deyaberge        ###   ########.fr        #
+#    Updated: 2020/04/30 20:43:08 by deyaberge        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -132,9 +132,9 @@ OUT_COREWAR_M=$(addprefix $(OBJ_FOLDER)/,$(notdir $(SRCS_MAIN_COR:.c=.o)))
 OUT_VISU=$(addprefix $(OBJ_FOLDER)/,$(notdir $(SRCS_VISU:.c=.o)))
 OUT_VISU_M=$(addprefix $(OBJ_FOLDER)/,$(notdir $(SRCS_MAIN_VISU:.c=.o)))
 
-SDLPATH =  /Users/deyaberger/.brew/Cellar/sdl2/2.0.12_1/lib
-SDLIMAGEPATH =  /Users/deyaberger/.brew/Cellar/sdl2_image/2.0.5/lib
-SDLTTFPATH =  /Users/deyaberger/.brew/Cellar/sdl2_ttf/2.0.15/lib
+SDLPATH= $(shell locate libSDL2.so | grep -m1 "" | rev | cut -d "/" -f 2- | rev)
+SDLIMAGEPATH= $(shell locate libSDL2_image.so | grep -m1 "" | rev | cut -d "/" -f 2- | rev)
+SDLTTFPATH = $(shell locate libSDL2_ttf.so | grep -m1 "" | rev | cut -d "/" -f 2- | rev)
 
 all: $(OBJ_FOLDER) $(LIB) libCorewar.a asm corewar
 
