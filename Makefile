@@ -6,7 +6,7 @@
 #    By: jbarment <jbarment@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/22 19:37:40 by dberger           #+#    #+#              #
-#    Updated: 2020/04/30 20:03:18 by deyaberge        ###   ########.fr        #
+#    Updated: 2020/04/30 20:42:08 by deyaberge        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,6 @@ PRINTF_DIR = ./includes/ft_printf
 
 LIB = $(PRINTF_DIR)/libftprintf.a $(LIB_DIR)/libft.a 
 
-SCANNER=/Users/dberger/static_analyzer/bin/scan-build
 CC=clang
 CFLAGS= -Wall -Wextra -Werror -g3
 INCLUDE_PATH=-I $(INCLUDE_FOLDER) -I $(SDL_INCLUDE_FOLDER)
@@ -121,13 +120,17 @@ INCLUDES_FILES= utils.h\
 RELINK_INCUDE=$(addprefix $(INCLUDE_FOLDER)/, $(INCLUDES_FILES))
 SRCS_UTILS=$(addprefix $(SRCS_UTILS_FOLDER)/, $(UTILS_SOURCE_FILES))
 SRCS_ASM=$(addprefix $(SRCS_ASM_FOLDER)/, $(ASM_SOURCE_FILES))
-SRCS_COREWAR=$(addprefix $(SRCS_COREWAR_FOLDER)/, $(COREWAR_SOURCE_FILES) $(MAIN_COR))
-SRCS_VISU=$(addprefix $(SRCS_VISU_FOLDER)/, $(VISU_SOURCE_FILES) $(MAIN_VISU))
+SRCS_COREWAR=$(addprefix $(SRCS_COREWAR_FOLDER)/, $(COREWAR_SOURCE_FILES))
+SRCS_MAIN_COR=$(addprefix $(SRCS_COREWAR_FOLDER)/, $(MAIN_COR))
+SRCS_VISU=$(addprefix $(SRCS_VISU_FOLDER)/, $(VISU_SOURCE_FILES))
+SRCS_MAIN_VISU=$(addprefix $(SRCS_VISU_FOLDER)/, $(MAIN_VISU))
 
-OUT_VISU=$(addprefix $(OBJ_FOLDER)/,$(notdir $(SRCS_VISU:.c=.o)))
 OUT_UTILS=$(addprefix $(OBJ_FOLDER)/,$(notdir $(SRCS_UTILS:.c=.o)))
 OUT_ASM=$(addprefix $(OBJ_FOLDER)/,$(notdir $(SRCS_ASM:.c=.o)))
 OUT_COREWAR=$(addprefix $(OBJ_FOLDER)/,$(notdir $(SRCS_COREWAR:.c=.o)))
+OUT_COREWAR_M=$(addprefix $(OBJ_FOLDER)/,$(notdir $(SRCS_MAIN_COR:.c=.o)))
+OUT_VISU=$(addprefix $(OBJ_FOLDER)/,$(notdir $(SRCS_VISU:.c=.o)))
+OUT_VISU_M=$(addprefix $(OBJ_FOLDER)/,$(notdir $(SRCS_MAIN_VISU:.c=.o)))
 
 SDLPATH =  /Users/deyaberger/.brew/Cellar/sdl2/2.0.12_1/lib
 SDLIMAGEPATH =  /Users/deyaberger/.brew/Cellar/sdl2_image/2.0.5/lib
@@ -140,7 +143,7 @@ $(LIB):
 	$(MAKE) -C $(PRINTF_DIR)
 
 $(OBJ_FOLDER):
-	@mkdir -p $(OBJ_FOLDER)
+	mkdir -p $(OBJ_FOLDER)
 
 libCorewar.a: $(OUT_UTILS) Makefile $(RELINK_INCUDE)
 	ar rc libCorewar.a $(OUT_UTILS)
@@ -155,12 +158,12 @@ asm: $(LIB) $(OUT_ASM) libCorewar.a Makefile $(RELINK_INCUDE)
 $(OBJ_FOLDER)/%.o: $(SRCS_ASM_FOLDER)/%.c Makefile $(RELINK_INCUDE)
 	$(COMPILER) -o $@ -c $<
 
-corewar: $(LIB) $(OUT_COREWAR) libCorewar.a Makefile $(RELINK_INCUDE)
-	$(COMPILER) -o $(NAME_COREWAR) $(OUT_COREWAR) $(LIBS)
+corewar: $(LIB) $(OUT_COREWAR) libCorewar.a Makefile $(RELINK_INCUDE) $(OUT_COREWAR_M)
+	$(COMPILER) -o $(NAME_COREWAR) $(OUT_COREWAR) $(OUT_COREWAR_M) $(LIBS)
 	echo "$(YELLOW)	--- $(GREEN)Corewar$(YELLOW) Compiled ! ---	$(NO_COLOR)"
 
-corewar_visu: visu $(LIB) $(OUT_COREWAR) libCorewar.a Makefile $(RELINK_INCUDE)
-	$(COMPILER) -o $(NAME_COREWAR_VISU) $(OUT_COREWAR) visu.a  $(LIBS) -L $(SDLPATH) -L $(SDLIMAGEPATH) -L $(SDLTTFPATH) -l SDL2 -l SDL2_image -l SDL2_ttf
+corewar_visu: visu $(LIB) $(OUT_COREWAR) libCorewar.a Makefile $(RELINK_INCUDE) $(OUT_VISU_M)
+	$(COMPILER) -o $(NAME_COREWAR_VISU) $(OUT_COREWAR) $(OUT_VISU_M) visu.a  $(LIBS) -L $(SDLPATH) -L $(SDLIMAGEPATH) -L $(SDLTTFPATH) -l SDL2 -l SDL2_image -l SDL2_ttf
 	echo "$(YELLOW)	--- $(GREEN)corewar_visu$(YELLOW) Compiled ! ---	$(NO_COLOR)"
 
 $(OBJ_FOLDER)/%.o: $(SRCS_COREWAR_FOLDER)/%.c Makefile $(RELINK_INCUDE)
@@ -195,4 +198,3 @@ re: fclean
 
 .PHONY: re all fclean clean asm corewar
 .SILENT:
-scan=/Users/ncoursol/Documents/corewar/static_analyzer/bin/scan-build
