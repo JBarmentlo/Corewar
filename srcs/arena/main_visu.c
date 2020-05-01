@@ -22,7 +22,7 @@ t_arena		init_vm(void)
 	return (vm);
 }
 
-int		assign_champ(t_arena *vm)
+int			assign_champ(t_arena *vm)
 {
 	int			i;
 	t_champion	*champ;
@@ -46,8 +46,8 @@ void		loop_poll(t_disp *d, t_arena *vm, int *running, int timeout)
 	
 	i = SDL_GetTicks() + 100;
 	while (SDL_PollEvent(&d->event)
-	|| (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout) && *running != 0)
-	|| (d->pause != 0 && d->step != 1))
+		|| (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout) && *running != 0)
+		|| (d->pause != 0 && d->step != 1))
 	{
 		d->step = 0;
 		events(d, running, &timeout, *vm);
@@ -66,10 +66,10 @@ void		loop_poll(t_disp *d, t_arena *vm, int *running, int timeout)
 	}
 }
 
-int		loop(t_disp *d, t_arena *vm, int *running)
+int			loop(t_disp *d, t_arena *vm, int *running)
 {
 	unsigned int	j;
-	int		timeout;
+	int			timeout;
 	
 	if (vm->cycle == UINT64_MAX)
 	{
@@ -79,17 +79,17 @@ int		loop(t_disp *d, t_arena *vm, int *running)
 	timeout = SDL_GetTicks() + 100;
 	j = 0;
 	while (j < d->delay && ((vm->cycle < (unsigned long)vm->option_dump)
-	|| vm->option_dump == 0))
+		|| vm->option_dump == 0))
 	{
 		do_the_cycle(vm);
 		j++;
 	}
 	loop_poll(d, vm, running, timeout);
-	update_visu(&d, vm);
+	update_visu(d, vm);
 	return (1);
 }
 
-int		main(int ac, char **av)
+int			main(int ac, char **av)
 {
 	t_disp			d;
 	int				running;
@@ -97,14 +97,14 @@ int		main(int ac, char **av)
 
 	vm = init_vm();
 	if (pars_args(ac, av, &vm) == FALSE
-	|| assign_champ(&vm) == FALSE)
+		|| assign_champ(&vm) == FALSE)
 		return (FALSE);
 	init_window(&d, vm);
 	running = 1;
 	vm.total_process_nb = vm.nb_champs;
 	count_owned_space(&vm);
 	while (!is_game_over(&vm) && running
-		&& ((vm.cycle < (unsigned long)vm.option_dump) || vm.option_dump == 0))
+	&& ((vm.cycle < (unsigned long)vm.option_dump) || vm.option_dump == 0))
 	{
 		if (!loop(&d, &vm, &running))
 			break ;
