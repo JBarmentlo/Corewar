@@ -43,7 +43,7 @@ int			assign_champ(t_arena *vm)
 void		loop_poll(t_disp *d, t_arena *vm, int *running, int timeout)
 {
 	int		i;
-	
+
 	i = SDL_GetTicks() + 100;
 	while (SDL_PollEvent(&d->event)
 	|| (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout) && *running != 0)
@@ -70,7 +70,7 @@ int			loop(t_disp *d, t_arena *vm, int *running)
 {
 	unsigned int	j;
 	int				timeout;
-	
+
 	if (vm->cycle == UINT64_MAX)
 	{
 		ft_printf("dude this is taking forever\n");
