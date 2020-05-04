@@ -31,6 +31,6 @@ void	x02(t_arena *arena, t_process *process)
 	process->carry = (value == 0);
 	if ((VERBOSE & LOAD))
 	{
-		printf("loaded %d to registre %d\n", value, arena->args->val[1]);
+		ft_printf("loaded %d to registre %d\n", value, arena->args->val[1]);
 	}
 }

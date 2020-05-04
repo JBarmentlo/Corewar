@@ -6,7 +6,7 @@
 /*   By: deyaberger <marvin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/23 13:26:34 by deyaberge         #+#    #+#             */
-/*   Updated: 2020/04/23 13:28:19 by deyaberge        ###   ########.fr       */
+/*   Updated: 2020/04/30 19:39:01 by deyaberge        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ t_byte		*endian_switch(void *vall, int size)
 
 	i = 0;
 	val = vall;
-	out = malloc(size);
+	if (!(out = malloc(size)))
+		return (NULL);
 	while (i < size)
 	{
 		out[i] = val[size - i - 1];
@@ -100,18 +101,18 @@ void		bit_dump(void *ptrr, int size)
 	i = 0;
 	while (i < size)
 	{
-		printf("%d", (ptr[i] & EIGHT) != 0);
-		printf("%d", (ptr[i] & SEVEN) != 0);
-		printf("%d", (ptr[i] & SIX) != 0);
-		printf("%d", (ptr[i] & FIVE) != 0);
-		printf("%d", (ptr[i] & FOUR) != 0);
-		printf("%d", (ptr[i] & THREE) != 0);
-		printf("%d", (ptr[i] & TWO) != 0);
-		printf("%d", (ptr[i] & ONE) != 0);
-		printf(" ");
+		ft_printf("%d", (ptr[i] & EIGHT) != 0);
+		ft_printf("%d", (ptr[i] & SEVEN) != 0);
+		ft_printf("%d", (ptr[i] & SIX) != 0);
+		ft_printf("%d", (ptr[i] & FIVE) != 0);
+		ft_printf("%d", (ptr[i] & FOUR) != 0);
+		ft_printf("%d", (ptr[i] & THREE) != 0);
+		ft_printf("%d", (ptr[i] & TWO) != 0);
+		ft_printf("%d", (ptr[i] & ONE) != 0);
+		ft_printf(" ");
 		i++;
 	}
-	printf("\n");
+	ft_printf("\n");
 }
 
 // not safe for use on MEM

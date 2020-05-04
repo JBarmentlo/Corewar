@@ -20,7 +20,7 @@ int		positive_modulo_memsize(int a)
 
 void	print_color_state(t_arena *vm)
 {
-	printf("total mem: %d\n", vm->champion_table[0].total_memory_owned);
+	ft_printf("total mem: %d\n", vm->champion_table[0].total_memory_owned);
 }
 
 // CHAMP NUMBER TO champion_table INDEX RELATIONSHIP unknown

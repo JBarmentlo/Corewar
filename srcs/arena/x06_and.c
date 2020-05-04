@@ -22,6 +22,6 @@ void	x06(t_arena *arena, t_process *process)
 	process->carry = (val == 0);
 	if ((VERBOSE & AND))
 	{
-		printf("store %d to register %d\n", val, arena->args->val[2]);
+		ft_printf("store %d to register %d\n", val, arena->args->val[2]);
 	}
 }
