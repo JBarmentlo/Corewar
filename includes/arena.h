@@ -59,7 +59,7 @@ typedef struct				s_process
 	t_byte					args_tmp[MAX_ARGS_SIZE];
 	int						bytecode_size;
 	int						carry;
-	uint16_t				PC;
+	uint16_t				pc;
 	t_op					*current_op;
 	unsigned long			last_live;
 	int						table_pos;
@@ -106,11 +106,10 @@ typedef void				(*t_fun_ptr)(t_arena*, t_process*);
 typedef struct				s_texte
 {
 	int						player;
-	char*					txt;
+	char					*txt;
 	struct s_texte			*next;
 }							t_texte;
 
-// ADD ALWAYS INLINE
 typedef struct				s_disp
 {
 	unsigned int			color_champ[MAX_PLAYERS + 1];
@@ -256,8 +255,8 @@ void						mem_write_int(t_arena *arena, int index, int val);
 ** UTILS
 */
 void						*reg_nb_to_ptr(t_process *process, int nb);
-void						*ind_to_ptr_idx(t_arena *arena, int ind, int PC);
-void						*ind_to_ptr_no_idx(t_arena *arena, int ind, int PC);
+void						*ind_to_ptr_idx(t_arena *arena, int ind, int pc);
+void						*ind_to_ptr_no_idx(t_arena *arena, int ind, int pc);
 int							positive_modulo_memsize(int a);
 int							opcode_to_mask(int opcode);
 void						dump_color(t_arena *arena);
@@ -265,7 +264,7 @@ void						print_vm_state(t_arena *arena);
 void						free_all(t_arena *arena);
 void						count_color(t_champion *champ, t_arena *arena);
 void						count_owned_space(t_arena *arena);
-void						check_negative_PC(t_arena *arena);
+void						check_negative_pc(t_arena *arena);
 
 /*
 ** DISPLAY

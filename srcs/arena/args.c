@@ -18,7 +18,7 @@ void		read_encoding_byte(t_arena *arena, t_process *process)
 	t_byte	mask;
 	t_byte	val;
 
-	val = arena->memory[(process->PC + 1) & MODULO_MASK];
+	val = arena->memory[(process->pc + 1) & MODULO_MASK];
 	mask = 3;
 	i = 4;
 	while (i)
@@ -56,7 +56,7 @@ void		copy_to_args_tmp(t_arena *arena, t_process *process)
 	i = 0;
 	while (i < MAX_ARGS_SIZE)
 	{
-		process->args_tmp[i] = arena->memory[(process->PC + 1
+		process->args_tmp[i] = arena->memory[(process->pc + 1
 			+ process->current_op->encoding_byte + i) & MODULO_MASK];
 		i++;
 	}

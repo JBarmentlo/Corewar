@@ -44,7 +44,7 @@ void	ft_printf_process_pc(t_arena *arena)
 	ft_printf("process list : \n");
 	while (it)
 	{
-		ft_printf("owner: %d PC: %d\n", it->owner->number, it->PC);
+		ft_printf("owner: %d PC: %d\n", it->owner->number, it->pc);
 		it = it->next_list;
 	}
 }

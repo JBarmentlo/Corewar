@@ -28,7 +28,7 @@ void	x03(t_arena *arena, t_process *process)
 	}
 	else
 	{
-		norm = process->PC + (arena->args->val[1] % IDX_MOD);
+		norm = process->pc + (arena->args->val[1] % IDX_MOD);
 		mem_write_int(arena, norm, val);
 		mem_write_color(arena, norm, 4, process->owner->number);
 		if (VERBOSE & STORE)
