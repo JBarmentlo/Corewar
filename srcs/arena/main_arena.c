@@ -22,13 +22,14 @@ t_arena		init_vm()
 	return (vm);
 }
 
-int		main(int ac, char **av)
+int			main(int ac, char **av)
 {
 	t_disp		d;
 	int		timeout;
 	int		running;
 	t_arena		vm;
 	t_champion	champ;
+	t_champion	*campo;
 	int		i;
 	int		visu = 1;
 	unsigned int 	j;
@@ -39,10 +40,9 @@ int		main(int ac, char **av)
 		return (FALSE);
 	while (i < vm.nb_champs)
 	{
-		champ = vm.champion_table[i];
-		if (pars_header(&champ) == FALSE)
+		campo = &vm.champion_table[i];
+		if (pars_header(campo) == FALSE)
 			return (FALSE);
-		vm.champion_table[i] = champ;
 		i++;
 	}
 	if (start_arena(&vm, &champ) == FALSE)
