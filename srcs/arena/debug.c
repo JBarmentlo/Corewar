@@ -49,6 +49,20 @@ void	ft_printf_process_pc(t_arena *arena)
 	}
 }
 
+void	hex_print_byte(t_byte byte, int size)
+{
+	char	*base;
+
+	base = "0123456789abcdef"; // check majuscules ou pas
+	if (size == 0)
+	{
+		write(1, " ", 1);
+		return ;
+	}
+	hex_print_byte(byte / ft_strlen(base), size - 1);
+	write(1, &base[byte % ft_strlen(base)], 1);
+}
+
 void	hex_dump_ugly(t_arena *arena)
 {
 	size_t		i;
@@ -58,7 +72,7 @@ void	hex_dump_ugly(t_arena *arena)
 	{
 		if (i % 32 == 0)
 			printf("\n");
-		printf("%02hhx ", arena->memory[i]);
+		hex_print_byte(arena->memory[i], 2);
 		i++;
 	}
 	printf("\n");
