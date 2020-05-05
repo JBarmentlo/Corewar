@@ -55,12 +55,11 @@ void	hex_print_byte(t_byte byte, int size)
 
 	base = "0123456789abcdef"; // check majuscules ou pas
 	if (size == 0)
-	{
-		write(1, " ", 1);
 		return ;
-	}
 	hex_print_byte(byte / ft_strlen(base), size - 1);
 	write(1, &base[byte % ft_strlen(base)], 1);
+	if (size == 2)
+		write(1, " ", 1);
 }
 
 void	hex_dump_ugly(t_arena *arena)
