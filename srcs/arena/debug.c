@@ -57,10 +57,11 @@ void	hex_dump_ugly(t_arena *arena)
 	while (i < MEM_SIZE)
 	{
 		if (i % 32 == 0)
-			ft_printf("\n");
-		ft_printf("%02x", arena->memory[i]);
+			printf("\n");
+		printf("%02hhx ", arena->memory[i]);
 		i++;
 	}
+	printf("\n");
 }
 
 void	dump_color(t_arena *arena)
