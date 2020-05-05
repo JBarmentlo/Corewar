@@ -59,7 +59,7 @@ typedef struct				s_process
 	t_byte					args_tmp[MAX_ARGS_SIZE];
 	int						bytecode_size;
 	int						carry;
-	uint16_t				PC;
+	uint16_t				pc;
 	t_op					*current_op;
 	unsigned long			last_live;
 	int						table_pos;
@@ -80,9 +80,9 @@ typedef struct				s_args
 
 typedef struct				s_arena
 {
-	t_process*				process_list;
+	t_process				*process_list;
 	int						total_process_nb;
-	t_process*				process_table[PROCESS_TABLE_SIZE]; // a init vide;
+	t_process				*process_table[PROCESS_TABLE_SIZE];
 	t_champion				champion_table[MAX_PLAYERS];
 	int						nb_champs;
 	int						option_dump;
@@ -106,11 +106,10 @@ typedef void				(*t_fun_ptr)(t_arena*, t_process*);
 typedef struct				s_texte
 {
 	int						player;
-	char*					txt;
-	struct s_texte*			next;
+	char					*txt;
+	struct s_texte			*next;
 }							t_texte;
 
-// ADD ALWAYS INLINE
 typedef struct				s_disp
 {
 	unsigned int			color_champ[MAX_PLAYERS + 1];
@@ -156,7 +155,7 @@ int							pars_num_champ(int *nb, t_arena *vm, int mode);
 int							pars_args(int ac, char **av, t_arena *vm);
 int							pars_header(t_champion *champ);
 int							fill_fun_ptr_tab(t_arena *arena);
-void						fill_arena(t_arena *vm, t_champion *champ, int indx);
+void						fill_arena(t_arena *vm, t_champion *cha, int indx);
 int							start_arena(t_arena *vm);
 
 /*
@@ -209,7 +208,7 @@ t_args						*new_t_args(void);
 int							is_valid_args_value(t_args *args);
 int							is_valid_encoding_byte(t_arena *arena,
 							t_process *process);
-t_byte						is_valid_opcode(t_byte);
+t_byte						is_valid_opcode(t_byte opcode);
 void						read_encoding_byte(t_arena *arena,
 							t_process *process);
 uint16_t					type_to_size(t_byte type, t_op *op);
@@ -233,7 +232,7 @@ void						execute_process(t_arena *arena, t_process *process);
 void						execute_processes(t_arena *arena);
 void						kill_process(t_arena *arena, t_process *it);
 void						remove_process_from_table(t_arena *arena,
-							t_process *process); //wildly unchecked
+							t_process *process);
 t_process					*process_copy(t_process *src);
 void						add_process_to_table(t_process *process,
 							t_arena *arena, uint table_index);
@@ -256,8 +255,8 @@ void						mem_write_int(t_arena *arena, int index, int val);
 ** UTILS
 */
 void						*reg_nb_to_ptr(t_process *process, int nb);
-void						*ind_to_ptr_idx(t_arena *arena, int ind, int PC);
-void						*ind_to_ptr_no_idx(t_arena *arena, int ind, int PC);
+void						*ind_to_ptr_idx(t_arena *arena, int ind, int pc);
+void						*ind_to_ptr_no_idx(t_arena *arena, int ind, int pc);
 int							positive_modulo_memsize(int a);
 int							opcode_to_mask(int opcode);
 void						dump_color(t_arena *arena);
@@ -265,7 +264,7 @@ void						print_vm_state(t_arena *arena);
 void						free_all(t_arena *arena);
 void						count_color(t_champion *champ, t_arena *arena);
 void						count_owned_space(t_arena *arena);
-void						check_negative_PC(t_arena *arena);
+void						check_negative_pc(t_arena *arena);
 
 /*
 ** DISPLAY
@@ -296,8 +295,9 @@ void						x13(t_arena *arena, t_process *process);
 void						x14(t_arena *arena, t_process *process);
 void						x15(t_arena *arena, t_process *process);
 void						x16(t_arena *arena, t_process *process);
-
-// 	TESTING FUNCTIONS
+/*
+**	TESTING FUNCTIONS
+*/
 t_byte						bytecode_gen(int one, int two, int three);
 t_arena						*make_vm(void);
 void						bit_dump(void *ptr, int size);

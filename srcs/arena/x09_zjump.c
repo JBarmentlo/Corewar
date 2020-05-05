@@ -16,9 +16,9 @@ void	x09(t_arena *arena, t_process *process)
 {
 	int	norm;
 
-	norm = (process->PC + (arena->args->val[0] % IDX_MOD));
+	norm = (process->pc + (arena->args->val[0] % IDX_MOD));
 	if (process->carry)
-		process->PC = norm & MODULO_MASK;
+		process->pc = norm & MODULO_MASK;
 	if ((VERBOSE & ZJUMP))
 	{
 		if (process->carry == 0)

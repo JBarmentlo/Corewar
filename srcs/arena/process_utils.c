@@ -26,7 +26,7 @@ t_process	*process_copy(t_process *src)
 		i++;
 	}
 	out->carry = src->carry;
-	out->PC = src->PC;
+	out->pc = src->pc;
 	out->current_op = NULL;
 	out->last_live = src->last_live;
 	out->table_pos = src->table_pos;

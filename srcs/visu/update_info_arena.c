@@ -24,8 +24,8 @@ void		update_arena3(t_disp *d, t_arena a, t_process *first)
 		(d->color_champ[a.process_list->owner->number] & 0xFF0000) >> 16,
 		(d->color_champ[a.process_list->owner->number] & 0xFF00) >> 8, 110) < 0)
 			error("(update_visu.c) SDL_SetRenderDrawColor : ", d);
-		d->mod.x = d->arena.x + 10 + 29.7 * (a.process_list->PC % 64);
-		d->mod.y = d->arena.y + 14 + 21.4 * (a.process_list->PC / 64);
+		d->mod.x = d->arena.x + 10 + 29.7 * (a.process_list->pc % 64);
+		d->mod.y = d->arena.y + 14 + 21.4 * (a.process_list->pc / 64);
 		if (SDL_RenderFillRect(d->rend, &d->mod) < 0)
 			error("(update_visu.c) SDL_RenderFillRect : ", d);
 		a.process_list = a.process_list->next_list;

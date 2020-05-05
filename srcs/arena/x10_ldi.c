@@ -18,7 +18,7 @@ void	x10(t_arena *arena, t_process *process)
 
 	get_val(arena, process);
 	val = (arena->args->val_read[0] + arena->args->val_read[1]) % IDX_MOD;
-	val = mem_read_int(arena, process->PC + val);
+	val = mem_read_int(arena, process->pc + val);
 	reg_write_int(process, val, arena->args->val[2]);
 	if ((VERBOSE & LDI))
 	{

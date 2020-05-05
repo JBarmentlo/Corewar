@@ -14,8 +14,8 @@
 
 void	process_invalid(t_process *process)
 {
-	process->PC++;
-	process->PC = process->PC & MODULO_MASK;
+	process->pc++;
+	process->pc = process->pc & MODULO_MASK;
 	process->current_op = NULL;
 }
 
@@ -41,7 +41,7 @@ void	execute_process(t_arena *arena, t_process *process)
 	}
 	run_function(arena, process);
 	if (process->current_op->opcode != 9 || process->carry == 0)
-		process->PC = (process->PC + pc_jump +
+		process->pc = (process->pc + pc_jump +
 			process->current_op->encoding_byte + 1) & MODULO_MASK;
 	process->current_op = NULL;
 	add_process_to_table(process, arena, arena->cycle + 1);
@@ -49,15 +49,15 @@ void	execute_process(t_arena *arena, t_process *process)
 
 void	execute_processes_splice(t_arena *arena, t_process *it)
 {
-	if (is_valid_opcode(arena->memory[it->PC]))
+	if (is_valid_opcode(arena->memory[it->pc]))
 	{
-		it->current_op = &g_op_tab[arena->memory[it->PC] - 1];
+		it->current_op = &g_op_tab[arena->memory[it->pc] - 1];
 		add_process_to_table(it, arena, arena->cycle +
 			it->current_op->cycle_to_wait);
 	}
 	else
 	{
-		it->PC = (it->PC + 1) & MODULO_MASK;
+		it->pc = (it->pc + 1) & MODULO_MASK;
 		add_process_to_table(it, arena, arena->cycle + 1);
 	}
 }
@@ -81,7 +81,7 @@ void	execute_processes(t_arena *arena)
 			{
 				ft_printf("\n\n");
 				ft_printf("cycle : \t%lu\n", arena->cycle);
-				ft_printf("PC:\t\t%d\n", it->PC);
+				ft_printf("PC:\t\t%d\n", it->pc);
 			}
 			execute_process(arena, it);
 		}

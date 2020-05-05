@@ -30,7 +30,7 @@ t_process	*make_process(void)
 		return (NULL);
 	process->bytecode_size = 0;
 	process->carry = 0;
-	process->PC = 0;
+	process->pc = 0;
 	process->current_op = NULL;
 	process->last_live = -123456798;
 	process->table_pos = 0;
@@ -61,7 +61,7 @@ t_process	*make_process_list(t_arena *vm)
 			return (NULL);
 		process->owner = &vm->champion_table[i];
 		process->registre[0] = -process->owner->number;
-		process->PC = pc;
+		process->pc = pc;
 		add_process_to_list(process, vm);
 		add_process_to_table(process, vm, 0);
 		i++;

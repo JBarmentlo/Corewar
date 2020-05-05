@@ -19,7 +19,7 @@ void	x02(t_arena *arena, t_process *process)
 
 	if (arena->args->type[0] == T_IND)
 	{
-		fk_norm = process->PC + (arena->args->val[0] % IDX_MOD);
+		fk_norm = process->pc + (arena->args->val[0] % IDX_MOD);
 		value = mem_read_int(arena, fk_norm);
 		reg_write_int(process, value, arena->args->val[1]);
 	}

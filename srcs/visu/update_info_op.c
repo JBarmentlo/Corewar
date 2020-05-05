@@ -22,7 +22,7 @@ void		update_info_op3(t_disp *d, t_arena a, char *info)
 	disp_ttf(info, d->color, d);
 	free(info);
 	d->mod.x = 2425;
-	info = ft_itoa(a.process_list->PC);
+	info = ft_itoa(a.process_list->pc);
 	disp_ttf(info, d->color, d);
 	free(info);
 	d->mod.y += 15;
