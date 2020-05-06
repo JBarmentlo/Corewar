@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 15:31:05 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/09 13:22:53 by dberger          ###   ########.fr       */
+/*   Updated: 2020/05/06 20:25:29 by deyaberge        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,7 +236,8 @@ t_instruct					*is_op(t_s *s, t_stack *stack, t_token *token);
 void						is_register(t_argz *argz);
 void						is_direct(t_argz *argz, size_t inst_type);
 void						is_indirect(t_argz *argz);
-void						*argz_is_label(t_s *s, t_argz *argz);
+void						*argz_is_label(t_s *s, t_argz *argz,
+							t_token *token);
 void						*is_argument(t_s *s, size_t inst_type, t_argz *argz,
 							int *sep_char);
 
