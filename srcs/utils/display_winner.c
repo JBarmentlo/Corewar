@@ -19,7 +19,8 @@ int		display_winner(t_arena *vm)
 	winner = vm->last_live_champ_number;
 	if (vm->nb_live_champions <= 1)
 	{
-		ft_printf("Player %d (%s) won\n", winner, vm->champion_table[winner - 1].header.prog_name);
+		ft_printf("Player %d (%s) won\n", winner,
+			vm->champion_table[winner - 1].header.prog_name);
 		return (1);
 	}
 	return (0);

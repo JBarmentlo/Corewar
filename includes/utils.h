@@ -33,6 +33,7 @@ typedef unsigned char		t_byte;
 /*
 ** is_direct_small : indicates the amount of bytes used to encode DIR arguments
 ** if == 1: 2 bytes, if == 0: 4 bytes.
+** encoding_byte indicates the presence (if == 1) of an argument encoding byte after the opcode;
 */
 
 typedef struct				s_op

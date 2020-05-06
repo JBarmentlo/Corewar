@@ -94,7 +94,8 @@ UTILS_SOURCE_FILES=endian_converter.c \
 	ft_error.c \
 	usage.c \
 	mem_color.c \
-	display_winner.c
+	display_winner.c \
+	read_write_2.c
 
 ASM_SOURCE_FILES=main_asm.c \
 	gnl.c \
