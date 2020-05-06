@@ -15,7 +15,7 @@
 
 # include "utils.h"
 # include <stdint.h>
-# include "bitMasks.h"
+# include "bitmasks.h"
 # include "stdlib.h"
 # include "limits.h"
 

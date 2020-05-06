@@ -115,7 +115,7 @@ INCLUDES_FILES= utils.h\
 	op.h \
 	asm.h \
 	arena.h \
-	bitMasks.h 
+	bitmasks.h 
 
 
 RELINK_INCUDE=$(addprefix $(INCLUDE_FOLDER)/, $(INCLUDES_FILES))

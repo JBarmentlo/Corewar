@@ -62,6 +62,7 @@ int			main(int ac, char **av)
 {
 	t_arena		vm;
 
+	printf("ALLL %d\n", ALL );
 	vm = init_vm();
 	if (pars_args(ac, av, &vm) == FALSE
 		|| assign_champ(&vm) == FALSE)
