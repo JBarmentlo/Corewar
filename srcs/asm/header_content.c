@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 15:29:26 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/03/09 16:05:13 by dberger          ###   ########.fr       */
+/*   Updated: 2020/05/06 22:30:59 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int		fill_empty_line(t_s *s, int fd)
 	token.line = s->l;
 	token.col = s->i;
 	ft_memdel((void**)&s->line);
-	ret = gnl(fd, &s->line);
+	ret = gnl(fd, &s->line, s);
 	if (ret <= 0 || s->line == NULL)
 		return ((intptr_t)token_free(MISSING_QUOTE, &token));
 	s->l += 1;

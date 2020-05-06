@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/23 14:47:44 by dberger           #+#    #+#             */
-/*   Updated: 2020/01/14 11:30:50 by dberger          ###   ########.fr       */
+/*   Updated: 2020/05/06 22:30:41 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ char	*after_line(char *x, char *tab, int size)
 	tmp[size] = '\0';
 	tmp = ft_memcpy(tmp, x + 1, size);
 	ft_memdel((void**)&tab);
-	tab = tmp;
-	return (tab);
+	return (tmp);
 }
 
 /*
@@ -107,7 +106,7 @@ int		content(t_fd *gnl, int fd, char **line)
 ** wwith the "\n" at the end, and it reads "\0" and stock them in [line]
 */
 
-int		gnl(int fd, char **line)
+int		gnl(int fd, char **line, t_s *s)
 {
 	int				ret;
 	t_list			buf[0];
@@ -130,5 +129,6 @@ int		gnl(int fd, char **line)
 		ft_memdel((void**)&gnl);
 		return (0);
 	}
+	s->gnl = gnl;
 	return (1);
 }

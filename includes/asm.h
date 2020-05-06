@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 15:31:05 by dberger           #+#    #+#             */
-/*   Updated: 2020/05/06 20:25:29 by deyaberge        ###   ########.fr       */
+/*   Updated: 2020/05/06 22:30:09 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ typedef	struct				s_s
 	char					*line;
 	int						l;
 	int						i;
+	t_fd					*gnl;
 }							t_s;
 
 /*
@@ -188,7 +189,7 @@ typedef	struct				s_file
 	int						prog_size;
 }							t_file;
 
-int							gnl(int fd, char **line);
+int							gnl(int fd, char **line, t_s *s);
 int							cor_file(char *source_file, t_file *out_file,
 							int fd);
 int							header_content(t_stack *stack, int fd,

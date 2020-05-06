@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 15:29:26 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/03/09 16:05:13 by dberger          ###   ########.fr       */
+/*   Updated: 2020/05/06 22:46:58 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,14 @@ int			parsing_header(t_stack *stack, int fd, t_s *s)
 		ft_memdel((void**)&stack->champion_name);
 		return ((intptr_t)ft_error(MALLOC_COMMENT, NULL));
 	}
-	if (!header_content(stack, fd, s))
+	if (!header_content(stack, fd, s) && !just_free(s->line, s->gnl->tab))
 	{
-		ft_memdel((void**)&s->line);
+		ft_memdel((void**)&s->gnl);
 		return ((intptr_t)just_free(stack->champion_name, stack->comment));
 	}
-	if (!header_content(stack, fd, s))
+	if (!header_content(stack, fd, s) && !just_free(s->line, s->gnl->tab))
 	{
-		ft_memdel((void**)&s->line);
+		ft_memdel((void**)&s->gnl);
 		return ((intptr_t)just_free(stack->champion_name, stack->comment));
 	}
 	return (TRUE);
