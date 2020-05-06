@@ -53,6 +53,11 @@ void		run_game(t_arena *vm)
 			break ;
 		}
 		do_the_cycle(vm);
+		if (PRINT_VM_STATE == 1)
+		{
+			print_vm_state(vm);
+			ft_printf("\n");
+		}
 	}
 	if (vm->option_dump != 0)
 		hex_dump_ugly(vm);
@@ -62,7 +67,6 @@ int			main(int ac, char **av)
 {
 	t_arena		vm;
 
-	printf("ALLL %d\n", ALL );
 	vm = init_vm();
 	if (pars_args(ac, av, &vm) == FALSE
 		|| assign_champ(&vm) == FALSE)

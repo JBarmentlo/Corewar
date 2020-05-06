@@ -41,8 +41,9 @@
 ** usage : TEST_PRINT (LIVE + STORE + FORK)
 */
 # define ALL			65535
-# define TEST_PRINT		0
+# define TEST_PRINT		ALL
 # define HEX_DUMP		0
 # define VERBOSE		TEST_PRINT
 # define MAX_TURNS		20
+# define PRINT_VM_STATE	0
 #endif

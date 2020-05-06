@@ -31,6 +31,13 @@ void	x02(t_arena *arena, t_process *process)
 	process->carry = (value == 0);
 	if ((VERBOSE & LOAD))
 	{
-		ft_printf("loaded %d to registre %d\n", value, arena->args->val[1]);
+		if (arena->args->type[0] == T_IND)
+		{
+			ft_printf("loaded %d from mem[%d] to registre %d\n", value, fk_norm, arena->args->val[1]);
+		}
+		else
+		{
+			ft_printf("loaded %d to registre %d\n", value, arena->args->val[1]);	
+		}		
 	}
 }

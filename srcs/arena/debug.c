@@ -18,12 +18,12 @@ void	print_vm_state(t_arena *arena)
 	int			i;
 
 	it = arena->process_list;
-	ft_printf("cycle:%lu\n process list : \n", arena->cycle);
+	ft_printf("cycle: %d\n process list: \n", (int)arena->cycle);
 	while (it)
 	{
-		ft_printf("Owner: %s, owner.nb: %d, R1:%d, R2:%d\n",
+		ft_printf("Owner: %s, owner.nb: %d, R1:%d, R2:%d, carry:%d\n",
 			it->owner->header.prog_name, it->owner->number,
-			it->registre[0], it->registre[1]);
+			it->registre[0], it->registre[1], it->carry);
 		it = it->next_list;
 	}
 	i = 0;
