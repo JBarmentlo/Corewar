@@ -12,11 +12,6 @@
 
 #include "arena.h"
 
-// write bit printer to test these
-
-//returns a pointer to switched endian value.
-// the macs are little endian I believe ?
-// it's malloc so free it later
 t_byte		*endian_switch(void *vall, int size)
 {
 	int		i;
@@ -35,8 +30,6 @@ t_byte		*endian_switch(void *vall, int size)
 	return (out);
 }
 
-// Only works for size in [1, 2, 4]
-// untested
 uint		big_endian_to_uint(void *vall, int size)
 {
 	t_byte	*tmp;
@@ -113,40 +106,4 @@ void		bit_dump(void *ptrr, int size)
 		i++;
 	}
 	ft_printf("\n");
-}
-
-// not safe for use on MEM
-void		memcopy(void *src, void *dest, uint16_t size)	// DOES this work for static arrays ?
-{
-	int		i;
-	t_byte	*srcc;
-	t_byte	*destt;
-
-	srcc = src;
-	destt = dest;
-
-	i = 0;
-	while (i < size)
-	{
-		destt[i] = srcc[i];
-		i++;
-	}
-}
-
-// not safe for use on MEM
-void		memcopy_endian_flip(void *src, void *dest, uint16_t size)
-{
-	int		i;
-	t_byte	*srcc;
-	t_byte	*destt;
-
-	srcc = src;
-	destt = dest;
-
-	i = 0;
-	while (i < size)
-	{
-		destt[i] = srcc[size - 1 - i];
-		i++;
-	}
 }

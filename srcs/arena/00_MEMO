@@ -1,12 +1,8 @@
-WILL CRASH:
-	champ_number to champion_table[champ_number] ?? needed for color_read_write total_owned_memory
-
 NEED TO ADD DEAD CHAMPS TO FILL TAB or live will segfault
 
 carry starts at 0  or 1 ?
 
-option -n nous nique car on utilise champ number comme indice ds le tableau
-
-live isnt checking champion numbers properly ?
-
 -- pour noms de ficher -dump et tout -- ends options
+
+indirects negatifs ?
+# now testing if we can read at the end of circular memory

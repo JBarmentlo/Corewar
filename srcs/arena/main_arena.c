@@ -53,6 +53,11 @@ void		run_game(t_arena *vm)
 			break ;
 		}
 		do_the_cycle(vm);
+		if (PRINT_VM_STATE == 1)
+		{
+			print_vm_state(vm);
+			ft_printf("\n");
+		}
 	}
 	if (vm->option_dump != 0)
 		hex_dump_ugly(vm);
