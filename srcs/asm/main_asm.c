@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 15:35:36 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/09 13:06:44 by dberger          ###   ########.fr       */
+/*   Updated: 2020/05/06 20:36:03 by deyaberge        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,6 @@ int		main(int ac, char **av)
 /*
 **__attribute__((destructor)) void test()
 **{
-**while(1);
+**  while(1);
 **}
 */

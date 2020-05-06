@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 15:29:26 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/03/09 16:05:13 by dberger          ###   ########.fr       */
+/*   Updated: 2020/05/06 20:24:15 by deyaberge        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,18 +55,17 @@ void	is_indirect(t_argz *argz)
 ** between the current op_code and the label that is called as an argument.
 */
 
-void	*argz_is_label(t_s *s, t_argz *argz)
+void	*argz_is_label(t_s *s, t_argz *argz, t_token *token)
 {
-	t_token		token;
-
 	s->i += 1;
 	argz->col = s->i;
-	init_token(&token);
-	fill_token(s, 0, &token);
+	init_token(token);
+	if (fill_token(s, 0, token) == FALSE)
+		return (NULL);
 	while (diff(s->line[s->i], SPACE_COMM) && s->line[s->i] != SEPARATOR_CHAR)
 		s->i += 1;
 	if (s->i - argz->col == FALSE)
-		return (token_free(LABEL_ERROR, &token));
+		return (token_free(LABEL_ERROR, token));
 	if (!(argz->lab = ft_memalloc(sizeof(char) * s->i - argz->col)))
 		return (ft_error(MALLOC_FAIL, NULL));
 	argz->lab = ft_stricpy(argz->lab, s->line, argz->col, s->i);
@@ -75,12 +74,13 @@ void	*argz_is_label(t_s *s, t_argz *argz)
 		if (ft_strchr(LABEL_CHARS, (int)s->line[argz->col]) == NULL)
 		{
 			ft_memdel((void**)&argz->lab);
-			token.col = argz->col + 1;
-			return (token_free(LABEL_ERROR, &token));
+			token->col = argz->col + 1;
+			return (token_free(LABEL_ERROR, token));
 		}
 		argz->col += 1;
 	}
 	argz->value = 0;
+	ft_memdel((void**)&token->name);
 	return (argz);
 }
 
@@ -93,6 +93,8 @@ void	*argz_is_label(t_s *s, t_argz *argz)
 
 void	*is_argument(t_s *s, size_t inst_type, t_argz *argz, int *sep_char)
 {
+	t_token	token;
+
 	if (s->line[s->i] == 'r')
 		is_register(argz);
 	else if (s->line[s->i] == DIRECT_CHAR)
@@ -108,8 +110,8 @@ void	*is_argument(t_s *s, size_t inst_type, t_argz *argz, int *sep_char)
 		ft_atolong(s, argz);
 		argz->lab = NULL;
 	}
-	else if (argz_is_label(s, argz) == NULL)
-		return (just_free(argz->lab, NULL));
+	else if (argz_is_label(s, argz, &token) == NULL)
+		return (just_free(argz->lab, token.name));
 	if ((diff(s->line[s->i], COMM) == FALSE) && s->i > 0)
 		s->i -= 1;
 	if (s->line[s->i] == SEPARATOR_CHAR)
