@@ -21,9 +21,10 @@ void	x03(t_arena *arena, t_process *process)
 	if (arena->args->type[1] == T_REG)
 	{
 		reg_write_int(process, val, arena->args->val[1]);
-		if (VERBOSE)
+		if (VERBOSE & STORE)
 		{
-			ft_printf("store %d to register %d\n", val, arena->args->val[1]);
+			ft_printf("store %d from reg[%d] to register %d\n",
+				val, arena->args->val[0], arena->args->val[1]);
 		}
 	}
 	else
@@ -33,7 +34,8 @@ void	x03(t_arena *arena, t_process *process)
 		mem_write_color(arena, norm, 4, process->owner->number);
 		if (VERBOSE & STORE)
 		{
-			ft_printf("store %d to mem[%d]\n", val, norm);
+			ft_printf("store %d from reg[%d] to mem[%d]\n", val,
+				arena->args->val[0], norm);
 		}
 	}
 }

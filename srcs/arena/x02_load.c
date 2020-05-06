@@ -32,12 +32,9 @@ void	x02(t_arena *arena, t_process *process)
 	if ((VERBOSE & LOAD))
 	{
 		if (arena->args->type[0] == T_IND)
-		{
-			ft_printf("loaded %d from mem[%d] to registre %d\n", value, fk_norm, arena->args->val[1]);
-		}
+			ft_printf("loaded %d from mem[%d + %d] to registre %d\n",
+			value, process->pc, fk_norm - process->pc, arena->args->val[1]);
 		else
-		{
-			ft_printf("loaded %d to registre %d\n", value, arena->args->val[1]);	
-		}		
+			ft_printf("loaded %d to registre %d\n", value, arena->args->val[1]);
 	}
 }
