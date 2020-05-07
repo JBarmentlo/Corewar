@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/23 14:47:44 by dberger           #+#    #+#             */
-/*   Updated: 2020/05/06 22:30:41 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/07 16:42:24 by deyaberge        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,11 +124,7 @@ int		gnl(int fd, char **line, t_s *s)
 		gnl->fd = 0;
 	}
 	if (!(ret = content(gnl, fd, line)))
-	{
-		ft_memdel((void**)&gnl->tab);
-		ft_memdel((void**)&gnl);
 		return (0);
-	}
 	s->gnl = gnl;
 	return (1);
 }

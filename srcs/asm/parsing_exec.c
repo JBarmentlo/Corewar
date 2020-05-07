@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 13:23:19 by dberger           #+#    #+#             */
-/*   Updated: 2020/05/06 22:56:04 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/07 16:45:34 by deyaberge        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,6 @@ int			is_label_or_op(t_s *s, t_stack *stack)
 
 int			parsing_exec(t_stack *stack, int fd, t_s *s)
 {
-	s->i = 0;
 	stack->first_label = NULL;
 	stack->label_list = NULL;
 	stack->first_op = NULL;
@@ -170,5 +169,6 @@ int			parsing_exec(t_stack *stack, int fd, t_s *s)
 	if (stack->first_op == NULL)
 		return ((intptr_t)ft_error(MISSING_CODE, NULL));
 	ft_memdel((void**)&s->line);
+	just_free(s->gnl->tab, s->gnl);
 	return (TRUE);
 }

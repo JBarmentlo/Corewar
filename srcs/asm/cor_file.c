@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 15:29:26 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/05/06 22:46:58 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/07 16:45:30 by deyaberge        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int			parsing_header(t_stack *stack, int fd, t_s *s)
 		ft_memdel((void**)&s->gnl);
 		return ((intptr_t)just_free(stack->champion_name, stack->comment));
 	}
+	s->i = 0;
 	return (TRUE);
 }
 
