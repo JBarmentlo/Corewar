@@ -53,7 +53,7 @@ void	hex_print_byte(t_byte byte, int size)
 {
 	char	*base;
 
-	base = "0123456789abcdef"; // check majuscules ou pas
+	base = "0123456789abcdef";
 	if (size == 0)
 		return ;
 	hex_print_byte(byte / ft_strlen(base), size - 1);

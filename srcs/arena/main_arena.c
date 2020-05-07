@@ -70,13 +70,12 @@ int			main(int ac, char **av)
 	vm = init_vm();
 	if (pars_args(ac, av, &vm) == FALSE
 		|| assign_champ(&vm) == FALSE)
-		return (-1); // was return(FALSE), changed for testing
+		return (-1);
 	run_game(&vm);
 	display_winner(&vm);
 	free_all(&vm);
 	return (0);
 }
-
 /*
 **__attribute__((destructor)) void test()
 **{

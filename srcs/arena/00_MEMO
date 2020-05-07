@@ -5,4 +5,5 @@ carry starts at 0  or 1 ?
 -- pour noms de ficher -dump et tout -- ends options
 
 indirects negatifs ?
-# now testing if we can read at the end of circular memory
+checked op arg types
+NEED TO CHECK CARRY and for (int) vs (uint) caused mistakes
