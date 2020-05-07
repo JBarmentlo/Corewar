@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/30 15:31:05 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/09 13:22:53 by dberger          ###   ########.fr       */
+/*   Updated: 2020/05/07 17:22:22 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,11 @@
 typedef unsigned char		t_byte;
 
 /*
-** is_direct_small : indicates the amount of bytes used to encode DIR arguments
+** is_direct_small : indicates the amount of bytes used to encode
+** DIR arguments
 ** if == 1: 2 bytes, if == 0: 4 bytes.
-** encoding_byte indicates the presence (if == 1) of an argument encoding byte after the opcode;
+** encoding_byte indicates the presence (if == 1) of an argument
+** encoding byte after the opcode;
 */
 
 typedef struct				s_op

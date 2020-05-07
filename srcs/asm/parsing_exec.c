@@ -6,7 +6,7 @@
 /*   By: dberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 13:23:19 by dberger           #+#    #+#             */
-/*   Updated: 2020/03/09 16:09:25 by dberger          ###   ########.fr       */
+/*   Updated: 2020/05/07 16:45:34 by deyaberge        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,22 +146,21 @@ int			is_label_or_op(t_s *s, t_stack *stack)
 
 int			parsing_exec(t_stack *stack, int fd, t_s *s)
 {
-	s->i = 0;
 	stack->first_label = NULL;
 	stack->label_list = NULL;
 	stack->first_op = NULL;
 	stack->op_list = NULL;
-	while (gnl(fd, &s->line))
+	while (gnl(fd, &s->line, s))
 	{
 		s->i = 0;
 		s->l += 1;
 		while (diff(s->line[s->i], COMM))
 		{
 			if (s->line[s->i] != '\0' && diff(s->line[s->i], SPACE))
-				if (is_label_or_op(s, stack) == FALSE)
+				if (!is_label_or_op(s, stack) && !just_free(s->gnl->tab, NULL))
 				{
 					free_op_lab(stack);
-					return ((intptr_t)just_free(s->line, NULL));
+					return ((intptr_t)just_free(s->line, s->gnl));
 				}
 			s->i += 1;
 		}
@@ -170,5 +169,6 @@ int			parsing_exec(t_stack *stack, int fd, t_s *s)
 	if (stack->first_op == NULL)
 		return ((intptr_t)ft_error(MISSING_CODE, NULL));
 	ft_memdel((void**)&s->line);
+	just_free(s->gnl->tab, s->gnl);
 	return (TRUE);
 }

@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 15:29:26 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/03/09 16:05:13 by dberger          ###   ########.fr       */
+/*   Updated: 2020/05/06 22:31:20 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int		is_valid_command_end(t_s *s, int *type, t_token *token)
 
 int		get_command_type(int fd, t_s *s, int *type, t_token *token)
 {
-	while (gnl(fd, &s->line) && s->line != NULL)
+	while (gnl(fd, &s->line, s) && s->line != NULL)
 	{
 		s->l += 1;
 		s->i = 0;
