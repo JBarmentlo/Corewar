@@ -17,7 +17,7 @@ t_arena		init_vm(void)
 	t_arena	vm;
 
 	vm.nb_champs = 0;
-	vm.option_dump = 0;
+	vm.option_dump = -1;
 	vm.cycle = 0;
 	return (vm);
 }
@@ -45,7 +45,7 @@ int			assign_champ(t_arena *vm)
 void		run_game(t_arena *vm)
 {
 	while (!is_game_over(vm) && ((vm->cycle < (unsigned long)vm->option_dump)
-			|| vm->option_dump == 0))
+			|| vm->option_dump < 0))
 	{
 		if (vm->cycle == UINT64_MAX)
 		{
@@ -59,7 +59,7 @@ void		run_game(t_arena *vm)
 			ft_printf("\n");
 		}
 	}
-	if (vm->option_dump != 0)
+	if (vm->option_dump >= 0)
 		hex_dump_ugly(vm);
 }
 

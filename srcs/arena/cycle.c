@@ -15,7 +15,7 @@
 int		is_game_over(t_arena *arena)
 {
 	return (arena->process_list == NULL ||
-	(((uint)arena->option_dump == arena->cycle) && arena->cycle != 0)); // we cant dump at 0 
+	(((uint)arena->option_dump == arena->cycle) && arena->cycle >= 0));
 }
 
 void	run_function(t_arena *arena, t_process *process)
