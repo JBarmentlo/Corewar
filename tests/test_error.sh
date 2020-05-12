@@ -24,14 +24,18 @@ process_folder()
 			fi
 			echo ""
 			echo -e "\e[95mMINE :\e[0m"
-			$ASM_MINE_DIR $f
-			OUTPUT=${f/.s/.cor}
-			if test -f "$OUTPUT"; then
-				hexdump -v $OUTPUT > myoutput
-			fi
-			ls -la | grep 'output' &> /dev/null
-			if [ $? -eq 0 ]; then
-				diff theiroutput myoutput
+			if test -f "$ASM_MINE_DIR"; then
+				$ASM_MINE_DIR $f
+				OUTPUT=${f/.s/.cor}
+				if test -f "$OUTPUT"; then
+					hexdump -v $OUTPUT > myoutput
+				fi
+				ls -la | grep 'output' &> /dev/null
+				if [ $? -eq 0 ]; then
+					diff theiroutput myoutput
+				fi
+			else
+				echo -e "The file $ASM_MINE_DIR doesn't exists - \e[95mYOU MIGHT HAVE FORGOT TO DO A MAKE...\e[0m"
 			fi
 			echo ""
 			OUTPUT=${f/.s/.cor}
