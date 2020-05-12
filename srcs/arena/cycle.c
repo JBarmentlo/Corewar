@@ -86,6 +86,7 @@ void	check_lives(t_arena *arena)
 	}
 	else
 		arena->max_checks += 1;
+	arena->total_live_since_check = 0;
 	arena->cycles_since_check = 0;
 }
 
