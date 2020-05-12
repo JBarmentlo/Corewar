@@ -1,10 +1,8 @@
 #!/bin/sh
 SCRIPT_DIR=`dirname $0`
-ASM_BASE_DIR="./"$SCRIPT_DIR"/../vm_champs/asm"
+ASM_BASE_DIR="./"$SCRIPT_DIR"/../vm-champs-linux/asm"
 ASM_MINE_DIR="./"$SCRIPT_DIR"/../asm"
-
-SEARCH_FOLDER="othervalid/*"
-
+SEARCH_FOLDER="asm_valid/*"
 process_folder()
 {
 	for f in $@
@@ -14,21 +12,38 @@ process_folder()
 			process_folder $f/*
 		elif [[ $f == *.s ]]
 		then
-			echo "Processing `basename $f`"
-			echo "BASE :"
+			echo ""
+			echo "************"
+			echo -e "Processing\e[36m `dirname $f`\e[0m"
+			echo ""
+			echo -e "\e[32mBASE :\e[0m"
 			$ASM_BASE_DIR $f
 			OUTPUT=${f/.s/.cor}
-			hexdump -v $OUTPUT > theiroutput
-			echo "MINE :"
-			$ASM_MINE_DIR $f
-			OUTPUT=${f/.s/.cor}
-			hexdump -v $OUTPUT > myoutput
-			diff myoutput theiroutput
+			if test -f "$OUTPUT"; then
+				hexdump -v $OUTPUT > theiroutput
+			fi
 			echo ""
+			echo -e "\e[95mMINE :\e[0m"
+			if test -f "$ASM_MINE_DIR"; then
+				$ASM_MINE_DIR $f
+				OUTPUT=${f/.s/.cor}
+				if test -f "$OUTPUT"; then
+					hexdump -v $OUTPUT > myoutput
+				fi
+				ls -la | grep 'output' &> /dev/null
+				if [ $? -eq 0 ]; then
+					diff theiroutput myoutput
+				fi
+			else
+				echo -e "The file $ASM_MINE_DIR doesn't exists - \e[95mYOU MIGHT HAVE FORGOT TO DO A MAKE...\e[0m"
+			fi
+			echo ""
+			OUTPUT=${f/.s/.cor}
 			rm -f $OUTPUT
-			rm -f myoutput theiroutput
+			rm -f theiroutput myoutput
 			read -n1 -r -p "Press any key to continue..." key
 		fi
 	done
 }
 process_folder $SEARCH_FOLDER
+
