@@ -1,6 +1,6 @@
 #!/bin/sh
 SCRIPT_DIR=`dirname $0`
-ASM_BASE_DIR="./"$SCRIPT_DIR"/../vm_champs/asm"
+ASM_BASE_DIR="./"$SCRIPT_DIR"/../vm-champs-linux/asm"
 ASM_MINE_DIR="./"$SCRIPT_DIR"/../asm"
 SEARCH_FOLDER="asm_errors/*"
 process_folder()
