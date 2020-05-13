@@ -17,7 +17,7 @@ t_arena		init_vm(void)
 	t_arena vm;
 
 	vm.nb_champs = 0;
-	vm.option_dump = 0;
+	vm.option_dump = -1;
 	vm.cycle = 0;
 	return (vm);
 }
@@ -79,7 +79,7 @@ int			loop(t_disp *d, t_arena *vm, int *running)
 	timeout = SDL_GetTicks() + 100;
 	j = 0;
 	while (j < d->delay && ((vm->cycle < (unsigned long)vm->option_dump)
-	|| vm->option_dump == 0))
+	|| vm->option_dump < 0))
 	{
 		do_the_cycle(vm);
 		j++;
@@ -104,12 +104,12 @@ int			main(int ac, char **av)
 	vm.total_process_nb = vm.nb_champs;
 	count_owned_space(&vm);
 	while (!is_game_over(&vm) && running
-	&& ((vm.cycle < (unsigned long)vm.option_dump) || vm.option_dump == 0))
+	&& ((vm.cycle < (unsigned long)vm.option_dump) || vm.option_dump < 0))
 	{
 		if (!loop(&d, &vm, &running))
 			break ;
 	}
-	if (vm.option_dump != 0)
+	if (vm.option_dump >= 0)
 		hex_dump_ugly(&vm);
 	error("End.", &d);
 	free_all(&vm);
