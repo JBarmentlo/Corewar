@@ -6,7 +6,7 @@
 /*   By: ncoursol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 15:29:26 by ncoursol          #+#    #+#             */
-/*   Updated: 2020/05/07 16:45:30 by deyaberge        ###   ########.fr       */
+/*   Updated: 2020/05/13 20:47:42 by deyaberge        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,12 +164,10 @@ int			cor_file(char *source_file, t_file *out_file, int fd)
 	real_prog_size = out_file->total_size - SIZE_HEADER;
 	nb_to_binary(out_file, INFO_PROG, out_file->prog_size, real_prog_size);
 	out_file->total_size -= INFO_PROG;
-	out_file->fd = open(out_file->name, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
+	out_file->fd = open(out_file->name,
+					O_CREAT | O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR);
 	free_op_lab(&stack);
-	if (out_file->fd <= 0)
-	{
-		ft_error(CREATE_FAIL, out_file->name);
+	if (out_file->fd <= 0 && !(ft_error(CREATE_FAIL, out_file->name)))
 		return ((intptr_t)just_free(out_file->name, out_file->content));
-	}
 	return (TRUE);
 }
