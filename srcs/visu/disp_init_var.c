@@ -38,11 +38,11 @@ void		error2(t_disp *d)
 
 void		error(char *src, t_disp *d)
 {
-	if (ft_strcmp(src, "TTF"))
+	if (ft_strcmp(src, "TTF") >= 0)
 		printf("%s%s\n", src, TTF_GetError());
-	else if (ft_strcmp(src, "SDL"))
+	else if (ft_strcmp(src, "SDL" >= 0))
 		printf("%s%s\n", src, SDL_GetError());
-	else if (ft_strcmp(src, "IMG"))
+	else if (ft_strcmp(src, "IMG" >= 0))
 		printf("%s%s\n", src, IMG_GetError());
 	else
 		printf("%s\n", src);
